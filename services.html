@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./styles-about.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Unbounded:wght@200..900&display=swap" rel="stylesheet">
+    <title>NovaBuk</title>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <div class="navbar" id="navbar">
+                <div class="logo"><img src="./images/logo.png" alt="" /></div>
+                <button id="navToggle" class="nav-toggle" aria-label="Toggle navigation">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <div class="nav-menu" id="navMenu">
+                    <ul>
+                        <li><a href="./index.html">Home</a></li>
+                        <li><a href="./about.html">About Us</a></li>
+                        <li><a href="./services.html" class="active">Features</a></li>
+                        <li><a href="./contact.html">Contact</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="banner">
+                <h1>Smart HealthCare, Simplified</h1>
+                <p>Discover the powerful feature that makes novabuk the leading digital health platform for Africa</p>
+            </div>
+        </header>
+        <main>
+            <div class="toggle-container">
+                <div id="mvp-toggle" class="toggle-button active"><h4>MVP (Freemium Core)</h4></div>
+                <div id="ai-toggle"  class="toggle-button"><h4>AI-Powered (Premium)</h4></div>
+            </div>
+            <div id="mvp-content" class="content-panel active-content">
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <div class="icon-box"><i class="fas fa-user-friends"></i></div>
+                        <h4>User Profiles</h4>
+                        <p>Secure logins for patients, doctors, and admins.</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="icon-box"><i class="fas fa-file-medical"></i></div>
+                        <h4>Electronic Health Records (EHR)</h4>
+                        <p>Centralized, easy-to-access patient history.</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="icon-box"><i class="fas fa-calendar-alt"></i></div>
+                        <h4>Appointments</h4>
+                        <p>Book and manage visits seamlessly with reminders.</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="icon-box"><i class="fas fa-prescription-bottle"></i></div>
+                        <h4>Digital Prescriptions</h4>
+                        <p>Doctors issues prescription ditigally to pharmacies.</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="icon-box"><i class="fas fa-th-large"></i></div>
+                        <h4>Admin Dashbord</h4>
+                        <p>Clinic-level control for record tracking and reports.</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="icon-box"><i class="fas fa-cloud"></i></div>
+                        <h4>Secured Cloud Storage</h4>
+                        <p>Encrypted backups and reliable hosting.</p>
+                    </div>
+                </div>    
+            </div>
+
+            <div id="ai-content" class="content-panel">
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <div class="icon-box"><i class="fas fa-clock"></i></div>
+                        <h4>Smart Appointment Suggestions(ANN)</h4>
+                        <p>Optimize schedules and reduce patient wait times.</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="icon-box"><i class="fas fa-shield-alt"></i></div>
+                        <h4>prescription Safety Check(ANN)</h4>
+                        <p>Detects dosages conflicts automatically.</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="icon-box"><i class="fas fa-calendar-alt"></i></div>
+                        <h4>EHR Insights</h4>
+                        <p>Spot trends and critical patterns in patient history.</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="icon-box"><i class="fa-solid fa-brain"></i></div>
+                        <h4>NLP-Powered symptom Checker</h4>
+                        <p>chat or type symptomto get AI suggestions.</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="icon-box"><i class="fas fa-comment-dots"></i></div>
+                        <h4>Lab Result Interpratation</h4>
+                        <p>AI translates complex lab reports into simple insights.</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="icon-box"><i class="fas fa-flask"></i></div>
+                        <h4>Medication Adherence Predication</h4>
+                        <p>Predict and remind patients to saty on track.</p>
+                    </div>
+                </div>    
+            </div>
+
+            <!-- Freenium vs Premium Comparison-->
+
+            <section class="modal-box">
+                <div class="modal-header">
+                    <h3>Freemium vs Premium</h3>
+                    <p>Choose the plan that best fits your healthcare needs</p>
+                </div>
+                <div class="comparison-table">
+                    <div class="comp-row header">
+                        <div class="col-feature">Packages</div>
+                        <div class="col-status">Freemium</div>
+                        <div class="col-status">Premium</div>
+                    </div>
+
+                    <div class="comp-row">
+                        <div class="col-feature">Basic Health Records</div>
+                        <div class="col-status"><i class="fa-solid fa-check check"></i></div>
+                        <div class="col-status"><i class="fa-solid fa-check check"></i></div>
+                    </div>
+
+                    <div class="comp-row">
+                        <div class="col-feature">AI Insights</div>
+                        <div class="col-status"><i class="fa-solid fa-xmark xmark"></i></div>
+                        <div class="col-status"><i class="fa-solid fa-check check"></i></div>
+                    </div>
+
+                    <div class="comp-row">
+                        <div class="col-feature">Smart Scheduling</div>
+                        <div class="col-status"><i class="fa-solid fa-xmark xmark"></i></div>
+                        <div class="col-status"><i class="fa-solid fa-check check"></i></div>
+                    </div>
+
+                    <div class="comp-row">
+                        <div class="col-feature">Teleconsultation</div>
+                        <div class="col-status"><i class="fa-solid fa-check check"></i></div>
+                        <div class="col-status"><i class="fa-solid fa-check check"></i></div>
+                    </div>
+                    
+                    <div class="comp-row">
+                        <div class="col-feature">Predictive Analysis</div>
+                        <div class="col-status"><i class="fa-solid fa-xmark xmark"></i></div>
+                        <div class="col-status"><i class="fa-solid fa-check check"></i></div>
+                    </div>
+                    <div class="comp-row">
+                        <div class="col-feature">Digital Prescription</div>
+                        <div class="col-status"><i class="fa-solid fa-check check"></i></div>
+                        <div class="col-status"><i class="fa-solid fa-check check"></i></div>
+                    </div>
+                    <div class="comp-row">
+                        <div class="col-feature">Admin Dashboard</div>
+                        <div class="col-status"><i class="fa-solid fa-check check"></i></div>
+                        <div class="col-status"><i class="fa-solid fa-check check"></i></div>
+                    </div>
+                    <div class="comp-row">
+                        <div class="col-feature">Cloud Storage</div>
+                        <div class="col-status"><i class="fa-solid fa-check check"></i></div>
+                        <div class="col-status"><i class="fa-solid fa-check check"></i></div>
+                    </div>
+                    <div class="comp-row">
+                        <div class="col-feature">NLP Symptom Checker</div>
+                        <div class="col-status"><i class="fa-solid fa-xmark xmark"></i></div>
+                        <div class="col-status"><i class="fa-solid fa-check check"></i></div>
+                    </div>
+                    <div class="comp-row">
+                        <div class="col-feature">Lab Result AI</div>
+                        <div class="col-status"><i class="fa-solid fa-xmark xmark"></i></div>
+                        <div class="col-status"><i class="fa-solid fa-check check"></i></div>
+                    </div>
+                </div>
+            </section>
+
+            <div class="foot-banner">
+                <div class="foot-banner-text">
+                    <h5>Powered by Artificial Intelligence</h5>
+                    <p>Our AI features are designed to enhance healthcare delivery, improve patient outcomes, and streamline clinical workflow.</p>
+                </div>
+                <div class="foot-banner-iconText">
+                    <div class="icon-text">
+                        <i class="fas fa-brain"></i>
+                        <h4>Machine Learning</h4>
+                        <p>Advanced algorithms that learn healthcare data.</p>
+                    </div>
+                    <div class="icon-text">
+                        <i class="fas fa-language"></i>
+                        <h4>NLP</h4>
+                        <p>Understand and process medical language naturally.</p>
+                    </div>
+                    <div class="icon-text">
+                        <i class="fas fa-chart-line"></i>
+                        <h4>Predictive Analysis</h4>
+                        <p>Forecasting trends in patient health.</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+       <footer class="main-footer">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <div class="logo-foot">
+                        <img src="./images/logo.png" alt="Logo" />
+                    </div>
+                    <p>Where Technology meets Care. Empowering Africa's Healthcare with AI-driven Digital Records.</p>
+                    <div class="social-links">
+                        <a href="https://www.instagram.com/novabukofficial?utm_source=qr&igsh=M2ZzM2ozeWQwN3hu" target="_blank"><i class="fa-brands fa-instagram"></i></a>
+                        <a href="https://x.com/NovaBukApp?t=r1xoJKvpfA1QSnGpHVdk_Q&s=o8" target="_blank"><i class="fa-brands fa-twitter"></i></a>
+                        <a href="https://www.linkedin.com/company/novabuk/" target="_blank"><i class="fa-brands fa-linkedin"></i></a>
+                    </div>
+                </div>
+
+                <div class="footer-col" id="col-foot">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="./about.html">About us</a></li>
+                        <li><a href="./services.html">Features</a></li>
+                        <li><a href="./contact.html">Contact</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-col">
+                    <h4>Contact</h4>
+                    <ul class="contact-list">
+                        <li><i class="fa-solid fa-phone"></i> +234 813 468 4154</li>
+                        <li><i class="fa-solid fa-envelope"></i> hello@novabuk.com</li>
+                        <li><i class="fa-solid fa-globe"></i> www.novabuk.com</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <div class="line"></div>
+                <p><i class="fa-regular fa-copyright"></i> 2025 NovaBuk HealthTech. All rights reserved.</p>
+            </div>
+        </footer>
+    </div>
+
+
+    <script src="./script.js"></script>
+</body>
+</html>
