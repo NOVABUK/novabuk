@@ -1,0 +1,6 @@
+# Allow all search engines to crawl the site
+User-agent: *
+Allow: /
+
+# Point to your sitemap to help engines index your pages faster
+Sitemap: https://www.novabuk.com/sitemap.xml
