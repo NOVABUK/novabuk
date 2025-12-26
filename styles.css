@@ -374,8 +374,8 @@ footer .navfoot .nav-menu ul {
     main .middle{
         font-size: 1px;
     }
-    
-@media (max-width: 1023px) {
+}    
+@media (max-width: 1200px) {
     .nav-toggle, .hamburger{
         display: block;
     }
@@ -406,24 +406,25 @@ footer .navfoot .nav-menu ul {
         margin: 0;
         color: white;
     }
-}
 
-.nav-menu ul li a:hover{
-    color: #3584a8;
-    transform: translateY(-3px);
-}
 
-/* Active link underline */
-.nav-menu ul li a.active {
-    color: #3584a8;
-    border-bottom: 2px solid #3584a8;
-    padding-bottom: 2px;
+    .nav-menu ul li a:hover{
+        color: #3584a8;
+        transform: translateY(-3px);
+    }
+
+    /* Active link underline */
+    .nav-menu ul li a.active {
+        color: #3584a8;
+        border-bottom: 2px solid #3584a8;
+        padding-bottom: 2px;
+    }
 }
 
 /* Mobile & Tablet */
-@media (max-width: 1023px) {
+@media (max-width: 1200px) {
     .header .navbar{
-        padding: 15px 20px;
+        padding: 15px 20px 15px 70px;
         flex-wrap: wrap;
     }
     .nav-menu ul{
@@ -435,7 +436,6 @@ footer .navfoot .nav-menu ul {
         margin: 8px 10px;
         font-size: 0.9rem;
     }
-}
 }
 
 /* ============================================
@@ -653,7 +653,6 @@ footer .navfoot .nav-menu ul {
 }
 .header-img-about .img-size{
     margin-top: 50px;
-    
 }
 .main-img-about{
     background-color: #ebf4f5;
@@ -697,7 +696,7 @@ footer .navfoot .nav-menu ul {
 }
 
 /* Mobile for the about page slider */
-@media (max-width: 1200px) {
+@media (max-width: 992px) {
     .header-img-about {
         display: block !important;
         padding: 16px;
@@ -715,17 +714,31 @@ footer .navfoot .nav-menu ul {
     }
 
     .header-img-about .slides > div {
-        flex: 0 0 72%;
+        flex: 0 0 auto;
         scroll-snap-align: center;
         display: flex;
         justify-content: center;
+        align-items: center;
+    }
+
+    /* First and last slides are smaller, middle slides are larger to mimic desktop layout */
+    .header-img-about .slides > div:first-child,
+    .header-img-about .slides > div:last-child {
+        flex: 0 0 108%;
+        width: 100%;
+        max-width: 260px;
+    }
+
+    /* Middle slides (2 and 3) should be the prominent large slides */
+    .header-img-about .slides > div:nth-child(2),
+    .header-img-about .slides > div:nth-child(3) {
+        flex: 0 0 44%;
+        max-width: 420px;
     }
 
     /* Make slide images scale predictably on mobile: limit width, keep aspect ratio */
     .header-img-about .slides img {
-        flex: 0 0 100%;
         width: 100%;
-        max-width: 420px;
         height: auto;
         display: block;
         border-radius: 10px;
@@ -741,6 +754,9 @@ footer .navfoot .nav-menu ul {
     .header-img-about .slides::-webkit-scrollbar { height: 8px; }
     .header-img-about .slides::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.12); border-radius: 8px; }
 }
+
+/* Tighter slider layout for mid-size tablets / small laptops to reduce large gaps */
+
 
 
 /* ============================================
@@ -875,42 +891,3 @@ footer .navfoot .nav-menu ul {
 }
 
 /* Strong overrides to ensure consistent about-slider layout for all viewports <= 1200px */
-@media (max-width: 992px) {
-    .header-img-about {
-        display: block !important;
-        padding: 10px !important;
-        margin: 0 auto !important;
-        gap: 4px !important;
-        width: 100% !important;
-    }
-    .header-img-about .slides {
-        display: flex !important;
-        gap: 4px !important;
-        overflow-x: auto !important;
-        scroll-snap-type: x mandatory !important;
-        -webkit-overflow-scrolling: touch !important;
-        padding-bottom: 8px !important;
-        margin: 0 !important;
-    }
-
-    .header-img-about .slides > div {
-        flex: 0 0 70% !important;
-        max-width: 70% !important;
-        scroll-snap-align: center !important;
-        display: flex !important;
-        justify-content: center !important;
-        box-sizing: border-box !important;
-        padding: 0 !important;
-        margin: 0 !important;
-    }
-
-    .header-img-about .slides img {
-        width: 100% !important;
-        max-width: 420px !important;
-        height: auto !important;
-        display: block !important;
-        /* margin: 0 !important; */
-        border-radius: 10px !important;
-        object-fit: cover !important;
-    }
-}
