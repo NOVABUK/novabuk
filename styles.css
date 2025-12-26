@@ -631,22 +631,25 @@ footer .navfoot .nav-menu ul {
 |--------------------------------------------|   */
 .header-img-about {
     display: flex !important;
-    gap: 9px;
+    gap: 4px;
     width: 100%;
-    flex: 1 1 300px;
+    /* flex: 1 1 300px; */
     justify-content: center;
-    padding: 10px 20px;
+    /* use a responsive horizontal padding to avoid huge side gutters on small viewports */
+    padding: 10px clamp(16px, 8vw, 200px);
     /* padding-left: 80px; */
 }
 
 .header-img-about .slides {
     display: flex;
-    gap: 9px;
+    gap: 6px;
 }
 
 .header-img-about img {
-    width: auto;
-    /* margin: 10px; */
+    max-width: 100%;
+    height: auto;
+    display: block;
+    object-fit: cover;
 }
 .header-img-about .img-size{
     margin-top: 50px;
@@ -695,46 +698,49 @@ footer .navfoot .nav-menu ul {
 
 /* Mobile for the about page slider */
 @media (max-width: 1200px) {
-    .header-img-about {
+    /* .header-img-about {
         
         display: block !important;
         padding: 16px;
         margin: 0 auto;
     }
-
+    
     .header-img-about .slides {
         display: flex;
-        gap: 12px;
+        gap: 6px;
         overflow-x: auto;
         scroll-snap-type: x mandatory;
         -webkit-overflow-scrolling: touch;
         padding-bottom: 8px;
-        margin: 0 6px;
+        margin: 0 0px;
     }
 
     .header-img-about .slides > div {
-        flex: 0 0 82%;
+        flex: 0 0 72%;
         scroll-snap-align: center;
         display: flex;
         justify-content: center;
-    }
+    } */
 
-    .header-img-about .slides img {
+    /* Make slide images scale predictably on mobile: limit width, keep aspect ratio */
+    /* .header-img-about .slides img {
+        flex: 0 0 100%;
         width: 100%;
         max-width: 420px;
         height: auto;
-        border-radius: 10px;
         display: block;
+        border-radius: 10px;
+        object-fit: cover;
     }
 
     .header-img-about img {
         max-width: 100%;
         height: auto;
-    }
+    } */
 
     /* hide excessive horizontal scrollbar on WebKit while keeping scroll functionality */
-    .header-img-about .slides::-webkit-scrollbar { height: 8px; }
-    .header-img-about .slides::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.12); border-radius: 8px; }
+    /* .header-img-about .slides::-webkit-scrollbar { height: 8px; } */
+    /* .header-img-about .slides::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.12); border-radius: 8px; } */
 }
 
 
@@ -866,5 +872,47 @@ footer .navfoot .nav-menu ul {
     .main-img-about .main-head-about p{
         width: 16em;
         font-size: 16px;
+    }
+}
+
+/* Strong overrides to ensure consistent about-slider layout for all viewports <= 1200px */
+@media (max-width: 768px) {
+    .header-img-about {
+        display: block !important;
+        padding: 10px !important;
+        margin: 0 auto !important;
+        gap: 4px !important;
+        width: 100% !important;
+    }
+    .header-img-
+    .header-img-about .slides {
+        display: flex !important;
+        gap: 4px !important;
+        overflow-x: auto !important;
+        scroll-snap-type: x mandatory !important;
+        -webkit-overflow-scrolling: touch !important;
+        padding-bottom: 8px !important;
+        margin: 0 !important;
+    }
+
+    .header-img-about .slides > div {
+        flex: 0 0 70% !important;
+        max-width: 70% !important;
+        scroll-snap-align: center !important;
+        display: flex !important;
+        justify-content: center !important;
+        box-sizing: border-box !important;
+        padding: 0 !important;
+        margin: 0 !important;
+    }
+
+    .header-img-about .slides img {
+        width: 100% !important;
+        max-width: 420px !important;
+        height: auto !important;
+        display: block !important;
+        /* margin: 0 !important; */
+        border-radius: 10px !important;
+        object-fit: cover !important;
     }
 }
