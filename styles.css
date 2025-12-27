@@ -636,7 +636,7 @@ footer .navfoot .nav-menu ul {
     /* flex: 1 1 300px; */
     justify-content: center;
     /* use a responsive horizontal padding to avoid huge side gutters on small viewports */
-    padding: 10px clamp(16px, 8vw, 200px);
+    /* padding: 10px clamp(16px, 8vw, 200px); */
     /* padding-left: 80px; */
 }
 
@@ -724,21 +724,21 @@ footer .navfoot .nav-menu ul {
     /* First and last slides are smaller, middle slides are larger to mimic desktop layout */
     .header-img-about .slides > div:first-child,
     .header-img-about .slides > div:last-child {
-        flex: 0 0 108%;
-        width: 100%;
-        max-width: 260px;
+        /* flex: 0 0 100%; */
+        /* width: 100%; */
+        /* max-width: 260px; */
     }
 
     /* Middle slides (2 and 3) should be the prominent large slides */
     .header-img-about .slides > div:nth-child(2),
-    .header-img-about .slides > div:nth-child(3) {
+    .header-img-about .slides > div:nth-child(4) {
         flex: 0 0 44%;
         max-width: 420px;
     }
 
     /* Make slide images scale predictably on mobile: limit width, keep aspect ratio */
     .header-img-about .slides img {
-        width: 100%;
+        /* width: 100%; */
         height: auto;
         display: block;
         border-radius: 10px;
@@ -746,8 +746,8 @@ footer .navfoot .nav-menu ul {
     }
 
     .header-img-about img {
-        max-width: 100%;
-        height: auto;
+        /* max-width: 100%; */
+        /* height: auto; */
     }
 
     /* hide excessive horizontal scrollbar on WebKit while keeping scroll functionality */
