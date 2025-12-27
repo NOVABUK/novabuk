@@ -1223,13 +1223,13 @@ main {
     margin-bottom: 40px;
     }
     .footer-col ul li{
-        margin-left: -20px;
+        margin-left: auto;
     }
     .footer-col ul li a{
-        margin-left: -20px;
+        margin-left: auto;
     }
     .footer-col h4{
-        margin-left: 10px;
+        margin-left: auto;
     }
     #col-foot h4{
         margin-left: -14px;
