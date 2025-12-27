@@ -321,10 +321,8 @@ header, .navbar, .hero, .banner, .feature-card, img, .button a {
     }
     .foot-banner-text h5{
         font-size: 1.3rem;
-        padding: 0px 10px;
+        /* padding: 0px 10px; */
         text-align: center;
-        /* margin-left: -60px; */
-        width: 100%;
     }
     .foot-banner-text p{
         font-size: 0.85rem;
@@ -349,9 +347,7 @@ header, .navbar, .hero, .banner, .feature-card, img, .button a {
     }
     .foot-banner-text h5{
         font-size: 1rem;
-        padding: 0px 40px;
-        margin-right: auto;
-        width: 100%;
+        /* padding: 0px 40px; */
     }
     .foot-banner-text p{
         font-size: 0.9rem;
@@ -392,7 +388,7 @@ header, .navbar, .hero, .banner, .feature-card, img, .button a {
 .foot-banner-text h5{
     font-family: "poppins", sans-serif;
     font-size: 2rem;
-    padding:0px 70px;
+    /* padding:0px 70px; */
     margin-bottom: 20px;
 }
 .foot-banner-text p{
