@@ -672,10 +672,7 @@ footer .navfoot .nav-menu ul {
     /* width: auto; */
 }
 .main-img-about .main-image-about img {
-    border-bottom-right-radius: 1px;
-    /* width: 600px; */
     height: auto;
-    /* margin-left: -23px; */
 }
 .main-img-about .main-head-about h2{
     margin-bottom: 20px;
@@ -687,17 +684,11 @@ footer .navfoot .nav-menu ul {
 #abouti{
     border-top-right-radius: 25px;
     border-bottom-right-radius: 25px;
-    /* border-top-left-radius: 0; */
-    /* border-bottom-left-radius: 0; */
-    /* border: 1px solid #08c4e0; */
     width: auto;
-    /* margin-left: auto; */
     height: auto;
 }
 #about-img img{
-    /* border: 1px solid #08c4e0; */
     width: auto;
-    /* margin-left: auto; */
     height: auto;
 }
 
@@ -842,13 +833,17 @@ footer .navfoot .nav-menu ul {
     .main-img-about img{
         width: auto;
         max-width: 450px;
-        padding: 20px 20px 20px 40px;
+        padding: 20px 40px 20px 40px;
+        border-bottom-left-radius: 55px;
+        border-top-left-radius: 55px;
         border-radius: 50px;
     }
     .main-image-last .main-image{
         display: none;
     }
     #about-img img{
+        border-bottom-right-radius: 55px;
+        border-top-right-radius: 55px;
         border-radius: 50px;
     }
     .main-image-last{
