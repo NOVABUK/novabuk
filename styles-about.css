@@ -316,48 +316,51 @@ header, .navbar, .hero, .banner, .feature-card, img, .button a {
         margin-bottom: 50px;
     }
     .foot-banner-text{
-        /* padding: 10px 15px; */
+        padding: 10px 15px;
         margin-top: 0;
     }
     .foot-banner-text h5{
         font-size: 1.3rem;
-        padding: 0px 100px;
+        padding: 0px 10px;
         text-align: center;
         /* margin-left: -60px; */
         width: 100%;
     }
     .foot-banner-text p{
         font-size: 0.85rem;
-        padding: 0px 10px;
+        padding: 0px 100px;
     }
     .foot-banner-iconText{
         /* flex-direction: column; */
         width: 100%;
-        padding: 20px 15px;
+        padding: 2px 15px;
         gap: 30px;
     }
 }
 @media (max-width: 818px) {
         
     .foot-banner{
-        padding: 60px 30px;
-        margin-bottom: 100px;
+        padding: 6px 30px;
+        /* margin-bottom: 100px; */
     }
     .foot-banner-text{
-        padding: 10px 50px;
+        padding: 1px 0px;
+        width: 100%;
     }
     .foot-banner-text h5{
-        font-size: 1.6rem;
+        font-size: 1rem;
         padding: 0px 40px;
+        margin-right: auto;
+        width: 100%;
     }
     .foot-banner-text p{
         font-size: 0.9rem;
-        padding: 0px 100px;
+        padding: 0px 30px;
     }
     .foot-banner-iconText{
         flex: 0 0 100%;
         flex-direction: column;
-        padding: 20px 50px;
+        padding: 2px 50px;
         gap: 20px;
     }
 }
