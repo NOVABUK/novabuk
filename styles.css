@@ -87,7 +87,7 @@ a i:hover{ color: #2a6a8f;transform: translateY(-4px) scale(1.1);box-shadow: 0 6
 
 /* Active underline */
 .nav-menu ul li a.active {
-    border-bottom: 2px solid #ff9800;
+    border-bottom: 2px solid #fff;
     padding-bottom: 2px;
 }
 
