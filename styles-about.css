@@ -145,6 +145,7 @@ header, .navbar, .hero, .banner, .feature-card, img, .button a {
 /* Mobile & Tablet */
 @media (max-width: 1028px) {
     .header .navbar{
+        /* width: 100%; */
         padding: 15px 20px;
         flex-wrap: wrap;
     }
@@ -163,7 +164,7 @@ header, .navbar, .hero, .banner, .feature-card, img, .button a {
 /* Mobile & Tablet */
 @media (max-width: 1028px) {
     .banner{
-        padding: 20px 15px 40px 15px;
+        padding: 20px 25px 40px 25px;
         background-position: center;
         margin: 0 15px 20px 15px;
         width: auto;
@@ -178,10 +179,10 @@ header, .navbar, .hero, .banner, .feature-card, img, .button a {
     }
     
     @media (min-width: 768px) {
-        .banner{
+        /* .banner{
             padding: 30px 60px 80px 60px;
             margin: 0 50px 40px 50px;
-        }
+        } */
         .banner h1{
             font-size: 2rem;
         }
@@ -192,9 +193,7 @@ header, .navbar, .hero, .banner, .feature-card, img, .button a {
 }
 
 /* Mobile & Tablet */
-@media (max-width: 1028px) {
 
-}
 
 
 .content-panel {
@@ -313,7 +312,7 @@ header, .navbar, .hero, .banner, .feature-card, img, .button a {
     
     /* FOOT-BANNER */
     .foot-banner{
-        padding: 40px 15px;
+        padding: 40px 1px;
         margin-bottom: 50px;
     }
     .foot-banner-text{
@@ -331,34 +330,36 @@ header, .navbar, .hero, .banner, .feature-card, img, .button a {
         font-size: 0.85rem;
         padding: 0px 10px;
     }
-    .foot-bannner-iconText{
-        flex-direction: column;
+    .foot-banner-iconText{
+        /* flex-direction: column; */
+        width: 100%;
         padding: 20px 15px;
         gap: 30px;
     }
 }
-@media (min-width: 768px) {
+@media (max-width: 818px) {
         
-        .foot-banner{
-            padding: 60px 30px;
-            margin-bottom: 100px;
-        }
-        .foot-banner-text{
-            padding: 10px 50px;
-        }
-        .foot-banner-text h5{
-            font-size: 1.6rem;
-            padding: 0px 40px;
-        }
-        .foot-banner-text p{
-            font-size: 0.9rem;
-            padding: 0px 100px;
-        }
-        .foot-bannner-iconText{
-            flex-direction: row;
-            padding: 20px 50px;
-            gap: 20px;
-        }
+    .foot-banner{
+        padding: 60px 30px;
+        margin-bottom: 100px;
+    }
+    .foot-banner-text{
+        padding: 10px 50px;
+    }
+    .foot-banner-text h5{
+        font-size: 1.6rem;
+        padding: 0px 40px;
+    }
+    .foot-banner-text p{
+        font-size: 0.9rem;
+        padding: 0px 100px;
+    }
+    .foot-banner-iconText{
+        flex: 0 0 100%;
+        flex-direction: column;
+        padding: 20px 50px;
+        gap: 20px;
+    }
 }
 
 .foot-banner{
@@ -379,7 +380,7 @@ header, .navbar, .hero, .banner, .feature-card, img, .button a {
 
 .foot-banner-iconText {
     display: flex;
-    flex-wrap: wrap;
+    /* flex-wrap: wrap; */
     justify-content: center;
     gap: 40px;
     margin-top: 40px;
@@ -859,9 +860,6 @@ main {
         height: 36px;
     }
 }
-@media(max-width: 1200px){
-    
-}
 /* Tablet (768px - 1023px) */
 @media (min-width: 768px) and (max-width: 1023px) {
     .about-section{
@@ -1178,7 +1176,25 @@ main {
     font-size: 0.85rem;
     opacity: 1.0;
 }
+@media (max-width: 992px) {
+    /* Navbar */
 
+    /* Comparison Table */
+    .comp-row {
+        grid-template-columns: 1.5fr 1fr 1fr;
+        font-size: 0.9rem;
+    }
+    .modal-header { 
+    background: rgb(179, 178, 178);
+    width: 100%;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+
+    }
+    .modal-header p, .modal-header h3{
+        
+    font-size: 1.2rem;
+    }
+}    
 @media (max-width: 768px) {
     /* Navbar */
 
