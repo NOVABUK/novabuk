@@ -1,0 +1,901 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="icon" sizes="180x180" href="./images/image 19.png">
+  <title>Clinic Directory | NovaBuk</title>
+  <link rel="stylesheet" href="./styles-app.css">
+  <!-- <link rel="stylesheet" href="./styles.css"> -->
+  <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
+      integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <!-- font google -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Unbounded:wght@200..900&display=swap"
+      rel="stylesheet"
+    />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --teal:       #35bac9;
+      --teal-light: #7ecad7;
+      --teal-pale:  #e8f8fb;
+      --teal-dark:  #1e9aaa;
+      --dark:       #0f2027;
+      --mid:        #4a5568;
+      --light:      #718096;
+      --border:     #e2e8f0;
+      --white:      #ffffff;
+      --bg:         #f7fafc;
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--teal-light);
+      color: var(--dark);
+      min-height: 100vh;
+    }
+
+    /* ── NAV ── */
+    
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    /* ── PAGE HEADER ── */
+    .page-header {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 50vh;
+      background: linear-gradient(135deg, var(--dark) 0%, #1a3a4a 100%);
+      padding: 68px 24px 40px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .page-header::before {
+      content: '';
+      position: absolute;
+      top: -60px; right: -60px;
+      width: 240px; height: 240px;
+      background: radial-gradient(circle, rgba(53,186,201,0.15), transparent 70%);
+      border-radius: 50%;
+    }
+
+    .page-header::after {
+      content: '';
+      position: absolute;
+      bottom: -40px; left: -40px;
+      width: 180px; height: 180px;
+      background: radial-gradient(circle, rgba(126,202,215,0.1), transparent 70%);
+      border-radius: 50%;
+    }
+
+    .page-header h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 32px;
+      color: var(--white);
+      margin-top: 50px;
+      margin-bottom: 8px;
+      position: relative;
+    }
+
+    .page-header p {
+      color: rgba(255,255,255,0.6);
+      font-size: 15px;
+      position: relative;
+    }
+
+    /* ── SEARCH BAR ── */
+    .search-section {
+      font-family: 'poppins',sans-serif;
+      max-width: 720px;
+      margin: 44px auto 0;
+      padding: 60px 24px;
+      position: relative;
+      z-index: 10;
+    }
+
+    .search-bar {
+      background: var(--white);
+      border-radius: 16px;
+      padding: 6px 6px 6px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+      border: 1px solid var(--border);
+    }
+
+    .search-bar input {
+      flex: 1;
+      border: none;
+      outline: none;
+      font-family: 'poppins',sans-serif;
+      font-size: 16px;
+      color: var(--dark);
+      background: transparent;
+    }
+
+    .search-bar input::placeholder { color: var(--light); 
+      font-family: 'poppins',sans-serif;
+      font-size: 18px;}
+
+    .search-btn {
+      background: linear-gradient(135deg, var(--teal-light), var(--teal));
+      border: none;
+      color: white;
+      padding: 10px 24px;
+      border-radius: 10px;
+      font-family: 'poppins',sans-serif;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: opacity 0.2s;
+      white-space: nowrap;
+    }
+
+    .search-btn:hover { opacity: 0.9; }
+
+    /* ── FILTERS ── */
+    .filters-section {
+      max-width: 960px;
+      margin: 24px auto 0;
+      padding: 0 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .filter-label {
+      font-size: 13px;
+      color: var(--light);
+      font-weight: 500;
+      font-family: 'poppins',sans-serif;
+      font-size: 18px;
+    }
+
+    .filter-chip {
+      padding: 6px 16px;
+      border-radius: 20px;
+      border: 1.5px solid var(--border);
+      background: var(--white);
+      font-family: 'poppins',sans-serif;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--mid);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .filter-chip:hover,
+    .filter-chip.active {
+      border-color: var(--teal);
+      color: var(--teal);
+      background: var(--teal-pale);
+    }
+
+    /* ── MAIN CONTENT ── */
+    .main-js {
+      width: 100%;
+      margin: 32px auto;
+      padding: 0 84px 48px;
+    }
+    @media(max-width:992px){
+      .search-section { padding: 22px 10px; }
+      .main{padding: 0;}
+      .clinic-info{display: flex;flex-direction: column;margin: auto 0;}
+      /* .clinic-location{padding:10px 0px 0px;} */
+      .clinic-header{padding: 20px 0px 0px;}
+    }
+    @media (max-width: 640px) {
+      .main-js { padding: 0 12px 32px; }
+      .filters-section {
+        max-width: 960px;
+        margin: 24px auto 0;
+        padding: 0 7px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .search-bar input::placeholder {
+        color: var(--light); 
+        font-family: 'poppins',sans-serif;
+        font-size: 13px;
+      }
+      .search-bar input{
+        width: 100%;
+      }
+
+      .filter-label {
+        color: var(--light);
+        font-weight: 500;
+        font-family: 'poppins',sans-serif;
+        font-size: 10px;
+      }
+      .filter-chip{
+        margin-bottom: 10px;
+      }
+      .clinic-card {
+        grid-template-columns: auto 1fr;
+        grid-template-rows: auto auto;
+      }
+      .clinic-action {
+        grid-column: 1 / -1;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        padding-top: 12px;
+        border-top: 1px solid var(--border);
+      }
+      .search-section { padding: 20px 10px; }
+    }
+    @media(max-width:375px){
+      .search-bar input::placeholder {
+        color: var(--light); 
+        font-family: 'poppins',sans-serif;
+        font-size: 12px;
+      }
+      .search-bar input{
+        width: 100%;
+      }
+
+      .search-btn {
+        font-size: 10px;
+      }
+      .filters-section{
+        width: 100%;
+        padding: 0px 0px;
+      }
+      .filter-chip{
+        /*width: 40%;*/
+      }
+    }
+
+    .results-count {
+      font-size: 13px;
+      color: var(--light);
+      margin-bottom: 20px;
+    }
+
+    .results-count span {
+      color: var(--teal);
+      font-weight: 600;
+    }
+
+    /* ── CLINIC CARDS ── */
+    .clinics-grid {
+      display: grid;
+      gap: 30px;
+      background-color: white;
+      padding: 30px;
+    }
+
+    .clinic-card {
+      background: var(--white);
+      border-radius: 5px;
+      border: 3px solid var(--teal-light);
+      padding: 24px;
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      gap: 20px;
+      align-items: start;
+      cursor: pointer;
+      transition: all 0.25s;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .clinic-card:hover {
+      border-color: var(--teal-light);
+      box-shadow: 0 8px 32px rgba(53,186,201,0.12);
+      transform: translateY(-2px);
+    }
+
+    .clinic-icon {
+      width: 56px;
+      height: 56px;
+      background: var(--teal-pale);
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 26px;
+      flex-shrink: 0;
+      color: red;
+    }
+
+    .clinic-info { min-width: 0; }
+
+    .clinic-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 6px;
+      flex-wrap: wrap;
+    }
+
+    .clinic-name {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--dark);
+    }
+
+    .status-badge {
+      font-size: 11px;
+      font-weight: 600;
+      padding: 3px 10px;
+      border-radius: 20px;
+      letter-spacing: 0.3px;
+      display: block;
+    }
+
+    .status-open {
+      background: #d4edda;
+      color: #155724;
+    }
+
+    .status-closed {
+      background: #f8d7da;
+      color: #721c24;
+    }
+
+    .clinic-location {
+      font-size: 13px;
+      color: #1e9aaa;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .clinic-services {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .service-tag {
+      font-size: 11px;
+      color: var(--teal-dark);
+      background: var(--teal-pale);
+      padding: 3px 10px;
+      border-radius: 6px;
+      font-weight: 500;
+    }
+
+    .clinic-action {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+
+    .btn-book {
+      background: linear-gradient(135deg, var(--teal-light), var(--teal));
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 10px;
+      font-family: 'poppins', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: opacity 0.2s;
+      white-space: nowrap;
+    }
+
+    .btn-book:hover { opacity: 0.9; }
+
+
+    .clinic-rating {
+      font-size: 12px;
+      color: var(--light);
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .clinic-rating .stars { color: #f6ad55; }
+
+    /* ── STATES ── */
+    .state-container {
+      text-align: center;
+      padding: 80px 24px;
+    }
+
+    .state-icon {
+      font-size: 56px;
+      margin-bottom: 16px;
+      display: block;
+    }
+
+    .state-container h3 {
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--dark);
+      margin-bottom: 8px;
+    }
+
+    .state-container p {
+      font-size: 14px;
+      color: var(--light);
+      max-width: 320px;
+      margin: 0 auto;
+    }
+
+    .spinner {
+      width: 40px;
+      height: 40px;
+      border: 3px solid var(--teal-pale);
+      border-top-color: var(--teal);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin: 0 auto 16px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 640px) {
+      .nav-links { display: none; }
+
+      .page-layout{
+        padding-top: 50px;
+      }
+      .clinic-name{
+        font-size: 1rem;
+        display: flex;
+        align-items: center;
+        margin:auto 0;
+      }
+      .clinic-location {
+        width: 100%;
+        font-size: 13px;
+        color: #1e9aaa;
+        margin-top: 30px;
+      }
+      .location-icon{
+        margin-left: -80px;
+        width: 100%;
+        display: flex;
+        gap: 4px;
+        align-items: center;
+      }
+      .status-badge{
+        /*width: 60%;*/
+      }
+      .fa-location-dot{
+        display: block;
+        float: left;
+      }
+      .clinic-action {
+        grid-column: 1 / -1;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        padding-top: 12px;
+        border-top: 1px solid var(--border);
+      }
+      .clinic-services {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+      }
+
+      .service-tag {
+        font-size: 11px;
+        color: var(--teal-dark);
+        background: var(--teal-pale);
+        padding: 3px 10px;
+        /*width: 100%;*/
+        margin-left: -70px;
+        display: flex;
+        justify-content: flex-start;
+        border-radius: 6px;
+        font-weight: 500;
+      }
+
+      .page-header h1 { font-size: 24px; }
+    }
+  </style>
+</head>
+<body class="app-page">
+
+  <!-- NAV -->
+  <div class="header">
+      <div class="navbar navbar-home">
+        
+        <div class="btn-log" style="display:flex">
+          <button id="navToggle" class="nav-toggle" aria-label="Toggle navigation">
+            <i class="fas fa-bars"></i>
+          </button>
+          <div class="logo"><img src="./images/logo.png" alt="" /></div>
+        </div>
+
+        <!-- <button id="navToggle" class="nav-toggle" aria-label="Toggle navigation">
+          <i class="fas fa-bars"></i>
+        </button> -->
+
+        <div class="nav-menu navMenu" id="navMenu">
+          <ul>
+            <li><a href="./app-home.html" >Home</a></li>
+            <li><a href="./complaints.html" >Symptoms Logging</a></li>
+            <li><a href="./app-clinics.html" class="active">Clinic Directory</a></li>
+            <li><a href="./app-history.html">History</a></li>
+          </ul>
+        </div>
+        <div class="nav-buttons navbtns">
+          <ul>
+            <li>
+              <a href="app-tip-view.html" data-tip="health tips">
+                <i class="fa-solid fa-briefcase-medical"></i>
+              </a>
+            </li>
+            <li>
+              <a href="./app-history.html">
+                <i class="fa-regular fa-bell"></i>
+              </a>
+            </li>
+            <li>
+              <div class="user-profile" id="userProfileBtn">
+                <div class="profile-check"><span><div class="nav-avatar" style="font-size: 1.5em; font-family:'poppins',san-serif;" id="navAvatar"></div></span>
+                <span class="dropdown-arrow"><i class="fa-solid fa-angle-down"></i></span></div>
+                <div class="dropdown-menu" id="settingsDropdown">
+                  <!-- User identity block -->
+                  <div class="dd-user-block">
+                    <div class="dd-avatar-sm" id="ddAvatar"></div>
+                    <div class="dd-user-info">
+                      <p class="dd-name" id="ddName">—</p>
+                      <p class="dd-email" id="ddEmail">—</p>
+                    </div>
+                  </div>
+                  <div class="dd-divider"></div>
+                  <!-- Quick actions -->
+                  <div class="dropdown-item" onclick="handleMenuSelect('dashboard')">
+                    <span><i class="fa-solid fa-house"></i></span> Dashboard
+                  </div>
+                  <div class="dropdown-item" onclick="handleMenuSelect('visits')">
+                    <span><i class="fa-solid fa-calendar-check"></i></span>
+                    My Visits
+                    <span class="dd-visits-badge" id="ddVisitsBadge" style="display:none"></span>
+                  </div>
+                  <div class="dropdown-item" onclick="handleMenuSelect('profile')">
+                    <span><i class="fa-solid fa-heart-pulse"></i></span> My Health Profile
+                  </div>
+                  <div class="dd-symptom-hint" id="ddSymptomHint" style="display:none">
+                    <i class="fa-regular fa-clock"></i>
+                    <span id="ddSymptomText">Last symptom logged: —</span>
+                    <a href="./complaints.html" class="dd-log-now">Log now →</a>
+                  </div>
+                  <div class="dd-divider"></div>
+                  <div class="dropdown-item" onclick="handleMenuSelect('settings')">
+                    <span><i class="fa-solid fa-gear"></i></span> Settings
+                  </div>
+                  <div class="dd-divider"></div>
+                  <div class="dropdown-item dd-logout" onclick="handleMenuSelect('logout')">
+                    <span><i class="fa-solid fa-right-from-bracket"></i></span> Logout
+                  </div>
+                </div>
+              </div>
+            </li>
+          </ul>
+        </div>
+        
+      </div>
+  </div>
+
+  <!-- PAGE HEADER -->
+  <!-- <div class="page-header">
+    <h1>Find a Clinic</h1>
+    <p>Discover nearby healthcare providers and book your visit</p>
+  </div> -->
+
+  <!-- SEARCH -->
+  <div class="search-section">
+    <div class="search-bar">
+      <span></span>
+      <input type="text" id="searchInput" placeholder="Search by clinic name or city..." />
+      <button class="search-btn" onclick="handleSearch()">Search</button>
+    </div>
+  </div>
+
+  <!-- FILTERS -->
+  <div class="filters-section">
+    <span class="filter-label">Filter:</span>
+    <button class="filter-chip active" data-filter="all" onclick="handleFilter(this)">All Clinics</button>
+    <button class="filter-chip" data-filter="open" onclick="handleFilter(this)">Open Now</button>
+    <button class="filter-chip" data-filter="Dental" onclick="handleFilter(this)">Dental</button>
+    <button class="filter-chip" data-filter="General Practice" onclick="handleFilter(this)">General Practice</button>
+    <button class="filter-chip" data-filter="Lab Tests" onclick="handleFilter(this)">Lab Tests</button>
+    <button class="filter-chip" data-filter="Mental Health" onclick="handleFilter(this)">Mental Health</button>
+  </div>
+
+  <!-- MAIN -->
+
+  
+  
+  <main class="main">
+    
+    <div class="hero-app">
+      <h1 id="welcomeHeading" style="color: black; margin:20px 10px 0px">Nearby Clinics </h1>
+    </div>
+    <div class="main-js">
+      <p class="results-count" id="resultsCount"></p>
+      <div class="clinics-grid" id="clinicsGrid">
+        <!-- Populated by JS -->
+      </div>
+    </div>
+  </main>
+
+  <script src="./script.js"></script>
+  <script>
+    var API_URL = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1"
+      ? "http://localhost:5000/api"
+      : "https://novabuk-backend.onrender.com/api";
+ 
+    let allClinics = [];
+    let activeFilter = "all";
+    let searchQuery = "";
+ 
+    // ── AUTH GUARD ────────────────────────────────────────
+    const token = localStorage.getItem("novabuk_token");
+    const user  = JSON.parse(localStorage.getItem("novabuk_user") || "{}");
+ 
+    if (!token) window.location.href = "./sign-in.html";
+ 
+    // avatar + handleMenuSelect handled by script.js initAppNav()
+ 
+    // ── FETCH CLINICS ─────────────────────────────────────
+    async function loadClinics(params = {}) {
+      showLoading();
+ 
+      try {
+        const query = new URLSearchParams();
+        if (params.search)  query.set("search",  params.search);
+        if (params.service) query.set("service", params.service);
+        if (params.isOpen)  query.set("isOpen",  params.isOpen);
+ 
+        const res  = await fetch(`${API_URL}/clinics?${query.toString()}`);
+        const data = await res.json();
+ 
+        if (data.success) {
+          allClinics = data.data;
+          applyFilters();
+        } else {
+          showError("Could not load clinics.");
+        }
+      } catch (err) {
+        showError("Network error. Please check your connection.");
+      }
+    }
+ 
+    // ── RENDER CLINICS ────────────────────────────────────
+    function renderClinics(clinics) {
+      const grid  = document.getElementById("clinicsGrid");
+      const count = document.getElementById("resultsCount");
+ 
+      if (clinics.length === 0) {
+        count.innerHTML = "";
+        grid.innerHTML = `
+          <div class="state-container">
+            <span class="state-icon"><i class="fa-solid fa-hospital"></i></span>
+            <h3>No clinics found</h3>
+            <p>Try a different search term or filter.</p>
+          </div>`;
+        return;
+      }
+ 
+      count.innerHTML = `Showing <span>${clinics.length}</span> clinic${clinics.length !== 1 ? "s" : ""}`;
+ 
+      grid.innerHTML = clinics.map(clinic => `
+        <div class="clinic-card" onclick="bookClinic('${clinic._id}', '${escHtml(clinic.name)}', '${clinic.image || ""}')">
+          <div class="clinic-icon">${clinic.image ? `<img src="${clinic.image}" alt="${escHtml(clinic.name)}" style="width:100%;height:100%;object-fit:cover;border-radius:5px;" />` : ``}</div>
+ 
+          <div class="clinic-info">
+            <div class="clinic-header">
+              <span class="clinic-name">${escHtml(clinic.name)}</span>
+            </div>
+            <div class="clinic-location">
+              <span class = "location-icon">
+                <i class="fa-solid fa-location-dot"></i> ${escHtml(clinic.location.address)}, ${escHtml(clinic.location.city)}
+              </span>
+              
+              <span class="status-badge ${isClinicOpenNow(clinic) ? 'status-open' : 'status-closed'}">
+                ${isClinicOpenNow(clinic) ? '● Open' : '● Closed'}
+              </span>
+            </div>
+            <div class="clinic-services">
+              ${(clinic.services || []).slice(0, 4).map(s =>
+                `<span class="service-tag">${escHtml(s)}</span>`
+              ).join("")}
+            </div>
+          </div>
+ 
+          <div class="clinic-action">
+            ${clinic.numReviews > 0 ? `
+              <div class="clinic-rating">
+                <span class="stars">★</span>
+                ${clinic.averageRating} (${clinic.numReviews})
+              </div>` : ""}
+            <button
+              class="btn-book"
+              onclick="event.stopPropagation(); bookClinic('${clinic._id}', '${escHtml(clinic.name)}', '${clinic.image || ""}')">
+              Request Visit
+            </button>
+          </div>
+        </div>
+      `).join("");
+    }
+ 
+    // ── BOOK A CLINIC ─────────────────────────────────────
+    function bookClinic(clinicId, clinicName, clinicImage) {
+      if (!clinicId) return;
+
+      // Check if all required profile fields are complete
+      fetch(`${API_URL}/users/me`, {
+        headers: { Authorization: `Bearer ${token}` },
+        credentials: 'include'
+      })
+      .then(r => r.json())
+      .then(data => {
+        const u  = data.success ? data.user : {};
+        const ec = u.emergencyContact || {};
+        const name = u.fullName || "";
+        const [firstName, ...rest] = name.split(" ");
+
+        const missing = [];
+        if (!firstName)    missing.push("First Name");
+        if (!rest.join("")) missing.push("Last Name");
+        if (!u.phone)      missing.push("Phone Number");
+        if (!u.dateOfBirth) missing.push("Date of Birth");
+        if (!u.address)    missing.push("Address");
+        if (!u.city)       missing.push("City");
+        if (!u.state)      missing.push("State");
+        if (!ec.name)      missing.push("Emergency Contact Name");
+        if (!ec.phone)     missing.push("Emergency Contact Phone");
+
+        if (missing.length > 0) {
+          document.getElementById("missingFields").textContent = missing.join(", ");
+          document.getElementById("incompleteModal").style.display = "flex";
+          return;
+        }
+        proceedToBook(clinicId, clinicName, clinicImage);
+      })
+      .catch(() => proceedToBook(clinicId, clinicName, clinicImage));
+    }
+
+    function proceedToBook(clinicId, clinicName, clinicImage) {
+      localStorage.setItem("selectedClinic", JSON.stringify({
+        id:    clinicId,
+        name:  clinicName,
+        image: clinicImage || ""
+      }));
+      window.location.href = "./app-visit-request.html";
+    }
+ 
+    // ── SEARCH ────────────────────────────────────────────
+    function handleSearch() {
+      const q = document.getElementById("searchInput").value.trim();
+      searchQuery = q;
+      
+      // Call backend for a real search across the whole database
+      loadClinics({ search: q });
+    }
+ 
+    document.getElementById("searchInput")?.addEventListener("keydown", e => {
+      if (e.key === "Enter") handleSearch();
+    });
+ 
+    // ── FILTER CHIPS ─────────────────────────────────────
+    function handleFilter(el) {
+      document.querySelectorAll(".filter-chip").forEach(c => c.classList.remove("active"));
+      el.classList.add("active");
+      activeFilter = el.getAttribute("data-filter");
+      applyFilters();
+    }
+ 
+    function applyFilters() {
+      if (!allClinics || allClinics.length === 0) return;
+
+      // 1. Start with all clinics
+      let filtered = [...allClinics];
+
+      // 2. Search Filter (Name or City)
+      if (searchQuery) {
+        const q = searchQuery.toLowerCase().trim();
+        filtered = filtered.filter(c => {
+          const nameMatch = c.name && c.name.toLowerCase().includes(q);
+          const cityMatch = c.location && c.location.city && c.location.city.toLowerCase().includes(q);
+          return nameMatch || cityMatch;
+        });
+      }
+
+      // 3. Category/Status Filter
+      if (activeFilter === "open") {
+        filtered = filtered.filter(c => isClinicOpenNow(c));
+      } else if (activeFilter && activeFilter !== "all") {
+        const filterLower = activeFilter.toLowerCase();
+        filtered = filtered.filter(c => {
+          return (c.services || []).some(s => s.toLowerCase() === filterLower);
+        });
+      }
+
+      renderClinics(filtered);
+    }
+ 
+    // ── STATES ────────────────────────────────────────────
+    function showLoading() {
+      document.getElementById("resultsCount").innerHTML = "";
+      document.getElementById("clinicsGrid").innerHTML = `
+        <div class="state-container">
+          <div class="spinner"></div>
+          <p style="color:var(--light)">Loading clinics...</p>
+        </div>`;
+    }
+ 
+    function showError(msg) {
+      document.getElementById("clinicsGrid").innerHTML = `
+        <div class="state-container">
+          <span class="state-icon">⚠️</span>
+          <h3>Something went wrong</h3>
+          <p>${msg}</p>
+        </div>`;
+    }
+ 
+    function escHtml(str) {
+      return String(str)
+        .replace(/&/g,"&amp;").replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+    }
+ 
+    // ── DROPDOWN ─────────────────────────────────────────
+    function toggleDropdown(e) {
+      e.stopPropagation();
+      const d = document.getElementById("settingsDropdown");
+      d.style.display = d.style.display === "block" ? "none" : "block";
+    }
+    window.addEventListener("click", () => {
+      document.getElementById("settingsDropdown").style.display = "none";
+    });
+    // ── INIT ─────────────────────────────────────────────
+    loadClinics();
+  </script>
+
+  <!-- Incomplete Profile Modal -->
+  <div id="incompleteModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:999;justify-content:center;align-items:center;">
+    <div style="background:white;border-radius:16px;padding:36px 28px;width:90%;max-width:380px;text-align:center;font-family:'Poppins',sans-serif;">
+      <div style="width:64px;height:64px;background:#fef3c7;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;font-size:28px;">⚠️</div>
+      <h3 style="color:#0f2027;margin-bottom:10px;font-size:18px;">Complete Your Profile First</h3>
+      <p style="font-size:13px;color:#718096;line-height:1.6;margin-bottom:8px;">
+        Please fill in the following before requesting a visit:
+      </p>
+      <p id="missingFields" style="font-size:12px;color:#e53e3e;font-weight:600;margin-bottom:20px;line-height:1.8;"></p>
+      <a href="./app-setting.html?tab=profile" style="display:block;padding:12px;background:#35bac9;color:white;border-radius:10px;text-decoration:none;font-size:14px;font-weight:600;margin-bottom:10px;">
+        Complete My Profile
+      </a>
+      <button onclick="document.getElementById('incompleteModal').style.display='none'" style="width:100%;padding:12px;background:#f0f4f8;border:none;border-radius:10px;font-family:'Poppins',sans-serif;font-size:14px;cursor:pointer;color:#555;">
+        Cancel
+      </button>
+    </div>
+  </div>
+
+</body>
+</html>

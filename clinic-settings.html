@@ -1,0 +1,695 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="icon" sizes="180x180" href="./images/image 19.png">
+  <title>Clinic Settings | NovaBuk</title>
+  <link rel="stylesheet" href="./clinic.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
+    crossorigin="anonymous" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet" />
+  <style>
+    
+  </style>
+</head>
+
+<body>
+
+  <header>
+      <div class="notif-left">
+        <div class="bck-icon">
+          <a href="./clinic-queue.html" class="btn-back" style="font-size: 24px; color: var(--text); text-decoration: none;">
+            <i class="fa-solid fa-arrow-left"></i>
+          </a>
+        </div>
+        <div class="notify">
+          <h3 class="topbar-title" style="font-size: 28px; font-weight: 700;">Settings</h3>
+        </div>
+      </div>
+
+    <div class="top-side">
+
+      <div class="topbar-actions">
+
+        <!-- Search shortcut -->
+        <a href="./clinic-search.html" class="topbar-btn" title="Search patients">
+          <i class="fa-solid fa-magnifying-glass"></i>
+        </a>
+
+        <!-- Notification bell -->
+        <a href="./clinic-notifications.html" class="topbar-btn" title="Notifications">
+          <i class="fa-solid fa-bell"></i>
+          <span class="notification-badge" id="topbarNotificationBadge"></span>
+        </a>
+
+
+        <!-- Staff chip — shows name + dropdown -->
+        <div class="staff-chip" id="staffChip">
+          <div class="staff-avatar-sm" id="topbarAvatar">?</div>
+          <span class="staff-name-sm staff-name">Staff</span>
+          <i class="fa-solid fa-angle-down"id="staffIcon"></i>
+
+          <div class="staff-dropdown" id="staffDropdown">
+            <div class="staff-dropdown-item" onclick="window.location.href='./clinic-settings.html'">
+              <i class="fa-solid fa-gear"></i> Settings
+            </div>
+            <div class="staff-dropdown-item danger" onclick="clinicLogout()">
+              <i class="fa-solid fa-right-from-bracket"></i> Logout
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </header>
+
+  <div class="all-content">
+    <!-- ============================================================
+       SIDEBAR
+       We use <a> tags instead of <button> for navigation items
+       because they support href — better for semantics and
+       middle-click to open in new tab.
+    ============================================================ -->
+    <aside class="sidebar" id="sidebar">
+
+
+
+      <div class="sidebar-icon">
+        <!-- Queue — this page (active) -->
+        <a href="./clinic-queue.html" class="sidebar-nav-btn " data-tip="Today's Queue">
+          <i class="fa-solid fa-list-check"></i>
+        </a>
+
+        <!-- Search -->
+        <a href="./clinic-search.html" class="sidebar-nav-btn" data-tip="Search Patients">
+          <i class="fa-solid fa-magnifying-glass"></i>
+        </a>
+
+        <!-- Settings pushed to bottom via margin-top: auto on logout -->
+        <a href="./clinic-settings.html" class="sidebar-nav-btn active" data-tip="Settings">
+          <i class="fa-solid fa-gear"></i>
+        </a>
+      </div>
+
+      <!-- Logout — at the bottom -->
+      <div class="logout-sidebar">
+        <button class="sidebar-nav-btn sidebar-logout" data-tip="Logout" onclick="clinicLogout()">
+          <i class="fa-solid fa-right-from-bracket"></i>
+        </button>
+      </div>
+
+    </aside>
+  </div>
+
+  <div class="main">
+    
+
+    <div class="content">
+      <div class="topba">
+      <!-- <a href="./clinic-queue.html" style="text-decoration: none; color: var(--teal-dark);" class="btn-back"><i
+          class="fa-solid fa-arrow-left"></i></a> -->
+      <!-- <span class="topbar-title" style="color: var(--teal-dark);">Settings</span> -->
+      
+      <div style="margin-left:auto; display:flex; align-items:center; gap:16px;">
+        
+        <a href="./clinic-notifications.html" title="Notifications"
+          style="color:var(--teal-dark); font-size:16px; position:relative; text-decoration:none; display:flex; align-items:center; justify-content:center;">
+          <!-- <i class="fa-solid fa-bell"></i> -->
+          <span class="notification-badge" id="topbarNotificationBadge"></span>
+        </a>
+      </div>
+    </div>
+      <div class="alert" id="pageAlert">
+        <i id="alertIcon"></i>
+        <span id="alertText"></span>
+      </div>
+
+      
+
+      <!-- TAB: CLINIC PROFILE -->
+      <div id="tab-profile">
+
+        <!-- TABS -->
+      <!-- <div class="tab-list tabs">
+        <button class="tab-btn active" onclick="switchTab('profile',this)">Clinic Profile</button>
+        <button class="tab-btn" onclick="switchTab('account',this)">My Account</button>
+        <button class="tab-btn" onclick="switchTab('plan',this)">Plan</button>
+      </div> -->
+        <!-- Photo -->
+        
+
+        <!-- Clinic details -->
+        <div class="card">
+          <div class="card-head" style="">
+            <h3>Clinic Information</h3>
+            <button id="editToggleBtn" onclick="toggleEditMode()"
+              style="background:var(--teal-dark); border:none; padding:6px 14px; border-radius:8px; font-family:inherit; font-size:12px; font-weight:600; cursor:pointer; transition:all 0.15s;">
+              <i class="fa-solid fa-pen-to-square"></i> Edit
+            </button>
+          </div>
+          <div class="card-body">
+            <div class="photo-section">
+          <div class="clinic-photo" id="clinicPhotoWrap">
+            <i class="fa-solid fa-hospital-alt" id="photoIcon"></i>
+          </div>
+          <div class="photo-right">
+            <h4>Clinic / Doctor Photo</h4>
+            <p>Upload your clinic front, logo, or doctor photo.<br>JPG or PNG, max 5MB.</p>
+            <div class="photo-btns">
+              <button class="btn-upload" id="uploadBtn" onclick="document.getElementById('photoFileInput').click()"
+                disabled>
+                <i class="fa-solid fa-camera"></i> Upload Photo
+              </button>
+              <button class="btn-remove-photo" id="removePhotoBtn" onclick="removePhoto()" style="display:none"
+                disabled>
+                <i class="fa-solid fa-trash"></i> Remove
+              </button>
+            </div>
+            <input type="file" id="photoFileInput" accept="image/*" onchange="handlePhotoSelect(event)" />
+            <div class="upload-note" id="uploadNote">Uploading…</div>
+          </div>
+        </div>
+            <div class="field">
+              <label>Clinic Name</label>
+              <input type="text" id="fName" placeholder="e.g. Greenfield Medical Centre" disabled />
+            </div>
+            <div class="field">
+              <label>Street Address</label>
+              <input type="text" id="fAddress" placeholder="e.g. 14 Adeola Odeku Street" disabled />
+            </div>
+            <div class="form-row">
+              <div class="field"><label>City</label><input type="text" id="fCity" placeholder="Lagos" disabled /></div>
+              <div class="field"><label>State</label><input type="text" id="fState" placeholder="Lagos State"
+                  disabled /></div>
+            </div>
+            <div class="form-row">
+              <div class="field"><label>Phone Number</label><input type="tel" id="fPhone"
+                  placeholder="+234 800 000 0000" disabled /></div>
+              <div class="field"><label>Clinic Email</label><input type="email" id="fEmail"
+                  placeholder="clinic@email.com" disabled /></div>
+            </div>
+            <div class="field">
+              <label>Services Offered</label>
+              <div class="svc-wrap disabled" id="svcWrap"
+                onclick="if(!isEditMode) return; document.getElementById('svcInput').focus()">
+                <input type="text" id="svcInput" placeholder="Type a service, press Enter…" disabled />
+              </div>
+            </div>
+            <!-- Availability & Operating Hours -->
+            <div class="card">
+              <div class="card-head">
+                <h3>Availability & Operating Hours</h3>
+              </div>
+              <div class="card-body">
+
+                <!-- Global Manual Toggle -->
+                <div class="toggle-row"
+                  style="padding-bottom: 20px; border-bottom: 1px solid var(--border); margin-bottom: 20px;">
+                  <div class="toggle-label">
+                    <h4 style="margin:0; font-size:15px;">Global Clinic Status</h4>
+                    <p style="margin:4px 0 0; font-size:12px; color:var(--light);">Manually set your clinic as Open or
+                      Closed right now.</p>
+                  </div>
+                  <label class="toggle">
+                    <input type="checkbox" id="isOpenToggle" disabled />
+                    <span class="slider"></span>
+                  </label>
+                </div>
+
+                <div class="hours-grid">
+                  <!-- Monday - Friday -->
+                  <div class="hour-row">
+                    <div class="hour-day">
+                      <label class="day-check">
+                        <input type="checkbox" id="hMonFriOpen" onchange="toggleDayInputs('MonFri')" disabled />
+                        <span>Mon - Fri</span>
+                      </label>
+                    </div>
+                    <div class="hour-time"><input type="time" id="hMonFriStart" disabled /></div>
+                    <div class="hour-time"><input type="time" id="hMonFriEnd" disabled /></div>
+                  </div>
+
+                  <!-- Saturday -->
+                  <div class="hour-row">
+                    <div class="hour-day">
+                      <label class="day-check">
+                        <input type="checkbox" id="hSatOpen" onchange="toggleDayInputs('Sat')" disabled />
+                        <span>Saturday</span>
+                      </label>
+                    </div>
+                    <div class="hour-time"><input type="time" id="hSatStart" disabled /></div>
+                    <div class="hour-time"><input type="time" id="hSatEnd" disabled /></div>
+                  </div>
+
+                  <!-- Sunday -->
+                  <div class="hour-row">
+                    <div class="hour-day">
+                      <label class="day-check">
+                        <input type="checkbox" id="hSunOpen" onchange="toggleDayInputs('Sun')" disabled />
+                        <span>Sunday</span>
+                      </label>
+                    </div>
+                    <div class="hour-time"><input type="time" id="hSunStart" disabled /></div>
+                    <div class="hour-time"><input type="time" id="hSunEnd" disabled /></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <button class="btn-save" id="saveBtn" onclick="saveProfile()" style="display:none">
+              <i class="fa-solid fa-floppy-disk"></i> Save Changes
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB: MY ACCOUNT -->
+      <div id="tab-account">
+        <div class="card">
+          <div class="card-head">
+            <h3>Account Details</h3>
+          </div>
+          <div class="info-row"><span class="info-label">Full Name</span><span class="info-value"
+              id="accName">—</span>
+          </div>
+          <div class="info-row"><span class="info-label">Email</span><span class="info-value" id="accEmail">—</span>
+          </div>
+          <div class="info-row"><span class="info-label">Role</span><span class="info-value" id="accRole">—</span>
+          </div>
+          <div class="info-row"><span class="info-label">Clinic</span><span class="info-value clinic-name">—</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-head">
+            <h3>Security</h3>
+          </div>
+          <div class="card-body">
+            <div class="field">
+              <label>Current Password</label>
+              <input type="password" id="curPw" placeholder="••••••••" />
+            </div>
+            <div class="form-row">
+              <div class="field"><label>New Password</label><input type="password" id="newPw"
+                  placeholder="Min 6 chars" /></div>
+              <div class="field"><label>Confirm New Password</label><input type="password" id="cfmPw"
+                  placeholder="Repeat new password" /></div>
+            </div>
+            <button class="btn-save" id="pwBtn" onclick="changePassword()" style="margin-top:4px">
+              <i class="fa-solid fa-lock"></i> Update Password
+            </button>
+          </div>
+        </div>
+
+        
+      </div>
+
+      <!-- TAB: PLAN -->
+      <div id="tab-plan">
+        <div class="card">
+          <div class="card-head">
+            <h3>Subscription</h3>
+          </div>
+          <div class="info-row"><span class="info-label">Current Plan</span><span class="plan-pill"><i
+                class="fa-solid fa-star"></i> Free MVP</span></div>
+          <!-- <div class="info-row"><span class="info-label">Visit History</span><span class="info-value">Last 3 visits
+              per
+              patient</span></div> -->
+          <!-- <div class="info-row"><span class="info-label">Full Timeline</span><span class="info-value"
+              style="color:var(--error)"><i class="fa-solid fa-lock"
+                style="font-size:11px;margin-right:4px"></i>Upgrade
+              required</span></div> -->
+        </div>
+        <div class="upgrade-card">
+          <h3>Unlock Full NovaBuk</h3>
+          <p>Complete patient history, analytics, and multi-staff accounts.</p>
+          <div class="upgrade-features">
+            <div class="upgrade-feature"><i class="fa-solid fa-check"></i> Basic Health Record</div>
+            <div class="upgrade-feature"><i class="fa-solid fa-check"></i> Appointments Management</div>
+            <div class="upgrade-feature"><i class="fa-solid fa-check"></i> Digital Prescription</div>
+            <!-- <div class="upgrade-feature"><i class="fa-solid fa-check"></i> SMS reminders</div> -->
+            <div class="upgrade-feature lock"><i class="fa-solid fa-lock"></i> AI Insights(Premium)</div>
+            <div class="upgrade-feature lock"><i class="fa-solid fa-lock"></i> Smart Scheduling(Premium)</div>
+            <div class="upgrade-feature lock"><i class="fa-solid fa-lock"></i> Predictive Analytics(Premium)</div>
+          </div>
+          <button class="btn-upgrade" onclick="alert('Upgrade coming soon. Email hello@novabuk.com')">
+            <i class="fa-solid fa-arrow-up" style="margin-right:6px"></i> Upgrade Plan
+          </button>
+        </div>
+      </div>
+      <button class="btn-logout" onclick="clinicLogout()"><i class="fa-solid fa-right-from-bracket"></i> Log
+          Out</button>
+    </div><!-- /content -->
+  </div><!-- /main -->
+
+      <script src="./clinic-shared.js"></script>
+      <script>
+        const storedUser = JSON.parse(localStorage.getItem("novabuk_user") || "{}");
+        document.getElementById("accName").textContent = storedUser.fullName || "—";
+        document.getElementById("accEmail").textContent = storedUser.email || "—";
+        document.getElementById("accRole").textContent = storedUser.role || "—";
+
+        // ── TABS ────────────────────────────────────────────────────
+        function switchTab(name, btn) {
+          ["profile", "account", "plan"].forEach(t => {
+            document.getElementById("tab-" + t).style.display = "none";
+          });
+          document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+          document.getElementById("tab-" + name).style.display = "block";
+          btn.classList.add("active");
+        }
+
+        // ── SERVICES CHIPS ───────────────────────────────────────────
+        const services = [];
+
+        document.getElementById("svcInput").addEventListener("keydown", function (e) {
+          if (e.key === "Enter" || e.key === ",") {
+            e.preventDefault();
+            const val = this.value.trim().replace(/,$/, "");
+            if (val && !services.includes(val)) { services.push(val); renderChips(); }
+            this.value = "";
+          }
+          if (e.key === "Backspace" && this.value === "" && services.length) {
+            services.pop(); renderChips();
+          }
+        });
+
+        function renderChips() {
+          const wrap = document.getElementById("svcWrap");
+          const input = document.getElementById("svcInput");
+          wrap.querySelectorAll(".svc-chip").forEach(c => c.remove());
+          services.forEach((s, i) => {
+            const chip = document.createElement("div");
+            chip.className = "svc-chip";
+            chip.innerHTML = s + `<button type="button" onclick="removeSvc(${i})">×</button>`;
+            wrap.insertBefore(chip, input);
+          });
+        }
+
+        function removeSvc(i) { services.splice(i, 1); renderChips(); }
+
+        // ── LOAD CLINIC DATA ─────────────────────────────────────────
+        async function loadClinic() {
+          try {
+            const res = await clinicFetch(`${API_URL}/clinics/my`);
+            const data = await res.json();
+            if (!data.success) return;
+            const c = data.clinic;
+            document.getElementById("fName").value = c.name || "";
+            document.getElementById("fAddress").value = c.location?.address || "";
+            document.getElementById("fCity").value = c.location?.city || "";
+            document.getElementById("fState").value = c.location?.state || "";
+            document.getElementById("fPhone").value = c.contactPhone || "";
+            document.getElementById("fEmail").value = c.contactEmail || "";
+            document.getElementById("isOpenToggle").checked = c.isOpen !== false;
+
+            // New fields (guard against missing elements)
+            const fFeeEl = document.getElementById("fFee");
+            if (fFeeEl) fFeeEl.value = c.consultationFee || "";
+            const fSessionEl = document.getElementById("fSessionTime");
+            if (fSessionEl) fSessionEl.value = c.avgSessionTime || "";
+
+            if (c.openingHours) {
+              document.getElementById("hMonFriStart").value = c.openingHours.monday?.open || "";
+              document.getElementById("hMonFriEnd").value = c.openingHours.monday?.close || "";
+              document.getElementById("hSatStart").value = c.openingHours.saturday?.open || "";
+              document.getElementById("hSatEnd").value = c.openingHours.saturday?.close || "";
+              document.getElementById("hSunStart").value = c.openingHours.sunday?.open || "";
+              document.getElementById("hSunEnd").value = c.openingHours.sunday?.close || "";
+
+              // Set checkboxes based on whether times exist
+              document.getElementById("hMonFriOpen").checked = !!(c.openingHours.monday?.open || c.openingHours.monday?.close);
+              document.getElementById("hSatOpen").checked = !!(c.openingHours.saturday?.open || c.openingHours.saturday?.close);
+              document.getElementById("hSunOpen").checked = !!(c.openingHours.sunday?.open || c.openingHours.sunday?.close);
+
+              toggleDayInputs('MonFri');
+              toggleDayInputs('Sat');
+              toggleDayInputs('Sun');
+            }
+
+            services.length = 0;
+            (c.services || []).forEach(s => services.push(s));
+            renderChips();
+            if (c.image) { setPhoto(c.image); document.getElementById("removePhotoBtn").style.display = "flex"; }
+            currentImage = c.image || "";
+
+            // Ensure everything is disabled after load if not in edit mode
+            if (!isEditMode) disableInputs(true);
+          } catch (e) { console.error("Load clinic error:", e); }
+        }
+        loadClinic();
+
+        // ── EDIT MODE ────────────────────────────────────────────────
+        let isEditMode = false;
+        function toggleEditMode() {
+          isEditMode = !isEditMode;
+          const btn = document.getElementById("editToggleBtn");
+          const saveBtn = document.getElementById("saveBtn");
+
+          if (isEditMode) {
+            btn.innerHTML = `<i class="fa-solid fa-xmark"></i> Cancel`;
+            btn.style.background = "rgba(231, 76, 60, 0.2)";
+            btn.style.color = "#ff8a80";
+            saveBtn.style.display = "flex";
+            disableInputs(false);
+          } else {
+            btn.innerHTML = `<i class="fa-solid fa-pen-to-square"></i> Edit`;
+            btn.style.background = "var(--teal-dark)";
+            btn.style.color = "white";
+            saveBtn.style.display = "none";
+            loadClinic(); // Reset fields
+            disableInputs(true);
+          }
+        }
+
+        function toggleDayInputs(day) {
+          const isOpen = document.getElementById(`h${day}Open`).checked;
+          const start = document.getElementById(`h${day}Start`);
+          const end = document.getElementById(`h${day}End`);
+          if (start) start.disabled = !isOpen || !isEditMode;
+          if (end) end.disabled = !isOpen || !isEditMode;
+        }
+
+        function disableInputs(disabled) {
+          const ids = [
+            "fName", "fAddress", "fCity", "fState", "fPhone", "fEmail",
+            "isOpenToggle", "uploadBtn", "removePhotoBtn", "svcInput",
+            "hMonFriOpen", "hSatOpen", "hSunOpen",
+            "hMonFriStart", "hMonFriEnd", "hSatStart", "hSatEnd", "hSunStart", "hSunEnd"
+          ];
+          ids.forEach(id => {
+            const el = document.getElementById(id);
+            if (el) el.disabled = disabled;
+          });
+
+          // Re-run day toggles to ensure time inputs stay disabled if the day is unchecked
+          if (!disabled) {
+            toggleDayInputs('MonFri');
+            toggleDayInputs('Sat');
+            toggleDayInputs('Sun');
+          }
+          const svcWrap = document.getElementById("svcWrap");
+          if (svcWrap) {
+            if (disabled) svcWrap.classList.add("disabled");
+            else svcWrap.classList.remove("disabled");
+          }
+        }
+
+        // ── PHOTO UPLOAD ─────────────────────────────────────────────
+        let currentImage = "";
+        let cloudCfg = null;
+
+        async function getCloudCfg() {
+          if (cloudCfg) return cloudCfg;
+          const res = await fetch(`${API_URL}/uploads/cloudinary/sign`, {
+            method: "POST",
+            headers: { Authorization: `Bearer ${localStorage.getItem("novabuk_token")}` },
+            credentials: "include",
+          });
+          cloudCfg = await res.json();
+          return cloudCfg;
+        }
+
+        function setPhoto(url) {
+          const wrap = document.getElementById("clinicPhotoWrap");
+          const icon = document.getElementById("photoIcon");
+          if (icon) icon.style.display = "none";
+          let img = wrap.querySelector("img");
+          if (!img) { img = document.createElement("img"); wrap.appendChild(img); }
+          img.src = url; img.alt = "Clinic photo";
+        }
+
+        async function handlePhotoSelect(event) {
+          const file = event.target.files[0];
+          if (!file) return;
+          if (file.size > 5 * 1024 * 1024) { showAlert("error", "Photo must be under 5MB."); return; }
+
+          const btn = document.getElementById("uploadBtn");
+          const note = document.getElementById("uploadNote");
+          btn.disabled = true;
+          btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Uploading…`;
+          note.classList.add("show");
+
+          try {
+            const cfg = await getCloudCfg();
+            const form = new FormData();
+            form.append("file", file);
+            if (cfg.unsigned) {
+              form.append("upload_preset", cfg.upload_preset);
+            } else {
+              form.append("signature", cfg.signature);
+              form.append("timestamp", cfg.timestamp);
+              form.append("api_key", cfg.api_key);
+            }
+            const res = await fetch(`https://api.cloudinary.com/v1_1/${cfg.cloud_name}/image/upload`, { method: "POST", body: form });
+            const data = await res.json();
+            if (data.secure_url) {
+              currentImage = data.secure_url;
+              setPhoto(currentImage);
+              document.getElementById("removePhotoBtn").style.display = "flex";
+              showAlert("success", "Photo uploaded. Click Save Changes to apply.");
+            } else { throw new Error("Upload failed"); }
+          } catch (e) {
+            showAlert("error", "Photo upload failed. Please try again.");
+          } finally {
+            btn.disabled = false;
+            btn.innerHTML = `<i class="fa-solid fa-camera"></i> Upload Photo`;
+            note.classList.remove("show");
+          }
+        }
+
+        function removePhoto() {
+          currentImage = "";
+          const wrap = document.getElementById("clinicPhotoWrap");
+          const img = wrap.querySelector("img");
+          if (img) img.remove();
+          const icon = document.getElementById("photoIcon");
+          if (icon) icon.style.display = "";
+          document.getElementById("removePhotoBtn").style.display = "none";
+        }
+
+        // ── SAVE PROFILE ─────────────────────────────────────────────
+        async function saveProfile() {
+          const partial = document.getElementById("svcInput").value.trim();
+          if (partial && !services.includes(partial)) { services.push(partial); renderChips(); }
+          document.getElementById("svcInput").value = "";
+
+          const btn = document.getElementById("saveBtn");
+          btn.disabled = true;
+          btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Saving…`;
+
+          const monFriStart = document.getElementById("hMonFriOpen").checked ? document.getElementById("hMonFriStart").value : "";
+          const monFriEnd = document.getElementById("hMonFriOpen").checked ? document.getElementById("hMonFriEnd").value : "";
+          const satStart = document.getElementById("hSatOpen").checked ? document.getElementById("hSatStart").value : "";
+          const satEnd = document.getElementById("hSatOpen").checked ? document.getElementById("hSatEnd").value : "";
+          const sunStart = document.getElementById("hSunOpen").checked ? document.getElementById("hSunStart").value : "";
+          const sunEnd = document.getElementById("hSunOpen").checked ? document.getElementById("hSunEnd").value : "";
+
+          const payload = {
+            name: document.getElementById("fName").value,
+            location: {
+              address: document.getElementById("fAddress").value,
+              city: document.getElementById("fCity").value,
+              state: document.getElementById("fState").value
+            },
+            contactPhone: document.getElementById("fPhone").value,
+            contactEmail: document.getElementById("fEmail").value,
+            isOpen: document.getElementById("isOpenToggle").checked,
+            services,
+            image: currentImage,
+            openingHours: {
+              monday:    { open: monFriStart, close: monFriEnd },
+              tuesday:   { open: monFriStart, close: monFriEnd },
+              wednesday: { open: monFriStart, close: monFriEnd },
+              thursday:  { open: monFriStart, close: monFriEnd },
+              friday:    { open: monFriStart, close: monFriEnd },
+              saturday:  { open: satStart, close: satEnd },
+              sunday:    { open: sunStart, close: sunEnd }
+            }
+          };
+
+          try {
+            const res = await clinicFetch(`${API_URL}/clinics/my`, {
+              method: "PATCH",
+              body: JSON.stringify(payload)
+            });
+            const data = await res.json();
+
+            if (data.success) {
+              // Update clinicName in localStorage if name changed
+              if (data.clinic?.name) {
+                const u = JSON.parse(localStorage.getItem("novabuk_user") || "{}");
+                u.clinicName = data.clinic.name;
+                localStorage.setItem("novabuk_user", JSON.stringify(u));
+                document.querySelectorAll(".clinic-name").forEach(el => el.textContent = data.clinic.name);
+              }
+              showAlert("success", "Clinic profile saved successfully.");
+              toggleEditMode();
+            } else {
+              showAlert("error", data.message || "Failed to save.");
+            }
+          } catch (e) {
+            showAlert("error", "Network error. Please try again.");
+          } finally {
+            btn.disabled = false;
+            btn.innerHTML = `<i class="fa-solid fa-floppy-disk"></i> Save Changes`;
+          }
+        }
+
+        // ── CHANGE PASSWORD ──────────────────────────────────────────
+        async function changePassword() {
+          const curPw = document.getElementById("curPw").value;
+          const newPw = document.getElementById("newPw").value;
+          const cfmPw = document.getElementById("cfmPw").value;
+
+          if (!curPw || !newPw || !cfmPw) { showAlert("error", "Please fill all password fields."); return; }
+          if (newPw !== cfmPw) { showAlert("error", "New passwords do not match."); return; }
+          if (newPw.length < 6) { showAlert("error", "New password must be at least 6 characters."); return; }
+
+          const btn = document.getElementById("pwBtn");
+          btn.disabled = true;
+          btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Updating…`;
+
+          try {
+            const res = await clinicFetch(`${API_URL}/users/change-password`, {
+              method: "PUT",
+              body: JSON.stringify({ currentPassword: curPw, newPassword: newPw })
+            });
+            const data = await res.json();
+            if (data.success) {
+              showAlert("success", "Password updated successfully.");
+              document.getElementById("curPw").value = "";
+              document.getElementById("newPw").value = "";
+              document.getElementById("cfmPw").value = "";
+            } else {
+              showAlert("error", data.message || "Failed to update password.");
+            }
+          } catch (e) {
+            showAlert("error", "Network error. Please try again.");
+          } finally {
+            btn.disabled = false;
+            btn.innerHTML = `<i class="fa-solid fa-lock"></i> Update Password`;
+          }
+        }
+
+        // ── ALERT ────────────────────────────────────────────────────
+        let alertTimer = null;
+        function showAlert(type, message) {
+          const el = document.getElementById("pageAlert");
+          const icon = document.getElementById("alertIcon");
+          const text = document.getElementById("alertText");
+          el.className = "alert " + type + " show";
+          icon.className = type === "success" ? "fa-solid fa-circle-check" : "fa-solid fa-circle-exclamation";
+          text.textContent = message;
+          el.scrollIntoView({ behavior: "smooth", block: "center" });
+          clearTimeout(alertTimer);
+          alertTimer = setTimeout(() => el.classList.remove("show"), 4000);
+        }
+      </script>
+</body>
+
+</html>

@@ -1,0 +1,2147 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Transition variables and gentle animations */
+:root {
+  --trans-fast: 0.16s;
+  --trans: 0.28s;
+  --trans-slow: 0.45s;
+  --ease-default: cubic-bezier(0.2, 0.9, 0.3, 1);
+}
+
+/* Respect user preference for reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --trans-fast: 0s;
+    --trans: 0s;
+    --trans-slow: 0s;
+  }
+
+  * {
+    transition: none !important;
+    animation-duration: 0s !important;
+  }
+}
+
+/* Page load gentle fade for major sections */
+@keyframes nb-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.nav-menu ul li a {
+  color: black;
+  display: flex;
+  margin: 14px;
+  text-decoration: none;
+  transition:
+  color 0.3s ease,
+  transform 0.3s ease;
+}
+
+/* Nav toggle (hamburger) and responsive nav behavior */
+.nav-toggle,
+.hamburger {
+  display: none;
+  background: transparent;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: #fff;
+  /* margin-left: auto; */
+  padding: 10px 15px;
+  transition: all 0.3s ease;
+  z-index: 1001;
+}
+
+#loggedoutHamburger {
+  display: none;
+  margin-left: 180px;
+  padding: 10px 0px;
+}
+
+#loggedoutHamburger .fa-bars {
+  color: #fff;
+  margin-left: auto;
+}
+
+#idxLoggedOut .logo {
+  /* width: 100px; */
+  /* margin-left: 5px; */
+  /* object-fit: contain; */
+}
+
+.nav-toggle:hover,
+.hamburger:hover {
+  transform: scale(1.1);
+  /* color: #ffeb3b; */
+}
+
+/* Hover underline */
+.nav-menu ul li a:hover::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 2px;
+  /* background-color: rgb(66, 66, 206); */
+}
+
+/* Active underline */
+.nav-menu ul li a.active {
+  /* border-bottom: 2px solid #ff9800; */
+  padding-bottom: 4px;
+  color: white;
+}
+
+.nav-menu ul li a.active:hover {
+  font-size: 1.2rem;
+  transition: 0.3 ease-in 2s;
+}
+
+.header {
+  background: linear-gradient(130deg, #7ecad7, #35bac9);
+  font-family: "Poppins", sans-serif;
+  font-weight: 300;
+  font-style: normal;
+}
+
+.header .navbar {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 10px 0px;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1000;
+  background: linear-gradient(130deg, #7ecad7, #35bac9);
+}
+
+.nav-menu ul,
+.nav-buttons ul,
+.nav-buttons ul {
+  display: flex;
+  gap: 5px;
+}
+
+.idx-auth-btns {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.idx-auth-btns .auth-link {
+  color: #2997a8;
+  background: #fff;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-weight: 600;
+  text-decoration: none;
+  border: 1px solid #2997a8;
+}
+
+.nav-auth-links {
+  display: none;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 10px;
+  border-top: 1px solid rgba(255, 255, 255, 0.4);
+  padding-top: 10px;
+}
+
+.nav-auth-links .auth-link {
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.65);
+  background: rgba(255, 255, 255, 0.12);
+  padding: 8px 10px;
+  border-radius: 8px;
+  text-decoration: none;
+}
+
+.nav-menu ul li,
+.nav-buttons ul li {
+  list-style: none;
+}
+
+.nav-menu ul li a,
+.nav-buttons ul li a {
+  color: #fff;
+  display: flex;
+  /* margin-left: 16px; */
+  text-decoration: none;
+}
+
+.nav-buttons ul li a {
+  padding: 0px 10px;
+}
+
+.nav-buttons ul li a,
+.user-profile {
+  border: 1px solid #797979;
+  height: 40px;
+  width: 40px;
+  font-size: 20px;
+  background-color: white;
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
+  text-align: center;
+  align-items: center;
+  border-radius: 50%;
+  /* padding: 0px 10px; */
+  color: #2997a8;
+}
+
+.nav-buttons ul li a:hover {
+  background-color: #fff;
+  color: #35bac9;
+}
+
+.user-profile {
+  position: relative;
+  cursor: pointer;
+  border: none;
+  background: transparent;
+  color: white;
+  display: flex;
+  align-items: center;
+}
+
+.user-profile .profile-check {
+  border: 1px solid #797979;
+  display: flex;
+  align-items: center;
+  background-color: white;
+  gap: 4px;
+  padding: 0px 10px;
+  width: 100px;
+  border-radius: 45px;
+  height: 35px;
+  color: #2997a8;
+}
+
+.nav-avatar {
+  height: 28px;
+  width: 28px;
+  color: white;
+  background-color: #2997a8;
+  border: 1px solid #797979;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dropdown-menu {
+  display: none;
+  position: absolute;
+  top: 60px;
+  right: -40px;
+  background-color: white;
+  min-width: 160px;
+  width: 300px;
+  box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+  z-index: 1001;
+  border-radius: 8px;
+  padding: 10px 0;
+}
+
+.dropdown-menu.show {
+  display: block;
+}
+
+.dropdown-item {
+  padding: 10px 20px;
+  color: #333;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.dropdown-item:hover {
+  background-color: #f1f1f1;
+}
+
+.dropdown-item.logout {
+  color: #ff7675;
+}
+
+.hero-app {
+  /* text-align: center; */
+  /* padding: 30px 65px 0px; */
+  color: #fff;
+  /* background-color: red; */
+  /* line-height: 2.5rem; */
+  font-family: "Poppins", sans-serif;
+  /* font-weight: 800; */
+  font-style: normal;
+}
+
+.main-info {
+  /* background-color: blue; */
+  display: flex;
+  align-items: center;
+  margin: 50px 10px;
+  padding: 40px 65px 0px;
+  justify-content: space-between;
+  /* height: 100vh; */
+}
+
+main {
+  background-color: #7ecad7;
+  width: 100%;
+  font-family: "Poppins", sans-serif;
+}
+
+.main-body {
+  padding: 40px;
+}
+
+.hero-detail {
+  padding: 0px 40px;
+  margin-bottom: 40px;
+}
+
+.hero-box {
+  border: 1px solid #2997a8;
+  background-color: #2997a8;
+  border-radius: 10px;
+  padding: 20px;
+}
+
+.hero-box>.detail-border {
+  background-color: white;
+  border: 1px solid white;
+  color: #000;
+  box-shadow: 2px 1px 30px rgb(221, 221, 221);
+  padding: 30px 40px;
+  border-radius: 10px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.box-one {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.box-one>.box-text {
+  line-height: 1.5;
+  width: 100%;
+}
+
+.box-one>.box-text h3 {
+  font-size: 24px;
+}
+
+.box-one>.box-text p {
+  font-size: 18px;
+  font-weight: 500;
+  opacity: 0.95;
+}
+
+.cta-box a {
+  border: 1px solid #2997a8;
+  background-color: #2997a8;
+  text-decoration: none;
+  /* width: 100%; */
+  padding: 10px 20px;
+  border-radius: 10px;
+  color: white;
+}
+
+.hero-box>h4 {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.hero-box>h4 i {
+  width: 50px;
+  height: 50px;
+  border: 2px solid;
+  border-radius: 50%;
+  font-size: 2rem;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.box-icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+@media (max-width: 768px) {
+  .main-info {
+    margin: 0px 0px 0px 10px;
+    padding: 5px 0px 0px 5px;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .page-main {
+    margin: 10px 0px 0px 10px;
+    padding: 50px 0px 0px 5px;
+  }
+
+  .hero-app {
+    width: 100%;
+    padding: 10px 10px 0px;
+  }
+
+  .hero-detail {
+    padding: 0px 0px;
+  }
+
+  .hero-box>.detail-border {
+    padding: auto 0px;
+    width: 100%;
+    flex-direction: column-reverse;
+    gap: 40px;
+    /* align-items: center; */
+    /* text-align: center; */
+  }
+
+  .main-body {
+    width: 100%;
+  }
+
+  .box-one {
+    width: 100%;
+    gap: 40px;
+    margin-bottom: 20px;
+  }
+
+  .cta-box {
+    width: auto;
+  }
+
+  .box-one>.box-text h3 {
+    font-size: 24px;
+  }
+
+  .box-one>.box-text p {
+    font-size: 14px;
+    font-weight: 500;
+    width: 100%;
+  }
+
+  #loggedoutHamburger {
+    display: none;
+    margin-left: auto;
+    padding: 10px 0px;
+  }
+
+}
+
+/* LOG COMPLAINTS SECTION */
+
+#form {
+  padding-left: 40px;
+}
+
+#form {
+  display: block;
+}
+
+#form>label {
+  font-size: 1.7rem;
+  font-weight: 500;
+  color: #1a1a1a;
+}
+
+#form>textarea {
+  width: 100%;
+  height: 350px;
+  padding: 10px;
+  border-radius: 8px;
+  border: 6px solid #2997a8;
+  font-family: "Poppins", sans-serif;
+  font-size: 1rem;
+  margin-top: 8px;
+}
+
+#form>textarea:focus {
+  outline: none;
+  border-color: #35bac9;
+}
+
+#form>textarea::placeholder {
+  color: #999;
+}
+
+#form>p {
+  font-size: 1.8rem;
+  margin-top: 50px;
+  opacity: 0.95;
+}
+
+.symptoms-options {
+  display: flex;
+  gap: 20px;
+  padding: 20px 20px 20px 0px;
+  flex-wrap: wrap;
+}
+
+.symptoms-options label {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  border: 1px solid #2997a8;
+  border-radius: 35px;
+  padding: 10px 20px;
+  font-family: "Poppins", sans-serif;
+  font-size: 2rem;
+  background-color: #fff;
+  color: #000;
+}
+
+.symptoms-options label input[type="checkbox"] {
+  appearance: none;
+  width: 40px;
+  height: 40px;
+  border: 2px solid #2997a8;
+  border-radius: 50%;
+  cursor: pointer;
+  outline: none;
+  display: grid;
+  place-content: center;
+  padding: 20px;
+  cursor: pointer;
+  transition: 0.2s all ease-in-out;
+}
+
+.round-checkbox::before {
+  content: "";
+  width: 20px;
+  height: 20px;
+  transform: scale(0);
+  transition: 120ms transform ease-in-out;
+  box-shadow: inset 1em 1em white;
+  background-color: CanvasText;
+  clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
+}
+
+/* Checked State */
+.round-checkbox:checked {
+  background-color: #2997a8;
+  border-color: #2196f3;
+}
+
+.round-checkbox:checked::before {
+  transform: scale(1);
+}
+
+/* Focus state for accessibility */
+.round-checkbox:focus {
+  outline: 2px solid #2196f3;
+  outline-offset: 2px;
+}
+
+#form>button {
+  margin-top: 20px;
+  padding: 35px 20px;
+  width: 100%;
+  background-color: #35bac9;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 2rem;
+  font-weight: 600;
+  font-family: "Poppins", sans-serif;
+  transition: all 0.3s ease;
+}
+
+#hero-box {
+  width: 100%;
+  padding: 20px;
+  margin-top: 50px;
+}
+
+
+
+/* ============================================
+   MOBILE NAVBAR STYLES FOR APP PAGES
+   ============================================ */
+@media (max-width: 1023px) {
+
+  /*  Navbar Layout  */
+  .header .navbar {
+    width: 100%;
+    padding: 0px 15px;
+    /* gap: 50px; */
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .header .navbar-home {
+    padding: 0px 50px 0px 10px;
+  }
+
+  .header .logo {
+    order: 2;
+    display: flex;
+  }
+
+  .navbar img {
+    width: 100px;
+    object-fit: contain;
+  }
+
+  /* Toggle Button */
+  .nav-toggle,
+  .hamburger {
+    display: block;
+    order: 1;
+  }
+
+  .navMenu.open {
+
+    display: block !important;
+    position: absolute;
+    top: 40px;
+    right: 0;
+    width: 100%;
+    background: linear-gradient(130deg, #7ecad7, #35bac9);
+    padding: 12px 16px;
+    z-index: 999 !important;
+
+  }
+
+  /* Navigation Menu */
+  .nav-menu {
+    display: none;
+    /* width: 80%; */
+    background: linear-gradient(130deg,
+        #7ecad7,
+        #35bac9);
+
+    width: 100%;
+    position: absolute;
+    top: 20px;
+    right: 0;
+    margin-top: 10px;
+    border-radius: 8px;
+    box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.16);
+    padding: 12px 16px;
+    /* opacity: 0.8; */
+    z-index: 999;
+  }
+
+  .navMenu {
+
+    display: none;
+
+  }
+
+  .nav-menu ul {
+    flex-direction: column;
+    gap: 20px;
+    /* align-items: center; */
+    border: 12px solid linear-gradient(130deg, #7ecad7, #35bac9);
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 18px 20px rgba(0, 0, 0, 0.06);
+    background: linear-gradient(130deg, #7ecad7, #35bac9);
+  }
+
+
+  .nav-buttons {
+    order: 4;
+  }
+
+  /* Style the buttons container when opened */
+
+  .nav-buttons ul {
+    flex-direction: column;
+    width: 100%;
+    /* padding: 8px 10px; */
+  }
+
+
+  /* Icons row inside the toggle */
+  .nav-buttons ul {
+    flex-direction: row !important;
+    /* width: 100%; */
+    padding: 0px 20px;
+    gap: 10px;
+    align-items: center;
+  }
+
+  .nav-buttons ul li {
+    width: auto !important;
+    margin: 0 !important;
+  }
+
+  /* Make icon buttons smaller inside toggle */
+  .nav-buttons ul li .user-profile {
+    height: 10px !important;
+    width: 10px !important;
+    font-size: 16px !important;
+    /* padding: 8px !important; */
+  }
+
+
+  /* Dropdown opens upward on mobile to avoid clipping */
+  .dropdown-menu {
+    /* bottom: 110%; */
+    top: 40px;
+    width: 250px;
+    right: -40px;
+    /* left: auto; */
+  }
+
+  .main {
+    padding-top: 50px;
+  }
+
+  .symptoms-options {
+    display: flex;
+    gap: 15px;
+    padding: 20px 0px 0px 0px;
+    /* flex-wrap: wrap; */
+  }
+
+  .symptoms-options label {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    border: 1px solid #2997a8;
+    border-radius: 35px;
+    padding: 10px 15px;
+    font-family: "Poppins", sans-serif;
+    font-size: 2rem;
+    background-color: #fff;
+    color: #000;
+  }
+}
+
+@media (max-width: 575px) {
+
+  /*  Navbar Layout  */
+  .header .navbar {
+    width: 100%;
+    /* position: fixed; */
+    /* padding: 5px 45px 5px 0px; */
+    align-items: center;
+    gap: 20px;
+  }
+
+  .header .navIndex {
+    /* padding: 5px 0px 5px 5px; */
+  }
+
+  .header .logo {
+    /* margin-left: 0; */
+    order: 2;
+    display: flex;
+  }
+
+  .navbar img {
+    width: 80px;
+    object-fit: contain;
+  }
+
+  /* Toggle Button */
+  .nav-toggle,
+  .hamburger {
+    display: block;
+    order: 1;
+  }
+
+  .nav-buttons {
+    order: 4;
+  }
+
+
+  .nav-buttons ul {
+    flex-direction: column;
+    width: 100%;
+    /* padding: 8px 10px; */
+  }
+
+
+  /* Icons row inside the toggle */
+  .nav-buttons ul {
+    flex-direction: row !important;
+    /* width: 100%; */
+    /* padding: 0px 80px 0px 0px; */
+    gap: 10px;
+    align-items: center;
+  }
+
+  .nav-buttons ul li a {
+    width: auto !important;
+    padding: 5px;
+    font-size: 12px;
+    margin: 0 !important;
+    width: 25px;
+    height: 25px;
+  }
+
+  .idx-loggedin {
+    padding: 0px 80px 0px 0px;
+  }
+
+  /* Make icon buttons smaller inside toggle */
+  .nav-buttons ul li .user-profile {
+    width: 14px !important;
+    font-size: 14px !important;
+    /* padding: 8px !important; */
+  }
+
+}
+
+/* PROFILE SESSION */
+
+.container-form {
+  display: flex;
+  /* gap: 70px; */
+  justify-content: space-between;
+  padding: 20px;
+}
+
+.form-session {
+  width: 100%;
+  padding: 10px 45px;
+  margin: 0px auto;
+  font-size: 18px;
+}
+
+.container-form>.form-session>.profile-hero {
+  display: flex;
+  align-items: center;
+  gap: 230px;
+  margin-bottom: 30px;
+}
+
+.profile-hero>.icon-profile a {
+  text-decoration: none;
+  color: #000;
+  font-size: 32px;
+  font-weight: 700;
+}
+
+.profile-title p {
+  font-size: 24px;
+  font-family: "poppins", sans-serif;
+}
+
+.form-session p {
+  font-size: 18px;
+  font-family: "poppins", sans-serif;
+}
+
+.profile-avatar {
+  text-align: center;
+  margin: auto;
+  font-size: 18px;
+  font-family: "poppins", sans-serif;
+}
+
+.avatar {
+  position: relative;
+  left: 240px;
+  margin: 20px auto;
+  text-align: center;
+}
+
+.avatar-logo {
+  width: 100px;
+  height: 100px;
+  border: 1px solid #2997a8;
+  background-color: white;
+  border-radius: 50%;
+}
+
+.avatar>.avatar-edit i {
+  font-size: 1.5rem;
+  position: absolute;
+  bottom: 0;
+  left: 70px;
+  background-color: #2997a8;
+  color: white;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: #35bac9;
+}
+
+.form-input::placeholder {
+  color: #999;
+}
+
+.detail-form {
+  margin-bottom: 30px;
+}
+
+.detail-form>label {
+  display: block;
+  width: 100%;
+  /* margin-bottom: 20px; */
+}
+
+.detail-form input,
+.detail-form>button {
+  width: 100%;
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid #5f5f5f;
+  outline: none;
+  font-family: "Poppins", sans-serif;
+  font-size: 1rem;
+  margin-top: 8px;
+}
+
+.detail-form input:focus {
+  outline: none;
+  border-color: #5f5f5f;
+}
+
+.sidebar {
+  width: 100%;
+  /* flex: 1; */
+}
+
+.sidebar img {
+  width: 100%;
+  /* height: 100vh; */
+  object-fit: cover;
+}
+
+/* MEDIA QUERY */
+@media (max-width: 768px) {
+  .container-form {
+    flex-direction: column;
+    padding: 20px 0px;
+  }
+
+  .container-form>.form-session>.profile-hero {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    gap: 10px;
+    margin-bottom: 10px auto;
+  }
+
+  .profile-hero>.icon-profile a {
+    text-decoration: none;
+    color: #000;
+    font-size: 32px;
+    font-weight: 700;
+  }
+
+  .form-session p {
+    font-size: 12px;
+    font-family: "poppins", sans-serif;
+  }
+
+  .avatar {
+    text-align: center;
+  }
+
+  .avatar-logo {
+    margin: auto;
+    margin-left: 80px;
+  }
+
+  .avatar>.avatar-edit i {
+    left: 150px;
+  }
+
+  .sidebar {
+    display: none;
+  }
+}
+
+/* SIGN IN */
+
+.container-sign {
+  background-image: url(./images/signin-banner.jpg);
+  background-size: contain;
+  /* height: 100vh; */
+  width: 100%;
+
+}
+
+.sign-info {
+  margin: auto;
+  display: flex;
+  width: 100%;
+  justify-content: space-around;
+  /* opacity: 1; */
+  padding: 10px 60px;
+  background: rgba(0, 0, 255, 0.007);
+}
+
+.sign-descrption {
+  display: flex;
+  flex-direction: column;
+  /* width: 489px; */
+  margin: auto 0;
+  /* height: 526px; */
+  opacity: 1;
+  gap: 30px;
+}
+
+.sign-descrption>.sign-logo img {
+  /* width: 112px; */
+  /* height: 36px; */
+  opacity: 1;
+}
+
+.sign-descrption h2 {
+  width: 365px;
+  font-size: 40px;
+  font-family: "poppins", sans-serif;
+  font-weight: 700;
+  font-style: Bold;
+  line-height: 1.5;
+  letter-spacing: 0%;
+  color: #ffffff;
+}
+
+.sign-descrption>.para>p {
+  width: 476px;
+  opacity: 1;
+  color: #ffffff;
+  font-family: Poppins;
+  font-weight: 400;
+  font-style: Regular;
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+.sign-descrption>.sign-icon-text {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 213px;
+  opacity: 1;
+  gap: 30px;
+}
+
+.sign-descrption>.sign-icon-text>.icon-text {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.sign-descrption>.sign-icon-text>.icon-text i {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 46px;
+  font-size: 1.5em;
+  color: white;
+  height: 46px;
+  opacity: 1;
+  gap: 3px;
+  border-radius: 5px;
+  margin: auto;
+  background: #3199c780;
+}
+
+.sign-descrption>.sign-icon-text>.icon-text>.text {
+  width: 100%;
+  opacity: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.sign-descrption>.sign-icon-text>.icon-text>.text>h5,
+.sign-descrption>.sign-icon-text>.icon-text>.text>p {
+  font-size: 14px;
+  color: #ffffff;
+  font-weight: 500;
+  font-family: "poppins", sans-serif;
+}
+
+.sign-descrption>.sign-icon-text>.icon-text>.text>p {
+  font-size: 12px;
+}
+
+.sign-input {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 500px;
+  /* height: 615px; */
+  opacity: 1;
+  gap: 0px;
+  border-radius: 30px;
+  padding: 20px 50px;
+  background: #fbfbfb;
+}
+
+.form-text {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  /* height: 77px; */
+  opacity: 1;
+  gap: 15px;
+  margin-bottom: 30px;
+}
+
+.form-text>h3 {
+  font-family: Poppins;
+  font-weight: 700;
+  font-style: Bold;
+  font-size: 32px;
+  line-height: 100%;
+  letter-spacing: 1%;
+  color: #444444;
+  width: 400px;
+}
+
+.form-text>p {
+  font-family: Poppins;
+  font-weight: 400;
+  font-style: Regular;
+  font-size: 16px;
+  line-height: 100%;
+  letter-spacing: 0%;
+  /* width: 366px; */
+  height: 24px;
+}
+
+#form-action {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  /* width: 400px; */
+  height: 71px;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.login-form label {
+  display: block;
+  font-family: Poppins;
+  font-weight: 400;
+  font-style: Regular;
+  font-size: 14px;
+  color: #444444;
+  line-height: 100%;
+  letter-spacing: -1%;
+}
+
+.login-form input {
+  border: none;
+  background: transparent;
+  width: 100%;
+  height: 20px;
+  color: #000000;
+  /* padding: 0px 20px; */
+  font-family: Poppins;
+  font-weight: 400;
+  font-style: Regular;
+  font-size: 13px;
+  line-height: 100%;
+  letter-spacing: -1%;
+  vertical-align: middle;
+}
+
+.login-form input:focus {
+  outline: none;
+  border: none;
+  /* background: transparent; */
+  color: #000000;
+}
+
+.login-form span,
+.login-form button {
+  display: block;
+  border: 1px solid #444444;
+  width: 100%;
+  height: 40px;
+  opacity: 1;
+  border-radius: 5px;
+  border-width: 1px;
+  padding: 10px;
+}
+
+.login-form span {
+  gap: 15px;
+  width: 100%;
+  display: flex;
+}
+
+.login-form button {
+  border-radius: 10px;
+  padding: 10px;
+  background: #3cb1c3;
+  font-family: Poppins;
+  font-weight: 600;
+  font-style: SemiBold;
+  font-size: 16px;
+  line-height: 100%;
+  letter-spacing: 1%;
+  color: #eeeeee;
+}
+
+.login-check {
+  width: 100%;
+  /* height: 24px; */
+  display: flex;
+  align-items: center;
+  margin: 5px ;
+  justify-content: space-between;
+  opacity: 1;
+}
+
+.login-check label {
+  width: 100%;
+  height: 24px;
+  opacity: 1;
+  display: flex;
+  gap: 5px;
+  align-items: center;
+  font-family: Poppins;
+  font-weight: 400;
+  font-style: Regular;
+  font-size: 16px;
+  line-height: 100%;
+  letter-spacing: 0%;
+}
+
+.login-check a {
+  display: block;
+  margin: auto 0;
+  font-family: Poppins;
+  font-weight: 400;
+  font-style: Regular;
+  font-size: 14px;
+  text-decoration: none;
+}
+
+.login-check label span {
+  font-size: 16px;
+
+  width: 100%;
+}
+
+#signupBtn.pop {
+  transform: scale(0.95);
+  transition: all 0.3s ease;
+}
+
+#signupBtn.pop {
+  opacity: 1;
+  transform: scale(1.05);
+  box-shadow: 0 8px 20px rgba(168, 47, 47, 0.2)
+}
+
+.divider {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  /* margin-top: 10px; */
+  color: #888;
+  width: 100%;
+  height: 24px;
+  opacity: 1;
+  gap: 10px;
+  font-family: Poppins;
+  font-style: Regular;
+  font-size: 16px;
+  line-height: 100%;
+  letter-spacing: 1%;
+}
+
+.divider::before,
+.divider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: #ccc;
+}
+
+.divider::before {
+  margin-right: 15px;
+}
+
+.divider::after {
+  margin-left: 15px;
+}
+
+.sign-input>p {
+  width: 100%;
+  height: 23px;
+  opacity: 1;
+  gap: 5px;
+  margin: 40px auto 0px;
+  text-align: center;
+  font-family: Poppins;
+  font-weight: 400;
+  font-style: Regular;
+  font-size: 15px;
+  line-height: 100%;
+  letter-spacing: 1%;
+}
+
+.sign-input>p span a {
+  color: #3cb1c3;
+  text-decoration: none;
+}
+
+/* Queries*/
+
+@media (max-width: 768px) {
+  .container-sign {
+    height: auto;
+    background-size: cover;
+  }
+
+  .sign-info {
+    width: 100%;
+    flex-direction: column;
+    padding: 0;
+  }
+
+  .sign-info>.sign-descrption {
+    width: 100%;
+    margin: 0 auto;
+    text-align: center;
+    height: auto;
+  }
+
+  .sign-logo {
+    /* width: 10px; */
+    height: 40px;
+  }
+
+  .heading>h2 {
+    font-size: 24px;
+    width: 100%;
+  }
+
+  .sign-info>.sign-descrption>.sign-logo {
+    display: block;
+  }
+
+  .sign-info>.sign-descrption>.para,
+  .sign-info>.sign-descrption>.sign-icon-text {
+    display: none;
+    padding: 0px 0px;
+  }
+
+  .sign-input {
+    width: 100%;
+    margin: auto;
+    /* text-align: center; */
+    height: auto;
+  }
+
+  .login-form {
+    margin-top: 0;
+    padding: 0;
+  }
+
+  .login-form span {
+    width: 100%;
+  }
+
+  .login-chec label span a{
+    font-size: 14px;
+    width: 100%;
+  }
+}
+
+
+/* SIGN UP */
+.signup-cont {
+  /* background-image: url(./images/signup-banner.jpg); */
+  /* height: 120vh; */
+  background-size: cover;
+  width: 100%;
+}
+
+.signup-check input[type="radio"] {
+  display: none;
+  cursor: pointer;
+}
+
+.signup-check label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.signup-check input[type="radio"]:checked+label {
+  background: red;
+  text-align: center;
+  border-color: #00bfa6;
+  color: #00bfa6;
+}
+
+.signup-check {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 20px 0px;
+  /* padding-bottom: 60px; */
+}
+
+.signup-check label {
+  /* display: block; */
+  width: 170px;
+  opacity: 1;
+  gap: 10px;
+  border-radius: 10px;
+  padding: 10px;
+  font-family: 'poppins', sans-serif;
+  border-width: 1px;
+  border: 1px solid black;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.submit button {
+  cursor: pointer;
+  margin-top: 25px;
+}
+
+/* ============================================================
+   NOVABUK — GLOBAL MOBILE RESPONSIVE ADDITIONS
+   ============================================================ */
+
+/* ── APP HOME: hero heading ── */
+
+@media (max-width: 480px) {
+  .hero-app h1 {
+    font-size: 1.5rem;
+  }
+
+  .hero-app p {
+    font-size: 0.9rem;
+  }
+
+  .main-body {
+    padding: 20px 16px;
+  }
+
+  .hero-detail {
+    padding: 0;
+    margin-bottom: 20px;
+  }
+
+  .hero-box>.detail-border {
+    padding: 20px 16px;
+    gap: 20px;
+  }
+
+  .box-one>.box-text h3 {
+    font-size: 18px;
+  }
+
+  .cta-box a {
+    font-size: 14px;
+    padding: 8px 16px;
+  }
+
+  .login-check a {
+    font-family: 'poppins', sans-serif;
+    font-weight: 400;
+    font-style: Regular;
+    font-size: 10px;
+  }
+}
+
+/* ── COMPLAINTS PAGE ── */
+@media (max-width: 600px) {
+  #form {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  #form>label {
+    font-size: 1.2rem;
+  }
+
+  #form>p {
+    font-size: 1.2rem;
+    margin-top: 28px;
+  }
+
+  #form>textarea {
+    height: 200px;
+  }
+
+  .symptoms-options label {
+    font-size: 1.2rem;
+    padding: 8px 14px;
+  }
+
+  .symptoms-options label input[type="checkbox"] {
+    width: 28px;
+    height: 28px;
+    padding: 14px;
+  }
+
+  #form>button {
+    font-size: 1.2rem;
+    padding: 20px;
+  }
+
+  .login-check a {
+    font-family: 'poppins', sans-serif;
+    font-weight: 400;
+    font-style: Regular;
+    font-size: 10px;
+  }
+
+  .login-check span {
+    width: 100%;
+    font-family: 'poppins', sans-serif;
+    font-weight: 400;
+    font-style: Regular;
+    font-size: 10px;
+  }
+}
+
+
+/* ── PROFILE HEALTH PAGE ── */
+@media (max-width: 600px) {
+  .container-form>.form-session>.profile-hero {
+    gap: 40px;
+  }
+
+  .avatar {
+    left: 80px !important;
+  }
+
+  .form-session {
+    padding: 10px 20px;
+  }
+
+  .signup-cont {
+    /* background-image: url(./images/signup-banner.jpg); */
+    background-repeat: no-repeat;
+    /* background-position: center; */
+    background-size: cover;
+  }
+}
+
+/* ── SIGN IN / SIGN UP ── */
+@media (max-width: 480px) {
+  .sign-info {
+    padding: 10px 16px;
+  }
+
+  .sign-input {
+    width: 100%;
+    border-radius: 16px;
+  }
+
+  .form-text>h3 {
+    font-size: 24px;
+    width: 100%;
+    height: auto;
+  }
+}
+
+@media(max-width:375px) {
+  .login-check a {
+    font-family: 'poppins', sans-serif;
+    font-weight: 400;
+    font-style: Regular;
+    font-size: 9px;
+  }
+
+  .login-check label span {
+    font-family: 'poppins', sans-serif;
+    font-weight: 400;
+    font-style: Regular;
+    font-size: 10px;
+  }
+}
+
+/* ================================================================
+   NOVABUK — NOTIFICATION BELL
+   ================================================================ */
+
+.nb-bell-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Bell button — same size/style as other nav icons */
+.nb-bell-btn {
+  position: relative;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid #797979;
+  background: white;
+  color: #2997a8;
+  font-size: 18px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s, color 0.2s;
+}
+
+.nb-bell-btn:hover {
+  background: #fff;
+  color: #35bac9;
+}
+
+/* Unread badge */
+.nb-badge {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  min-width: 18px;
+  height: 18px;
+  background: #e53e3e;
+  color: white;
+  font-size: 10px;
+  font-weight: 700;
+  font-family: 'Poppins', sans-serif;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 4px;
+  border: 2px solid white;
+  line-height: 1;
+  pointer-events: none;
+}
+
+/* Dropdown panel */
+.nb-dropdown {
+  display: none;
+  position: absolute;
+  top: calc(100% + 10px);
+  right: -60px;
+  width: 320px;
+  background: white;
+  border-radius: 14px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.14);
+  border: 1px solid #e8f8fb;
+  z-index: 9999;
+  overflow: hidden;
+  animation: nb-slide-in 0.18s ease;
+}
+
+.nb-dropdown.show {
+  display: block;
+}
+
+@keyframes nb-slide-in {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.nb-dropdown-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 16px 10px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.nb-dropdown-title {
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: #0f2027;
+}
+
+.nb-mark-all {
+  background: none;
+  border: none;
+  font-family: 'Poppins', sans-serif;
+  font-size: 11px;
+  color: #35bac9;
+  cursor: pointer;
+  padding: 0;
+  font-weight: 500;
+}
+
+.nb-mark-all:hover {
+  text-decoration: underline;
+}
+
+/* Scrollable list */
+.nb-dropdown-list {
+  max-height: 340px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #e0f2f7 transparent;
+}
+
+/* Empty state */
+.nb-empty {
+  padding: 32px 16px;
+  text-align: center;
+  font-family: 'Poppins', sans-serif;
+  font-size: 13px;
+  color: #aaa;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.nb-empty i {
+  font-size: 24px;
+  color: #cce8ef;
+}
+
+/* Notification item */
+.nb-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px 16px;
+  border-bottom: 1px solid #f7f7f7;
+  cursor: pointer;
+  transition: background 0.15s;
+  position: relative;
+}
+
+.nb-item:last-child {
+  border-bottom: none;
+}
+
+.nb-item:hover {
+  background: #f7fbfd;
+}
+
+.nb-item.unread {
+  background: #f0fbfc;
+}
+
+/* Icon circle */
+.nb-item-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-size: 14px;
+}
+
+.nb-item-icon.visit_requested {
+  background: #e0f2f7;
+  color: #35bac9;
+}
+
+.nb-item-icon.visit_confirmed {
+  background: #d4edda;
+  color: #38a169;
+}
+
+.nb-item-icon.visit_completed {
+  background: #e9d8fd;
+  color: #6b46c1;
+}
+
+.nb-item-icon.visit_cancelled {
+  background: #fed7d7;
+  color: #e53e3e;
+}
+
+.nb-item-icon.general {
+  background: #fefcbf;
+  color: #b7791f;
+}
+
+.nb-item-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.nb-item-title {
+  margin: 0 0 2px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  color: #0f2027;
+}
+
+.nb-item-msg {
+  margin: 0 0 4px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 11px;
+  color: #718096;
+  line-height: 1.4;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.nb-item-time {
+  font-family: 'Poppins', sans-serif;
+  font-size: 10px;
+  color: #aaa;
+}
+
+/* Unread dot */
+.nb-dot {
+  width: 8px;
+  height: 8px;
+  background: #35bac9;
+  border-radius: 50%;
+  flex-shrink: 0;
+  align-self: center;
+}
+
+@media (max-width: 500px) {
+  .nb-dropdown {
+    right: -100px;
+    width: 290px;
+
+  }
+}
+
+
+/* ================================================================
+   NOVABUK — REDESIGNED DROPDOWN MENU
+   ================================================================ */
+
+/* Wider, more refined panel */
+.dropdown-menu {
+  min-width: 260px;
+  width: 280px;
+  padding: 0;
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.14);
+  border: 1px solid #e8f8fb;
+}
+
+/* User identity block */
+.dd-user-block {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 16px 14px;
+  background: linear-gradient(135deg, #0f2027 0%, #1a3a4a 100%);
+}
+
+.dd-avatar-sm {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: #35bac9;
+  color: white;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 700;
+  font-size: 1.1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  overflow: hidden;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.dd-avatar-initials {
+  background: #35bac9;
+  color: white;
+}
+
+.dd-user-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.dd-name {
+  margin: 0 0 2px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  color: white;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.dd-email {
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.5);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Divider */
+.dd-divider {
+  height: 1px;
+  background: #f0f0f0;
+  margin: 4px 0;
+}
+
+/* Override base dropdown-item for new look */
+.dropdown-menu .dropdown-item,
+.dropdown-menu .dropdown-item a {
+  padding: 11px 16px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 13px;
+  color: #2d3748;
+  /* display: flex; */
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  transition: background 0.15s;
+  position: relative;
+}
+
+.dropdown-menu .dropdown-item a {
+  padding: 0px 0px !important;
+}
+
+.dropdown-menu .dropdown-item span,
+.dropdown-menu .dropdown-item a span {
+  width: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* color: #4db6c6; */
+  font-size: 13px;
+}
+
+.dropdown-menu .dropdown-item:hover {
+  background: #f0fbfc;
+}
+
+/* Pending visits badge inside dropdown */
+.dd-visits-badge {
+  margin-left: auto;
+  background: #35bac9;
+  color: white;
+  font-family: 'Poppins', sans-serif;
+  font-size: 1px;
+  font-weight: 600;
+  padding: 2px 28px;
+  border-radius: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Last symptom hint row */
+.dd-symptom-hint {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 16px 10px 46px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 11px;
+  color: #999;
+}
+
+.dd-symptom-hint i {
+  color: #aaa;
+  font-size: 11px;
+}
+
+.dd-log-now {
+  margin-left: auto;
+  color: #35bac9;
+  font-size: 11px;
+  font-weight: 600;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.dd-log-now:hover {
+  text-decoration: underline;
+}
+
+/* Logout item — red tint */
+.dropdown-menu .dd-logout {
+  color: #e53e3e;
+  margin-top: 2px;
+}
+
+.dropdown-menu .dd-logout span {
+  color: #e53e3e;
+}
+
+.dropdown-menu .dd-logout:hover {
+  background: #fff5f5;
+}
+
+
+/* ================================================================
+   NOVABUK — LOGOUT CONFIRMATION MODAL
+   ================================================================ */
+
+.nb-logout-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 99999;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  transition: opacity 0.22s ease;
+}
+
+.nb-logout-overlay.show {
+  opacity: 1;
+}
+
+.nb-logout-box {
+  background: white;
+  border-radius: 18px;
+  padding: 36px 32px 28px;
+  width: 90%;
+  max-width: 340px;
+  text-align: center;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+  transform: translateY(16px);
+  transition: transform 0.22s ease;
+}
+
+.nb-logout-overlay.show .nb-logout-box {
+  transform: translateY(0);
+}
+
+.nb-logout-icon {
+  width: 60px;
+  height: 60px;
+  background: #fff5f5;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 16px;
+  font-size: 22px;
+  color: #e53e3e;
+}
+
+.nb-logout-title {
+  font-family: 'Poppins', sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: #0f2027;
+  margin: 0 0 8px;
+}
+
+.nb-logout-msg {
+  font-family: 'Poppins', sans-serif;
+  font-size: 13px;
+  color: #718096;
+  line-height: 1.5;
+  margin: 0 0 24px;
+}
+
+.nb-logout-btns {
+  display: flex;
+  gap: 10px;
+}
+
+.nb-logout-cancel {
+  flex: 1;
+  padding: 12px;
+  border: 1.5px solid #e2e8f0;
+  background: white;
+  border-radius: 10px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  color: #4a5568;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.nb-logout-cancel:hover {
+  border-color: #4db6c6;
+  color: #4db6c6;
+}
+
+.nb-logout-confirm {
+  flex: 1;
+  padding: 12px;
+  border: none;
+  background: #e53e3e;
+  border-radius: 10px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  color: white;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.nb-logout-confirm:hover {
+  background: #c53030;
+  transform: translateY(-1px);
+}
+
+@media (max-width: 480px) {
+  .nb-logout-box {
+    padding: 28px 20px 22px;
+  }
+
+  .nb-logout-btns {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 375px) {
+
+  html,
+  body {
+    min-width: auto;
+    overflow-x: hidden;
+  }
+
+  .header .navbar {
+    width: 100%;
+    padding: 5px 65px 5px 5px;
+    align-items: center;
+  }
+}

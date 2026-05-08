@@ -1,0 +1,396 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Search Patients — NovaBuk Clinic</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
+    crossorigin="anonymous" />
+  <link rel="stylesheet" href="./clinic.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet" />
+  <style>
+    .topbar-title {
+      font-size: 15px;
+      font-weight: 600;
+      color: white;
+    }
+
+    .content {
+      margin-right: auto;
+      /* padding: 24px; */
+      /* max-width: 660px; */
+    }
+
+    .search-wrap {
+      position: relative;
+      margin-bottom: 8px;
+    }
+
+    .search-wrap i {
+      position: absolute;
+      left: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #aaa;
+      font-size: 15px;
+      pointer-events: none;
+    }
+
+    .search-input {
+      width: 100%;
+      padding: 13px 16px 13px 46px;
+      border: 1.5px solid var(--border);
+      border-radius: 12px;
+      font-family: 'Poppins', sans-serif;
+      font-size: 14px;
+      color: var(--text);
+      background: white;
+      outline: none;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+
+    .search-input:focus {
+      border-color: var(--teal);
+      box-shadow: 0 0 0 3px rgba(53, 186, 201, 0.1);
+    }
+
+    .results {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .result-card {
+      background: white;
+      border: 1.5px solid var(--border);
+      border-radius: 12px;
+      padding: 10px 18px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .result-card:hover {
+      border-color: var(--teal);
+      box-shadow: 0 4px 12px rgba(53, 186, 201, 0.1);
+      transform: translateY(-1px);
+    }
+
+    .result-body {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .result-name {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .result-sub {
+      font-size: 12px;
+      color: var(--light);
+      margin-top: 3px;
+    }
+
+    .result-last {
+      font-size: 11px;
+      color: var(--teal);
+      font-weight: 500;
+      margin-top: 4px;
+    }
+
+    .result-arrow {
+      color: #ccc;
+      font-size: 13px;
+      flex-shrink: 0;
+    }
+
+    .hint {
+      text-align: center;
+      padding: 5px 20px;
+      font-size: 13px;
+      color: var(--light);
+    }
+
+    .hint i {
+      font-size: 36px;
+      color: #dce3ea;
+      display: block;
+      margin-bottom: 14px;
+    }
+
+    .spinner-wrap {
+      display: flex;
+      justify-content: center;
+      padding: 40px;
+    }
+
+    .spinner {
+      width: 28px;
+      height: 28px;
+      border: 3px solid var(--border);
+      border-top-color: var(--teal);
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <div class="notif-left">
+      <div class="bck-icon">
+        <a href="./clinic-queue.html" class="btn-back" style="font-size: 24px; color: var(--text); text-decoration: none;">
+          <i class="fa-solid fa-arrow-left"></i>
+        </a>
+      </div>
+      <div class="notify">
+        <h3 class="topbar-title" style="font-size: 28px; font-weight: 700;">Search</h3>
+      </div>
+    </div>
+
+    <div class="top-side">
+
+      <div class="topbar-actions">
+
+        <!-- Search shortcut -->
+        <a href="./clinic-search.html" class="topbar-btn" title="Search patients">
+          <i class="fa-solid fa-magnifying-glass"></i>
+        </a>
+
+        <!-- Notification bell -->
+        <a href="./clinic-notifications.html" class="topbar-btn" title="Notifications">
+          <i class="fa-solid fa-bell"></i>
+          <span class="notification-badge" id="topbarNotificationBadge"></span>
+        </a>
+
+
+        <!-- Staff chip — shows name + dropdown -->
+        <div class="staff-chip" id="staffChip">
+          <div class="staff-avatar-sm" id="topbarAvatar">?</div>
+          <span class="staff-name-sm staff-name">Staff</span>
+          <i class="fa-solid fa-angle-down"id="staffIcon"></i>
+
+          <div class="staff-dropdown" id="staffDropdown">
+            <div class="staff-dropdown-item" onclick="window.location.href='./clinic-settings.html'">
+              <i class="fa-solid fa-gear"></i> Settings
+            </div>
+            <div class="staff-dropdown-item danger" onclick="clinicLogout()">
+              <i class="fa-solid fa-right-from-bracket"></i> Logout
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </header>
+
+  <div class="all-content">
+    <!-- ============================================================
+       SIDEBAR
+       We use <a> tags instead of <button> for navigation items
+       because they support href — better for semantics and
+       middle-click to open in new tab.
+    ============================================================ -->
+    <aside class="sidebar" id="sidebar">
+
+
+
+      <div class="sidebar-icon">
+        <!-- Queue — this page (active) -->
+        <a href="./clinic-queue.html" class="sidebar-nav-btn " data-tip="Today's Queue">
+          <i class="fa-solid fa-list-check"></i>
+        </a>
+
+        <!-- Search -->
+        <a href="./clinic-search.html" class="sidebar-nav-btn active" data-tip="Search Patients">
+          <i class="fa-solid fa-magnifying-glass"></i>
+        </a>
+
+        <!-- Settings pushed to bottom via margin-top: auto on logout -->
+        <a href="./clinic-settings.html" class="sidebar-nav-btn" data-tip="Settings">
+          <i class="fa-solid fa-gear"></i>
+        </a>
+      </div>
+
+      <!-- Logout — at the bottom -->
+      <div class="logout-sidebar">
+        <button class="sidebar-nav-btn sidebar-logout" data-tip="Logout" onclick="clinicLogout()">
+          <i class="fa-solid fa-right-from-bracket"></i>
+        </button>
+      </div>
+
+    </aside>
+  </div>
+
+  <!-- main content -->
+  <div class="main search-main" style="padding: 18px 0px;">
+
+    <div class="content">
+      <div class="search-wrap">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <input type="text" class="search-input" id="searchInput" placeholder="Search by name, email or phone…" autofocus
+          oninput="handleSearch()" />
+      </div>
+      <div id="results">
+        <div class="hint">
+          <!-- <i class="fa-solid fa-magnifying-glass"></i> -->
+          <!-- Type a name or email to search -->
+        </div>
+      </div>
+
+      <div class="recent-activity-container">
+        <div class="section-header">
+          <div class="section-title">Recently Viewed</div>
+          <a href="javascript:void(0)" class="see-all" onclick="clearRecentlyViewed()">Clear</a>
+        </div>
+        <div class="recent-flex" id="recentFlex">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="./clinic-shared.js"></script>
+  <script>
+
+    let debounce = null;
+
+    function handleSearch() {
+      clearTimeout(debounce);
+      const q = document.getElementById("searchInput").value.trim();
+
+      if (q.length < 2) {
+        document.getElementById("results").innerHTML = `
+          <div class="hint">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            Type at least 2 characters to search
+          </div>`;
+        return;
+      }
+
+      document.getElementById("results").innerHTML =
+        `<div class="spinner-wrap"><div class="spinner"></div></div>`;
+
+      debounce = setTimeout(() => doSearch(q), 350);
+    }
+
+    async function doSearch(q) {
+      try {
+        const res = await clinicFetch(
+          `${CLINIC_API}/patients/search?q=${encodeURIComponent(q)}`
+        );
+        const data = await res.json();
+        renderResults(data.data || [], q);
+      } catch {
+        document.getElementById("results").innerHTML = `
+          <div class="hint">
+            <i class="fa-solid fa-triangle-exclamation"></i>
+            Search failed. Please try again.
+          </div>`;
+      }
+    }
+
+    function renderResults(patients, q) {
+      if (!patients.length) {
+        document.getElementById("results").innerHTML = `
+          <div class="hint">
+            <i class="fa-solid fa-user-slash"></i>
+            No patients found matching "<strong>${q}</strong>"
+          </div>`;
+        return;
+      }
+
+      document.getElementById("results").innerHTML = `
+        <div class="results">
+          ${patients.map(p => `
+            <div class="result-card" onclick="openPatient('${p._id}')">
+              ${avatarInitials(p.fullName, 44, p.avatarUrl)}
+              <div class="result-body">
+                <div class="result-name">${p.fullName}</div>
+                <div class="result-sub">${p.email || p.phone || "—"}</div>
+                <div class="result-last">
+                  ${p.lastVisit ? "Last visit: " + formatDate(p.lastVisit) : "No previous visits"}
+                </div>
+              </div>
+              <i class="fa-solid fa-chevron-right result-arrow"></i>
+            </div>`).join("")}
+        </div>`;
+    }
+
+    // ── RECENTLY VIEWED ──────────────────────────────────────────
+    function getRecentKey() {
+      const cid = getClinicId();
+      return cid ? `novabuk_recent_patients_${cid}` : 'novabuk_recent_patients';
+    }
+
+    function loadRecentlyViewed() {
+      try {
+        const list = JSON.parse(localStorage.getItem(getRecentKey()) || '[]');
+        renderRecentFlex(list);
+      } catch (e) { console.error("Load recently viewed error:", e); }
+    }
+
+    function renderRecentFlex(patients) {
+      const flex = document.getElementById("recentFlex");
+      if (!patients.length) {
+        flex.innerHTML = `<p style="font-size:12px;color:var(--text-light);padding:20px;">No recently viewed patients.</p>`;
+        return;
+      }
+
+      flex.innerHTML = patients.map(p => {
+        const timeStr = p.lastViewed ? timeAgo(p.lastViewed) : "";
+
+        return `
+          <div class="recent-item" onclick="openPatient('${p._id}')">
+            <div class="recent-top">
+              <div class="recent-avatar" style="padding:0; background:none; border:none; overflow:hidden">
+                ${avatarInitials(p.fullName, 32, p.avatarUrl)}
+              </div>
+              <i class="fa-solid fa-clock-rotate-left" style="font-size:10px; color:var(--text-light)"></i>
+            </div>
+            <div class="recent-name">${p.fullName}</div>
+            <div class="recent-status">${timeStr}</div>
+          </div>
+        `;
+      }).join("");
+    }
+
+    function clearRecentlyViewed() {
+      if (confirm("Clear recently viewed list?")) {
+        localStorage.removeItem(getRecentKey());
+        loadRecentlyViewed();
+      }
+    }
+
+    function openVisit(id) {
+      window.location.href = `./clinic-consultation.html?visit=${id}`;
+    }
+
+    function openPatient(id) {
+      window.location.href = `./clinic-patient.html?id=${id}`;
+    }
+
+    function formatDate(d) {
+      return new Date(d).toLocaleDateString("en-NG", { day: 'numeric', month: 'short', year: 'numeric' });
+    }
+
+    // Init
+    loadRecentlyViewed();
+  </script>
+</body>
+
+</html>

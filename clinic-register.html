@@ -1,0 +1,538 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Register Your Clinic — NovaBuk</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" crossorigin="anonymous" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="./clinic.css">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --teal: #35bac9; --teal-dark: #1e9aaa; --teal-pale: #e8f8fb;
+      --navy: #0f2027; --mid: #1a3a4a;
+      --border: #e2e8f0; --bg: #f4f7f9;
+      --text: #0f2027; --muted: #4a5568; --light: #718096;
+      --error: #e53e3e; --error-bg: #fff5f5;
+      --success: #38a169; --success-bg: #f0fff4;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: var(--bg);
+      min-height: 100vh;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 40px 16px 60px;
+    }
+
+    .page-wrap {
+      width: 100%;
+      max-width: 560px;
+    }
+
+    /* ── HEADER ── */
+    .page-header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 32px;
+    }
+    .page-header img { height: 32px; }
+    .page-header-text h1 {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1.2;
+    }
+    .page-header-text p {
+      font-size: 12px;
+      color: var(--light);
+      margin-top: 2px;
+    }
+
+    /* ── PROGRESS STEPS ── */
+    .steps {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      margin-bottom: 28px;
+    }
+    .step {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex: 1;
+    }
+    .step-circle {
+      width: 28px; height: 28px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 12px; font-weight: 700;
+      flex-shrink: 0;
+    }
+    .step.done   .step-circle { background: var(--success); color: white; }
+    .step.active .step-circle { background: var(--teal);    color: white; }
+    .step.todo   .step-circle { background: #e2e8f0;        color: var(--light); }
+    .step-label {
+      font-size: 11px; font-weight: 500;
+      color: var(--light);
+    }
+    .step.active .step-label { color: var(--teal); font-weight: 600; }
+    .step.done   .step-label { color: var(--success); }
+    .step-line {
+      flex: 1; height: 2px;
+      background: #e2e8f0;
+      margin: 0 8px;
+    }
+    .step-line.done { background: var(--success); }
+
+    /* ── CARD ── */
+    .card {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 28px;
+    }
+    .card-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+    .card-subtitle {
+      font-size: 13px;
+      color: var(--light);
+      margin-bottom: 24px;
+      line-height: 1.5;
+    }
+
+    /* ── FORM ── */
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    .field { margin-bottom: 18px; }
+    .field.full { grid-column: 1 / -1; }
+
+    label {
+      display: block;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--muted);
+      margin-bottom: 7px;
+    }
+    label .req { color: var(--error); margin-left: 2px; }
+
+    .input-wrap { position: relative; }
+    .input-wrap .icon {
+      position: absolute; left: 13px; top: 50%;
+      transform: translateY(-50%);
+      color: #aaa; font-size: 13px; pointer-events: none;
+    }
+    .input-wrap.icon-left input,
+    .input-wrap.icon-left select { padding-left: 38px; }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="tel"],
+    select,
+    textarea {
+      width: 100%;
+      padding: 11px 13px;
+      border: 1.5px solid var(--border);
+      border-radius: 9px;
+      font-family: 'Poppins', sans-serif;
+      font-size: 13px;
+      color: var(--text);
+      background: #fafafa;
+      outline: none;
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+    input:focus, select:focus, textarea:focus {
+      border-color: var(--teal);
+      background: white;
+      box-shadow: 0 0 0 3px rgba(53,186,201,0.1);
+    }
+    textarea { resize: vertical; min-height: 80px; }
+
+    /* ── SERVICES CHIP INPUT ── */
+    .services-wrap {
+      border: 1.5px solid var(--border);
+      border-radius: 9px;
+      padding: 8px 10px;
+      background: #fafafa;
+      min-height: 46px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      align-items: center;
+      cursor: text;
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+    .services-wrap:focus-within {
+      border-color: var(--teal);
+      background: white;
+      box-shadow: 0 0 0 3px rgba(53,186,201,0.1);
+    }
+    .service-chip {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      background: var(--teal-pale);
+      color: var(--teal-dark);
+      padding: 3px 9px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 500;
+    }
+    .service-chip button {
+      background: none; border: none;
+      color: var(--teal-dark); cursor: pointer;
+      font-size: 13px; line-height: 1;
+      padding: 0; margin: 0;
+    }
+    #serviceInput {
+      border: none; background: transparent;
+      font-family: 'Poppins', sans-serif; font-size: 13px;
+      color: var(--text); outline: none;
+      min-width: 120px; flex: 1; padding: 2px 4px;
+    }
+    .service-hint {
+      font-size: 11px; color: var(--light);
+      margin-top: 5px;
+    }
+
+    /* ── ERROR / SUCCESS ── */
+    .alert {
+      display: none;
+      border-radius: 9px;
+      padding: 11px 14px;
+      font-size: 13px;
+      margin-bottom: 18px;
+      align-items: center;
+      gap: 9px;
+    }
+    .alert.show  { display: flex; }
+    .alert.error { background: var(--error-bg); color: var(--error); border: 1px solid #fed7d7; }
+    .alert.success { background: var(--success-bg); color: var(--success); border: 1px solid #c6f6d5; }
+
+    /* ── SUBMIT ── */
+    .btn-submit {
+      width: 100%;
+      padding: 14px;
+      background: linear-gradient(135deg, #7ecad7, var(--teal));
+      border: none; border-radius: 10px;
+      font-family: 'Poppins', sans-serif;
+      font-size: 15px; font-weight: 600;
+      color: white; cursor: pointer;
+      transition: opacity 0.15s, transform 0.15s;
+      display: flex; align-items: center;
+      justify-content: center; gap: 9px;
+      margin-top: 6px;
+    }
+    .btn-submit:hover:not(:disabled) { opacity: 0.9; transform: translateY(-1px); }
+    .btn-submit:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+    .skip-link {
+      display: block;
+      text-align: center;
+      margin-top: 16px;
+      font-size: 12px;
+      color: var(--light);
+    }
+    .skip-link a {
+      color: var(--teal); text-decoration: none; font-weight: 500;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 500px) {
+      .form-grid { grid-template-columns: 1fr; }
+      .field.full { grid-column: 1; }
+      .card { padding: 20px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="page-wrap">
+
+    <!-- Header -->
+    <div class="page-header">
+      <img src="./images/logo.png" alt="NovaBuk" />
+      <div class="page-header-text">
+        <h1>Set Up Your Clinic</h1>
+        <p>One-time setup — takes about 2 minutes</p>
+      </div>
+    </div>
+
+    <!-- Progress steps -->
+    <div class="steps">
+      <div class="step done">
+        <div class="step-circle"><i class="fa-solid fa-check"></i></div>
+        <span class="step-label">Account Created</span>
+      </div>
+      <div class="step-line done"></div>
+      <div class="step active">
+        <div class="step-circle">2</div>
+        <span class="step-label">Clinic Details</span>
+      </div>
+      <div class="step-line"></div>
+      <div class="step todo">
+        <div class="step-circle">3</div>
+        <span class="step-label">Your Queue</span>
+      </div>
+    </div>
+
+    <!-- Form card -->
+    <div class="card">
+      <div class="card-title">Tell us about your clinic</div>
+      <div class="card-subtitle">
+        This information helps patients find and book visits at your clinic.
+        You can update these details later from settings.
+      </div>
+
+      <div class="alert error" id="alertError">
+        <i class="fa-solid fa-circle-exclamation"></i>
+        <span id="alertErrorText"></span>
+      </div>
+
+      <form id="clinicForm" onsubmit="handleSubmit(event)">
+
+        <div class="form-grid">
+
+          <!-- Clinic Name -->
+          <div class="field full">
+            <label for="clinicName">Clinic Name <span class="req">*</span></label>
+            <div class="input-wrap icon-left">
+              <i class="fa-solid fa-hospital-alt icon"></i>
+              <input type="text" id="clinicName"
+                     placeholder="e.g. Greenfield Medical Centre"
+                     required maxlength="100" />
+            </div>
+          </div>
+
+          <!-- Address -->
+          <div class="field full">
+            <label for="clinicAddress">Street Address <span class="req">*</span></label>
+            <div class="input-wrap icon-left">
+              <i class="fa-solid fa-location-dot icon"></i>
+              <input type="text" id="clinicAddress"
+                     placeholder="e.g. 14 Adeola Odeku Street, Victoria Island"
+                     required />
+            </div>
+          </div>
+
+          <!-- City -->
+          <div class="field">
+            <label for="clinicCity">City <span class="req">*</span></label>
+            <input type="text" id="clinicCity"
+                   placeholder="e.g. Lagos" required />
+          </div>
+
+          <!-- State -->
+          <div class="field">
+            <label for="clinicState">State</label>
+            <input type="text" id="clinicState"
+                   placeholder="e.g. Lagos State" />
+          </div>
+
+          <!-- Phone -->
+          <div class="field">
+            <label for="clinicPhone">Phone Number <span class="req">*</span></label>
+            <div class="input-wrap icon-left">
+              <i class="fa-solid fa-phone icon"></i>
+              <input type="tel" id="clinicPhone"
+                     placeholder="+234 800 000 0000" required />
+            </div>
+          </div>
+
+          <!-- Email -->
+          <div class="field">
+            <label for="clinicEmail">Clinic Email</label>
+            <div class="input-wrap icon-left">
+              <i class="fa-regular fa-envelope icon"></i>
+              <input type="email" id="clinicEmail"
+                     placeholder="clinic@email.com" />
+            </div>
+          </div>
+
+          <!-- Services offered -->
+          <div class="field full">
+            <label>Services Offered</label>
+            <div class="services-wrap" id="servicesWrap"
+                 onclick="document.getElementById('serviceInput').focus()">
+              <!-- Chips appear here -->
+              <input type="text" id="serviceInput"
+                     placeholder="Type a service, press Enter…" />
+            </div>
+            <div class="service-hint">
+              e.g. General Practice, Lab Tests, Pharmacy, Dental
+            </div>
+          </div>
+
+        </div><!-- /form-grid -->
+
+        <div class="alert error" id="alertBottom">
+          <i class="fa-solid fa-circle-exclamation"></i>
+          <span id="alertBottomText"></span>
+        </div>
+
+        <button type="submit" class="btn-submit" id="submitBtn">
+          <i class="fa-solid fa-arrow-right"></i>
+          Register Clinic & Go to Queue
+        </button>
+
+      </form><!-- /form -->
+
+      <p class="skip-link">
+        Already set up? <a href="./clinic-queue.html">Go to your queue →</a>
+      </p>
+
+    </div><!-- /card -->
+  </div><!-- /page-wrap -->
+
+  <script>
+    var API_URL = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1"
+      ? "http://localhost:5000/api"
+      : "https://novabuk-backend.onrender.com/api";
+
+    // ── AUTH GUARD ───────────────────────────────────────────
+    // This page is only for Doctors with no clinic yet.
+    // If they already have a clinic → send them to the queue.
+    // If they're not logged in → send them to sign-in.
+    const token = localStorage.getItem("novabuk_token");
+    const user  = JSON.parse(localStorage.getItem("novabuk_user") || "null");
+
+    if (!token || !user) {
+      window.location.replace("./sign-in.html");
+    } else if (user.role !== "Doctors") {
+      window.location.replace("./app-home.html");
+    } else if (user.clinicId) {
+      // Already has a clinic — go straight to queue
+      window.location.replace("./clinic-queue.html");
+    }
+
+    // ── SERVICES CHIP INPUT ──────────────────────────────────
+    // Works like a tag input: type a service name, press Enter
+    // or comma to add it as a chip. Click × to remove.
+    const services = [];  // the live array of service strings
+
+    document.getElementById("serviceInput").addEventListener("keydown", function(e) {
+      // Enter or comma adds a chip
+      if (e.key === "Enter" || e.key === ",") {
+        e.preventDefault();
+        const val = this.value.trim().replace(/,+$/, "");
+        addService(val);
+        this.value = "";
+      }
+      // Backspace on empty input removes last chip
+      if (e.key === "Backspace" && this.value === "" && services.length) {
+        removeService(services.length - 1);
+      }
+    });
+
+    function addService(val) {
+      if (!val || services.includes(val)) return;
+      services.push(val);
+      renderChips();
+    }
+
+    function removeService(index) {
+      services.splice(index, 1);
+      renderChips();
+    }
+
+    function renderChips() {
+      const wrap  = document.getElementById("servicesWrap");
+      const input = document.getElementById("serviceInput");
+
+      // Remove all existing chips
+      wrap.querySelectorAll(".service-chip").forEach(c => c.remove());
+
+      // Re-insert chips before the input
+      services.forEach((s, i) => {
+        const chip = document.createElement("div");
+        chip.className = "service-chip";
+        chip.innerHTML = `${s} <button type="button" onclick="removeService(${i})" aria-label="Remove ${s}">×</button>`;
+        wrap.insertBefore(chip, input);
+      });
+    }
+
+    // ── FORM SUBMIT ──────────────────────────────────────────
+    async function handleSubmit(e) {
+      e.preventDefault();
+
+      const name    = document.getElementById("clinicName").value.trim();
+      const address = document.getElementById("clinicAddress").value.trim();
+      const city    = document.getElementById("clinicCity").value.trim();
+      const state   = document.getElementById("clinicState").value.trim();
+      const phone   = document.getElementById("clinicPhone").value.trim();
+      const email   = document.getElementById("clinicEmail").value.trim();
+
+      // Add any partially typed service
+      const partialInput = document.getElementById("serviceInput").value.trim();
+      if (partialInput) addService(partialInput);
+
+      const btn      = document.getElementById("submitBtn");
+      const errTop   = document.getElementById("alertError");
+      const errBot   = document.getElementById("alertBottom");
+      [errTop, errBot].forEach(el => el.classList.remove("show"));
+
+      btn.disabled = true;
+      btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Registering…`;
+
+      try {
+        const res  = await fetch(`${API_URL}/clinics/register`, {
+          method:      "POST",
+          headers:     {
+            "Content-Type": "application/json",
+            Authorization:  `Bearer ${token}`,
+          },
+          credentials: "include",
+          body: JSON.stringify({ name, address, city, state, phone, email, services }),
+        });
+
+        const data = await res.json();
+
+        if (data.success) {
+          // Update localStorage with the new clinicId and clinicName
+          // so clinic-shared.js can find them immediately on the next page
+          const updatedUser = { ...user, ...data.user };
+          localStorage.setItem("novabuk_user", JSON.stringify(updatedUser));
+
+          // Brief success flash before navigating
+          btn.innerHTML = `<i class="fa-solid fa-circle-check"></i> Clinic Registered!`;
+          btn.style.background = "linear-gradient(135deg, #68d391, #38a169)";
+
+          setTimeout(() => {
+            window.location.href = "./clinic-queue.html";
+          }, 900);
+
+        } else {
+          showError(data.message || "Registration failed. Please try again.");
+          btn.disabled = false;
+          btn.innerHTML = `<i class="fa-solid fa-arrow-right"></i> Register Clinic & Go to Queue`;
+        }
+
+      } catch (err) {
+        showError("Network error. Check your connection and try again.");
+        btn.disabled = false;
+        btn.innerHTML = `<i class="fa-solid fa-arrow-right"></i> Register Clinic & Go to Queue`;
+      }
+    }
+
+    function showError(msg) {
+      const errTop  = document.getElementById("alertError");
+      const errText = document.getElementById("alertErrorText");
+      errText.textContent = msg;
+      errTop.classList.add("show");
+      // Scroll to top of card so user sees the error
+      errTop.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+  </script>
+</body>
+</html>

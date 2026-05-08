@@ -1,0 +1,383 @@
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./styles.css" />
+    <link rel="stylesheet" href="./styles-app.css" />
+
+    <!-- font cdn -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
+      integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Unbounded:wght@200..900&display=swap"
+      rel="stylesheet"
+    />
+    <title>Sign Up NovaBuk</title>
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <style>
+      .error-msg {
+        color: #e53e3e;
+        font-size: 14px;
+        font-weight: 600;
+        /*margin-top: 8px;*/
+        display: none;
+        text-align: center;
+        padding: 0px 0px;
+        background: #fff5f5;
+        font-family: 'poppins', sans-serif;
+        border-radius: 15px;
+        border: 1px solid #fed7d7;
+      }
+      .error-msg.show { display: block; }
+      .field-error {
+        color: #e53e3e;
+        font-size: 14px;
+        margin-top: -10px;
+        padding-bottom: 10px;
+        display: none;
+      }
+      .field-error.show { display: block; }
+      .submit button:disabled { opacity: 0.6; cursor: not-allowed; }
+
+      /* Social Login Styling */
+      .social-divider {
+        display: flex;
+        align-items: center;
+        text-align: center;
+        margin: 24px 0;
+        color: var(--text-light);
+        font-size: 13px;
+      }
+      .social-divider::before, .social-divider::after {
+        content: '';
+        flex: 1;
+        border-bottom: 1px solid #eee;
+      }
+      .social-divider:not(:empty)::before { margin-right: .5em; }
+      .social-divider:not(:empty)::after { margin-left: .5em; }
+
+      .google-btn {
+        width: 100%;
+        height: 52px;
+        background: #fff;
+        border: 1px solid #ddd;
+        border-radius: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+        color: #333;
+        font-weight: 600;
+        font-size: 14px;
+        cursor: pointer;
+        transition: all 0.2s;
+        font-family: 'Poppins', sans-serif;
+      }
+      .google-btn:hover { background: #f9f9f9; border-color: #ccc; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+      .google-btn img { width: 18px; }
+
+      @media(max-width:768px){
+        .signup-cont{
+          width: 100%;
+          height: auto;
+        }
+      }
+      @media (max-width: 575px) {
+        .signup-cont{
+          width: 100%;
+          height: auto;
+        }
+        .sign-up-info {
+          padding: 28px 20px;
+          border-radius: 16px;
+          gap: 16px;
+        }
+        .form-text > h3  { font-size: 22px; width: 100%; height: auto; }
+        .form-text > p   { font-size: 13px; height: auto; }
+        .login-form      { height: auto; margin-bottom: 12px; }
+        .login-form span { padding: 8px 10px; height: auto; }
+        .signup-check    { flex-wrap: wrap; gap: 8px;}
+        .signup-check label { width: auto; height: auto; font-size: 14px; padding: 8px 18px; }
+        .login-chec     { height: auto; flex-wrap: wrap; gap: 8px; width: 100%; }
+        .field-error     { font-size: 11px; }
+        .login-chec label span a{font-size: 10px;text-decoration: none;}
+        .login-chec label span{font-size: 14px;}
+      }
+
+    </style>
+  </head>
+<body>
+    <div class="container-sign signup-cont">
+      <div class="sign-info">
+        <div class="sign-descrption">
+          <div class="sign-logo">
+            <img src="./images/logo-text.png" alt="" />
+          </div>
+          <div class="heading"><h2>Join the future of Healthcare today</h2></div>
+          <div class="para">
+            <p>
+              Create your account and enjoy seamless, AI-powered healthcare
+              management across Africa
+            </p>
+          </div>
+          <div class="sign-icon-text">
+            <div class="icon-text">
+              <i class="fa fa-shield" aria-hidden="true"></i>
+              <div class="text">
+                <h5>Personalized care</h5>
+                <p>Tailored health insight powered by AI</p>
+              </div>
+            </div>
+            <div class="icon-text">
+              <i class="fa fa-shield" aria-hidden="true"></i>
+              <div class="text">
+                <h5>Digital Records</h5>
+                <p>All your medical history in one secured place</p>
+              </div>
+            </div>
+            <div class="icon-text">
+              <i class="fa fa-users" aria-hidden="true"></i>
+              <div class="text">
+                <h5>Experts Network</h5>
+                <p>Connect with top healthcare professionals</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="sign-input ">
+          <div class="form-text">
+            <h3>Create Account</h3>
+            <p>Fill in your details to get started</p>
+          </div>
+
+          <!-- ERROR BANNER -->
+          <div class="error-msg" id="errorMsg"></div>
+
+          <form id="signupForm" onsubmit="handleSignUp(event)">
+            <div class="login-form">
+              <label for="signupName">Full Name:</label>
+              <span>
+                <i class="fa fa-user" aria-hidden="true"></i>
+                <input type="text" id="signupName" placeholder="Your full name" required />
+              </span>
+              <div class="field-error" id="nameError"></div>
+            </div>
+
+            <div class="login-form">
+              <label for="signupEmail">Email Address:</label>
+              <span>
+                <i class="fa fa-envelope" aria-hidden="true"></i>
+                <input type="email" id="signupEmail" placeholder="youremail@example.com" required />
+              </span>
+              <div class="field-error" id="emailError"></div>
+            </div>
+
+            <div class="locheck signup-check">
+              <input type="radio" id="Patient" name="role" value="Patient" checked required />
+              <label for="Patient"> Patient</label>
+              <input type="radio" id="Doctors" name="role" value="Doctors" required />
+              <label for="Doctors"> Doctors</label>
+            </div>
+
+            <div class="login-form">
+              <label for="signupPassword">Password</label>
+              <span>
+                <i class="fa fa-lock" aria-hidden="true"></i>
+                <input type="password" id="signupPassword" placeholder="At least 6 characters" required />
+                <i class="fa fa-eye" id="togglePassword"></i>
+              </span>
+              
+            </div>
+            <div class="field-error" id="passwordError"></div>
+
+            <div class="login-form">
+              <label for="signupConfirm">Confirm Password</label>
+              <span>
+                <i class="fa fa-lock" aria-hidden="true"></i>
+                <input type="password" id="signupConfirm" placeholder="Repeat your password" required />
+                <i class="fa fa-eye" id="togglePwdConfirm"></i>
+              </span>
+              
+            </div>
+            <div class="field-error" id="confirmError"></div>
+
+            <div class="login-chec">
+              <label for="agreeTerms">
+                <input type="checkbox" id="agreeTerms" required />
+                <span>
+                I agree to the
+                <span><a href="#">Terms of service</a></span> and
+                <span><a href="#">Privacy Policy</a></span>
+              </span>
+              </label>
+              
+            </div>
+
+            <div class="login-form submit">
+              <button type="submit" id="signupBtn">Create Account</button>
+            </div>
+
+            <div class="social-divider">Or continue with</div>
+
+            <button type="button" class="google-btn" onclick="handleGoogleSignIn()">
+              <img src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg" alt="G">
+              Google
+            </button>
+          </form>
+
+          <p style="margin-top: 20px;">
+            Already have an account?
+            <span><a href="./sign-in.html">Sign In</a></span>
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      var API_URL = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1"
+        ? "http://localhost:5000/api"
+        : "https://novabuk-backend.onrender.com/api";
+
+      // If already logged in as Patient, skip to home
+      // Doctors stay on sign-up (portal not ready)
+      if (localStorage.getItem("novabuk_token")) {
+        const existingUser = JSON.parse(localStorage.getItem("novabuk_user") || "{}");
+        if (existingUser.role === "Doctors") {
+          window.location.href = existingUser.clinicId
+            ? "./clinic-queue.html"
+            : "./clinic-register.html";
+        } else {
+          window.location.href = "./app-home.html";
+        }
+      }
+
+      async function handleSignUp(e) {
+        e.preventDefault();
+
+        // Clear old errors
+        ["nameError","emailError","passwordError","confirmError"].forEach(id => {
+          document.getElementById(id).classList.remove("show");
+        });
+        document.getElementById("errorMsg").classList.remove("show");
+
+        const fullName = document.getElementById("signupName").value.trim();
+        const email    = document.getElementById("signupEmail").value.trim();
+        const password = document.getElementById("signupPassword").value;
+        const confirm  = document.getElementById("signupConfirm").value;
+        const role     = document.querySelector('input[name="role"]:checked')?.value || "Patient";
+        const btn      = document.getElementById("signupBtn");
+
+        // Client-side validation
+        let valid = true;
+
+        if (!fullName) {
+          showFieldError("nameError", "Full name is required.");
+          valid = false;
+        }
+        if (!email || !email.includes("@")) {
+          showFieldError("emailError", "Please enter a valid email address.");
+          valid = false;
+        }
+        if (!password || password.length < 8) {
+          showFieldError("passwordError", "Password must be at least 6 characters.");
+          valid = false;
+        }
+        if (password !== confirm) {
+          showFieldError("confirmError", "Passwords do not match.");
+          valid = false;
+        }
+        if (!valid) return;
+
+        btn.disabled    = true;
+        btn.textContent = "Creating account...";
+
+        try {
+          const res  = await fetch(`${API_URL}/users/register`, {
+            method:  "POST",
+            headers: { "Content-Type": "application/json" },
+            body:    JSON.stringify({ fullName, email, password, role }),
+          });
+
+          const data = await res.json();
+
+          if (data.success) {
+            // Store email so verify-otp.html knows where to send the code
+            localStorage.setItem("novabuk_verify_email", email);
+            window.location.href = "./verify-otp.html";
+          } else {
+            showBannerError(data.message || "Could not create account. Please try again.");
+            btn.disabled    = false;
+            btn.textContent = "Create Account";
+          }
+        } catch (err) {
+          showBannerError("Network error. Please check your connection.");
+          btn.disabled    = false;
+          btn.textContent = "Create Account";
+        }
+      }
+
+      function showFieldError(id, msg) {
+        const el = document.getElementById(id);
+        el.textContent = msg;
+        el.classList.add("show");
+      }
+
+      function showBannerError(msg) {
+        const el = document.getElementById("errorMsg");
+        el.textContent = msg;
+        el.classList.add("show");
+      }
+
+      async function handleGoogleSignIn() {
+          // Initialize Google Identity Services
+          google.accounts.id.initialize({
+            client_id: "YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com", // This should be replaced with real ID
+            callback: handleCredentialResponse
+          });
+          
+          // Trigger the selection prompt
+          google.accounts.id.prompt();
+      }
+
+      async function handleCredentialResponse(response) {
+          const btn = document.querySelector('.google-btn');
+          const originalText = btn.innerHTML;
+          btn.innerHTML = "Logging in...";
+          btn.disabled = true;
+
+          try {
+              const res = await fetch(`${API_URL}/users/google-login`, {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({ idToken: response.credential })
+              });
+
+              const data = await res.json();
+              if (data.success) {
+                  localStorage.setItem("novabuk_token", data.token);
+                  localStorage.setItem("novabuk_user", JSON.stringify(data.user));
+                  window.location.href = data.redirectTo || "./app-home.html";
+              } else {
+                  showBannerError(data.message || "Google login failed.");
+                  btn.innerHTML = originalText;
+                  btn.disabled = false;
+              }
+          } catch (err) {
+              showBannerError("Network error. Please try again.");
+              btn.innerHTML = originalText;
+              btn.disabled = false;
+          }
+      }
+    </script>
+    <script src="./script.js"></script>
+  </body>
+</html>

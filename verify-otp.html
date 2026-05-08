@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verify Your Account — NovaBuk</title>
+    <link rel="stylesheet" href="./styles.css">
+    <link rel="stylesheet" href="./styles-app.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --teal: #3CB1C3;
+            --teal-dark: #2A8A99;
+            --teal-light: #E0F4F7;
+            --white: #ffffff;
+            --text-dark: #1A202C;
+            --text-light: #718096;
+            --error: #E53E3E;
+            --border: #E2E8F0;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #f8fafc 0%, #edf2f7 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .verify-card {
+            background: var(--white);
+            width: 100%;
+            max-width: 440px;
+            padding: 40px;
+            border-radius: 24px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+            text-align: center;
+        }
+
+        .logo-box {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+
+        .logo-box img { width: 32px; }
+        .logo-box span { font-size: 20px; font-weight: 700; color: var(--text-dark); letter-spacing: -0.5px; }
+
+        .icon-box {
+            width: 64px;
+            height: 64px;
+            background: var(--teal-light);
+            color: var(--teal);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            margin: 0 auto 24px;
+        }
+
+        h1 { font-size: 24px; font-weight: 700; color: var(--text-dark); margin: 0 0 10px; }
+        p { font-size: 14px; color: var(--text-light); line-height: 1.6; margin: 0 0 32px; }
+        #displayEmail { font-weight: 600; color: var(--text-dark); }
+
+        .otp-inputs {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            margin-bottom: 32px;
+        }
+
+        .otp-input {
+            width: 48px;
+            height: 56px;
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            text-align: center;
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--text-dark);
+            transition: all 0.2s;
+            outline: none;
+        }
+
+        .otp-input:focus {
+            border-color: #3CB1C3;
+            box-shadow: 0 0 0 4px rgba(60, 177, 195, 0.1);
+        }
+
+        .otp-input.filled {
+            border-color: var(--teal);
+            background: var(--teal-light);
+        }
+
+        .verify-btn {
+            width: 100%;
+            height: 56px;
+            background: var(--teal);
+            color: var(--white);
+            border: none;
+            border-radius: 14px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-bottom: 24px;
+        }
+
+        .verify-btn:hover { background: var(--teal-dark); transform: translateY(-1px); }
+        .verify-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+        .resend-box { font-size: 14px; color: var(--text-light); }
+        .resend-link {
+            color: var(--teal);
+            text-decoration: none;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        .resend-link.disabled { color: var(--text-light); cursor: not-allowed; opacity: 0.5; }
+
+        .error-toast {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--error);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-size: 14px;
+            font-weight: 500;
+            box-shadow: 0 4px 12px rgba(229, 62, 62, 0.2);
+            display: none;
+            z-index: 1000;
+        }
+
+        @media (max-width: 480px) {
+            .verify-card { padding: 30px 20px; }
+            .otp-inputs { gap: 8px; }
+            .otp-input { width: 40px; height: 48px; font-size: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="error-toast" id="errorToast">Invalid code. Please try again.</div>
+
+    <div class="verify-card">
+        <div class="logo-box">
+            <img src="./images/logo.png" alt="NovaBuk">
+            <span>NovaBuk</span>
+        </div>
+
+        <div class="icon-box">
+            <i class="fa-solid fa-envelope-open-text"></i>
+        </div>
+
+        <h1>Verify your email</h1>
+        <p>We've sent a 6-digit code to <br><span id="displayEmail">loading...</span></p>
+
+        <form id="otpForm">
+            <div class="otp-inputs">
+                <input type="text" class="otp-input" maxlength="1" inputmode="numeric" autocomplete="one-time-code" autofocus>
+                <input type="text" class="otp-input" maxlength="1" inputmode="numeric">
+                <input type="text" class="otp-input" maxlength="1" inputmode="numeric">
+                <input type="text" class="otp-input" maxlength="1" inputmode="numeric">
+                <input type="text" class="otp-input" maxlength="1" inputmode="numeric">
+                <input type="text" class="otp-input" maxlength="1" inputmode="numeric">
+            </div>
+
+            <button type="submit" class="verify-btn" id="verifyBtn">Verify Account</button>
+        </form>
+
+        <div class="resend-box">
+            Didn't receive the code? <br>
+            <span class="resend-link disabled" id="resendBtn">Resend code <span id="timer">(60s)</span></span>
+        </div>
+    </div>
+
+    <script>
+        var API_URL = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1"
+          ? "http://localhost:5000/api"
+          : "https://novabuk-backend.onrender.com/api";
+        const email = localStorage.getItem("novabuk_verify_email") || new URLSearchParams(window.location.search).get("email");
+
+        if (!email) {
+            window.location.href = "./sign-up.html";
+        }
+
+        document.getElementById("displayEmail").textContent = email;
+
+        const inputs = document.querySelectorAll('.otp-input');
+        const form = document.getElementById('otpForm');
+        const resendBtn = document.getElementById('resendBtn');
+        const timerSpan = document.getElementById('timer');
+        const errorToast = document.getElementById('errorToast');
+
+        // Handle OTP Input Behavior
+        inputs.forEach((input, index) => {
+            input.addEventListener('input', (e) => {
+                if (e.target.value) {
+                    input.classList.add('filled');
+                    if (index < inputs.length - 1) {
+                        inputs[index + 1].focus();
+                    }
+                }
+            });
+
+            input.addEventListener('keydown', (e) => {
+                if (e.key === 'Backspace' && !e.target.value && index > 0) {
+                    inputs[index - 1].focus();
+                    inputs[index - 1].classList.remove('filled');
+                }
+            });
+
+            // Handle paste
+            input.addEventListener('paste', (e) => {
+                e.preventDefault();
+                const data = e.clipboardData.getData('text').slice(0, 6);
+                if (/^\d+$/.test(data)) {
+                    data.split('').forEach((char, i) => {
+                        if (index + i < inputs.length) {
+                            inputs[index + i].value = char;
+                            inputs[index + i].classList.add('filled');
+                            if (index + i < inputs.length - 1) inputs[index + i + 1].focus();
+                        }
+                    });
+                }
+            });
+        });
+
+        // Resend Logic
+        resendBtn.addEventListener('click', async () => {
+            if (resendBtn.classList.contains('disabled')) return;
+            
+            resendBtn.classList.add('disabled');
+            resendBtn.textContent = "Sending...";
+
+            try {
+                const res = await fetch(`${API_URL}/users/resend-otp`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email })
+                });
+
+                const data = await res.json();
+                if (data.success) {
+                    resendBtn.textContent = "Code Sent!";
+                    setTimeout(() => {
+                        timeLeft = 60;
+                        startTimer();
+                    }, 1000);
+                } else {
+                    resendBtn.innerHTML = `Resend code <span id="timer"></span>`;
+                    resendBtn.classList.remove('disabled');
+                    showError(data.message || "Failed to resend code.");
+                }
+            } catch (err) {
+                resendBtn.innerHTML = `Resend code <span id="timer"></span>`;
+                resendBtn.classList.remove('disabled');
+                showError("Network error. Please try again.");
+            }
+        });
+
+        let countdownInterval = null;
+        function startTimer() {
+            if (countdownInterval) clearInterval(countdownInterval);
+            
+            resendBtn.classList.add('disabled');
+            resendBtn.innerHTML = `Resend code <span id="timer"></span>`;
+            const tSpan = document.getElementById('timer');
+
+            countdownInterval = setInterval(() => {
+                timeLeft--;
+                if (tSpan) tSpan.textContent = `(${timeLeft}s)`;
+                if (timeLeft <= 0) {
+                    clearInterval(countdownInterval);
+                    resendBtn.classList.remove('disabled');
+                    if (tSpan) tSpan.textContent = "";
+                }
+            }, 1000);
+        }
+
+        let timeLeft = 60;
+        startTimer();
+
+        // Submit Logic
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const otpCode = Array.from(inputs).map(i => i.value).join('');
+            
+            if (otpCode.length < 6) return;
+
+            const btn = document.getElementById('verifyBtn');
+            btn.disabled = true;
+            btn.textContent = "Verifying...";
+
+            try {
+                const res = await fetch(`${API_URL}/users/verify-otp`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, otpCode })
+                });
+
+                const data = await res.json();
+
+                if (data.success) {
+                    // Success! Store token and user
+                    localStorage.setItem("novabuk_token", data.token);
+                    localStorage.setItem("novabuk_user", JSON.stringify(data.user));
+                    localStorage.removeItem("novabuk_verify_email");
+
+                    window.location.href = data.redirectTo;
+                } else {
+                    showError(data.message || "Invalid verification code.");
+                    btn.disabled = false;
+                    btn.textContent = "Verify Account";
+                }
+            } catch (err) {
+                showError("Network error. Please try again.");
+                btn.disabled = false;
+                btn.textContent = "Verify Account";
+            }
+        });
+
+        function showError(msg) {
+            errorToast.textContent = msg;
+            errorToast.style.display = 'block';
+            setTimeout(() => {
+                errorToast.style.display = 'none';
+            }, 3000);
+        }
+    </script>
+</body>
+</html>

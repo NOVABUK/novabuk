@@ -1,0 +1,1460 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+/* Transition variables and gentle animations */
+:root {
+  --trans-fast: 0.16s;
+  --trans: 0.28s;
+  --trans-slow: 0.45s;
+  --ease-default: cubic-bezier(0.2, 0.9, 0.3, 1);
+}
+
+/* Respect user preference for reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --trans-fast: 0s;
+    --trans: 0s;
+    --trans-slow: 0s;
+  }
+  * {
+    transition: none !important;
+    animation-duration: 0s !important;
+  }
+}
+
+/* Page load gentle fade for major sections */
+@keyframes nb-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.container > header,
+.container > main,
+.container > footer {
+  animation: nb-fade-in 0.45s var(--ease-default) both;
+}
+
+/* Default subtle transitions applied to common interactive elements */
+header,
+.navbar,
+.hero,
+.banner,
+.main,
+footer,
+.feature-card,
+.nav-menu ul li a,
+.btn-primary,
+.btn-secondary,
+.icon-box,
+.icon-text i,
+img {
+  transition:
+    transform var(--trans) var(--ease-default),
+    box-shadow var(--trans) var(--ease-default),
+    opacity var(--trans) var(--ease-default),
+    filter var(--trans) var(--ease-default);
+}
+
+/* Images: gentle lift on hover on non-touch devices */
+.header-img img,
+.header-img-about img,
+.main-img img,
+.main-image img {
+  will-change: transform, filter;
+}
+@media (hover: hover) and (pointer: fine) {
+  .header-img img:hover,
+  .header-img-about img:hover,
+  .main-img img:hover,
+  .main-image img:hover {
+    transform: translateY(-6px) scale(1.02);
+    filter: saturate(1.05) contrast(1.02);
+  }
+  .feature-card:hover {
+    transform: translateY(-10px);
+  }
+}
+
+.btn-primary:hover,
+.btn-secondary:hover,
+.talk-session a:hover,
+.contact-form button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.08);
+}
+
+.nav-menu ul li a {
+  color: black;
+  display: flex;
+  margin: 14px;
+  text-decoration: none;
+  transition:
+    color 0.3s ease,
+    transform 0.3s ease;
+}
+
+/* Nav toggle (hamburger) and responsive nav behavior */
+.nav-toggle,
+.hamburger {
+  display: none;
+  background: transparent;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: #fff;
+  padding: 10px 15px;
+  transition: all 0.3s ease;
+  z-index: 1001;
+}
+
+.nav-toggle:hover,
+.hamburger:hover {
+  transform: scale(1.1);
+  /* color: #ffeb3b; */
+}
+
+.nav-toggle.open,
+.hamburger.open {
+  /* color: #ffeb3b; */
+}
+
+/* Hover underline */
+.nav-menu ul li a:hover::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 2px;
+  /* background-color: rgb(66, 66, 206); */
+}
+
+/* Active underline */
+.nav-menu ul li a.active {
+  /* border-bottom: 2px solid #ff9800; */
+  padding-bottom: 4px;
+  color:  #ff9800;
+  /* width: 40%; */
+}
+.nav-menu ul li a.active:hover{
+  font-size: 1.2rem;
+  transition: 0.3 ease-in 2s;
+}
+
+.header {
+  background: linear-gradient(130deg, #7ecad7, #35bac9);
+
+  font-family: "Poppins", sans-serif;
+  font-weight: 300;
+  font-style: normal;
+  /* min-height: 100vh; */
+}
+.header .navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 60px;
+  position: fixed;
+  top: 0;
+  width: 100%; 
+  z-index: 1000;
+  background: linear-gradient(130deg, #7ecad7, #35bac9);
+}
+.nav-menu ul,
+.nav-buttons ul,
+.nav-buttons ul {
+  display: flex;
+  gap: 5px;
+  /* margin-right: 380px; */
+}
+.nav-menu ul li,
+.nav-buttons ul li {
+  list-style: none;
+}
+
+.nav-menu ul li a,
+.nav-buttons ul li a {
+  color: #fff;
+  display: flex;
+  /* margin-left: 16px; */
+  text-decoration: none;
+}
+.nav-buttons ul li a{
+  padding: 0px 10px;
+}
+.nav-buttons ul li a,
+.user-profile {
+  border: 1px solid #797979;
+  height: 40px;
+  width: 40px;
+  font-size: 20px;
+  background-color: white;
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
+  text-align: center;
+  align-items: center;
+  border-radius: 50%;
+  /* padding: 0px 10px; */
+  color: #2997a8;
+}
+.nav-buttons ul li a:hover {
+  background-color: #fff;
+  color: #35bac9;
+}
+.user-profile {
+  position: relative;
+  cursor: pointer;
+  border: none;
+  background: transparent;
+  color: white;
+  display: flex;
+  align-items: center;
+}
+.user-profile .profile-check{
+  border: 1px solid #797979;
+  display: flex;
+  align-items: center;
+  background-color: white;
+  gap: 4px;
+  padding:0px 10px;
+  width: 100px;
+  border-radius: 45px;
+  height: 35px;
+  color: #2997a8;
+}
+.nav-avatar{
+  height: 28px;
+  width: 28px;
+  color: white;
+  background-color: #2997a8;
+  border: 1px solid #797979;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.dropdown-menu {
+  display: none;
+  position: absolute;
+  top: 60px;
+  right: -40px;
+  background-color: white;
+  min-width: 160px;
+  width: 300px;
+  box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+  z-index: 1001;
+  border-radius: 8px;
+  padding: 10px 0;
+}
+
+.dropdown-menu.show {
+  display: block;
+}
+
+.dropdown-item {
+  padding: 10px 20px;
+  color: #333;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.dropdown-item:hover {
+  background-color: #f1f1f1;
+}
+
+.dropdown-item.logout {
+  color: #ff7675;
+}
+.hero-app {
+  /* text-align: center; */
+  padding: 30px 65px 0px;
+  color: #fff;
+  /* background-color: red; */
+  /* line-height: 2.5rem; */
+  font-family: "Poppins", sans-serif;
+  /* font-weight: 800; */
+  font-style: normal;
+}
+.main-info {
+  /* background-color: blue; */
+  display: flex;
+  align-items: center;
+  margin: 50px 0px 0px 10px;
+  padding: 40px 0px 0px 5px;
+  /* height: 100vh; */
+}
+.main {
+  background-color: #7ecad7;
+  width: 100%;
+  font-family: "Poppins", sans-serif;
+}
+.main-body {
+  padding: 40px;
+}
+.hero-detail {
+  padding: 0px 40px;
+  margin-bottom: 40px;
+}
+.hero-box {
+  border: 1px solid #2997a8;
+  background-color: #2997a8;
+  border-radius: 10px;
+  padding: 20px;
+}
+.hero-box > .detail-border {
+  background-color: white;
+  border: 1px solid white;
+  color: #000;
+  box-shadow: 2px 1px 30px rgb(221, 221, 221);
+  padding: 30px 40px;
+  border-radius: 10px;
+  display: flex;
+  justify-content: space-between;
+}
+.box-one {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.box-one > .box-text {
+  line-height: 1.5;
+  width: 100%;
+}
+.box-one > .box-text h3 {
+  font-size: 24px;
+}
+.box-one > .box-text p {
+  font-size: 18px;
+  font-weight: 500;
+  opacity: 0.95;
+}
+.cta-box a {
+  border: 1px solid #2997a8;
+  background-color: #2997a8;
+  text-decoration: none;
+  /* width: 100%; */
+  padding: 10px 20px;
+  border-radius: 10px;
+  color: white;
+}
+.hero-box > h4 {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+.hero-box > h4 i {
+  width: 50px;
+  height: 50px;
+  border: 2px solid;
+  border-radius: 50%;
+  font-size: 2rem;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.box-icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+@media (max-width: 768px) {
+  .main-info {
+    margin: 0px 0px 0px 10px;
+    padding: 5px 0px 0px 5px;
+  }
+
+  .page-main {
+    margin: 10px 0px 0px 10px;
+    padding: 50px 0px 0px 5px;
+  }
+  .hero-app {
+    width: 100%;
+    padding: 10px 10px 0px;
+  }
+  .hero-detail {
+    padding: 0px 0px;
+  }
+  .hero-box > .detail-border {
+    padding: auto 0px;
+    width: 100%;
+    flex-direction: column-reverse;
+    gap: 40px;
+    /* align-items: center; */
+    /* text-align: center; */
+  }
+  .main-body {
+    width: 100%;
+  }
+  .box-one {
+    width: 100%;
+    gap: 40px;
+    margin-bottom: 20px;
+  }
+  .cta-box {
+    width: auto;
+  }
+  .box-one > .box-text h3 {
+    font-size: 24px;
+  }
+  .box-one > .box-text p {
+    font-size: 14px;
+    font-weight: 500;
+    width: 100%;
+  }
+}
+
+/* LOG COMPLAINTS SECTION */
+
+#form {
+  padding-left: 40px;
+}
+#form {
+  display: block;
+}
+#form > label {
+  font-size: 1.7rem;
+  font-weight: 500;
+  color: #1a1a1a;
+}
+#form > textarea {
+  width: 100%;
+  height: 350px;
+  padding: 10px;
+  border-radius: 8px;
+  border: 6px solid #2997a8;
+  font-family: "Poppins", sans-serif;
+  font-size: 1rem;
+  margin-top: 8px;
+}
+#form > textarea:focus {
+  outline: none;
+  border-color: #35bac9;
+}
+#form > textarea::placeholder {
+  color: #999;
+}
+#form > p {
+  font-size: 1.8rem;
+  margin-top: 50px;
+  opacity: 0.95;
+}
+.symptoms-options {
+  display: flex;
+  gap: 20px;
+  padding: 20px 20px 20px 0px;
+  flex-wrap: wrap;
+}
+.symptoms-options label {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  border: 1px solid #2997a8;
+  border-radius: 35px;
+  padding: 10px 20px;
+  font-family: "Poppins", sans-serif;
+  font-size: 2rem;
+  background-color: #fff;
+  color: #000;
+}
+.symptoms-options label input[type="checkbox"] {
+  appearance: none;
+  width: 40px;
+  height: 40px;
+  border: 2px solid #2997a8;
+  border-radius: 50%;
+  cursor: pointer;
+  outline: none;
+  display: grid;
+  place-content: center;
+  padding: 20px;
+  cursor: pointer;
+  transition: 0.2s all ease-in-out;
+}
+.round-checkbox::before {
+  content: "";
+  width: 20px;
+  height: 20px;
+  transform: scale(0);
+  transition: 120ms transform ease-in-out;
+  box-shadow: inset 1em 1em white;
+  background-color: CanvasText;
+  clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
+}
+
+/* Checked State */
+.round-checkbox:checked {
+  background-color: #2997a8;
+  border-color: #2196f3;
+}
+
+.round-checkbox:checked::before {
+  transform: scale(1);
+}
+
+/* Focus state for accessibility */
+.round-checkbox:focus {
+  outline: 2px solid #2196f3;
+  outline-offset: 2px;
+}
+#form > button {
+  margin-top: 20px;
+  padding: 35px 20px;
+  width: 100%;
+  background-color: #35bac9;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 2rem;
+  font-weight: 600;
+  font-family: "Poppins", sans-serif;
+  transition: all 0.3s ease;
+}
+#hero-box {
+  width: 100%;
+  padding: 20px;
+  margin-top: 50px;
+}
+
+
+
+/* ============================================
+   MOBILE NAVBAR STYLES FOR APP PAGES
+   ============================================ */
+@media (max-width: 1023px) {
+  /*  Navbar Layout  */
+  .header .navbar{
+      width: 100%;
+      padding: 5px 45px 5px 5px;
+      align-items: center;
+    }
+    .header .logo {
+      order: 2;
+      display: flex;
+    }
+
+    .navbar img{
+      width: 100px;
+      object-fit: contain;
+    }
+    
+    /* Toggle Button */
+    .nav-toggle, .hamburger{
+      display: block;
+      order: 1;
+    }
+    
+    /* Navigation Menu */
+    .nav-menu{
+      display: none;
+      width: 100%;
+      background: linear-gradient(
+        130deg,
+        #7ecad7,
+        #35bac9
+      );
+      position: absolute;
+      top: 75px;
+      /* margin-top: 10px; */
+      border-radius: 8px;
+      box-shadow: 0px 8px 20px rgba(0,0,0,0.26);
+      padding: 12px 16px;
+    }
+    
+    .nav-menu.open{
+      display: block;
+    }
+    
+    .nav-menu ul{
+      flex-direction: column;
+      gap: 6px;
+    }
+    
+    .nav-menu ul li a{
+      display: block;
+      padding: 8px 0;
+      margin: 0;
+      color: white;
+      font-size: 0.9rem;
+    }
+    
+    
+    .nav-buttons{
+      order: 4;
+    }
+    
+    
+    
+    /* Style the buttons container when opened */
+    .signup-btns ul,
+    .nav-buttons ul{
+      flex-direction: column;
+      width: 100%;
+      padding: 8px 10px;
+    }
+ 
+
+  /* Icons row inside the toggle */
+  .nav-buttons ul {
+    flex-direction: row !important;
+    /* width: 100%; */
+    padding: 0px 20px;
+    gap: 10px;
+    align-items: center;
+  }
+
+  .nav-buttons ul li {
+    width: auto !important;
+    margin: 0 !important;
+  }
+
+  /* Make icon buttons smaller inside toggle */
+  .nav-buttons ul li .user-profile {
+    height: 10px !important;
+    width: 10px !important;
+    font-size: 16px !important;
+    /* padding: 8px !important; */
+  }
+
+
+  /* Dropdown opens upward on mobile to avoid clipping */
+  .dropdown-menu {
+    /* bottom: 110%; */
+    top: 40px;
+    width: 250px;
+    right: -40px;
+    /* left: auto; */
+  }
+
+  .main{
+    padding-top: 50px;
+  }
+  .symptoms-options {
+    display: flex;
+    gap: 15px;
+    padding: 20px 0px 0px 0px;
+    /* flex-wrap: wrap; */
+  }
+  .symptoms-options label {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    border: 1px solid #2997a8;
+    border-radius: 35px;
+    padding: 10px 15px;
+    font-family: "Poppins", sans-serif;
+    font-size: 2rem;
+    background-color: #fff;
+    color: #000;
+  }
+}
+@media (max-width: 575px) {
+  /*  Navbar Layout  */
+  .header .navbar{
+      width: 100%;
+      /* position: fixed; */
+      padding: 5px 45px 5px 5px;
+      /* flex-wrap: wrap; */
+      /* justify-content: space-between; */
+      align-items: center;
+    }
+    .header .logo {
+      /* margin-left: 0; */
+      order: 2;
+      display: flex;
+    }
+
+    .navbar img{
+      width: 80px;
+      object-fit: contain;
+    }
+    
+    /* Toggle Button */
+    .nav-toggle, .hamburger{
+      display: block;
+      order: 1;
+    }
+    
+    /* Navigation Menu */
+    .nav-menu{
+      display: none;
+      /* order: 4; */
+      width: 100%;
+      background: linear-gradient(
+        130deg,
+        #7ecad7,
+        #35bac9
+      );
+      position: absolute;
+      top: 75px;
+      /* margin-top: 10px; */
+      border-radius: 8px;
+      box-shadow: 0px 8px 20px rgba(0,0,0,0.26);
+      padding: 12px 16px;
+    }
+    
+    .nav-menu.open{
+      display: block;
+    }
+    
+    .nav-menu ul{
+      flex-direction: column;
+      gap: 6px;
+    }
+    
+    .nav-menu ul li a{
+      display: block;
+      /* padding: 8px 0; */
+      margin: 0;
+      color: white;
+      font-size: 0.9rem;
+    }
+    
+    
+    .nav-buttons{
+      order: 4;
+    }
+    
+    
+    
+    /* Style the buttons container when opened */
+    .signup-btns ul,
+    .nav-buttons ul{
+      flex-direction: column;
+      width: 100%;
+      padding: 8px 10px;
+    }
+ 
+
+  /* Icons row inside the toggle */
+  .nav-buttons ul {
+    flex-direction: row !important;
+    /* width: 100%; */
+    padding: 0px 20px;
+    gap: 10px;
+    align-items: center;
+  }
+
+  .nav-buttons ul li a{
+    width: auto !important;
+    padding: 5px;
+    font-size: 12px;
+    margin: 0 !important;
+    width: 25px;
+    height: 25px;
+  }
+
+  /* Make icon buttons smaller inside toggle */
+  .nav-buttons ul li .user-profile {
+    width: 14px !important;
+    font-size: 14px !important;
+    /* padding: 8px !important; */
+  }
+
+}
+/* PROFILE SESSION */
+
+.container-form {
+  display: flex;
+  /* gap: 70px; */
+  justify-content: space-between;
+  padding: 20px;
+}
+.form-session {
+  width: 100%;
+  padding: 10px 45px;
+  margin: 0px auto;
+  font-size: 18px;
+}
+.container-form > .form-session > .profile-hero {
+  display: flex;
+  align-items: center;
+  gap: 230px;
+  margin-bottom: 30px;
+}
+.profile-hero > .icon-profile a {
+  text-decoration: none;
+  color: #000;
+  font-size: 32px;
+  font-weight: 700;
+}
+.profile-title p {
+  font-size: 24px;
+  font-family: "poppins", sans-serif;
+}
+.form-session p {
+  font-size: 18px;
+  font-family: "poppins", sans-serif;
+}
+.profile-avatar {
+  text-align: center;
+  margin: auto;
+  font-size: 18px;
+  font-family: "poppins", sans-serif;
+}
+.avatar {
+  position: relative;
+  left: 240px;
+  margin: 20px auto;
+  text-align: center;
+}
+.avatar-logo {
+  width: 100px;
+  height: 100px;
+  border: 1px solid #2997a8;
+  background-color: white;
+  border-radius: 50%;
+}
+.avatar > .avatar-edit i {
+  font-size: 1.5rem;
+  position: absolute;
+  bottom: 0;
+  left: 70px;
+  background-color: #2997a8;
+  color: white;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: #35bac9;
+}
+.form-input::placeholder {
+  color: #999;
+}
+.detail-form {
+  margin-bottom: 30px;
+}
+.detail-form > label {
+  display: block;
+  width: 100%;
+  /* margin-bottom: 20px; */
+}
+.detail-form input,
+.detail-form > button {
+  width: 100%;
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid #5f5f5f;
+  outline: none;
+  font-family: "Poppins", sans-serif;
+  font-size: 1rem;
+  margin-top: 8px;
+}
+.detail-form input:focus {
+  outline: none;
+  border-color: #5f5f5f;
+}
+.sidebar {
+  width: 100%;
+  /* flex: 1; */
+}
+.sidebar img {
+  width: 100%;
+  /* height: 100vh; */
+  object-fit: cover;
+}
+
+/* MEDIA QUERY */
+@media (max-width: 768px) {
+  .container-form {
+    flex-direction: column;
+    padding: 20px 0px;
+  }
+  .container-form > .form-session > .profile-hero {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    gap: 10px;
+    margin-bottom: 10px auto;
+  }
+  .profile-hero > .icon-profile a {
+    text-decoration: none;
+    color: #000;
+    font-size: 32px;
+    font-weight: 700;
+  }
+  .form-session p {
+    font-size: 12px;
+    font-family: "poppins", sans-serif;
+  }
+  .avatar {
+    text-align: center;
+  }
+  .avatar-logo{
+    margin:auto;
+    margin-left: 80px;
+  }
+  .avatar > .avatar-edit i{
+    left: 150px;
+  }
+  .sidebar {
+    display: none;
+  }
+}
+
+/* SIGN IN */
+
+.container-sign {
+  background-image: url(./images/signin-banner.jpg);
+  background-size: contain;
+  height: 100vh;
+  width: 100%;
+  background-color: #3cb1c333;
+}
+.sign-info {
+  margin: auto;
+  display: flex;
+  width: 100%;
+  justify-content: space-around;
+  /* opacity: 1; */
+  padding: 10px 60px;
+}
+.sign-descrption {
+  display: flex;
+  flex-direction: column;
+  width: 489px;
+  height: 526px;
+  opacity: 1;
+  gap: 30px;
+  padding: 30px;
+}
+.sign-descrption > .sign-logo img {
+  /* width: 112px; */
+  /* height: 36px; */
+  opacity: 1;
+}
+.sign-descrption h2 {
+  width: 365px;
+  font-size: 40px;
+  font-family: "poppins", sans-serif;
+  font-weight: 700;
+  font-style: Bold;
+  line-height: 1.5;
+  letter-spacing: 0%;
+  color: #ffffff;
+}
+.sign-descrption > .para > p {
+  width: 476px;
+  height: 48px;
+  opacity: 1;
+  color: #ffffff;
+  font-family: Poppins;
+  font-weight: 400;
+  font-style: Regular;
+  font-size: 16px;
+  line-height: 1.5;
+  letter-spacing: 0%;
+}
+.sign-descrption > .sign-icon-text {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 213px;
+  opacity: 1;
+  gap: 30px;
+}
+.sign-descrption > .sign-icon-text > .icon-text {
+  display: flex;
+  gap: 10px;
+}
+.sign-descrption > .sign-icon-text > .icon-text i {
+  display: flex;
+  align-items: center;
+  width: 46px;
+  font-size: 2em;
+  color: white;
+  height: 47px;
+  opacity: 1;
+  gap: 3px;
+  border-radius: 5px;
+  padding-top: 2px;
+  padding-right: 3px;
+  padding-bottom: 2px;
+  padding-left: 8px;
+  background: #3199c780;
+}
+.sign-descrption > .sign-icon-text > .icon-text > .text {
+  width: 100%;
+  height: 51px;
+  opacity: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.sign-descrption > .sign-icon-text > .icon-text > .text > h5,
+.sign-descrption > .sign-icon-text > .icon-text > .text > p {
+  font-size: 14px;
+  color: #ffffff;
+  font-weight: 500;
+  font-family: "poppins", sans-serif;
+}
+.sign-descrption > .sign-icon-text > .icon-text > .text > p {
+  font-size: 12px;
+}
+.sign-input {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 500px;
+  /* height: 615px; */
+  opacity: 1;
+  gap: 0px;
+  border-radius: 30px;
+  padding: 50px;
+  background: #fbfbfb;
+}
+.form-text {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  /* height: 77px; */
+  opacity: 1;
+  gap: 15px;
+  margin-bottom: 30px;
+}
+.form-text > h3 {
+  font-family: Poppins;
+  font-weight: 700;
+  font-style: Bold;
+  font-size: 32px;
+  line-height: 100%;
+  letter-spacing: 1%;
+  color: #444444;
+  width: 400px;
+}
+.form-text > p {
+  font-family: Poppins;
+  font-weight: 400;
+  font-style: Regular;
+  font-size: 16px;
+  line-height: 100%;
+  letter-spacing: 0%;
+  /* width: 366px; */
+  height: 24px;
+}
+#form-action {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+.login-form {
+  display: flex;
+  flex-direction: column;
+  /* width: 400px; */
+  height: 71px;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+.login-form label {
+  display: block;
+  font-family: Poppins;
+  font-weight: 400;
+  font-style: Regular;
+  font-size: 14px;
+  color: #444444;
+  line-height: 100%;
+  letter-spacing: -1%;
+}
+.login-form input {
+  border: none;
+  background: transparent;
+  width: 100%;
+  height: 20px;
+  color: #000000;
+  /* padding: 0px 20px; */
+  font-family: Poppins;
+  font-weight: 400;
+  font-style: Regular;
+  font-size: 13px;
+  line-height: 100%;
+  letter-spacing: -1%;
+  vertical-align: middle;
+}
+.login-form input:focus {
+  outline: none;
+  border: none;
+  /* background: transparent; */
+  color: #000000;
+}
+
+.login-form span,
+.login-form button {
+  display: block;
+  border: 1px solid #444444;
+  width: 100%;
+  height: 40px;
+  opacity: 1;
+  border-radius: 5px;
+  border-width: 1px;
+  padding: 10px;
+}
+.login-form span {
+  gap: 15px;
+  width: 100%;
+  display: flex;
+}
+.login-form button {
+  border-radius: 10px;
+  padding: 10px;
+  background: #3cb1c3;
+  font-family: Poppins;
+  font-weight: 600;
+  font-style: SemiBold;
+  font-size: 16px;
+  line-height: 100%;
+  letter-spacing: 1%;
+  color: #eeeeee;
+}
+.login-check {
+  width: 100%;
+  height: 24px;
+  display: flex;
+  margin: 5px 0px;
+  justify-content: space-between;
+  opacity: 1;
+}
+.login-check label {
+  /* width: 100%; */
+  height: 24px;
+  opacity: 1;
+  display: flex;
+  gap: 5px;
+  align-items: center;
+  font-family: Poppins;
+  font-weight: 400;
+  font-style: Regular;
+  font-size: 16px;
+  line-height: 100%;
+  letter-spacing: 0%;
+}
+.login-check a {
+  font-family: Poppins;
+  font-weight: 400;
+  font-style: Regular;
+  font-size: 14px;
+  line-height: 100%;
+  letter-spacing: 0%;
+  width: 141px;
+  height: 24px;
+  text-decoration: none;
+}
+.login-check label span{
+  font-size: 16px;
+
+  width: 100%;
+}
+#signupBtn.pop{
+  transform: scale(0.95);
+  transition: all 0.3s ease;
+}
+#signupBtn.pop{
+  opacity: 1;
+  transform: scale(1.05);
+  box-shadow: 0 8px 20px rgba(0, 0,0, 0.2)
+}
+.divider {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  margin-top: 10px;
+  color: #888;
+  width: 100%;
+  height: 24px;
+  opacity: 1;
+  gap: 10px;
+  font-family: Poppins;
+  font-style: Regular;
+  font-size: 16px;
+  line-height: 100%;
+  letter-spacing: 1%;
+}
+
+.divider::before,
+.divider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: #ccc;
+}
+
+.divider::before {
+  margin-right: 15px;
+}
+
+.divider::after {
+  margin-left: 15px;
+}
+
+.sign-input > p {
+  width: 100%;
+  height: 23px;
+  opacity: 1;
+  gap: 5px;
+  margin:40px auto 0px;
+  text-align: center;
+  font-family: Poppins;
+  font-weight: 400;
+  font-style: Regular;
+  font-size: 15px;
+  line-height: 100%;
+  letter-spacing: 1%;
+}
+.sign-input > p span a {
+  color: #3cb1c3;
+  text-decoration: none;
+}
+
+/* Queries*/
+
+@media (max-width: 768px) {
+  .container-sign{
+    height: auto;
+    background-size: cover;
+  }
+  .sign-info {
+    width: 100%;
+    flex-direction: column;
+    /* padding: 0px 40px; */
+  }
+  .sign-info > .sign-descrption {
+    width: 100%;
+    margin: 0px auto;
+    text-align: center;
+    height: auto;
+  }
+  .heading > h2 {
+    font-size: 24px;
+    width: 100%;
+  }
+  .sign-info > .sign-descrption > .sign-logo {
+    display: block;
+  }
+  .sign-info > .sign-descrption > .para,
+  .sign-info > .sign-descrption > .sign-icon-text {
+    display: none;
+    padding: 0px 0px;
+  }
+
+  .sign-input {
+    width: 100%;
+    margin: 0px auto;
+    /* text-align: center; */
+    height: auto;
+  }
+  .login-form span {
+    width: 100%;
+  }
+  .login-check label span{
+    font-size: 14px;
+    width: 100%;
+  }
+  .login-check a {
+    font-family: Poppins;
+    font-weight: 400;
+    font-style: Regular;
+    font-size: 14px;
+    line-height: 100%;
+    letter-spacing: 0%;
+    /* width: 141px; */
+    height: 24px;
+    text-decoration: none;
+  }
+}
+
+
+/* SIGN UP */
+.signup-cont {
+  /* background-image: url(./images/signup-banner.jpg); */
+  height: 120vh;
+  background-size: cover;
+  width: 100%;
+}
+.signup-check input[type="radio"] {
+  display: none;
+  cursor: pointer;
+}
+.signup-check label{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.signup-check input[type="radio"]:checked + label {
+  background: red;
+  text-align: center;
+  border-color: #00bfa6;
+  color: #00bfa6;
+}
+.signup-check {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 20px 0px;
+  /* padding-bottom: 60px; */
+}
+.signup-check label {
+  /* display: block; */
+  width: 170px;
+  opacity: 1;
+  gap: 10px;
+  border-radius: 10px;
+  padding: 10px;
+  font-family: 'poppins', sans-serif;
+  border-width: 1px;
+  border: 1px solid black;
+  cursor: pointer;
+  transition: 0.3s;
+}
+.submit button {
+  cursor: pointer;
+  margin-top: 25px;
+}
+/* ============================================================
+   NOVABUK — GLOBAL MOBILE RESPONSIVE ADDITIONS
+   ============================================================ */
+
+/* ── APP HOME: hero heading ── */
+
+@media (max-width: 480px) {
+  .hero-app h1 {
+    font-size: 1.5rem;
+  }
+  .hero-app p {
+    font-size: 0.9rem;
+  }
+  .main-body {
+    padding: 20px 16px;
+  }
+  .hero-detail {
+    padding: 0;
+    margin-bottom: 20px;
+  }
+  .hero-box > .detail-border {
+    padding: 20px 16px;
+    gap: 20px;
+  }
+  .box-one > .box-text h3 {
+    font-size: 18px;
+  }
+  .cta-box a {
+    font-size: 14px;
+    padding: 8px 16px;
+  }
+  .login-check a {
+    font-family: 'poppins', sans-serif;
+    font-weight: 400;
+    font-style: Regular;
+    font-size: 10px;
+  }
+}
+
+/* ── COMPLAINTS PAGE ── */
+@media (max-width: 600px) {
+  #form {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+  #form > label {
+    font-size: 1.2rem;
+  }
+  #form > p {
+    font-size: 1.2rem;
+    margin-top: 28px;
+  }
+  #form > textarea {
+    height: 200px;
+  }
+  .symptoms-options label {
+    font-size: 1.2rem;
+    padding: 8px 14px;
+  }
+  .symptoms-options label input[type="checkbox"] {
+    width: 28px;
+    height: 28px;
+    padding: 14px;
+  }
+  #form > button {
+    font-size: 1.2rem;
+    padding: 20px;
+  }
+  .login-check a {
+    font-family: 'poppins', sans-serif;
+    font-weight: 400;
+    font-style: Regular;
+    font-size: 10px;
+  }
+  .login-check span {
+    width: 100%;
+    font-family: 'poppins', sans-serif;
+    font-weight: 400;
+    font-style: Regular;
+    font-size: 10px;
+  }
+}
+
+
+/* ── PROFILE HEALTH PAGE ── */
+@media (max-width: 600px) {
+  .container-form > .form-session > .profile-hero {
+    gap: 40px;
+  }
+  .avatar {
+    left: 80px !important;
+  }
+  .form-session {
+    padding: 10px 20px;
+  }
+  .signup-cont {
+    /* background-image: url(./images/signup-banner.jpg); */
+    background-repeat: no-repeat;
+    /* background-position: center; */
+    background-size: cover;
+  }
+}
+
+/* ── SIGN IN / SIGN UP ── */
+@media (max-width: 480px) {
+  .sign-info {
+    padding: 10px 16px;
+  }
+  .sign-input {
+    width: 100%;
+    border-radius: 16px;
+  }
+  .form-text > h3 {
+    font-size: 24px;
+    width: 100%;
+    height: auto;
+  }
+}
+@media(max-width:375px){
+   .login-check a {
+    font-family: 'poppins', sans-serif;
+    font-weight: 400;
+    font-style: Regular;
+    font-size: 9px;
+  }
+  .login-check label span {
+    font-family: 'poppins', sans-serif;
+    font-weight: 400;
+    font-style: Regular;
+    font-size: 10px;
+  }
+}

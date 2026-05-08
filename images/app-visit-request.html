@@ -1,0 +1,1079 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Clinic Directory — NovaBuk</title>
+  <link rel="stylesheet" href="./styles-app.css">
+  <!-- <link rel = 'stylesheet' href='./styles.css'> -->
+  <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
+      integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Unbounded:wght@200..900&display=swap"
+      rel="stylesheet"
+    />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --teal:       #35bac9;
+      --teal-light: #7ecad7;
+      --teal-pale:  #e8f8fb;
+      --teal-dark:  #1e9aaa;
+      --dark:       #0f2027;
+      --mid:        #4a5568;
+      --light:      #718096;
+      --border:     #e2e8f0;
+      --white:      #ffffff;
+      --bg:         #f7fafc;
+      --error:      #e53e3e;
+      --success:    #38a169;
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--dark);
+      min-height: 100vh;
+    }
+
+    /* ── NAV ── */
+   
+
+    .nav-back {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--light);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      padding: 8px 14px;
+      border-radius: 8px;
+      transition: all 0.2s;
+    }
+
+    .nav-back:hover {
+      color: var(--teal);
+      background: var(--teal-pale);
+    }
+
+    /* ── LAYOUT ── */
+    .page-layout {
+      margin: 60px auto;
+      padding: 40px 40px 60px;
+      display: grid;
+      grid-template-columns: 1fr 340px;
+      gap: 24px;
+      align-items: start;
+    }
+
+    /* ── FORM CARD ── */
+    
+    .form-card-header {
+      background: linear-gradient(135deg, var(--dark) 0%, #1a3a4a 100%);
+      padding: 28px 32px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .form-card-header::after {
+      content: '';
+      position: absolute;
+      top: -40px; right: -40px;
+      width: 160px; height: 160px;
+      background: radial-gradient(circle, rgba(53,186,201,0.2), transparent 70%);
+      border-radius: 50%;
+    }
+
+    .form-card-header h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 22px;
+      color: var(--white);
+      margin-bottom: 6px;
+      position: relative;
+    }
+
+    .form-card-header p {
+      color: rgba(255,255,255,0.55);
+      font-size: 13px;
+      position: relative;
+    }
+
+    .form-body {
+      background: var(--white);
+      border-radius: 20px;
+      width: 100%;
+      border: 1px solid var(--border);
+      overflow: hidden;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.06);
+      margin: 60px auto;
+      padding: 40px 40px 60px;
+    }
+
+    /* ── SELECTED CLINIC BANNER ── */
+    .clinic-banner {
+      background: var(--teal-pale);
+      border: 1.5px solid var(--teal-light);
+      border-radius: 12px;
+      padding: 36px 20px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 28px;
+      font-family: 'poppins',sans-serif;
+    }
+
+    .clinic-banner-icon {
+      width: 44px;
+      height: 44px;
+      background: linear-gradient(135deg, var(--teal-light), var(--teal));
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      flex-shrink: 0;
+    }
+
+    .clinic-banner-info { flex: 1; min-width: 0; }
+
+    .clinic-banner-label {
+      font-size: 11px;
+      color: var(--teal-dark);
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      margin-bottom: 3px;
+    }
+
+    .clinic-banner-name {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--dark);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .clinic-banner-change {
+      font-size: 12px;
+      color: var(--teal);
+      text-decoration: none;
+      font-weight: 500;
+      flex-shrink: 0;
+    }
+
+    .clinic-banner-change:hover { text-decoration: underline; }
+
+    /* ── FORM FIELDS ── */
+    .form-section {
+      margin-bottom: 24px;
+      width: 100%;
+    }
+
+    .form-section-title {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--light);
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      margin-bottom: 14px;
+    }
+
+    .field {
+      margin-bottom: 18px;
+    }
+
+    label {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--mid);
+      margin-bottom: 7px;
+    }
+
+    .field-hint {
+      font-size: 12px;
+      color: var(--light);
+      font-weight: 400;
+      margin-left: 4px;
+    }
+
+    textarea,
+    select {
+      width: 100%;
+      padding: 12px 16px;
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      font-family: 'lora', serif;
+      font-size: 18px;
+      color: var(--dark);
+      background: var(--white);
+      transition: border-color 0.2s, box-shadow 0.2s;
+      outline: none;
+    }
+
+    input[type="datetime-local"]:focus,
+    textarea:focus,
+    select:focus {
+      border-color: var(--teal);
+      box-shadow: 0 0 0 3px rgba(53,186,201,0.12);
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
+    .form-group { margin-bottom: 20px; }
+    label { display: block; font-weight: bold; margin-bottom: 8px; }
+
+  /* Style for Date and Text Inputs */
+ .input-container {
+    position: relative;
+    width: 100%;
+    margin-bottom: 20px;
+  }
+  .input-container input{
+    width: 100%;
+    margin-bottom: 20px;
+    border: 1px solid ;
+    border-radius: 15px;
+    cursor: pointer;
+  }
+
+
+  /* The Input Field */
+  .custom-date {
+    width: 100%;
+    padding: 15px 12px 15px 45px; /* Extra padding on left for the icon */
+    /*border: 1px solid #ccc;*/
+    /*border-radius: 25px;*/
+    font-size: 18px;
+    font-family: 'poppins',sans-serif;
+    box-sizing: border-box;
+    outline: none;
+    color: #666;
+  }
+
+  /* The Calendar Icon on the Left */
+  .input-container::before {
+    content: "📅"; /* You can replace this with an <img> or FontAwesome icon */
+    position: absolute;
+    left: 15px;
+    top: 28px;
+    transform: translateY(-50%);
+    font-size: 18px;
+  }
+
+  /* Hide the default browser calendar icon (Chrome/Safari) */
+  input::-webkit-calendar-picker-indicator {
+    background: transparent;
+    bottom: 0;
+    color: transparent;
+    cursor: pointer;
+    height: auto;
+    left: -10px;
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: auto;
+  }
+  /* Time Slot Container */
+  .time-options { display: flex; gap: 10px; }
+
+  /* Hide the actual radio circle */
+  .time-options input[type="radio"] { display: none; }
+
+  /* Style the label to look like a button */
+  .time-options label {
+    display: inline-block;
+    padding: 10px 30px;
+    border: 1px solid #444343;
+    border-radius: 20px;
+    cursor: pointer;
+    font-weight: normal;
+    font-size: 16px;
+    font-family: 'poppins',sans-serif;
+    font-weight: 600;
+    transition: 0.3s;
+  }
+
+  /* Style for when the radio is checked */
+  .time-options input[type="radio"]:checked + label {
+    background-color: #add8e6; /* Light blue from your image */
+    border-color: #add8e6;
+  }
+  .form-group{
+    margin-bottom: 50px;
+  }
+  .form-group > input{
+    display: block;
+    width: 100%;
+    padding: 20px;
+    margin-top: 30px;
+    border: 1px solid;
+    border-radius: 10px;
+  }
+  .form-group > .login-form{
+    margin-bottom: 20px;
+  }
+  .form-group > .login-form span{
+    align-items: center;
+    padding: 30px;
+    border-radius: 15px;
+  }
+  .form-group > .login-form span input{
+    align-items: center;
+    font-size: 16px;
+    font-weight: 600;
+  }
+
+  .section-title{ font-size: 18px; margin-bottom: 10px; display: flex; align-items: center; font-family: 'poppins',sans-serif;}
+  .section-title i { margin-right: 8px; }
+    /* ── SYMPTOM LOG LINK ── */
+    .symptom-option {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 16px;
+      background: var(--bg);
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .symptom-option:hover,
+    .symptom-option.selected {
+      border-color: var(--teal);
+      background: var(--teal-pale);
+    }
+
+    .symptom-option input[type="radio"] { display: none; }
+
+    .symptom-dot {
+      width: 18px;
+      height: 18px;
+      border: 2px solid var(--border);
+      border-radius: 50%;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+    }
+
+    .symptom-option.selected .symptom-dot {
+      border-color: var(--teal);
+      background: var(--teal);
+    }
+
+    .symptom-option.selected .symptom-dot::after {
+      content: '';
+      width: 7px;
+      height: 7px;
+      background: white;
+      border-radius: 50%;
+    }
+
+    .symptom-option-text { flex: 1; }
+
+    .symptom-option-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--dark);
+    }
+
+    .symptom-option-sub {
+      font-size: 12px;
+      color: var(--light);
+      margin-top: 2px;
+    }
+
+    #symptomOptions { display: flex; flex-direction: column; gap: 8px; }
+
+    /* ── SUBMIT BTN ── */
+    .submit-btn {
+      width: 100%;
+      padding: 25px;
+      background: linear-gradient(135deg, var(--teal-light), var(--teal));
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-family: 'poppins', sans-serif;
+      font-size: 18px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      margin-top: 8px;
+      letter-spacing: 0.3px;
+    }
+
+    .submit-btn:hover { opacity: 0.9; transform: translateY(-1px); }
+    .submit-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+    /* ── SIDEBAR ── */
+    .sidebar { display: flex; flex-direction: column; gap: 16px; }
+
+    .info-card {
+      background: var(--white);
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      padding: 24px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+    }
+
+    .info-card h3 {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--dark);
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .info-step {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .info-step:last-child { margin-bottom: 0; }
+
+    .step-num {
+      width: 24px;
+      height: 24px;
+      background: var(--teal-pale);
+      color: var(--teal-dark);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    .step-text { font-size: 13px; color: var(--mid); line-height: 1.5; }
+
+    .health-snapshot {
+      background: var(--teal-pale);
+      border-radius: 10px;
+      padding: 14px 16px;
+    }
+
+    .health-snapshot p {
+      font-size: 12px;
+      color: var(--teal-dark);
+      line-height: 1.7;
+    }
+
+    .health-item {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      padding: 6px 0;
+      border-bottom: 1px solid rgba(53,186,201,0.15);
+    }
+
+    .health-item:last-child { border-bottom: none; }
+    .health-item-label { color: var(--light); }
+    .health-item-value { font-weight: 600; color: var(--dark); }
+
+    /* ── TOAST ── */
+    .toast {
+      position: fixed;
+      bottom: 32px;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: var(--dark);
+      color: white;
+      padding: 14px 24px;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 500;
+      z-index: 9999;
+      transition: transform 0.3s ease;
+      max-width: 380px;
+      text-align: center;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+    }
+
+    .toast.show { transform: translateX(-50%) translateY(0); }
+    .toast.success { background: var(--success); }
+    .toast.error   { background: var(--error); }
+
+    /* ── SUCCESS SCREEN ── */
+    .success-screen {
+      display: none;
+      text-align: center;
+      padding: 48px 32px;
+    }
+
+    .success-screen.show { display: block; }
+
+    .success-icon {
+      width: 80px;
+      height: 80px;
+      background: linear-gradient(135deg, #d4edda, #b8e0c4);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 36px;
+      margin: 0 auto 20px;
+    }
+
+    .success-screen h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 22px;
+      color: var(--dark);
+      margin-bottom: 10px;
+    }
+
+    .success-screen p {
+      font-size: 14px;
+      color: var(--light);
+      line-height: 1.6;
+      margin-bottom: 28px;
+    }
+
+    .success-actions { display: flex; flex-direction: column; gap: 10px; }
+
+    .btn-secondary {
+      padding: 12px;
+      border: 1.5px solid var(--border);
+      background: var(--white);
+      border-radius: 10px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--mid);
+      cursor: pointer;
+      text-decoration: none;
+      display: block;
+      text-align: center;
+      transition: all 0.2s;
+    }
+
+    .btn-secondary:hover {
+      border-color: var(--teal);
+      color: var(--teal);
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 700px) {
+      .page-layout {
+        grid-template-columns: 1fr;
+        margin-top: 24px;
+        padding: 16px;
+      }
+      .sidebar { order: -1; }
+      .form-body { padding: 20px 16px; margin: 20px auto; }
+      .clinic-banner { padding: 16px; gap: 10px; }
+      .time-options {
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+      .time-options label {
+        padding: 8px 14px;
+        font-size: 13px;
+      }
+      .submit-btn { padding: 16px; font-size: 15px; }
+      .section-title { font-size: 15px; }
+      .form-group > .login-form span { padding: 10px; }
+    }
+
+    @media (max-width: 400px) {
+      .time-options label { padding: 7px 10px; font-size: 12px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <div class="header">
+    <div class="navbar">
+        
+        <button id="navToggle" class="nav-toggle" aria-label="Toggle navigation">
+          <i class="fas fa-bars"></i>
+        </button>
+        <div class="logo"><img src="./images/logo.png" alt="" /></div>
+
+        <!-- <button id="navToggle" class="nav-toggle" aria-label="Toggle navigation">
+          <i class="fas fa-bars"></i>
+        </button> -->
+
+        <div class="nav-menu" id="navMenu">
+          <ul>
+            <li><a href="./app-home.html">Home</a></li>
+            <li><a href="./complaints.html">Symptoms Logging</a></li>
+            <li><a href="./app-clinics.html">Clinic Directory</a></li>
+            <li><a href="./app-history.html">History</a></li>
+          </ul>
+        </div>
+        <div class="nav-buttons">
+          <ul>
+            <li>
+              <a href="./profile-health.html">
+                <i class="fa-solid fa-user"></i>
+              </a>
+            </li>
+            <li>
+              <a href="./app-history.html">
+                <i class="fa-regular fa-bell"></i>
+              </a>
+            </li>
+            <li>
+              <div class="user-profile" id="userProfileBtn">
+                <div class="profile-check"><span><div class="nav-avatar" style="font-size: 1.5em; font-family:'poppins',san-serif;" id="navAvatar"></div></span>
+                <span class="dropdown-arrow"><i class="fa-solid fa-angle-down"></i></span></div>
+                <div class="dropdown-menu" id="settingsDropdown">
+                  <div class="dropdown-item" onclick="handleMenuSelect('profile')">
+                    <span><i class="fa-solid fa-user"></i></span> Profile
+                  </div>
+                  <div class="dropdown-item" onclick="handleMenuSelect('settings')">
+                    <span><i class="fa-solid fa-gear"></i></span> Privacy
+                  </div>
+                  <div class="dropdown-item" onclick="handleMenuSelect('notification')">
+                    <span><i class="fa-regular fa-bell"></i></span> Notifications
+                  </div>
+                  <hr>
+                  <div class="dropdown-item logout" onclick="handleMenuSelect('logout')" style="color: rgb(65, 63, 63);">
+                    <span style="color: black; font-size:1.2em;margin: 0px 10px">&#9735;</span>Logout
+                  </div>
+                </div>
+              </div>
+            </li>
+          </ul>
+        </div>
+        
+    </div>
+  </div>
+
+  <!-- LAYOUT -->
+  <div class="main">
+    <div class="main-info page-main">
+      <div class="page-layout">
+
+        <!-- FORM -->
+        <div class="form-card">
+
+          <!-- FORM CONTENT -->
+          <!-- Selected Clinic Banner -->
+            <div class="clinic-banner">
+              <div class="clinic-banner-icon" id="clinicBannerIcon"><i class="fa fa-hospital" style="color:white;font-size:20px;"></i></div>
+              <div class="clinic-banner-info">
+                <div class="clinic-banner-label">Selected Clinic</div>
+                <div class="clinic-banner-name" id="selectedClinicName">Loading...</div>
+              </div>
+              <a href="./app-clinics.html" class="clinic-banner-change">← Change</a>
+            </div>
+          <div class="form-body" id="formBody">
+
+            
+
+            <!-- Preferred Date -->
+            <div class="form-section">
+              <div class="section-title"><span><i class="fa fa-user"></i></span> Visit Details</div>
+
+              <div class="form-group">
+                <div class="input-container">
+                  <input 
+                    type="text" 
+                    class="custom-date" id="preferredDate" 
+                    placeholder="Select preferred date" 
+                    onfocus="(this.type='date')" 
+                    onblur="(this.value ? this.type='date' : this.type='text')"
+                  >
+                </div>
+              </div>
+            </div>
+
+          <div class="form-group">
+            <div class="section-title"><span><i class="fa-regular fa-alarm-clock"></i></span> Time</div>
+            <div class="time-options">
+              <input type="radio" id="t1" name="time" value="9:00am" checked>
+              <label for="t1">9:00 AM</label>
+
+              <input type="radio" id="t2" name="time" value="11:00am">
+              <label for="t2">11:00 AM</label>
+
+              <input type="radio" id="t3" name="time" value="12:00pm">
+              <label for="t3">12:00 PM</label>
+              
+              <input type="radio" id="t4" name="time" value="1:00pm">
+              <label for="t4">1:00 PM</label>
+
+              <input type="radio" id="t5" name="time" value="2:00pm">
+              <label for="t5">2:00 PM</label>
+
+              <input type="radio" id="t6" name="time" value="3:00pm">
+              <label for="t6">3:00 PM</label>
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <div class="section-title"><span><i class="fa fa-user"></i></span> Personal Information</div>
+            <div class="login-form">
+              <span>
+                <i class="fa fa-user" aria-hidden="true"></i>
+                <input
+                  type="text"
+                  id="name"
+                  placeholder="Full Name"
+                  required
+                />
+              </span>
+            </div>
+            <div class="login-form">
+              <span>
+                <i class="fa fa-phone" aria-hidden="true"></i>
+                <input
+                  type="number"
+                  id="phone"
+                  placeholder="Phone Number"
+                  required
+                />
+              </span>
+            </div>
+            <div class="login-form">
+              <span>
+                <i class="fa fa-envelope" aria-hidden="true"></i>
+                <input
+                  type="email"
+                  id="signinEmail"
+                  placeholder="Email Address"
+                  required
+                />
+              </span>
+            </div>
+            <!-- <div class="section-title"><span><i class="fa-solid fa-stethoscope"></i></span> Reasons for Visits</div>
+            <div class="form-group">
+              <input type="text" placeholder="Reasons for visit">
+            </div> -->
+
+            <div class="field">
+              <label for="notes"><div class="section-title"><span><i class="fa-solid fa-stethoscope"></i></span> Reasons for Visits<span class="field-hint">(optional)</span></div></label>
+              <textarea id="notes" placeholder="Describe your concern or any specific request for the clinic..."></textarea>
+            </div>
+          </div>
+
+            <!-- Link Symptom Log -->
+            <div class="form-section">
+              <div class="form-section-title">Attach Symptom Log <span class="field-hint" style="text-transform:none;letter-spacing:0">(optional)</span></div>
+              <div id="symptomOptions">
+                <div class="symptom-option selected" onclick="selectSymptom(this, null)">
+                  <div class="symptom-dot"></div>
+                  <div class="symptom-option-text">
+                    <div class="symptom-option-title">No symptom log</div>
+                    <div class="symptom-option-sub">Book a general visit without linking symptoms</div>
+                  </div>
+                </div>
+                <!-- Recent symptoms loaded here -->
+              </div>
+            </div>
+
+            <button class="submit-btn" id="submitBtn" onclick="submitVisit()">
+              Confirm Booking
+            </button>
+          </div>
+
+          <!-- SUCCESS SCREEN (hidden initially) -->
+          <div class="success-screen" id="successScreen">
+            <div class="success-icon" style="font-family: 'poppins', san-serif;"><span style="color: #38a169;"><i class="fa-solid fa-square-check"></i></span></div>
+            <h2 style="font-family: 'poppins', san-serif;">Visit Requested!</h2>
+            <p>Your visit request has been submitted successfully. The clinic will confirm your appointment shortly. Check your email for confirmation.</p>
+            <div class="success-actions">
+              <a href="./app-history.html" class="submit-btn" style="text-decoration:none; display:block; text-align:center;">View My Visits</a>
+              <a href="./app-clinics.html" class="btn-secondary">Book Another Visit</a>
+              <a href="./app-home.html" class="btn-secondary">Back to Dashboard</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- SIDEBAR -->
+        <div class="sidebar">
+
+          <!-- How It Works -->
+          <div class="info-card">
+            <h3><i class="fa fa-hospital"></i> How It Works</h3>
+            <div class="info-step">
+              <div class="step-num">1</div>
+              <div class="step-text">Submit your visit request with your preferred date</div>
+            </div>
+            <div class="info-step">
+              <div class="step-num">2</div>
+              <div class="step-text">The clinic reviews your request and confirms</div>
+            </div>
+            <div class="info-step">
+              <div class="step-num">3</div>
+              <div class="step-text">You receive an email confirmation with details</div>
+            </div>
+            <div class="info-step">
+              <div class="step-num">4</div>
+              <div class="step-text">Attend your visit at the clinic</div>
+            </div>
+          </div>
+
+          <!-- Health Snapshot -->
+          <div class="info-card">
+            <h3><i class="fa fa-stethoscope"></i> Your Health Profile</h3>
+            <p style="font-size:12px;color:var(--light);margin-bottom:12px;">
+              This information will be shared with the clinic when you book.
+            </p>
+            <div id="healthSnapshot">
+              <div class="health-snapshot">
+                <p style="color:var(--light)">Loading your health profile...</p>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST -->
+  <div class="toast" id="toast"></div>
+
+  <script>
+    const API_URL = "https://novabuk-backend.onrender.com/api";
+    //const API_URL = "http://localhost:5000/api"; // ← uncomment for local
+
+    const token = localStorage.getItem("novabuk_token");
+    const user  = JSON.parse(localStorage.getItem("novabuk_user") || "{}");
+
+    // ── AUTH GUARD ────────────────────────────────────────
+    if (!token) window.location.href = "./sign-in.html";
+
+    let selectedSymptomId = null;
+    let selectedClinicId  = null;
+
+    // ── LOAD PAGE DATA ────────────────────────────────────
+    async function initPage() {
+      // 1. Load selected clinic from localStorage
+      const saved = JSON.parse(localStorage.getItem("selectedClinic") || "null");
+      if (!saved) {
+        window.location.href = "./app-clinics.html";
+        return;
+      }
+      selectedClinicId = saved.id;
+      document.getElementById("selectedClinicName").textContent = saved.name;
+
+      // Show clinic image if available, otherwise keep the default hospital icon
+      if (saved.image) {
+        const iconEl = document.getElementById("clinicBannerIcon");
+        iconEl.innerHTML = `<img src="${saved.image}" alt="${saved.name}" style="width:100%;height:100%;object-fit:cover;border-radius:12px;" onerror="this.parentElement.innerHTML='<i class=\'fa fa-hospital\' style=\'color:white;font-size:20px;\'></i>'" />`;
+        iconEl.style.padding = "0";
+        iconEl.style.overflow = "hidden";
+        iconEl.style.background = "none";
+      }
+
+      // 2. Prefill personal info from saved user
+      if (user.fullName) document.getElementById("name").value  = user.fullName;
+      if (user.email)    document.getElementById("signinEmail").value = user.email;
+
+      // 3. Load user health profile + recent symptoms in parallel
+      await Promise.all([loadHealthProfile(), loadRecentSymptoms()]);
+    }
+
+    async function loadHealthProfile() {
+      try {
+        const res  = await fetch(`${API_URL}/users/me`, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        const data = await res.json();
+
+        if (data.success) {
+          const hp = data.user.healthProfile;
+          const el = document.getElementById("healthSnapshot");
+
+          if (!hp || !hp.ageRange) {
+            el.innerHTML = `
+              <div class="health-snapshot">
+                <p>No health profile set. <a href="./app-settings.html" style="color:var(--teal)">Add one</a> to give the clinic context.</p>
+              </div>`;
+            return;
+          }
+
+          el.innerHTML = `
+            <div>
+              <div class="health-item">
+                <span class="health-item-label">Age Range</span>
+                <span class="health-item-value">${hp.ageRange || '—'}</span>
+              </div>
+              <div class="health-item">
+                <span class="health-item-label">Gender</span>
+                <span class="health-item-value">${hp.gender || '—'}</span>
+              </div>
+              <div class="health-item">
+                <span class="health-item-label">Conditions</span>
+                <span class="health-item-value">${hp.existingConditions?.length ? hp.existingConditions.join(', ') : 'None'}</span>
+              </div>
+              <div class="health-item">
+                <span class="health-item-label">Allergies</span>
+                <span class="health-item-value">${hp.allergies?.length ? hp.allergies.join(', ') : 'None'}</span>
+              </div>
+            </div>`;
+        }
+      } catch (err) {
+        console.error("Health profile load failed:", err);
+      }
+    }
+
+    async function loadRecentSymptoms() {
+      try {
+        const res  = await fetch(`${API_URL}/symptoms?limit=5`, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        const data = await res.json();
+
+        if (data.success && data.data.length > 0) {
+          const container = document.getElementById("symptomOptions");
+          data.data.forEach(symptom => {
+            const date  = new Date(symptom.createdAt).toLocaleDateString("en-NG", {
+              day: "numeric", month: "short", year: "numeric"
+            });
+            const tags  = symptom.tags.join(", ") || "No tags";
+            const div   = document.createElement("div");
+            div.className = "symptom-option";
+            div.innerHTML = `
+              <div class="symptom-dot"></div>
+              <div class="symptom-option-text">
+                <div class="symptom-option-title">${tags}</div>
+                <div class="symptom-option-sub">${symptom.severity} • ${date}</div>
+              </div>`;
+            div.onclick = () => selectSymptom(div, symptom._id);
+            container.appendChild(div);
+          });
+        }
+      } catch (err) {
+        console.error("Symptoms load failed:", err);
+      }
+    }
+
+    function selectSymptom(el, symptomId) {
+      document.querySelectorAll(".symptom-option").forEach(o => o.classList.remove("selected"));
+      el.classList.add("selected");
+      selectedSymptomId = symptomId;
+    }
+
+    // ── SUBMIT VISIT ──────────────────────────────────────
+    async function submitVisit() {
+      const btn   = document.getElementById("submitBtn");
+      const name  = document.getElementById("name").value.trim();
+      const phone = document.getElementById("phone").value.trim();
+      const email = document.getElementById("signinEmail").value.trim();
+      const notes = document.getElementById("notes").value.trim();
+
+      // Combine date + selected time slot
+      const dateVal = document.getElementById("preferredDate").value;
+      const timeVal = document.querySelector('input[name="time"]:checked')?.value || "";
+      let preferredDate = null;
+      if (dateVal) {
+        const timeMap = {
+          "9:00am": "09:00", "11:00am": "11:00", "12:00pm": "12:00",
+          "1:00pm": "13:00", "2:00pm": "14:00", "3:00pm": "15:00"
+        };
+        const timeStr = timeMap[timeVal] || "09:00";
+        preferredDate = new Date(`${dateVal}T${timeStr}`).toISOString();
+      }
+
+      // ── Validate required fields ──────────────────────────
+      const missing = [];
+      if (!name)          missing.push("Full Name");
+      if (!phone)         missing.push("Phone Number");
+      if (!email)         missing.push("Email Address");
+      if (!dateVal)       missing.push("Preferred Date");
+      if (!notes)         missing.push("Reason for Visit");
+
+      if (missing.length > 0) {
+        showToast(`Please fill in: ${missing.join(", ")}`, "error");
+        return;
+      }
+
+      if (!selectedClinicId) {
+        showToast("No clinic selected. Please go back and choose a clinic.", "error");
+        return;
+      }
+
+      btn.disabled    = true;
+      btn.textContent = "Submitting...";
+
+      try {
+        const body = {
+          clinicId: selectedClinicId,
+          notes,
+        };
+
+        if (preferredDate)     body.preferredDate = preferredDate;
+        if (selectedSymptomId) body.symptomLogId  = selectedSymptomId;
+
+        const res  = await fetch(`${API_URL}/visits/request`, {
+          method:  "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization:  `Bearer ${token}`,
+          },
+          body: JSON.stringify(body),
+        });
+
+        const data = await res.json();
+
+        if (data.success) {
+          // Show success screen
+          document.getElementById("formBody").style.display  = "none";
+          document.getElementById("successScreen").classList.add("show");
+          // Clear saved clinic
+          localStorage.removeItem("selectedClinic");
+        } else {
+          showToast(data.message || "Something went wrong.", "error");
+          btn.disabled    = false;
+          btn.textContent = "Confirm Booking";
+        }
+      } catch (err) {
+        showToast("Network error. Please try again.", "error");
+        btn.disabled    = false;
+        btn.textContent = "Confirm Booking";
+      }
+    }
+
+    // ── TOAST ─────────────────────────────────────────────
+    function showToast(msg, type = "success") {
+      const t = document.getElementById("toast");
+      t.textContent = msg;
+      t.className   = `toast ${type} show`;
+      setTimeout(() => t.classList.remove("show"), 3500);
+    }
+
+    // ── DROPDOWN ─────────────────────────────────────────
+    function handleMenuSelect(value) {
+      if (value === "logout") {
+        localStorage.removeItem("novabuk_token");
+        localStorage.removeItem("novabuk_user");
+        localStorage.removeItem("selectedClinic");
+        window.location.href = "./sign-in.html";
+      } else if (value === "profile") {
+        window.location.href = "./app-setting.html?tab=profile";
+      } else if (value === "settings") {
+        window.location.href = "./app-setting.html?tab=privacy";
+      } else if (value === "notification") {
+        window.location.href = "./app-setting.html?tab=notification";
+      }
+    }
+
+    // ── INIT ─────────────────────────────────────────────
+    initPage();
+  </script>
+  <script src="./script.js"></script>
+</body>
+</html>

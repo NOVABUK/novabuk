@@ -1,0 +1,483 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" sizes="180x180" href="./images/image 19.png">
+    
+    <title>NovaBuk Blog | Healthcare Insights & Innovation in Africa</title>
+    <meta name="description" content="Stay updated with the latest trends in African healthcare, digital health records, medical AI, and wellness tips on the NovaBuk blog. Insights for patients and doctors.">
+    <meta name="keywords" content="Healthcare Blog Africa, Medical AI News, Digital Health Trends, NovaBuk Updates, African Health Innovation">
+    <meta name="author" content="NovaBuk">
+    <meta name="robots" content="index, follow">
+
+    <!-- Open Graph / Social Media -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://www.novabuk.com/blog-dynamic.html">
+    <meta property="og:title" content="NovaBuk Blog - The Future of Digital Health in Africa">
+    <meta property="og:description" content="Expert insights on how AI and digital records are transforming healthcare across the continent.">
+    <meta property="og:image" content="https://www.novabuk.com/images/og-blog.png">
+
+    <!-- Styles and Fonts -->
+    <link rel="stylesheet" href="./styles.css" />
+    <link rel="stylesheet" href="./styles-app.css" />
+    <link rel="stylesheet" href="./styles-about.css">
+    <link rel="stylesheet" href="./styles-blog.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
+      integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Unbounded:wght@200..900&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  </head>
+  <body>
+    <div class="container">
+      <!-- Header Section -->
+      <div class="header">
+        <div class="nav" id="loggedOutNav">
+          <div class="idx-loggedout" id="idxLoggedOut">
+            <div class="logo">
+              <img src="./images/logo.png" alt="NovaBuk" />
+            </div>
+          </div>
+          <nav class="nav-links" id="navMenu">
+            <ul>
+              <li><a href="index.html">Home</a></li>
+              <li><a href="./about.html">About Us</a></li>
+              <li><a href="./services.html">Services</a></li>
+              <li><a href="./blog-dynamic.html">Blog</a></li>
+              <li><a href="./contact.html">Contact Us</a></li>
+              <!-- Mobile hamburger — auth links shown when logged out -->
+              <li class="mobile-only" id="mobileSignUp">
+                <a href="./sign-up.html" class="btn-signin">Sign Up</a>
+              </li>
+              <li class="mobile-only" id="mobileLogin">
+                <a href="./sign-in.html" class="btn-getstarted">Login</a>
+              </li>
+            </ul>
+          </nav>
+
+          <!-- Logged out right: Sign Up + Login buttons -->
+          <div class="signup-btns idx-loggedout" id="idxAuthBtns">
+            <ul>
+              <li><a href="./sign-up.html">Sign Up</a></li>
+              <li><a href="./sign-in.html">Login</a></li>
+            </ul>
+          </div>
+
+          <!-- Bar icon for logged out on mobile -->
+          <div class="nav-icon" id="navToggleIcon">
+            <i class="fa fa-bars"></i>
+          </div>
+
+          
+        </div>
+
+        
+        <!-- ── LOGGED IN STATE ──────────────────────────────── -->
+
+        <div class="navbar navbar-home" id="loggedInNav" style="display: none;">
+        
+          <div class="btn-log" style="display:flex">
+            <button id="navToggle" class="nav-toggle" aria-label="Toggle navigation">
+              <i class="fas fa-bars"></i>
+            </button>
+            <div class="logo"><img src="./images/logo.png" alt="" /></div>
+          </div>
+
+          <!-- <button id="navToggle" class="nav-toggle" aria-label="Toggle navigation">
+            <i class="fas fa-bars"></i>
+          </button> -->
+
+          <div class="nav-menu navMenu" id="navMenu">
+            <ul>
+              <li><a href="./index.html" class="active">Home</a></li>
+              <li><a href="./about.html">About</a></li>
+              <li><a href="./services.html">Features</a></li>
+              <li><a href="./blog-dynamic.html">Blog</a></li>
+              <li><a href="./contact.html">Contact</a></li>
+            </ul>
+          </div>
+          <div class="nav-buttons navbtns">
+            <ul>
+              <li>
+                <a href="#">
+                  <i class="fa-solid fa-briefcase-medical"></i>
+                </a>
+              </li>
+              <li>
+                <a href="./app-history.html">
+                  <i class="fa-regular fa-bell"></i>
+                </a>
+              </li>
+              <li>
+                <div class="user-profile" id="userProfileBtn">
+                  <div class="profile-check"><span><div class="nav-avatar" style="font-size: 1.5em; font-family:'poppins',san-serif;" id="navAvatar"></div></span>
+                  <span class="dropdown-arrow"><i class="fa-solid fa-angle-down"></i></span></div>
+                  <div class="dropdown-menu" id="settingsDropdown">
+                    <!-- User identity block -->
+                    <div class="dd-user-block">
+                      <div class="dd-avatar-sm" id="ddAvatar"></div>
+                      <div class="dd-user-info">
+                        <p class="dd-name" id="ddName">—</p>
+                        <p class="dd-email" id="ddEmail">—</p>
+                      </div>
+                    </div>
+                    <div class="dd-divider"></div>
+                    <!-- Quick actions -->
+                    <div class="dropdown-item" onclick="handleMenuSelect('dashboard')">
+                      <span><i class="fa-solid fa-house"></i></span> Dashboard
+                    </div>
+                    <div class="dropdown-item" onclick="handleMenuSelect('visits')">
+                      <span><i class="fa-solid fa-calendar-check"></i></span>
+                      My Visits
+                      <span class="dd-visits-badge" id="ddVisitsBadge" style="display:none"></span>
+                    </div>
+                    <div class="dropdown-item" onclick="handleMenuSelect('profile')">
+                      <span><i class="fa-solid fa-heart-pulse"></i></span> My Health Profile
+                    </div>
+                    <div class="dd-symptom-hint" id="ddSymptomHint" style="display:none">
+                      <i class="fa-regular fa-clock"></i>
+                      <span id="ddSymptomText">Last symptom logged: —</span>
+                      <a href="./complaints.html" class="dd-log-now">Log now →</a>
+                    </div>
+                    <div class="dd-divider"></div>
+                    <div class="dropdown-item" onclick="handleMenuSelect('settings')">
+                      <span><i class="fa-solid fa-gear"></i></span> Settings
+                    </div>
+                    <div class="dd-divider"></div>
+                    <div class="dropdown-item dd-logout" onclick="handleMenuSelect('logout')">
+                      <span><i class="fa-solid fa-right-from-bracket"></i></span> Logout
+                    </div>
+                  </div>
+                </div>
+              </li>
+            </ul>
+          </div>
+        
+        </div>
+        <div class="blog-hero" style="padding-top: 120px;">
+          <div class="blog-hero-content">
+            <h1>Healthcare Insights & Innovation</h1>
+            <p>
+              Stay updated with the latest trends in digital health, AI-driven
+              medical records, and healthcare innovation across Africa
+            </p>
+          </div>
+        </div>
+      </div> 
+
+      <!-- Featured Post Section -->
+      <section class="featured-post-section" id="featuredSection">
+        <div class="loader" style="text-align: center; padding: 40px">
+          <div
+            class="spinner"
+            style="
+              border: 4px solid #f3f3f3;
+              border-top: 4px solid #35bac9;
+              border-radius: 50%;
+              width: 40px;
+              height: 40px;
+              animation: spin 1s linear infinite;
+              margin: 0 auto;
+            "
+          ></div>
+        </div>
+      </section>
+
+      <!-- Search & Filter Section -->
+      <section class="blog-search-section">
+        <div class="search-container">
+          <input
+            type="text"
+            id="blogSearch"
+            class="blog-search-input"
+            placeholder="Search articles..."
+          />
+          <button class="search-btn"><i class="fas fa-search"></i></button>
+        </div>
+        <div class="filter-tags">
+          <button class="filter-btn active" data-filter="all">All Posts</button>
+          <button class="filter-btn" data-filter="healthcare">
+            Healthcare
+          </button>
+          <button class="filter-btn" data-filter="technology">
+            Technology
+          </button>
+          <button class="filter-btn" data-filter="innovation">
+            Innovation
+          </button>
+          <button class="filter-btn" data-filter="tips">Tips & Guides</button>
+        </div>
+      </section>
+
+      <!-- Blog Posts Grid -->
+      <section class="blog-posts-grid" id="blogsGrid">
+        <div
+          class="loader"
+          style="grid-column: 1 / -1; text-align: center; padding: 40px"
+        >
+          <div
+            class="spinner"
+            style="
+              border: 4px solid #f3f3f3;
+              border-top: 4px solid #35bac9;
+              border-radius: 50%;
+              width: 40px;
+              height: 40px;
+              animation: spin 1s linear infinite;
+              margin: 0 auto;
+            "
+          ></div>
+        </div>
+      </section>
+
+      <!-- Newsletter Section -->
+      <section class="newsletter-section">
+        <div class="newsletter-content">
+          <h2>Stay Updated with Healthcare Insights</h2>
+          <p>
+            Subscribe to our newsletter for the latest updates on digital health
+            innovation and tips for healthcare providers.
+          </p>
+          <form class="newsletter-form">
+            <input type="email" placeholder="Enter your email" required />
+            <button type="submit" class="btn-primary">Subscribe</button>
+          </form>
+        </div>
+      </section>
+
+      <!-- Footer -->
+      <footer class="main-footer">
+        <div class="footer-content">
+            <div class="footer-brand">
+                <div class="logo-foot">
+                    <img src="./images/logo.png" alt="Logo" />
+                </div>
+                <p>Where Technology meets Care. Empowering Africa's Healthcare with AI-driven Digital Records.</p>
+                <div class="social-links">
+                    <a href="https://www.instagram.com/novabukofficial?utm_source=qr&igsh=M2ZzM2ozeWQwN3hu" target="_blank"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="https://x.com/NovaBukApp?t=r1xoJKvpfA1QSnGpHVdk_Q&s=o8" target="_blank"><i class="fa-brands fa-twitter"></i></a>
+                    <a href="https://www.linkedin.com/company/novabuk/" target="_blank"><i class="fa-brands fa-linkedin"></i></a>
+                </div>
+            </div>
+
+            <div class="footer-col">
+                <h4>Quick Links</h4>
+                <ul>
+                    <li><a href="./about.html">About us</a></li>
+                    <li><a href="./contact.html">Contact</a></li>
+                    <li><a href="./services.html">Features</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h4>Contact</h4>
+                <ul class="contact-list">
+                    <li><i class="fa-solid fa-phone"></i> +234 813 468 4154</li>
+                    <li><i class="fa-solid fa-envelope"></i> hello@novabuk.com</li>
+                    <li><i class="fa-solid fa-globe"></i> www.novabuk.com</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <!-- <div class="line"></div> -->
+            <p>&copy; 2025 NovaBuk HealthTech. All rights reserved.</p>
+        </div>
+      </footer>
+    </div>
+
+      <script src="./script.js"></script>
+      
+      <script>
+      // script.js runIndexNavSync() handles navbar state + bfcache restore
+      // Only define handleMenuSelect here since it needs page-specific reload behaviour
+      window.handleMenuSelect = function(value) {
+        if      (value === 'logout')    { if (typeof showLogoutModal === 'function') showLogoutModal(); else { localStorage.removeItem('novabuk_token'); localStorage.removeItem('novabuk_user'); localStorage.removeItem('selectedClinic'); window.location.reload(); } }
+        else if (value === 'dashboard') { window.location.href = './app-home.html'; }
+        else if (value === 'visits')    { window.location.href = './app-history.html'; }
+        else if (value === 'profile')   { window.location.href = './app-setting.html?tab=profile'; }
+        else if (value === 'settings')  { window.location.href = './app-setting.html?tab=profile'; }
+        else if (value === 'notification') { window.location.href = './app-setting.html?tab=notification'; }
+      };
+      </script>
+      <script>
+        // API Configuration
+        var API_URL =
+          window.location.hostname === "localhost" ||
+          window.location.protocol === "file:"
+            ? "http://localhost:5000/api"
+            : "http://localhost:5000/api";
+        let allBlogs = [];
+        let filteredBlogs = [];
+
+        // Load blogs on page load
+        document.addEventListener("DOMContentLoaded", () => {
+          loadBlogs();
+          setupEventListeners();
+        });
+
+        // Load all blogs from backend
+        async function loadBlogs() {
+          try {
+            const response = await fetch(`${API_URL}/blogs?limit=100`);
+            const data = await response.json();
+
+            if (data.success && data.data) {
+              allBlogs = data.data;
+              filteredBlogs = [...allBlogs];
+
+              // Display featured blog
+              displayFeaturedBlog();
+
+              // Display all blogs
+              displayBlogs(filteredBlogs);
+            } else {
+              console.error("No blogs found");
+              document.getElementById("blogsGrid").innerHTML =
+                '<p style="grid-column: 1 / -1; text-align: center; padding: 40px;">No blog posts yet. Check back soon!</p>';
+            }
+          } catch (error) {
+            console.error("Error loading blogs:", error);
+            document.getElementById("blogsGrid").innerHTML =
+              '<p style="grid-column: 1 / -1; text-align: center; padding: 40px; color: #e74c3c;">Error loading blog posts. Please try again later.</p>';
+          }
+        }
+
+        // Helper to ensure valid image URL and fallback
+        function safeUrl(url) {
+          if (!url) return './images/image 34.png';
+          try {
+            // If already an absolute URL, return as-is
+            if (/^https?:\/\//i.test(url)) return url;
+            // Otherwise encode spaces and return
+            return encodeURI(url);
+          } catch (err) {
+            return './images/image 34.png';
+          }
+        }
+
+        // Display featured blog (most recent published)
+        function displayFeaturedBlog() {
+          const featured = allBlogs[0]; // Most recent published first
+
+          if (!featured) {
+            document.getElementById("featuredSection").innerHTML = "";
+            return;
+          }
+
+          document.getElementById("featuredSection").innerHTML = `
+                  <div class="featured-post">
+                      <div class="featured-post-content">
+                          <span class="post-badge">Featured</span>
+                          <h2>${featured.title}</h2>
+                          <p>${featured.excerpt || featured.content.substring(0, 200)}</p>
+                          <div class="post-meta">
+                              <span class="post-date"><i class="fas fa-calendar"></i> ${new Date(featured.publishedAt).toLocaleDateString()}</span>
+                              <span class="post-author"><i class="fas fa-user"></i> ${featured.author}</span>
+                              <span class="read-time"><i class="fas fa-clock"></i> ${featured.readTime} min read</span>
+                          </div>
+                          <a href="./blog-single.html?slug=${featured.slug}" class="read-more-btn">Read Full Article <i class="fas fa-arrow-right"></i></a>
+                      </div>
+                      <div class="featured-post-image">
+                        <img src="${safeUrl(featured.image)}" alt="${featured.title}">
+                      </div>
+                  </div>
+              `;
+        }
+
+        // Display blogs grid
+        function displayBlogs(blogs) {
+          const blogsGrid = document.getElementById("blogsGrid");
+
+          if (blogs.length === 0) {
+            blogsGrid.innerHTML =
+              '<p style="grid-column: 1 / -1; text-align: center; padding: 40px;">No blog posts found. Try a different search or filter.</p>';
+            return;
+          }
+
+          blogsGrid.innerHTML = blogs
+            .map(
+              (blog) => `
+                  <article class="blog-card" data-category="${blog.category}">
+                      <div class="blog-card-image">
+                          <img src="${safeUrl(blog.image)}" alt="${blog.title}">
+                          <span class="category-badge">${capitalizeFirst(blog.category)}</span>
+                      </div>
+                      <div class="blog-card-content">
+                          <h3>${blog.title}</h3>
+                          <p>${blog.excerpt || blog.content.substring(0, 150)}</p>
+                          <div class="post-meta">
+                              <span class="post-date"><i class="fas fa-calendar"></i> ${new Date(blog.publishedAt).toLocaleDateString()}</span>
+                              <span class="read-time"><i class="fas fa-clock"></i> ${blog.readTime} min read</span>
+                          </div>
+                          <a href="./blog-single.html?slug=${blog.slug}" class="read-link">Read Article <i class="fas fa-arrow-right"></i></a>
+                      </div>
+                  </article>
+              `,
+            )
+            .join("");
+        }
+
+        // Setup event listeners
+        function setupEventListeners() {
+          // Filter buttons
+          document.querySelectorAll(".filter-btn").forEach((btn) => {
+            btn.addEventListener("click", (e) => {
+              document
+                .querySelectorAll(".filter-btn")
+                .forEach((b) => b.classList.remove("active"));
+              btn.classList.add("active");
+
+              const filter = btn.getAttribute("data-filter");
+              if (filter === "all") {
+                filteredBlogs = [...allBlogs];
+              } else {
+                filteredBlogs = allBlogs.filter(
+                  (blog) => blog.category === filter,
+                );
+              }
+              displayBlogs(filteredBlogs);
+            });
+          });
+
+          // Search
+          document.getElementById("blogSearch").addEventListener("input", (e) => {
+            const query = e.target.value.toLowerCase();
+            filteredBlogs = allBlogs.filter(
+              (blog) =>
+                blog.title.toLowerCase().includes(query) ||
+                blog.excerpt.toLowerCase().includes(query) ||
+                blog.content.toLowerCase().includes(query),
+            );
+            displayBlogs(filteredBlogs);
+          });
+
+          // Newsletter
+          document
+            .querySelector(".newsletter-form")
+            .addEventListener("submit", (e) => {
+              e.preventDefault();
+              const email = e.target.email.value;
+              alert(
+                "Thank you for subscribing! You will receive updates at " + email,
+              );
+              e.target.reset();
+            });
+        }
+
+        // Helper function
+        function capitalizeFirst(str) {
+          return str.charAt(0).toUpperCase() + str.slice(1);
+        }
+      </script>
+  </body>
+</html>

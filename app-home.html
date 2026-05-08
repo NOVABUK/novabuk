@@ -1,0 +1,466 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow">
+    <title>Patient Dashboard | NovaBuk</title>
+    <link rel="icon" sizes="180x180" href="./images/image 19.png">
+    <link rel="stylesheet" href="./styles-app.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
+      integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Unbounded:wght@200..900&display=swap"
+      rel="stylesheet"
+    />
+    <title>Home NovaBuk</title>
+  </head>
+
+  <body>
+    <div class="header">
+      <div class="navbar navbar-home">
+        
+        <div class="btn-log" style="display:flex">
+          <button id="navToggle" class="nav-toggle" aria-label="Toggle navigation">
+            <i class="fas fa-bars"></i>
+          </button>
+          <div class="logo"><img src="./images/logo.png" alt="" /></div>
+        </div>
+
+        <!-- <button id="navToggle" class="nav-toggle" aria-label="Toggle navigation">
+          <i class="fas fa-bars"></i>
+        </button> -->
+
+        <div class="nav-menu navMenu" id="navMenu">
+          <ul>
+            <li><a href="./app-home.html" class="active">Home</a></li>
+            <li><a href="./complaints.html">Symptoms Logging</a></li>
+            <li><a href="./app-clinics.html">Clinic Directory</a></li>
+            <li><a href="./app-history.html">History</a></li>
+          </ul>
+        </div>
+        <div class="nav-buttons navbtns">
+          <ul>
+            <li>
+              <a href="app-tip-view.html" data-tip="health tips">
+                <i class="fa-solid fa-briefcase-medical"></i>
+              </a>
+            </li>
+            <li>
+              <a href="./app-history.html">
+                <i class="fa-regular fa-bell"></i>
+              </a>
+            </li>
+            <li>
+              <div class="user-profile" id="userProfileBtn">
+                <div class="profile-check"><span><div class="nav-avatar" style="font-size: 1.5em; font-family:'poppins',san-serif;" id="navAvatar"></div></span>
+                <span class="dropdown-arrow"><i class="fa-solid fa-angle-down"></i></span></div>
+                <div class="dropdown-menu" id="settingsDropdown">
+                  <!-- User identity block -->
+                  <div class="dd-user-block">
+                    <div class="dd-avatar-sm" id="ddAvatar"></div>
+                    <div class="dd-user-info">
+                      <p class="dd-name" id="ddName">—</p>
+                      <p class="dd-email" id="ddEmail">—</p>
+                    </div>
+                  </div>
+                  <div class="dd-divider"></div>
+                  <!-- Quick actions -->
+                  <div class="dropdown-item" onclick="handleMenuSelect('dashboard')">
+                    <span><i class="fa-solid fa-house"></i></span> Dashboard
+                  </div>
+                  <div class="dropdown-item" onclick="handleMenuSelect('visits')">
+                    <span><i class="fa-solid fa-calendar-check"></i></span>
+                    My Visits
+                    <span class="dd-visits-badge" id="ddVisitsBadge" style="display:none"></span>
+                  </div>
+                  <div class="dropdown-item" onclick="handleMenuSelect('profile')">
+                    <span><i class="fa-solid fa-heart-pulse"></i></span> My Health Profile
+                  </div>
+                  <div class="dd-symptom-hint" id="ddSymptomHint" style="display:none">
+                    <i class="fa-regular fa-clock"></i>
+                    <span id="ddSymptomText">Last symptom logged: —</span>
+                    <a href="./complaints.html" class="dd-log-now">Log now →</a>
+                  </div>
+                  <div class="dd-divider"></div>
+                  <div class="dropdown-item" onclick="handleMenuSelect('settings')">
+                    <span><i class="fa-solid fa-gear"></i></span> Settings
+                  </div>
+                  <div class="dd-divider"></div>
+                  <div class="dropdown-item dd-logout" onclick="handleMenuSelect('logout')">
+                    <span><i class="fa-solid fa-right-from-bracket"></i></span> Logout
+                  </div>
+                </div>
+              </div>
+            </li>
+          </ul>
+        </div>
+        
+      </div>
+    </div>
+
+    <main class="main">
+      <div class="main-info">
+        <div class="hero-app">
+          <h1 id="welcomeHeading">Hi there!</h1>
+          <p>How are you doing today?</p>
+
+          <!-- NovaBuk Digital ID Card -->
+          
+        </div>
+        <div class="id-card-mini" id="novaBukIdCard" style="display:none; margin-top:20px; background:rgba(255,255,255,0.12); border:1px solid rgba(255,255,255,0.25); border-radius:14px; padding:14px 18px; backdrop-filter:blur(8px);">
+            <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+              <div>
+                <p style="margin:0; font-size:10px; color:rgba(255,255,255,0.65); text-transform:uppercase; letter-spacing:1.2px; font-weight:600;">NovaBuk Patient ID</p>
+                <div style="display:flex; align-items:center; gap:10px; margin-top:6px;">
+                  <div id="displayNovaBukId" style="font-family:'Unbounded',sans-serif; font-size:1.1rem; font-weight:700; color:white; letter-spacing:0.5px;">NB-PENDING</div>
+                  <button id="toggleIdVisibility" style="background:none; border:none; color:white; cursor:pointer; opacity:0.7; padding:5px;"><i class="fa-solid fa-eye-slash" id="eyeIcon"></i></button>
+                </div>
+              </div>
+              <!-- <div style="background:white; padding:6px; border-radius:8px; opacity:0.9;"> -->
+                <!-- <i class="fa-solid fa-qrcode" style="color:#0f2027; font-size:22px;"></i> -->
+              <!-- </div> -->
+            </div>
+          </div>
+      </div>
+
+      <div class="main-body">
+        <div class="hero-detail">
+          <div class="hero-box">
+            <div class="detail-border">
+              <div class="box-one">
+                <div class="box-text">
+                  <h3>Log a symptom</h3>
+                  <p>Tell us how you feel today</p>
+                </div>
+                <div class="cta-box">
+                  <a href="./complaints.html">Log a symptom</a>
+                </div>
+              </div>
+              <div class="box-icon">
+                <img src="images/complain (1).png" alt="log complain" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="hero-detail">
+          <div class="hero-box">
+            <div class="detail-border">
+              <div class="box-one">
+                <div class="box-text">
+                  <h3>Visit Clinic</h3>
+                  <p>Find and visit nearby clinics</p>
+                </div>
+                <div class="cta-box">
+                  <a href="./app-clinics.html">Visit Clinic</a>
+                </div>
+              </div>
+              <div class="box-icon">
+                <img src="images/clinic.png" alt="clinic" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="hero-detail">
+          <div class="hero-box">
+            <div class="detail-border">
+              <div class="box-one">
+                <div class="box-text">
+                  <h3>View History</h3>
+                  <p>View past history and symptoms</p>
+                </div>
+                <div class="cta-box">
+                  <a href="./app-history.html">View past history</a>
+                </div>
+              </div>
+              <div class="box-icon">
+                <img src="images/history.png" alt="history" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="hero-detail">
+          <div class="hero-box">
+            <h4><span><i class="fa-solid fa-exclamation"></i></span> NovaBuk does not replace professional advice</h4>
+          </div>
+        </div>
+
+        <!-- ── HEALTH TIPS SECTION ── -->
+        <!-- <div class="hero-detail">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px; padding:0 5px;">
+            <h3 style="font-family:poppins,sans-serif; font-size:1.1rem; font-weight:700; color:#0f2027;">Latest Health Tips</h3>
+            <a href="./app-tips.html" style="color:#35bac9; font-size:0.85rem; font-weight:600; text-decoration:none;">View All</a>
+          </div>
+          <div id="healthTipsContainer" style="display:flex; gap:15px; overflow-x:auto; padding-bottom:10px; scroll-snap-type:x mandatory; -ms-overflow-style:none; scrollbar-width:none;">
+            
+            <div style="min-width:100%; height:80px; background:#f0fbfc; border-radius:14px; display:flex; align-items:center; justify-content:center; color:#35bac9; font-size:0.9rem;">
+              <div class="spinner"></div> Loading daily tips...
+            </div>
+          </div>
+        </div> -->
+
+        <!-- ── ONBOARDING CHECKLIST ── -->
+        <!-- <div id="onboardingChecklist" style="display:none; width:100%;">
+          <div class="hero-box" style="padding:0; overflow:hidden; border-radius:14px; border:1.5px solid #b2e0ea; background:white; box-shadow:0 4px 18px rgba(53,186,201,0.08);">
+            <div style="background:linear-gradient(135deg,#0f2027,#1a3a4a); padding:18px 22px; display:flex; justify-content:space-between; align-items:center;">
+              <div>
+                <p style="margin:0; font-family:poppins,sans-serif; font-size:11px; color:rgba(255,255,255,0.55); text-transform:uppercase; letter-spacing:0.6px;">Getting Started</p>
+                <h4 style="margin:4px 0 0; font-family:poppins,sans-serif; color:white; font-size:0.95rem; font-weight:600;">Complete your NovaBuk setup</h4>
+              </div>
+              <button onclick="dismissChecklist()" style="background:rgba(255,255,255,0.1); border:none; color:rgba(255,255,255,0.6); width:28px; height:28px; border-radius:50%; cursor:pointer; font-size:14px; display:flex; align-items:center; justify-content:center;">✕</button>
+            </div>
+            <div style="padding:16px 22px 20px;">
+              <div style="margin-bottom:10px;">
+                <div style="height:4px; background:#eee; border-radius:2px; overflow:hidden;">
+                  <div id="checklistBar" style="height:100%; background:linear-gradient(90deg,#7ecad7,#35bac9); transition:width 0.4s ease; width:0%"></div>
+                </div>
+                <p id="checklistProgress" style="font-family:poppins,sans-serif; font-size:11px; color:#888; margin:6px 0 0;">0 of 3 complete</p>
+              </div>
+              <div id="checklistItems" style="display:flex; flex-direction:column; gap:10px;"></div>
+            </div>
+          </div>
+        </div> -->
+
+      </div>
+    </main>
+
+    
+    <script>
+      var API_URL = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1"
+        ? "http://localhost:5000/api"
+        : "https://novabuk-backend.onrender.com/api";
+
+      // ── DOCTOR ROLE GUARD ───────────────────────────────
+      // Doctors should never land on app-home — redirect them
+      // to the clinic portal immediately. Using replace() removes
+      // this page from the browser history so the back button
+      // doesn't loop through app-home.
+      (function() {
+        var _u = JSON.parse(localStorage.getItem('novabuk_user') || '{}');
+        if (_u.role === 'Doctors') {
+          window.location.replace('./clinic-queue.html');
+        }
+      })();
+
+      // ── SHOW WELCOME MESSAGE ────────────────────────────
+      const user = JSON.parse(localStorage.getItem("novabuk_user") || "{}");
+      if (user.fullName) {
+        const firstName = user.fullName.split(" ")[0];
+        document.getElementById("welcomeHeading").textContent = `Hi, ${firstName}!`;
+      }
+      
+      // Sync localStorage with latest user data (especially the novaBukId)
+      (async function syncProfile() {
+        const token = localStorage.getItem("novabuk_token");
+        if (!token) return;
+        try {
+          const res = await fetch(`${API_URL}/users/me`, {
+            headers: { Authorization: `Bearer ${token}` }
+          });
+          const data = await res.json();
+          if (data.success && data.user) {
+            // Update local storage with the very latest data (including generated ID)
+            const updatedUser = {
+              id: data.user.id,
+              fullName: data.user.fullName,
+              email: data.user.email,
+              role: 'Patient',
+              avatarUrl: data.user.avatarUrl,
+              profileComplete: data.user.profileComplete,
+              isVerified: true,
+              novaBukId: data.user.novaBukId
+            };
+            localStorage.setItem("novabuk_user", JSON.stringify(updatedUser));
+            
+            // Update UI if ID was missing
+            if (updatedUser.novaBukId) {
+              document.getElementById("novaBukIdCard").style.display = "block";
+              
+              const idDisplay = document.getElementById("displayNovaBukId");
+              const toggleBtn = document.getElementById("toggleIdVisibility");
+              const eyeIcon = document.getElementById("eyeIcon");
+              let isHidden = true; // Default to hidden for privacy
+              
+              const realId = updatedUser.novaBukId;
+              const maskedId = "NB-****";
+              
+              idDisplay.textContent = maskedId;
+              
+              if (toggleBtn) {
+                toggleBtn.onclick = (e) => {
+                  e.stopPropagation();
+                  isHidden = !isHidden;
+                  idDisplay.textContent = isHidden ? maskedId : realId;
+                  eyeIcon.className = isHidden ? "fa-solid fa-eye-slash" : "fa-solid fa-eye";
+                };
+              }
+            }
+          }
+        } catch (err) { console.log("Profile sync failed"); }
+      })();
+
+      // Set avatar initial
+
+      if (user.fullName) {
+        const avatarEl = document.getElementById("navAvatar");
+        if (user.avatarUrl) {
+          avatarEl.innerHTML = `<img src="${user.avatarUrl}" alt="avatar" style="width:100%;height:100%;object-fit:cover;border-radius:50%;" />`;
+          avatarEl.style.padding = "0";
+          avatarEl.style.fontSize = "0";
+        } else {
+          avatarEl.textContent = user.fullName.trim().charAt(0).toUpperCase();
+        }
+      }
+
+      // ── SETTINGS DROPDOWN ───────────────────────────────
+      function handleMenuSelect(value) {
+          if (value === "logout") {
+              localStorage.removeItem("novabuk_token");
+              localStorage.removeItem("novabuk_user");
+              window.location.href = "./index.html";
+          } else if (value === "profile") {
+              // Redirects to settings and tells it to open 'profile'
+              window.location.href = "./app-setting.html?tab=profile";
+          } else if (value === "settings") {
+              // Redirects to settings and tells it to open 'privacy' (default settings)
+              window.location.href = "./app-setting.html?tab=privacy";
+          } else if (value === "notification") {
+              // Redirects to settings and tells it to open 'privacy' (default settings)
+              window.location.href = "./app-setting.html?tab=notification";
+          }
+      }
+
+      // ── FETCH HEALTH TIPS ────────────────────────────────
+      async function loadHealthTips() {
+        const container = document.getElementById("healthTipsContainer");
+        try {
+          const res = await fetch(`${API_URL}/tips`);
+          const data = await res.json();
+          if (!data.success || !data.data.length) {
+            container.innerHTML = `<div style="min-width:100%; text-align:center; padding:20px; color:#aaa; font-size:0.85rem;">No health tips available yet. Check back later!</div>`;
+            return;
+          }
+
+          container.innerHTML = data.data.map(tip => `
+            <div style="min-width:280px; background:white; border-radius:14px; border:1px solid #e0f4f7; padding:18px; scroll-snap-align:start; position:relative; overflow:hidden;">
+              <div style="position:absolute; top:0; left:0; width:4px; height:100%; background:#35bac9;"></div>
+              <div style="display:flex; gap:10px; align-items:flex-start;">
+                <div style="background:rgba(53,186,201,0.1); color:#35bac9; width:30px; height:30px; border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+                  <i class="fas fa-lightbulb" style="font-size:14px;"></i>
+                </div>
+                <div>
+                  <p style="margin:0; font-size:0.7rem; font-weight:700; color:#35bac9; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:4px;">${tip.category}</p>
+                  <p style="margin:0; font-size:0.95rem; color:#0f2027; line-height:1.4; font-weight:500;">${tip.text}</p>
+                </div>
+              </div>
+            </div>
+          `).join("");
+        } catch (err) {
+          container.innerHTML = `<div style="min-width:100%; text-align:center; padding:20px; color:#888;">Unable to load tips right now.</div>`;
+        }
+      }
+      loadHealthTips();
+    </script>
+
+    <script src="./script.js"></script>
+  <script>
+  // ── ONBOARDING CHECKLIST ─────────────────────────────
+  (async function initChecklist() {
+    // Don't show if already dismissed
+    if (localStorage.getItem("novabuk_checklist_done") === "1") return;
+
+    const token = localStorage.getItem("novabuk_token");
+    if (!token) return;
+
+    try {
+      const res  = await fetch(`${API_URL}/users/me`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      const data = await res.json();
+      if (!data.success) return;
+
+      const u  = data.user;
+      const hp = u.healthProfile || {};
+
+      const steps = [
+        {
+          id: "step-profile",
+          label: "Complete your profile",
+          sub: "Add your name, phone, and address",
+          done: !!(u.phone && u.address),
+          href: "./app-setting.html?tab=profile",
+        },
+        {
+          id: "step-health",
+          label: "Set up your health profile",
+          sub: "Add age range, conditions & allergies",
+          done: !!(hp.ageRange || (hp.existingConditions && hp.existingConditions.length)),
+          href: "./app-setting.html?tab=profile",
+        },
+        {
+          id: "step-symptom",
+          label: "Log your first symptom",
+          sub: "Tell us how you're feeling today",
+          done: u.profileComplete === true,
+          href: "./complaints.html",
+        },
+      ];
+
+      const completed = steps.filter(s => s.done).length;
+
+      // If all done, mark dismissed and hide
+      if (completed === steps.length) {
+        localStorage.setItem("novabuk_checklist_done", "1");
+        return;
+      }
+
+      // Render
+      const container = document.getElementById("onboardingChecklist");
+      const itemsEl   = document.getElementById("checklistItems");
+      const barEl     = document.getElementById("checklistBar");
+      const progEl    = document.getElementById("checklistProgress");
+
+      barEl.style.width  = `${Math.round((completed / steps.length) * 100)}%`;
+      progEl.textContent = `${completed} of ${steps.length} complete`;
+
+      steps.forEach(step => {
+        const div = document.createElement("div");
+        div.style.cssText = `display:flex; align-items:center; gap:12px; padding:12px 14px; border-radius:10px; border:1.5px solid ${step.done ? "#b2e0ea" : "#eee"}; background:${step.done ? "#f0fbfc" : "#fafafa"}; cursor:${step.done ? "default" : "pointer"};`;
+        if (!step.done) div.onclick = () => window.location.href = step.href;
+        div.innerHTML = `
+          <div style="width:22px; height:22px; border-radius:50%; border:2px solid ${step.done ? "#35bac9" : "#ccc"}; background:${step.done ? "#35bac9" : "white"}; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+            ${step.done ? '<i class="fa-solid fa-check" style="color:white;font-size:10px;"></i>' : ""}
+          </div>
+          <div style="flex:1;">
+            <p style="margin:0; font-family:poppins,sans-serif; font-size:13px; font-weight:600; color:${step.done ? "#888" : "#0f2027"}; text-decoration:${step.done ? "line-through" : "none"};">${step.label}</p>
+            <p style="margin:2px 0 0; font-family:poppins,sans-serif; font-size:11px; color:#aaa;">${step.sub}</p>
+          </div>
+          ${!step.done ? '<i class="fa-solid fa-arrow-right" style="color:#35bac9; font-size:12px;"></i>' : ""}
+        `;
+        itemsEl.appendChild(div);
+      });
+
+      container.style.display = "block";
+    } catch (err) {
+      console.log("Checklist load failed:", err);
+    }
+  })();
+
+  function dismissChecklist() {
+    localStorage.setItem("novabuk_checklist_done", "1");
+    const el = document.getElementById("onboardingChecklist");
+    if (el) { el.style.opacity = "0"; el.style.transition = "opacity 0.3s"; setTimeout(() => el.style.display = "none", 300); }
+  }
+  </script>
+  </body>
+</html>

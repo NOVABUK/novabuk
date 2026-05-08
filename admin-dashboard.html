@@ -1,0 +1,1743 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="icon" sizes="180x180" href="./images/image 19.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    <title>Super Admin Dashboard | NovaBuk</title>
+    <style>
+      *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+      :root {
+        --primary: #35bac9;
+        --primary-light: #7ecad7;
+        --sidebar-width: 250px;
+        --header-h: 70px;
+      }
+
+      body {
+        font-family: "Poppins", sans-serif;
+        background: #f0f4f8;
+        color: #333;
+        overflow-x: hidden;
+      }
+
+      /* ── LOGIN PAGE ─────────────────────────────────── */
+      #loginPage {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        background: linear-gradient(135deg, var(--primary-light), var(--primary));
+        padding: 16px;
+      }
+
+      .login-box {
+        background: white;
+        padding: clamp(24px, 5vw, 40px);
+        border-radius: 16px;
+        box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        width: 100%;
+        max-width: 420px;
+      }
+
+      .login-box h2 { text-align: center; margin-bottom: 28px; color: #1a1a1a; }
+
+      /* ── LAYOUT ─────────────────────────────────────── */
+      #dashboard { display: flex; min-height: 100vh; }
+
+      /* ── SIDEBAR ────────────────────────────────────── */
+      .sidebar {
+        width: var(--sidebar-width);
+        background: linear-gradient(160deg, var(--primary-light), var(--primary));
+        color: white;
+        padding: 20px;
+        position: fixed;
+        top: 0; left: 0;
+        height: 100vh;
+        overflow-y: auto;
+        z-index: 300;
+        transition: transform 0.3s ease;
+        box-shadow: 4px 0 20px rgba(0,0,0,0.1);
+        display: flex;
+        flex-direction: column;
+      }
+
+      .sidebar-header { text-align: center; margin-bottom: 28px; padding-bottom: 16px; border-bottom: 2px solid rgba(255,255,255,0.25); }
+      .sidebar-header h2 { font-size: 1.4rem; }
+      .sidebar-header p { font-size: 0.8rem; opacity: 0.85; margin-top: 4px; }
+
+      .sidebar-menu { list-style: none; flex: 1; }
+      .sidebar-menu li { margin-bottom: 6px; }
+      .sidebar-menu a {
+        display: flex; align-items: center; gap: 10px;
+        padding: 11px 14px;
+        color: white; text-decoration: none;
+        border-radius: 8px;
+        transition: all 0.2s;
+        font-size: 0.95rem;
+      }
+      .sidebar-menu a:hover,
+      .sidebar-menu a.active { background: rgba(255,255,255,0.22); padding-left: 18px; }
+      .sidebar-menu a i { width: 18px; text-align: center; }
+
+      .logout-btn {
+        margin-top: auto; padding: 11px 14px;
+        background: rgba(255,255,255,0.18);
+        border: none; color: white; border-radius: 8px;
+        cursor: pointer; width: 100%; font-family: inherit;
+        font-size: 0.95rem; display: flex; align-items: center; gap: 8px;
+        transition: background 0.2s;
+      }
+      .logout-btn:hover { background: rgba(255,255,255,0.3); }
+
+      /* ── OVERLAY ────────────────────────────────────── */
+      .sidebar-overlay {
+        display: none; position: fixed; inset: 0;
+        background: rgba(0,0,0,0.45); z-index: 200;
+      }
+      .sidebar-overlay.active { display: block; }
+
+      /* ── MAIN CONTENT ───────────────────────────────── */
+      .main-content {
+        margin-left: var(--sidebar-width);
+        flex: 1; padding: 24px;
+        min-width: 0;
+      }
+
+      /* ── TOP HEADER ─────────────────────────────────── */
+      .top-header {
+        display: flex; align-items: center; gap: 12px;
+        background: white; padding: 14px 20px;
+        border-radius: 12px; margin-bottom: 24px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+      }
+
+      .menu-toggle {
+        display: none;
+        background: none; border: none; cursor: pointer;
+        font-size: 1.2rem; color: #555; padding: 4px 8px;
+        border-radius: 6px; transition: background 0.2s;
+        flex-shrink: 0;
+      }
+      .menu-toggle:hover { background: #f0f4f8; }
+
+      .sidebar-close {
+        display: none;
+        position: absolute; top: 14px; right: 14px;
+        background: rgba(255,255,255,0.2); border: none;
+        color: white; font-size: 1rem; width: 30px; height: 30px;
+        border-radius: 50%; cursor: pointer;
+        align-items: center; justify-content: center;
+        transition: background 0.2s; z-index: 10;
+      }
+      .sidebar-close:hover { background: rgba(255,255,255,0.4); }
+
+      .top-header h1 { font-size: clamp(1.2rem, 3vw, 1.8rem); color: #1a1a1a; flex: 1; }
+
+      .btn {
+        display: inline-flex; align-items: center; gap: 7px;
+        padding: 10px 20px; border: none; border-radius: 8px;
+        cursor: pointer; font-family: inherit; font-weight: 600;
+        transition: all 0.2s; font-size: 0.9rem; white-space: nowrap;
+      }
+      .btn-primary { background: linear-gradient(135deg, var(--primary-light), var(--primary)); color: white; }
+      .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(53,186,201,0.35); }
+      .btn-danger { background: #e74c3c; color: white; }
+      .btn-danger:hover { background: #c0392b; }
+      .btn-secondary { background: #95a5a6; color: white; }
+      .btn-secondary:hover { background: #7f8c8d; }
+      .btn-sm { padding: 6px 12px; font-size: 0.8rem; }
+
+      /* ── ALERTS ─────────────────────────────────────── */
+      #alertContainer { margin-bottom: 16px; }
+
+      .alert {
+        padding: 13px 16px; margin-bottom: 10px;
+        border-radius: 8px; display: none; font-size: 0.9rem;
+      }
+      .alert-success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+      .alert-error   { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+      .alert.show { display: flex; align-items: center; gap: 8px; animation: slideIn 0.3s ease; }
+
+      @keyframes slideIn {
+        from { opacity: 0; transform: translateY(-8px); }
+        to   { opacity: 1; transform: translateY(0); }
+      }
+
+      /* ── CARD WRAPPER ───────────────────────────────── */
+      .card {
+        background: white; border-radius: 12px;
+        padding: clamp(16px, 3vw, 28px);
+        box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+      }
+      .card h2 { margin-bottom: 20px; font-size: 1.2rem; }
+
+      /* ── TABLE ──────────────────────────────────────── */
+      .table-responsive { overflow-x: auto; border-radius: 12px; }
+      .table-responsive table { width: 100%; border-collapse: collapse; min-width: 480px; }
+
+      th {
+        background: #f8f9fa; padding: 13px 14px;
+        text-align: left; font-weight: 600; font-size: 0.85rem;
+        border-bottom: 2px solid #eee; white-space: nowrap;
+      }
+      td { padding: 13px 14px; border-bottom: 1px solid #f0f0f0; font-size: 0.9rem; vertical-align: middle; }
+      tr:last-child td { border-bottom: none; }
+      tr:hover td { background: #fafbfc; }
+
+      .status-badge {
+        display: inline-block; padding: 4px 10px;
+        border-radius: 20px; font-size: 0.78rem; font-weight: 600;
+      }
+      .status-published { background: #d4edda; color: #155724; }
+      .status-draft     { background: #fff3cd; color: #856404; }
+
+      .action-buttons { display: flex; gap: 6px; flex-wrap: wrap; }
+
+      /* ── FORMS ──────────────────────────────────────── */
+      .form-group { margin-bottom: 18px; }
+      label { display: block; margin-bottom: 6px; font-weight: 600; font-size: 0.9rem; color: #2d2d2d; }
+
+      input, textarea, select {
+        width: 100%; padding: 11px 13px;
+        border: 2px solid #e0e0e0; border-radius: 8px;
+        font-family: inherit; font-size: 0.95rem;
+        transition: border-color 0.2s; background: #fafafa;
+      }
+      input:focus, textarea:focus, select:focus {
+        outline: none; border-color: var(--primary); background: white;
+      }
+      input:disabled { background: #f0f0f0; cursor: not-allowed; }
+      textarea { resize: vertical; min-height: 260px; }
+
+      .grid-2 {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+      }
+
+      .form-actions {
+        display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
+        margin-top: 8px;
+      }
+
+      /* ── UPLOAD AREA ────────────────────────────────── */
+      .upload-zone {
+        border: 2px dashed #ccc; border-radius: 8px;
+        padding: 20px; text-align: center;
+        cursor: pointer; transition: border-color 0.2s;
+        background: #fafafa; position: relative;
+      }
+      .upload-zone:hover { border-color: var(--primary); }
+      .upload-zone input[type="file"] {
+        position: absolute; inset: 0; opacity: 0; cursor: pointer;
+        width: 100%; height: 100%; padding: 0; border: none; background: none;
+      }
+      .upload-zone-label { pointer-events: none; color: #888; font-size: 0.9rem; }
+      .upload-zone-label i { font-size: 1.6rem; color: var(--primary); display: block; margin-bottom: 6px; }
+
+      #uploadPreview { margin-top: 12px; }
+      #uploadPreview img, #uploadPreview video {
+        max-width: 180px; max-height: 130px;
+        border-radius: 8px; border: 2px solid #eee;
+      }
+
+      progress { width: 100%; height: 8px; border-radius: 4px; margin-top: 8px; }
+
+      /* ── LOADER ─────────────────────────────────────── */
+      .loader { text-align: center; padding: 40px; color: #aaa; }
+      .spinner {
+        border: 3px solid #f3f3f3; border-top: 3px solid var(--primary);
+        border-radius: 50%; width: 36px; height: 36px;
+        animation: spin 0.8s linear infinite; margin: 0 auto 10px;
+      }
+      @keyframes spin { to { transform: rotate(360deg); } }
+
+      /* ── PROFILE SECTION ────────────────────────────── */
+      #profileSection .card { max-width: 600px; }
+      hr { border: none; border-top: 1px solid #eee; margin: 24px 0; }
+      #profileSection h3 { margin-bottom: 16px; font-size: 1rem; }
+
+      /* ── HIDDEN ─────────────────────────────────────── */
+      .hidden { display: none !important; }
+
+      /* ── SIDEBAR CLOSE BTN (hidden on desktop) ──────── */
+      .sidebar-close {
+        display: none;
+        position: absolute; top: 14px; right: 14px;
+        background: rgba(255,255,255,0.2); border: none;
+        color: white; border-radius: 8px; width: 34px; height: 34px;
+        align-items: center; justify-content: center;
+        cursor: pointer; font-size: 1.1rem;
+        transition: background 0.2s;
+      }
+      .sidebar-close:hover { background: rgba(255,255,255,0.35); }
+
+      /* ── GRID SYSTEM ────────────────────────────────── */
+      .grid-4 { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; }
+      .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+
+      /* ── STAT CARDS ─────────────────────────────────── */
+      .stat-card {
+        display: flex; align-items: center; gap: 16px;
+        padding: 20px !important;
+      }
+      .stat-icon {
+        width: 50px; height: 50px; border-radius: 12px;
+        display: flex; align-items: center; justify-content: center;
+        font-size: 1.3rem; flex-shrink: 0;
+      }
+      .stat-info h3 { font-size: 1.5rem; color: #1a1a1a; margin-bottom: 2px; }
+      .stat-info p { font-size: 0.82rem; color: #718096; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600; }
+
+      /* ── RESPONSIVE ─────────────────────────────────── */
+      @media (max-width: 900px) {
+        .sidebar { transform: translateX(-100%); position: fixed; }
+        .sidebar.open { transform: translateX(0); }
+        .main-content { margin-left: 0; }
+        .menu-toggle { display: inline-flex; align-items: center; }
+        .sidebar-close { display: flex; }
+      }
+
+      @media (max-width: 640px) {
+        .main-content { padding: 12px; }
+        .top-header { padding: 10px 12px; }
+        .grid-2 { grid-template-columns: 1fr; }
+        .form-actions { grid-template-columns: 1fr; }
+        .btn { padding: 9px 14px; }
+
+        /* ── Card-style table on mobile (no horizontal scroll) ── */
+        .table-responsive { overflow-x: visible; }
+        .table-responsive table { display: block; min-width: unset; }
+        .table-responsive thead { display: none; }
+        .table-responsive tbody { display: block; }
+        .table-responsive tr {
+          display: block;
+          background: white;
+          border-radius: 10px;
+          margin-bottom: 12px;
+          padding: 14px;
+          box-shadow: 0 1px 6px rgba(0,0,0,0.07);
+          border: 1px solid #eee;
+        }
+        .table-responsive td {
+          display: flex;
+          align-items: flex-start;
+          gap: 8px;
+          padding: 5px 0;
+          border: none;
+          font-size: 0.88rem;
+        }
+        .table-responsive td::before {
+          content: attr(data-label);
+          font-weight: 600;
+          color: #999;
+          font-size: 0.72rem;
+          text-transform: uppercase;
+          letter-spacing: 0.04em;
+          min-width: 76px;
+          flex-shrink: 0;
+          padding-top: 3px;
+        }
+        .table-responsive td:last-child {
+          padding-top: 10px;
+          margin-top: 6px;
+          border-top: 1px solid #f0f0f0;
+          flex-direction: column;
+        }
+        .table-responsive td:last-child::before { content: ''; min-width: 0; }
+        .action-buttons { flex-wrap: wrap; width: 100%; }
+        .action-buttons .btn { flex: 1; justify-content: center; min-width: 80px; font-size: 0.8rem; }
+      }
+
+      @media (max-width: 400px) {
+        .top-header h1 { font-size: 1.05rem; }
+        .top-header .btn span { display: none; }
+      }
+    </style>
+  </head>
+  <body>
+
+    <!-- ══ LOGIN PAGE ══════════════════════════════════════ -->
+    <div id="loginPage">
+      <div class="login-box">
+        <h2>NovaBuk Admin</h2>
+
+        <!-- Login Form -->
+        <form id="loginForm">
+          <div id="loginAlert"></div>
+          <div class="form-group">
+            <label>Email</label>
+            <input type="email" id="loginEmail" required placeholder="admin@example.com" />
+          </div>
+          <div class="form-group">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <label>Password</label>
+              <a href="./admin-forgot-password.html" style="font-size:0.8rem; color:var(--primary); text-decoration:none;">Forgot?</a>
+            </div>
+            <input type="password" id="loginPassword" required placeholder="••••••••" minlength="6" />
+          </div>
+          <button type="submit" class="btn btn-primary" style="width:100%">Login</button>
+          <p style="text-align:center;margin:14px auto 0px;color:#888;font-size:0.9rem">
+            No account? <a href="#" id="registerToggle" style="color:var(--primary)">Register</a>
+          </p>
+        </form>
+
+        <!-- Register Form -->
+        <form id="registerForm" class="hidden">
+          <div class="form-group">
+            <label>Full Name</label>
+            <input type="text" id="registerName" required placeholder="Your name" />
+          </div>
+          <div class="form-group">
+            <label>Email</label>
+            <input type="email" id="registerEmail" required placeholder="admin@example.com" />
+          </div>
+          <div class="form-group">
+            <label>Password</label>
+            <input type="password" id="registerPassword" required placeholder="••••••••" minlength="6" />
+          </div>
+          <button type="submit" class="btn btn-primary" style="width:100%">Create Account</button>
+          <p style="text-align:center;margin-top:14px;color:#888;font-size:0.9rem">
+            Already have account? <a href="#" id="loginToggle" style="color:var(--primary)">Login</a>
+          </p>
+        </form>
+      </div>
+    </div>
+
+    <!-- ══ DASHBOARD ══════════════════════════════════════ -->
+    <div id="dashboard" class="hidden">
+
+      <!-- Sidebar -->
+      <aside class="sidebar" id="sidebar">
+        <button class="sidebar-close" id="sidebarClose" aria-label="Close menu"><i class="fas fa-xmark"></i></button>
+        <div class="sidebar-header">
+          <h2>NovaBuk</h2>
+          <p>Blog Admin</p>
+        </div>
+        <ul class="sidebar-menu">
+          <li><a href="#" onclick="showSection('overview')" class="menu-link active"><i class="fas fa-chart-line"></i> Overview</a></li>
+          <li><a href="#" onclick="showSection('clinics')" class="menu-link"><i class="fas fa-hospital"></i> Clinics</a></li>
+          <li><a href="#" onclick="showSection('users')" class="menu-link"><i class="fas fa-users"></i> Users</a></li>
+          <li><a href="#" onclick="showSection('blogs')" class="menu-link"><i class="fas fa-newspaper"></i> Blog Posts</a></li>
+          <li><a href="#" onclick="showSection('tips')" class="menu-link"><i class="fas fa-lightbulb"></i> Health Tips</a></li>
+          <li><a href="#" onclick="showSection('profile')" class="menu-link"><i class="fas fa-user"></i> Profile</a></li>
+        </ul>
+        <button class="logout-btn" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</button>
+      </aside>
+
+      <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
+
+      <!-- Main -->
+      <main class="main-content">
+
+        <!-- Top Header -->
+        <div class="top-header">
+          <button class="menu-toggle" id="menuToggle" aria-label="Toggle menu"><i class="fas fa-bars"></i></button>
+          <h1 id="pageTitle">Blog Posts</h1>
+          <button class="btn btn-primary" onclick="editingBlogId=null; showSection('createBlog')">
+            <i class="fas fa-plus"></i><span>New Post</span>
+          </button>
+        </div>
+
+        <div id="alertContainer"></div>
+
+        <!-- ── Overview Section ── -->
+        <section id="overviewSection">
+          <div class="grid-4" style="margin-bottom:30px">
+            <div class="card stat-card">
+              <div class="stat-icon" style="background:rgba(53,186,201,0.1);color:var(--primary)"><i class="fas fa-hospital"></i></div>
+              <div class="stat-info">
+                <h3 id="statClinics">0</h3>
+                <p>Total Clinics</p>
+              </div>
+            </div>
+            <div class="card stat-card">
+              <div class="stat-icon" style="background:rgba(46,204,113,0.1);color:#2ecc71"><i class="fas fa-users"></i></div>
+              <div class="stat-info">
+                <h3 id="statPatients">0</h3>
+                <p>Total Patients</p>
+              </div>
+            </div>
+            <div class="card stat-card">
+              <div class="stat-icon" style="background:rgba(241,196,15,0.1);color:#f1c40f"><i class="fas fa-star"></i></div>
+              <div class="stat-info">
+                <h3 id="statSubscriptions">0</h3>
+                <p>Pro Subscriptions</p>
+              </div>
+            </div>
+            <div class="card stat-card">
+              <div class="stat-icon" style="background:rgba(155,89,182,0.1);color:#9b59b2"><i class="fas fa-newspaper"></i></div>
+              <div class="stat-info">
+                <h3 id="statBlogs">0</h3>
+                <p>Blog Posts</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="grid-2">
+             <div class="card">
+                <h3>Recent Clinics</h3>
+                <div class="table-responsive">
+                   <table style="font-size:0.85rem">
+                      <thead>
+                         <tr><th>Clinic</th><th>City</th><th>Joined</th></tr>
+                      </thead>
+                      <tbody id="recentClinicsTable">
+                         <tr><td colspan="3" style="text-align:center;padding:20px;color:#ccc">Loading...</td></tr>
+                      </tbody>
+                   </table>
+                </div>
+             </div>
+             <div class="card">
+                <h3>System Status</h3>
+                <div style="padding:10px 0">
+                   <div style="display:flex;justify-content:space-between;margin-bottom:12px;font-size:0.9rem">
+                      <span>API Server</span>
+                      <span style="color:#2ecc71"><i class="fas fa-circle" style="font-size:10px"></i> Online</span>
+                   </div>
+                   <div style="display:flex;justify-content:space-between;margin-bottom:12px;font-size:0.9rem">
+                      <span>Database</span>
+                      <span style="color:#2ecc71"><i class="fas fa-circle" style="font-size:10px"></i> Healthy</span>
+                   </div>
+                   <div style="display:flex;justify-content:space-between;font-size:0.9rem">
+                      <span>Cloudinary Storage</span>
+                      <span style="color:#2ecc71"><i class="fas fa-circle" style="font-size:10px"></i> Connected</span>
+                   </div>
+                </div>
+             </div>
+          </div>
+        </section>
+
+        <!-- ── Blogs Section ── -->
+        <section id="blogsSection" class="hidden">
+          <div class="card" style="padding:0;overflow:hidden">
+            <div class="table-responsive">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Title</th>
+                    <th>Category</th>
+                    <th>Status</th>
+                    <th>Published</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="blogsTable">
+                  <tr><td colspan="5" class="loader"><div class="spinner"></div>Loading…</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- ── Create / Edit Section ── -->
+        <section id="createBlogSection" class="hidden">
+          <div class="card">
+            <h2 id="formTitle">Create New Blog Post</h2>
+            <form id="blogForm">
+              <input type="hidden" id="blogId" />
+
+              <div class="form-group">
+                <label>Title</label>
+                <input type="text" id="blogTitle" required placeholder="Blog title" />
+              </div>
+
+              <div class="grid-2">
+                <div class="form-group">
+                  <label>Category</label>
+                  <select id="blogCategory" required>
+                    <option value="">Select Category</option>
+                    <option value="healthcare">Healthcare</option>
+                    <option value="technology">Technology</option>
+                    <option value="innovation">Innovation</option>
+                    <option value="tips">Tips &amp; Guides</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label>Read Time (minutes)</label>
+                  <input type="number" id="blogReadTime" value="5" min="1" />
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label>Excerpt / Summary</label>
+                <textarea id="blogExcerpt" placeholder="Brief summary…" style="min-height:80px"></textarea>
+              </div>
+
+              <div class="form-group">
+                <label>Content</label>
+                <textarea id="blogContent" required placeholder="Write your blog content here…"></textarea>
+              </div>
+
+              <div class="grid-2">
+                <div class="form-group">
+                  <label>Author</label>
+                  <input type="text" id="blogAuthor" value="NovaBuk Team" placeholder="Author name" />
+                </div>
+                <div class="form-group">
+                  <label>Author Role</label>
+                  <input type="text" id="blogAuthorRole" value="Content Team" placeholder="Author's role" />
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label>Upload Image / Video</label>
+                <div class="upload-zone" id="uploadZone">
+                  <input type="file" id="blogFile" accept="image/*,video/*" />
+                  <div class="upload-zone-label">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                    Click or drag a file here
+                  </div>
+                </div>
+                <div id="uploadPreview"></div>
+                <progress id="uploadProgressBar" value="0" max="100" style="display:none"></progress>
+                <input type="hidden" id="blogImage" value="./images/image 34.png" />
+              </div>
+
+              <div class="form-actions">
+                <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Save Draft</button>
+                <button type="button" class="btn btn-secondary" onclick="saveBlogAndPublish()"><i class="fas fa-upload"></i> Save &amp; Publish</button>
+              </div>
+              <button type="button" class="btn btn-secondary" onclick="showSection('blogs')" style="width:100%;margin-top:10px">
+                Cancel
+              </button>
+            </form>
+          </div>
+        </section>
+
+        <!-- ── Profile Section ── -->
+        <section id="profileSection" class="hidden">
+          <div class="card">
+            <h2>Admin Profile</h2>
+            <form id="profileForm">
+              <div class="form-group"><label>Name</label><input type="text" id="profileName" required /></div>
+              <div class="form-group"><label>Email</label><input type="email" id="profileEmail" required /></div>
+              <div class="form-group"><label>Role</label><input type="text" id="profileRole" disabled /></div>
+              <hr />
+              <h3>Change Password</h3>
+              <div class="form-group"><label>Current Password</label><input type="password" id="currentPassword" placeholder="••••••••" minlength="6" /></div>
+              <div class="grid-2">
+                <div class="form-group"><label>New Password</label><input type="password" id="newPassword" placeholder="••••••••" minlength="6" /></div>
+                <div class="form-group"><label>Confirm Password</label><input type="password" id="confirmPassword" placeholder="••••••••" minlength="6" /></div>
+              </div>
+              <div class="form-actions">
+                <button type="submit" class="btn btn-primary">Update Profile</button>
+                <button type="button" class="btn btn-secondary" onclick="changePassword()">Change Password</button>
+              </div>
+            </form>
+          </div>
+        </section>
+
+        <!-- ── Clinics Section ── -->
+        <section id="clinicsSection" class="hidden">
+          <div class="card">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
+              <h2 style="margin:0">All Clinics</h2>
+              <div style="display:flex; gap:15px; align-items:center;">
+                <label style="display:flex; align-items:center; gap:8px; font-size:0.9rem; color:#666; cursor:pointer;">
+                  <input type="checkbox" id="filterActiveClinics" onchange="loadClinics()" style="width:auto;"> Active Only
+                </label>
+                <button class="btn btn-primary" onclick="editingClinicId=null; showSection('createClinicSection')">
+                  <i class="fas fa-plus"></i> Add Clinic
+                </button>
+              </div>
+            </div>
+            <div class="table-responsive">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Location</th>
+                    <th>Plan</th>
+                    <th>Status</th>
+                    <th>Open</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="clinicsTable">
+                  <tr><td colspan="6" style="text-align:center;padding:40px;color:#aaa">Loading...</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- ── Users Section ── -->
+        <section id="usersSection" class="hidden">
+          <div class="card">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
+              <h2 style="margin:0">All Registered Patients</h2>
+              <div style="display:flex; gap:15px; align-items:center;">
+                <label style="display:flex; align-items:center; gap:8px; font-size:0.9rem; color:#666; cursor:pointer;">
+                  <input type="checkbox" id="filterVerifiedUsers" onchange="loadUsers()" style="width:auto;"> Verified Only
+                </label>
+                <button class="btn btn-secondary" onclick="generateMissingIds()" style="background:#8e44ad; color:white; border:none;">
+                  <i class="fas fa-sync"></i> Sync Missing IDs
+                </button>
+              </div>
+            </div>
+            <div class="table-responsive">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>NovaBuk ID</th>
+                    <th>Verified</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="usersTable">
+                  <tr><td colspan="6" class="loader"><div class="spinner"></div>Loading…</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- ── Create / Edit Clinic Section ── -->
+        <section id="createClinicSection" class="hidden">
+          <div class="card">
+            <h2 id="clinicFormTitle">Add New Clinic</h2>
+            <form id="clinicForm" onsubmit="handleClinicSubmit(event)">
+              <input type="hidden" id="clinicId" />
+
+              <div class="grid-2">
+                <div class="form-group">
+                  <label>Clinic Name *</label>
+                  <input type="text" id="clinicName" required placeholder="e.g. Lagos University Teaching Hospital" />
+                </div>
+                <div class="form-group">
+                  <label>Phone</label>
+                  <input type="text" id="clinicPhone" placeholder="+234 803 000 0000" />
+                </div>
+              </div>
+
+              <div class="grid-2">
+                <div class="form-group">
+                  <label>Email</label>
+                  <input type="email" id="clinicEmail" placeholder="clinic@example.com" />
+                </div>
+                <div class="form-group">
+                  <label>City *</label>
+                  <input type="text" id="clinicCity" required placeholder="e.g. Lagos" />
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label>Address *</label>
+                <input type="text" id="clinicAddress" required placeholder="e.g. 123 Herbert Macaulay Way, Yaba" />
+              </div>
+
+              <div class="grid-2">
+                <div class="form-group">
+                  <label>State</label>
+                  <input type="text" id="clinicState" placeholder="e.g. Lagos State" />
+                </div>
+                <div class="form-group">
+                  <label>Services (comma separated)</label>
+                  <input type="text" id="clinicServices" placeholder="General Practice, Lab Tests, Pharmacy" />
+                </div>
+              </div>
+
+              <div class="grid-2">
+                <div class="form-group">
+                  <label>Opening Time (Mon–Fri)</label>
+                  <input type="time" id="clinicOpenTime" value="08:00" />
+                </div>
+                <div class="form-group">
+                  <label>Closing Time (Mon–Fri)</label>
+                  <input type="time" id="clinicCloseTime" value="17:00" />
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label>Clinic Image</label>
+                <input type="file" id="clinicImageFile" accept="image/*" onchange="handleClinicImageUpload(this)" />
+                <div id="clinicImagePreview" style="margin-top:10px;"></div>
+                <input type="hidden" id="clinicImageUrl" />
+              </div>
+
+              <div class="form-group">
+                <label style="display:flex;align-items:center;gap:10px;cursor:pointer;">
+                  <input type="checkbox" id="clinicIsOpen" checked style="width:auto;" />
+                  Mark as Open Now
+                </label>
+              </div>
+
+              <!-- Doctor Account Section (Only for NEW clinics) -->
+              <div id="doctorAccountFields">
+                <hr style="margin:20px 0; border-top:1px dashed #ccc" />
+                <h3 style="margin-bottom:15px; font-size:1rem; color:var(--primary)">Doctor Account (Login Details)</h3>
+                <div class="form-group">
+                  <label>Doctor Full Name *</label>
+                  <input type="text" id="doctorName" placeholder="e.g. Dr. John Doe" />
+                </div>
+                <div class="grid-2">
+                  <div class="form-group">
+                    <label>Doctor Email *</label>
+                    <input type="email" id="doctorEmail" placeholder="doctor@example.com" />
+                  </div>
+                  <div class="form-group">
+                    <label>Initial Password *</label>
+                    <input type="password" id="doctorPassword" placeholder="••••••••" minlength="6" />
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-actions">
+                <button type="submit" class="btn btn-primary" id="clinicSaveBtn">
+                  <i class="fas fa-save"></i> Save Clinic
+                </button>
+                <button type="button" class="btn btn-secondary" onclick="showSection('clinics')">
+                  Cancel
+                </button>
+              </div>
+            </form>
+          </div>
+        </section>
+
+        <!-- ── Health Tips Section ── -->
+        <section id="tipsSection" class="hidden">
+          <div class="card">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
+              <h2 style="margin:0">Health Tips (Short Advice)</h2>
+              <button class="btn btn-primary" onclick="openTipModal()">
+                <i class="fas fa-plus"></i> Add Tip
+              </button>
+            </div>
+            <div class="table-responsive">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Tip Content</th>
+                    <th>Category</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="tipsTable">
+                  <tr><td colspan="4" class="loader"><div class="spinner"></div>Loading…</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- ── Tip Modal ── -->
+        <div id="tipModal" class="modal hidden" style="position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:2000; display:flex; align-items:center; justify-content:center;">
+           <div class="card" style="width:100%; max-width:500px; margin:20px; background:white; padding:30px; border-radius:12px;">
+              <h2 id="tipModalTitle">Add Health Tip</h2>
+              <form id="tipForm">
+                 <input type="hidden" id="tipId">
+                 <div class="form-group">
+                    <label>Tip Text</label>
+                    <textarea id="tipText" required placeholder="e.g. Drink at least 8 glasses of water daily." style="min-height:100px; width:100%; padding:10px; border-radius:8px; border:1px solid #ddd;"></textarea>
+                 </div>
+                 <div class="form-group" style="margin-top:15px;">
+                    <label>Category</label>
+                    <select id="tipCategory" style="width:100%; padding:10px; border-radius:8px; border:1px solid #ddd;">
+                       <option value="general">General</option>
+                       <option value="nutrition">Nutrition</option>
+                       <option value="exercise">Exercise</option>
+                       <option value="mental-health">Mental Health</option>
+                       <option value="hygiene">Hygiene</option>
+                    </select>
+                 </div>
+                 <div class="form-actions" style="margin-top:20px; display:flex; gap:10px; justify-content:flex-end;">
+                    <button type="button" class="btn btn-secondary" onclick="closeTipModal()">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save Tip</button>
+                 </div>
+              </form>
+           </div>
+        </div>
+
+      </main>
+    </div>
+
+    <script>
+      var API_URL = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1"
+        ? "http://localhost:5000/api"
+        : "https://novabuk-backend.onrender.com/api";
+
+      let authToken = localStorage.getItem("novabuk_admin_token");
+      let currentUser = JSON.parse(localStorage.getItem("novabuk_admin_user")) || null;
+      let editingBlogId = null;
+      let editingClinicId = null;
+
+      // ── Init ──────────────────────────────────────────────
+      document.addEventListener("DOMContentLoaded", () => {
+        if (authToken && currentUser) { showDashboard(); loadProfile(); }
+        else showLoginPage();
+
+        document.getElementById("loginForm").addEventListener("submit", handleLogin);
+        document.getElementById("registerForm").addEventListener("submit", handleRegister);
+        document.getElementById("blogForm").addEventListener("submit", handleBlogSubmit);
+        document.getElementById("profileForm").addEventListener("submit", handleProfileSubmit);
+        document.getElementById("registerToggle").addEventListener("click", e => { e.preventDefault(); toggleForms(); });
+        document.getElementById("loginToggle").addEventListener("click", e => { e.preventDefault(); toggleForms(); });
+        document.getElementById("menuToggle").addEventListener("click", toggleSidebar);
+        document.getElementById("sidebarClose").addEventListener("click", closeSidebar);
+        document.getElementById("blogFile").addEventListener("change", handleFileSelect);
+      });
+
+      // ── Sidebar ───────────────────────────────────────────
+      function toggleSidebar() {
+        document.getElementById("sidebar").classList.toggle("open");
+        document.getElementById("sidebarOverlay").classList.toggle("active");
+      }
+      function closeSidebar() {
+        document.getElementById("sidebar").classList.remove("open");
+        document.getElementById("sidebarOverlay").classList.remove("active");
+      }
+      // close sidebar on menu link click (mobile)
+      document.querySelectorAll(".menu-link").forEach(l => l.addEventListener("click", () => { if (window.innerWidth <= 900) closeSidebar(); }));
+
+      // ── Forms / navigation ────────────────────────────────
+      function toggleForms() {
+        document.getElementById("loginForm").classList.toggle("hidden");
+        document.getElementById("registerForm").classList.toggle("hidden");
+      }
+
+      function showSection(section) {
+        ["overviewSection","blogsSection","createBlogSection","profileSection","clinicsSection","createClinicSection","usersSection","tipsSection"].forEach(id => {
+          const el = document.getElementById(id);
+          if (el) el.classList.add("hidden");
+        });
+        document.querySelectorAll(".menu-link").forEach(l => l.classList.remove("active"));
+
+        if (section === "overview") {
+          document.getElementById("overviewSection").classList.remove("hidden");
+          document.getElementById("pageTitle").textContent = "Dashboard Overview";
+          const overviewBtn = document.querySelector("[onclick=\"showSection('overview')\"]");
+          if (overviewBtn) overviewBtn.classList.add("active");
+          loadOverviewStats();
+        } else if (section === "blogs") {
+          document.getElementById("blogsSection").classList.remove("hidden");
+          document.getElementById("pageTitle").textContent = "Blog Posts";
+          document.querySelector("[onclick=\"showSection('blogs')\"]").classList.add("active");
+          loadBlogs();
+        } else if (section === "createBlog") {
+          if (!editingBlogId) {
+            document.getElementById("blogForm").reset();
+            document.getElementById("blogId").value = "";
+            document.getElementById("formTitle").textContent = "Create New Blog Post";
+            document.getElementById("pageTitle").textContent = "New Blog Post";
+            document.getElementById("uploadPreview").innerHTML = "";
+          } else {
+            document.getElementById("pageTitle").textContent = "Edit Blog Post";
+          }
+          document.getElementById("createBlogSection").classList.remove("hidden");
+        } else if (section === "clinics") {
+          document.getElementById("clinicsSection").classList.remove("hidden");
+          document.getElementById("pageTitle").textContent = "Clinics";
+          document.querySelector("[onclick=\"showSection('clinics')\"]").classList.add("active");
+          loadClinics();
+        } else if (section === "createClinic") {
+          document.getElementById("createClinicSection").classList.remove("hidden");
+          document.getElementById("pageTitle").textContent = editingClinicId ? "Edit Clinic" : "Add New Clinic";
+          document.querySelector("[onclick=\"showSection('clinics')\"]").classList.add("active");
+          if (!editingClinicId) {
+            document.getElementById("clinicForm").reset();
+            document.getElementById("clinicId").value = "";
+            document.getElementById("clinicFormTitle").textContent = "Add New Clinic";
+            document.getElementById("clinicIsOpen").checked = true;
+            document.getElementById("clinicImageUrl").value = "";
+            document.getElementById("clinicImagePreview").innerHTML = "";
+            document.getElementById("doctorAccountFields").classList.remove("hidden");
+          }
+        } else if (section === "users") {
+          document.getElementById("usersSection").classList.remove("hidden");
+          document.getElementById("pageTitle").textContent = "User Management";
+          document.querySelector("[onclick=\"showSection('users')\"]").classList.add("active");
+          loadUsers();
+        } else if (section === "tips") {
+          document.getElementById("tipsSection").classList.remove("hidden");
+          document.getElementById("pageTitle").textContent = "Health Tips Management";
+          document.querySelector("[onclick=\"showSection('tips')\"]").classList.add("active");
+          loadTips();
+        } else if (section === "createClinicSection") {
+          document.getElementById("createClinicSection").classList.remove("hidden");
+          document.getElementById("pageTitle").textContent = editingClinicId ? "Edit Clinic" : "Register New Clinic";
+          // We don't mark a sidebar link as active here, usually it's reached from Clinics
+        } else if (section === "profile") {
+          document.getElementById("profileSection").classList.remove("hidden");
+          document.getElementById("pageTitle").textContent = "Admin Profile";
+          document.querySelector("[onclick=\"showSection('profile')\"]").classList.add("active");
+          loadProfile();
+        }
+      }
+
+      function showLoginPage()  { document.getElementById("dashboard").classList.add("hidden"); document.getElementById("loginPage").classList.remove("hidden"); }
+      function showDashboard()  {
+        document.getElementById("loginPage").classList.add("hidden");
+        document.getElementById("dashboard").classList.remove("hidden");
+        showSection("overview");
+      }
+
+      // ── Auth ──────────────────────────────────────────────
+      async function handleLogin(e) {
+        e.preventDefault();
+        try {
+          const res  = await fetch(`${API_URL}/admin/login`, { method:"POST", headers:{"Content-Type":"application/json"}, body: JSON.stringify({ email: document.getElementById("loginEmail").value, password: document.getElementById("loginPassword").value }) });
+          const data = await res.json();
+          if (data.success) {
+            authToken = data.token; currentUser = data.admin;
+            localStorage.setItem("novabuk_admin_token", authToken);
+            localStorage.setItem("novabuk_admin_user", JSON.stringify(currentUser));
+            showAlert("Login successful!", "success", "loginAlert");
+            setTimeout(() => { showDashboard(); }, 500);
+          } else showAlert(data.message || "Login failed", "error", "loginAlert");
+        } catch(err) { showAlert("Error: " + err.message, "error", "loginAlert"); }
+      }
+
+      async function handleRegister(e) {
+        e.preventDefault();
+        const name = document.getElementById("registerName").value;
+        const email = document.getElementById("registerEmail").value;
+        const password = document.getElementById("registerPassword").value;
+        try {
+          const res  = await fetch(`${API_URL}/admin/register`, { method:"POST", headers:{"Content-Type":"application/json"}, body: JSON.stringify({ name, email, password }) });
+          const data = await res.json();
+          if (data.success) {
+            authToken = data.token; currentUser = { name, email, role:"admin" };
+            localStorage.setItem("novabuk_admin_token", authToken);
+            localStorage.setItem("novabuk_admin_user", JSON.stringify(currentUser));
+            showAlert("Account created! Redirecting…", "success", "loginAlert");
+            setTimeout(() => { showDashboard(); loadProfile(); }, 500);
+          } else showAlert(data.message || "Registration failed", "error", "loginAlert");
+        } catch(err) { showAlert("Error: " + err.message, "error", "loginAlert"); }
+      }
+
+      function logout() {
+        if (!confirm("Are you sure you want to logout?")) return;
+        localStorage.removeItem("novabuk_admin_token"); localStorage.removeItem("novabuk_admin_user");
+        authToken = null; currentUser = null;
+        showLoginPage();
+        document.getElementById("loginForm").reset();
+        document.getElementById("registerForm").reset();
+      }
+
+      // ── Blogs ─────────────────────────────────────────────
+      async function loadBlogs() {
+        const tbody = document.getElementById("blogsTable");
+        try {
+          const res  = await fetch(`${API_URL}/blogs/admin/all`, { 
+            headers:{ Authorization:`Bearer ${authToken}` },
+            signal: AbortSignal.timeout(10000) // 10 second timeout
+          });
+          
+          if (!res.ok) {
+            const errData = await res.json().catch(() => ({}));
+            tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;padding:40px;color:var(--error)">Error: ${errData.message || 'Server returned ' + res.status}</td></tr>`;
+            return;
+          }
+
+          const data = await res.json();
+          if (!data.success) { 
+            tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;padding:40px;color:var(--error)">${data.message || 'Error loading blogs'}</td></tr>`;
+            return; 
+          }
+
+          tbody.innerHTML = "";
+          if (!data.data.length) {
+            tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;padding:40px;color:#aaa">No posts yet. <a href="#" onclick="editingBlogId=null;showSection('createBlog')" style="color:var(--primary)">Create one</a></td></tr>`;
+            return;
+          }
+          data.data.forEach(blog => {
+            const tr = document.createElement("tr");
+            const publishBtn = blog.published ? "" : `<button class="btn btn-primary btn-sm" onclick="publishBlog('${blog._id}')"><i class="fas fa-upload"></i> Publish</button>`;
+            tr.innerHTML = `
+              <td data-label="Title"><strong>${blog.title}</strong></td>
+              <td data-label="Category">${blog.category}</td>
+              <td data-label="Status"><span class="status-badge ${blog.published ? 'status-published':'status-draft'}">${blog.published?'Published':'Draft'}</span></td>
+              <td data-label="Published">${blog.publishedAt ? new Date(blog.publishedAt).toLocaleDateString() : '—'}</td>
+              <td><div class="action-buttons">
+                <button class="btn btn-secondary btn-sm" onclick="editBlog('${blog._id}')"><i class="fas fa-edit"></i> Edit</button>
+                ${publishBtn}
+                <button class="btn btn-danger btn-sm" onclick="deleteBlog('${blog._id}')"><i class="fas fa-trash"></i> Delete</button>
+              </div></td>`;
+            tbody.appendChild(tr);
+          });
+        } catch(err) { showAlert("Error loading blogs: " + err.message, "error"); }
+      }
+
+      async function editBlog(blogId) {
+        console.log("editBlog called with", blogId);
+        try {
+          const res = await fetch(`${API_URL}/blogs/admin/${blogId}`, { headers:{ Authorization:`Bearer ${authToken}` } });
+          let data = null;
+          try { data = await res.json(); } catch(e) {}
+          if (res.ok && data && data.success) {
+            const b = data.data;
+            editingBlogId = b._id;
+            console.log("loaded blog for edit, editingBlogId=", editingBlogId);
+            document.getElementById("blogId").value = b._id;
+            document.getElementById("blogTitle").value = b.title;
+            document.getElementById("blogCategory").value = b.category;
+            document.getElementById("blogExcerpt").value = b.excerpt;
+            document.getElementById("blogContent").value = b.content;
+            document.getElementById("blogAuthor").value = b.author;
+            document.getElementById("blogAuthorRole").value = b.authorRole;
+            document.getElementById("blogImage").value = b.image;
+            document.getElementById("blogReadTime").value = b.readTime;
+            document.getElementById("formTitle").textContent = "Edit Blog Post";
+            if (b.image) showImagePreviewFromUrl(b.image);
+            showSection("createBlog");
+          } else {
+            showAlert(`Error loading blog: ${res.status} ${res.statusText}`, "error");
+          }
+        } catch(err) { showAlert("Error: " + err.message, "error"); }
+      }
+
+      async function handleBlogSubmit(e) {
+        e.preventDefault();
+        const blogData = getBlogFormData(false);
+        try {
+          const method = editingBlogId ? "PUT" : "POST";
+          const url    = editingBlogId ? `${API_URL}/blogs/${editingBlogId}` : `${API_URL}/blogs`;
+          const res    = await fetch(url, { method, headers:{"Content-Type":"application/json", Authorization:`Bearer ${authToken}`}, body: JSON.stringify(blogData) });
+          const data   = await res.json();
+          if (data.success) {
+            showAlert(editingBlogId ? "Blog updated!" : "Blog saved as draft!", "success");
+            setTimeout(() => { editingBlogId = null; showSection("blogs"); }, 1000);
+          } else showAlert(data.message || "Error saving blog", "error");
+        } catch(err) { showAlert("Error: " + err.message, "error"); }
+      }
+
+      async function saveBlogAndPublish() {
+        const blogData = getBlogFormData(false);
+        try {
+          const method = editingBlogId ? "PUT" : "POST";
+          const url    = editingBlogId ? `${API_URL}/blogs/${editingBlogId}` : `${API_URL}/blogs`;
+          const res    = await fetch(url, { method, headers:{"Content-Type":"application/json", Authorization:`Bearer ${authToken}`}, body: JSON.stringify(blogData) });
+          const data   = await res.json();
+          if (!data.success) { showAlert(data.message || "Error", "error"); return; }
+          const blogId = editingBlogId || data.data._id;
+          const pubRes = await fetch(`${API_URL}/blogs/${blogId}/publish`, { method:"PATCH", headers:{"Content-Type":"application/json", Authorization:`Bearer ${authToken}`}, body: JSON.stringify({ published:true }) });
+          const pubData = await pubRes.json();
+          if (pubData.success) {
+            showAlert("Blog published!", "success");
+            setTimeout(() => { editingBlogId = null; showSection("blogs"); }, 1000);
+          } else showAlert("Saved but error publishing", "error");
+        } catch(err) { showAlert("Error: " + err.message, "error"); }
+      }
+
+      function getBlogFormData(published) {
+        return {
+          title:      document.getElementById("blogTitle").value,
+          category:   document.getElementById("blogCategory").value,
+          excerpt:    document.getElementById("blogExcerpt").value,
+          content:    document.getElementById("blogContent").value,
+          author:     document.getElementById("blogAuthor").value,
+          authorRole: document.getElementById("blogAuthorRole").value,
+          image:      document.getElementById("blogImage").value,
+          readTime:   parseInt(document.getElementById("blogReadTime").value),
+          published,
+        };
+      }
+
+      async function deleteBlog(blogId) {
+        if (!confirm("Delete this blog post?")) return;
+        try {
+          const res  = await fetch(`${API_URL}/blogs/${blogId}`, { method:"DELETE", headers:{ Authorization:`Bearer ${authToken}` } });
+          const data = await res.json();
+          if (data.success) { showAlert("Deleted!", "success"); loadBlogs(); }
+          else showAlert(data.message || "Error", "error");
+        } catch(err) { showAlert("Error: " + err.message, "error"); }
+      }
+
+      async function publishBlog(blogId) {
+        if (!confirm("Publish this post?")) return;
+        try {
+          const res  = await fetch(`${API_URL}/blogs/${blogId}/publish`, { method:"PATCH", headers:{"Content-Type":"application/json", Authorization:`Bearer ${authToken}`}, body: JSON.stringify({ published:true }) });
+          const data = await res.json();
+          if (data.success) { showAlert("Published!", "success"); loadBlogs(); }
+          else showAlert(data.message || "Error", "error");
+        } catch(err) { showAlert("Error: " + err.message, "error"); }
+      }
+
+      // ── Profile ───────────────────────────────────────────
+      async function loadProfile() {
+        try {
+          const res  = await fetch(`${API_URL}/admin/me`, { headers:{ Authorization:`Bearer ${authToken}` } });
+          const data = await res.json();
+          if (data.success) {
+            document.getElementById("profileName").value  = data.data.name;
+            document.getElementById("profileEmail").value = data.data.email;
+            document.getElementById("profileRole").value  = data.data.role;
+          }
+        } catch(err) { showAlert("Error loading profile", "error"); }
+      }
+
+      async function handleProfileSubmit(e) {
+        e.preventDefault();
+        try {
+          const res  = await fetch(`${API_URL}/admin/profile`, { method:"PUT", headers:{"Content-Type":"application/json", Authorization:`Bearer ${authToken}`}, body: JSON.stringify({ name: document.getElementById("profileName").value, email: document.getElementById("profileEmail").value }) });
+          const data = await res.json();
+          if (data.success) showAlert("Profile updated!", "success");
+          else showAlert(data.message || "Error", "error");
+        } catch(err) { showAlert("Error: " + err.message, "error"); }
+      }
+
+      async function changePassword() {
+        const currentPassword = document.getElementById("currentPassword").value;
+        const newPassword     = document.getElementById("newPassword").value;
+        const confirmPassword = document.getElementById("confirmPassword").value;
+        if (!currentPassword || !newPassword) { showAlert("Enter current and new password", "error"); return; }
+        if (newPassword !== confirmPassword)   { showAlert("Passwords do not match", "error"); return; }
+        try {
+          const res  = await fetch(`${API_URL}/admin/change-password`, { method:"PUT", headers:{"Content-Type":"application/json", Authorization:`Bearer ${authToken}`}, body: JSON.stringify({ currentPassword, newPassword }) });
+          const data = await res.json();
+          if (data.success) {
+            showAlert("Password changed!", "success");
+            ["currentPassword","newPassword","confirmPassword"].forEach(id => document.getElementById(id).value = "");
+          } else showAlert(data.message || "Error", "error");
+        } catch(err) { showAlert("Error: " + err.message, "error"); }
+      }
+
+      // ── Upload ────────────────────────────────────────────
+      async function handleFileSelect(e) {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        // local preview
+        const preview = document.getElementById("uploadPreview");
+        preview.innerHTML = "";
+        const el = file.type.startsWith("video/") ? document.createElement("video") : document.createElement("img");
+        el.src = URL.createObjectURL(file);
+        if (file.type.startsWith("video/")) el.controls = true;
+        preview.appendChild(el);
+
+        try {
+          const result = await uploadToCloudinary(file);
+          if (result && result.secure_url) {
+            document.getElementById("blogImage").value = result.secure_url;
+            showImagePreviewFromUrl(result.secure_url);
+            showAlert("Upload successful!", "success");
+          } else showAlert("Upload failed", "error");
+        } catch(err) {
+          console.error("Upload error", err);
+          showAlert("Upload error: " + (err.message || err), "error");
+        }
+      }
+
+      async function uploadToCloudinary(file) {
+        if (!authToken) throw new Error("Not authenticated");
+
+        const signRes  = await fetch(`${API_URL}/uploads/cloudinary/sign`, { method:"POST", headers:{"Content-Type":"application/json", Authorization:`Bearer ${authToken}`} });
+        const signData = await signRes.json();
+        console.log("Backend /uploads/cloudinary/sign response:", signData);
+
+        if (!signData.success) throw new Error(signData.message || "Could not get upload info");
+
+        const cloudName   = signData.cloud_name || signData.cloudName;
+        const uploadUrl   = signData.upload_url || (cloudName ? `https://api.cloudinary.com/v1_1/${cloudName}/auto/upload` : null);
+
+        if (!uploadUrl) throw new Error("Cloudinary cloud name missing from backend response");
+
+        const formData = new FormData();
+        formData.append("file", file);
+
+        if (signData.unsigned) {
+          if (!signData.upload_preset) throw new Error("Unsigned upload requires upload_preset from server");
+          formData.append("upload_preset", signData.upload_preset);
+        } else {
+          if (!signData.api_key) throw new Error("Backend error: Signed upload requires api_key.\nFix your backend to return: { api_key, signature, timestamp }");
+          formData.append("api_key",    signData.api_key);
+          formData.append("timestamp",  signData.timestamp);
+          formData.append("signature",  signData.signature);
+        }
+
+        return await uploadWithXhr(uploadUrl, formData);
+      }
+
+      function uploadWithXhr(url, formData) {
+        return new Promise((resolve, reject) => {
+          const xhr = new XMLHttpRequest();
+          xhr.open("POST", url);
+          const bar = document.getElementById("uploadProgressBar");
+          bar.style.display = "block"; bar.value = 0;
+          xhr.upload.onprogress = e => { if (e.lengthComputable) bar.value = Math.round(e.loaded/e.total*100); };
+          xhr.onload = () => {
+            bar.style.display = "none";
+            if (xhr.status >= 200 && xhr.status < 300) {
+              try { resolve(JSON.parse(xhr.responseText)); } catch(err) { reject(err); }
+            } else reject(new Error(`Upload failed: ${xhr.status} ${xhr.statusText} - ${xhr.responseText}`));
+          };
+          xhr.onerror = () => { bar.style.display = "none"; reject(new Error("Network error during upload")); };
+          xhr.send(formData);
+        });
+      }
+
+      function showImagePreviewFromUrl(url) {
+        if (!url) return;
+        const preview = document.getElementById("uploadPreview");
+        if (!preview) return;
+        preview.innerHTML = "";
+        const src = url + (url.includes("?")?"&":"?") + "cb=" + Date.now();
+        const el  = /(\.mp4|\.webm|\.ogg)(\?|$)/i.test(url) || url.includes("video") ? document.createElement("video") : document.createElement("img");
+        el.src = src;
+        if (el.tagName === "VIDEO") el.controls = true;
+        preview.appendChild(el);
+      }
+
+      async function handleClinicImageUpload(input) {
+        const file = input.files[0];
+        if (!file) return;
+        const preview = document.getElementById("clinicImagePreview");
+        preview.innerHTML = `<p style="font-size:13px;color:#888">Uploading...</p>`;
+        try {
+          const result = await uploadToCloudinary(file);
+          if (result && result.secure_url) {
+            document.getElementById("clinicImageUrl").value = result.secure_url;
+            preview.innerHTML = `<img src="${result.secure_url}" style="width:120px;height:80px;object-fit:cover;border-radius:8px;border:1px solid #eee;" />`;
+            showAlert("Image uploaded!", "success");
+          } else {
+            preview.innerHTML = "";
+            showAlert("Image upload failed", "error");
+          }
+        } catch(err) {
+          preview.innerHTML = "";
+          showAlert("Upload error: " + err.message, "error");
+        }
+      }
+
+      // ── Clinics ───────────────────────────────────────────
+
+      async function loadClinics() {
+        try {
+          const res  = await fetch(`${API_URL}/clinics`, { headers:{ Authorization:`Bearer ${authToken}` } });
+          const data = await res.json();
+          const tbody = document.getElementById("clinicsTable");
+          if (!data.success) { showAlert(data.message, "error"); return; }
+          
+          let filtered = data.data;
+          const onlyActive = document.getElementById("filterActiveClinics").checked;
+          if (onlyActive) {
+            filtered = filtered.filter(c => c.isActive);
+          }
+
+          if (!filtered.length) {
+            tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;padding:40px;color:#aaa">No clinics found matching criteria.</td></tr>`;
+            return;
+          }
+          tbody.innerHTML = filtered.map(c => `
+            <tr>
+              <td><strong>${c.name}</strong></td>
+              <td>${c.location.city}</td>
+              <td><span class="status-badge ${c.subscriptionPlan==='Pro'?'status-published':'status-draft'}" style="text-transform:capitalize">${c.subscriptionPlan || 'Free'}</span></td>
+              <td><span class="status-badge ${c.isActive ? 'status-published' : 'status-draft'}">${c.isActive ? "Active" : "Inactive"}</span></td>
+              <td><span class="status-badge ${c.isOpen ? 'status-published' : 'status-draft'}">${c.isOpen ? "Open" : "Closed"}</span></td>
+              <td>
+                <div class="action-buttons">
+                  <button class="btn btn-sm" style="background:#3498db;color:white" title="View Stats" onclick="viewClinicStats('${c._id}', '${c.name.replace(/'/g,"\\'")}')"><i class="fas fa-chart-line"></i></button>
+                  <button class="btn btn-secondary btn-sm" onclick="editClinic('${c._id}')"><i class="fas fa-edit"></i> Edit</button>
+                  <button class="btn btn-sm" style="background:#f39c12;color:white" onclick="toggleClinicOpen('${c._id}', ${c.isOpen})">${c.isOpen ? "Close" : "Open"}</button>
+                  <button class="btn btn-danger btn-sm" onclick="deleteClinic('${c._id}', ${c.isActive})">${c.isActive ? "Deactivate" : "Activate"}</button>
+                </div>
+              </td>
+            </tr>`).join("");
+        } catch(err) { showAlert("Error loading clinics: " + err.message, "error"); }
+      }
+
+      // ── Users ─────────────────────────────────────────────
+      async function loadUsers() {
+        const tbody = document.getElementById("usersTable");
+        try {
+          const res  = await fetch(`${API_URL}/users/admin/all`, { 
+            headers:{ Authorization:`Bearer ${authToken}` },
+            signal: AbortSignal.timeout(10000)
+          });
+          const data = await res.json();
+          if (!data.success) { tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;padding:40px;color:var(--error)">${data.message}</td></tr>`; return; }
+          
+          let filtered = data.data;
+          const onlyVerified = document.getElementById("filterVerifiedUsers").checked;
+          if (onlyVerified) {
+            filtered = filtered.filter(u => u.isVerified);
+          }
+
+          if (!filtered.length) {
+            tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;padding:40px;color:#aaa">No patients found matching criteria.</td></tr>`;
+            return;
+          }
+          
+          tbody.innerHTML = filtered.map(u => `
+            <tr>
+              <td><strong>${u.fullName}</strong></td>
+              <td>${u.email}</td>
+              <td><code style="background:#eee;padding:2px 6px;border-radius:4px">${u.novaBukId || '—'}</code></td>
+              <td><span class="status-badge ${u.isVerified?'status-published':'status-draft'}">${u.isVerified?'Yes':'No'}</span></td>
+              <td><span class="status-badge ${u.isActive?'status-published':'status-draft'}">${u.isActive?'Active':'Deactivated'}</span></td>
+              <td>
+                <button class="btn ${u.isActive?'btn-danger':'btn-primary'} btn-sm" onclick="toggleUserActive('${u._id}', ${u.isActive})">
+                  ${u.isActive ? 'Deactivate' : 'Activate'}
+                </button>
+              </td>
+            </tr>
+          `).join("");
+        } catch(err) { tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;padding:40px;color:var(--error)">Error: ${err.message}</td></tr>`; }
+      }
+
+      async function toggleUserActive(userId, currentlyActive) {
+        if (!confirm(`Are you sure you want to ${currentlyActive ? 'deactivate' : 'activate'} this user?`)) return;
+        try {
+          const res = await fetch(`${API_URL}/users/admin/${userId}/toggle`, { 
+            method: "PATCH", 
+            headers: { Authorization: `Bearer ${authToken}` } 
+          });
+          const data = await res.json();
+          if (data.success) {
+            showAlert(data.message, "success");
+            loadUsers();
+          } else showAlert(data.message, "error");
+        } catch(err) { showAlert("Error toggling status", "error"); }
+      }
+
+      // ── Health Tips ───────────────────────────────────────
+      async function loadTips() {
+        const tbody = document.getElementById("tipsTable");
+        try {
+          const res = await fetch(`${API_URL}/tips/admin`, { headers: { Authorization: `Bearer ${authToken}` } });
+          const data = await res.json();
+          if (!data.success) return;
+          
+          if (!data.data.length) {
+            tbody.innerHTML = `<tr><td colspan="4" style="text-align:center;padding:40px;color:#aaa">No tips yet. Click 'Add Tip' to start.</td></tr>`;
+            return;
+          }
+          
+          tbody.innerHTML = data.data.map(t => `
+            <tr>
+              <td><div style="max-width:400px; font-weight:500;">${t.text}</div></td>
+              <td style="text-transform:capitalize">${t.category.replace("-"," ")}</td>
+              <td><span class="status-badge ${t.active?'status-published':'status-draft'}">${t.active?'Active':'Inactive'}</span></td>
+              <td>
+                <div class="actions">
+                  <button class="action-btn" title="Edit" onclick="editTip('${t._id}', '${t.text.replace(/'/g,"\\'")}', '${t.category}')"><i class="fas fa-edit"></i></button>
+                  <button class="action-btn" style="color:var(--error)" title="Delete" onclick="deleteTip('${t._id}')"><i class="fas fa-trash"></i></button>
+                </div>
+              </td>
+            </tr>
+          `).join("");
+        } catch(err) { showAlert("Error loading tips", "error"); }
+      }
+
+      function openTipModal() {
+        document.getElementById("tipId").value = "";
+        document.getElementById("tipText").value = "";
+        document.getElementById("tipCategory").value = "general";
+        document.getElementById("tipModalTitle").textContent = "Add Health Tip";
+        document.getElementById("tipModal").classList.remove("hidden");
+      }
+
+      function closeTipModal() {
+        document.getElementById("tipModal").classList.add("hidden");
+      }
+
+      function editTip(id, text, category) {
+        document.getElementById("tipId").value = id;
+        document.getElementById("tipText").value = text;
+        document.getElementById("tipCategory").value = category;
+        document.getElementById("tipModalTitle").textContent = "Edit Health Tip";
+        document.getElementById("tipModal").classList.remove("hidden");
+      }
+
+      document.getElementById("tipForm").onsubmit = async (e) => {
+        e.preventDefault();
+        const id = document.getElementById("tipId").value;
+        const body = {
+          text: document.getElementById("tipText").value,
+          category: document.getElementById("tipCategory").value
+        };
+
+        const url = id ? `${API_URL}/tips/${id}` : `${API_URL}/tips`;
+        const method = id ? "PUT" : "POST";
+
+        try {
+          const res = await fetch(url, {
+            method,
+            headers: { "Content-Type": "application/json", Authorization: `Bearer ${authToken}` },
+            body: JSON.stringify(body)
+          });
+          const data = await res.json();
+          if (data.success) {
+            showAlert(id ? "Tip updated!" : "Tip added!", "success");
+            closeTipModal();
+            loadTips();
+          } else showAlert(data.message, "error");
+        } catch(err) { showAlert("Error saving tip", "error"); }
+      };
+
+      async function deleteTip(id) {
+        if (!confirm("Delete this tip?")) return;
+        try {
+          const res = await fetch(`${API_URL}/tips/${id}`, { 
+            method: "DELETE", 
+            headers: { Authorization: `Bearer ${authToken}` } 
+          });
+          const data = await res.json();
+          if (data.success) {
+            showAlert("Tip deleted", "success");
+            loadTips();
+          }
+        } catch(err) { showAlert("Error deleting tip", "error"); }
+      }
+
+      async function loadOverviewStats() {
+         const grid = document.querySelector("#overviewSection .grid-4");
+         try {
+            const res = await fetch(`${API_URL}/clinics`, { 
+               headers: { Authorization: `Bearer ${authToken}` },
+               signal: AbortSignal.timeout(10000)
+            });
+            
+            if (!res.ok) throw new Error("Server not responding");
+            const data = await res.json();
+            if (!data.success) return;
+            
+            const clinics = data.data;
+            document.getElementById("statClinics").textContent = clinics.length;
+            document.getElementById("statSubscriptions").textContent = clinics.filter(c => c.subscriptionPlan === 'Pro').length;
+            
+            // Fetch real patient count
+            const userRes = await fetch(`${API_URL}/users/admin/count`, { headers: { Authorization: `Bearer ${authToken}` } });
+            const userData = await userRes.json();
+            if (userData.success) {
+               document.getElementById("statPatients").textContent = userData.count;
+            }
+            
+            // Recent clinics list
+            const recent = clinics.slice(0, 5);
+            document.getElementById("recentClinicsTable").innerHTML = recent.map(c => `
+               <tr>
+                  <td>${c.name}</td>
+                  <td>${c.location.city}</td>
+                  <td>${new Date(c.createdAt).toLocaleDateString()}</td>
+               </tr>
+            `).join("");
+
+            // Fetch blog count
+            const blogRes = await fetch(`${API_URL}/blogs/admin/all`, { headers: { Authorization: `Bearer ${authToken}` } });
+            const blogData = await blogRes.json();
+            if (blogData.success) {
+               document.getElementById("statBlogs").textContent = blogData.data.length;
+            }
+         } catch(err) { console.error("Stats load failed", err); }
+      }
+
+      async function handleClinicSubmit(e) {
+        e.preventDefault();
+        const btn = document.getElementById("clinicSaveBtn");
+        btn.disabled = true; btn.textContent = "Saving...";
+
+        const services = document.getElementById("clinicServices").value
+          .split(",").map(s => s.trim()).filter(Boolean);
+
+        const openTime  = document.getElementById("clinicOpenTime").value;
+        const closeTime = document.getElementById("clinicCloseTime").value;
+        const hours = {};
+        ["monday","tuesday","wednesday","thursday","friday"].forEach(d => {
+          hours[d] = { open: openTime, close: closeTime };
+        });
+        hours.saturday = { open: openTime, close: closeTime };
+        hours.sunday   = { open: null, close: null };
+
+        const payload = {
+          name:         document.getElementById("clinicName").value,
+          contactPhone: document.getElementById("clinicPhone").value,
+          contactEmail: document.getElementById("clinicEmail").value,
+          location: {
+            address: document.getElementById("clinicAddress").value,
+            city:    document.getElementById("clinicCity").value,
+            state:   document.getElementById("clinicState").value,
+          },
+          services,
+          openingHours: hours,
+          isOpen:   document.getElementById("clinicIsOpen").checked,
+          isActive: true,
+          image:    document.getElementById("clinicImageUrl").value || "",
+        };
+
+        // Add doctor data only if NEW clinic
+        if (!editingClinicId) {
+          payload.doctorName = document.getElementById("doctorName").value.trim();
+          payload.doctorEmail = document.getElementById("doctorEmail").value.trim();
+          payload.doctorPassword = document.getElementById("doctorPassword").value.trim();
+        }
+
+        try {
+          const method = editingClinicId ? "PUT" : "POST";
+          const url    = editingClinicId ? `${API_URL}/clinics/${editingClinicId}` : `${API_URL}/clinics`;
+          const res    = await fetch(url, { method, headers:{ "Content-Type":"application/json", Authorization:`Bearer ${authToken}` }, body: JSON.stringify(payload) });
+          const data   = await res.json();
+          if (data.success) {
+            showAlert(editingClinicId ? "Clinic updated!" : "Clinic added!", "success");
+            editingClinicId = null;
+            setTimeout(() => showSection("clinics"), 800);
+          } else {
+            showAlert(data.message || "Error saving clinic", "error");
+            btn.disabled = false; btn.innerHTML = '<i class="fas fa-save"></i> Save Clinic';
+          }
+        } catch(err) {
+          showAlert("Error: " + err.message, "error");
+          btn.disabled = false; btn.innerHTML = '<i class="fas fa-save"></i> Save Clinic';
+        }
+      }
+
+      async function editClinic(clinicId) {
+        try {
+          const res  = await fetch(`${API_URL}/clinics/${clinicId}`, { headers:{ Authorization:`Bearer ${authToken}` } });
+          const data = await res.json();
+          if (!data.success) { showAlert("Error loading clinic", "error"); return; }
+          const c = data.data;
+          editingClinicId = c._id;
+          document.getElementById("clinicId").value      = c._id;
+          document.getElementById("clinicName").value    = c.name;
+          document.getElementById("clinicPhone").value   = c.contactPhone || "";
+          document.getElementById("clinicEmail").value   = c.contactEmail || "";
+          document.getElementById("clinicAddress").value = c.location.address;
+          document.getElementById("clinicCity").value    = c.location.city;
+          document.getElementById("clinicState").value   = c.location.state || "";
+          document.getElementById("clinicServices").value = (c.services||[]).join(", ");
+          document.getElementById("clinicIsOpen").checked = c.isOpen;
+          document.getElementById("clinicImageUrl").value = c.image || "";
+          if (c.image) {
+            document.getElementById("clinicImagePreview").innerHTML =
+              `<img src="${c.image}" style="width:120px;height:80px;object-fit:cover;border-radius:8px;border:1px solid #eee;" />`;
+          } else {
+            document.getElementById("clinicImagePreview").innerHTML = "";
+          }
+          if (c.openingHours?.monday?.open) {
+            document.getElementById("clinicOpenTime").value  = c.openingHours.monday.open;
+            document.getElementById("clinicCloseTime").value = c.openingHours.monday.close;
+          }
+          document.getElementById("clinicFormTitle").textContent = "Edit Clinic";
+          document.getElementById("doctorAccountFields").classList.add("hidden");
+          showSection("createClinic");
+        } catch(err) { showAlert("Error: " + err.message, "error"); }
+      }
+
+      async function toggleClinicOpen(clinicId, currentlyOpen) {
+        try {
+          const res  = await fetch(`${API_URL}/clinics/${clinicId}/toggle`, { method:"PATCH", headers:{ "Content-Type":"application/json", Authorization:`Bearer ${authToken}` }, body: JSON.stringify({ isOpen: !currentlyOpen }) });
+          const data = await res.json();
+          if (data.success) { showAlert(`Clinic marked as ${!currentlyOpen ? "Open" : "Closed"}`, "success"); loadClinics(); }
+          else showAlert(data.message || "Error", "error");
+        } catch(err) { showAlert("Error: " + err.message, "error"); }
+      }
+
+      async function deleteClinic(clinicId, currentlyActive) {
+        const action = currentlyActive ? "deactivate" : "activate";
+        if (!confirm(`Are you sure you want to ${action} this clinic?`)) return;
+        try {
+          const res  = await fetch(`${API_URL}/clinics/${clinicId}`, { method:"DELETE", headers:{ Authorization:`Bearer ${authToken}` }, body: JSON.stringify({ isActive: !currentlyActive }) });
+          const data = await res.json();
+          if (data.success) { showAlert(`Clinic ${action}d!`, "success"); loadClinics(); }
+          else showAlert(data.message || "Error", "error");
+        } catch(err) { showAlert("Error: " + err.message, "error"); }
+      }
+
+      async function viewClinicStats(id, name) {
+        document.getElementById("statsClinicName").textContent = name + " Performance";
+        document.getElementById("statsTotalVisits").textContent = "...";
+        document.getElementById("statsUniquePatients").textContent = "...";
+        document.getElementById("statsCompleted").textContent = "...";
+        document.getElementById("statsPending").textContent = "...";
+        document.getElementById("statsInProgress").textContent = "...";
+        document.getElementById("clinicStatsModal").classList.remove("hidden");
+
+        try {
+          const res = await fetch(`${API_URL}/clinics/admin/${id}/stats`, {
+            headers: { Authorization: `Bearer ${authToken}` }
+          });
+          const data = await res.json();
+          if (data.success) {
+            const s = data.data;
+            document.getElementById("statsTotalVisits").textContent = s.totalVisits;
+            document.getElementById("statsUniquePatients").textContent = s.totalUniquePatients;
+            document.getElementById("statsCompleted").textContent = s.completedVisits;
+            document.getElementById("statsPending").textContent = s.pendingVisits;
+            document.getElementById("statsInProgress").textContent = s.inProgressVisits;
+          } else showAlert("Error loading stats", "error");
+        } catch(err) { showAlert("Error: " + err.message, "error"); }
+      }
+
+      function closeStatsModal() {
+        document.getElementById("clinicStatsModal").classList.add("hidden");
+      }
+
+      async function generateMissingIds() {
+        if (!confirm("This will scan all patients and generate NovaBuk IDs for those who don't have one. Proceed?")) return;
+        try {
+          const res = await fetch(`${API_URL}/users/admin/generate-ids`, {
+            method: "POST",
+            headers: { Authorization: `Bearer ${authToken}` }
+          });
+          const data = await res.json();
+          if (data.success) {
+            showAlert(data.message, "success");
+            if (document.getElementById("usersSection").classList.contains("hidden") === false) loadUsers();
+          } else showAlert(data.message, "error");
+        } catch(err) { showAlert("Error: " + err.message, "error"); }
+      }
+
+      // ── Alert helper ──────────────────────────────────────
+      function showAlert(message, type, elementId = "alertContainer") {
+        const container = document.getElementById(elementId);
+        if (!container) return;
+        const el = document.createElement("div");
+        el.className = `alert alert-${type}`;
+        el.innerHTML = `<i class="fas fa-${type==='success'?'check-circle':'exclamation-circle'}"></i> ${message}`;
+        container.appendChild(el);
+        setTimeout(() => el.classList.add("show"), 10);
+        setTimeout(() => { el.classList.remove("show"); setTimeout(() => el.remove(), 300); }, 5000);
+      }
+    </script>
+
+    <!-- ── Clinic Stats Modal ── -->
+    <div id="clinicStatsModal" class="modal hidden" style="position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:2000; display:flex; align-items:center; justify-content:center;">
+       <div class="card" style="width:100%; max-width:600px; margin:20px; background:white; padding:30px; border-radius:12px; position:relative;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+            <h2 id="statsClinicName" style="margin:0; font-size:1.3rem;">Clinic Performance</h2>
+            <button class="btn btn-secondary btn-sm" onclick="closeStatsModal()"><i class="fas fa-times"></i></button>
+          </div>
+          
+          <div style="display:grid; grid-template-columns: 1fr 1fr; gap:15px; margin-bottom:20px;">
+            <div style="background:#f0f7ff; padding:15px; border-radius:10px; text-align:center; border:1px solid #d0e7ff;">
+              <h3 style="font-size:1.8rem; margin:0; color:#2980b9" id="statsTotalVisits">0</h3>
+              <p style="margin:5px 0 0; color:#555; font-size:0.8rem; font-weight:600; text-transform:uppercase;">Total Visits</p>
+            </div>
+            <div style="background:#f0fff4; padding:15px; border-radius:10px; text-align:center; border:1px solid #d0f5da;">
+              <h3 style="font-size:1.8rem; margin:0; color:#27ae60" id="statsUniquePatients">0</h3>
+              <p style="margin:5px 0 0; color:#555; font-size:0.8rem; font-weight:600; text-transform:uppercase;">Unique Patients</p>
+            </div>
+          </div>
+
+          <div style="display:flex; flex-direction:column; gap:10px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; padding:12px 15px; background:#fff; border:1px solid #eee; border-radius:8px;">
+              <span style="font-weight:600; color:#333; font-size:0.9rem;">Completed Consultations</span>
+              <span class="status-badge status-published" id="statsCompleted" style="font-size:0.85rem; padding:4px 12px;">0</span>
+            </div>
+            <div style="display:flex; justify-content:space-between; align-items:center; padding:12px 15px; background:#fff; border:1px solid #eee; border-radius:8px;">
+              <span style="font-weight:600; color:#333; font-size:0.9rem;">Pending Requests</span>
+              <span class="status-badge status-draft" id="statsPending" style="font-size:0.85rem; padding:4px 12px;">0</span>
+            </div>
+            <div style="display:flex; justify-content:space-between; align-items:center; padding:12px 15px; background:#fff; border:1px solid #eee; border-radius:8px;">
+              <span style="font-weight:600; color:#333; font-size:0.9rem;">In Progress</span>
+              <span class="status-badge" style="background:#f39c12; color:white; font-size:0.85rem; padding:4px 12px;" id="statsInProgress">0</span>
+            </div>
+          </div>
+       </div>
+    </div>
+  </body>
+</html>

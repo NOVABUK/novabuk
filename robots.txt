@@ -1,6 +1,22 @@
-# Allow all search engines to crawl the site
+# NovaBuk Robots File
 User-agent: *
 Allow: /
+Allow: /index.html
+Allow: /about.html
+Allow: /services.html
+Allow: /blog-dynamic.html
+Allow: /contact.html
+Allow: /images/
 
-# Point to your sitemap to help engines index your pages faster
+# Disallow private app areas
+Disallow: /app-home.html
+Disallow: /app-history.html
+Disallow: /app-setting.html
+Disallow: /app-clinics.html
+Disallow: /clinic-queue.html
+Disallow: /admin-dashboard.html
+Disallow: /verify-otp.html
+Disallow: /reset-password.html
+
+# Sitemap link
 Sitemap: https://www.novabuk.com/sitemap.xml

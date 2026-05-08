@@ -1,0 +1,331 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./styles.css" />
+    <link rel="stylesheet" href="./styles-app.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
+      integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Unbounded:wght@200..900&display=swap"
+      rel="stylesheet"
+    />
+    <title>Sign In — NovaBuk</title>
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <style>
+      .error-msg {
+        color: #e53e3e;
+        font-size: 13px;
+        margin-top: 8px;
+        display: none;
+        text-align: center;
+        padding: 8px 12px;
+        background: #fff5f5;
+        border-radius: 6px;
+        border: 1px solid #fed7d7;
+      }
+      .error-msg.show {
+        display: block;
+      }
+      .submit button:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+      }
+
+      @media (max-width: 575px) {
+        .sign-input {
+          padding: 28px 20px;
+          border-radius: 16px;
+          height: auto;
+          gap: 2px;
+        }
+        .form-text > h3 {
+          font-size: 22px;
+          width: 100%;
+          height: auto;
+        }
+        .form-text > p {
+          font-size: 13px;
+          height: auto;
+        }
+        .login-form {
+          height: auto;
+        }
+        .login-form span {
+          padding: 8px 10px;
+          height: auto;
+        }
+        .login-check {
+          font-size: 13px;
+          height: auto;
+          flex-wrap: wrap;
+          gap: 8px;
+        }
+        .login-check a {
+          width: auto;
+          height: auto;
+          font-size: 13px;
+        }
+        .divider {
+          font-size: 13px;
+        }
+      .heading h2{
+          width: 100%;
+          font-size: 18px;
+        }
+      }
+
+      /* Social Login Styling */
+      .divider {
+        display: flex;
+        align-items: center;
+        text-align: center;
+        margin: 0px 0 20px;
+        color: #718096;
+        font-size: 13px;
+      }
+      .divider::before, .divider::after {
+        content: '';
+        flex: 1;
+        border-bottom: 1px solid #eee;
+      }
+      .divider:not(:empty)::before { margin-right: .5em; }
+      .divider:not(:empty)::after { margin-left: .5em; }
+
+      .google-btn {
+        width: 100%;
+        height: 52px;
+        background: #fff;
+        border: 1px solid #ddd;
+        border-radius: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+        color: #333;
+        font-weight: 600;
+        font-size: 14px;
+        cursor: pointer;
+        transition: all 0.2s;
+        font-family: 'Poppins', sans-serif;
+        /* margin-bottom: 20px; */
+      }
+      .google-btn:hover { background: #f9f9f9; border-color: #ccc; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+      .google-btn img { width: 18px; }
+    </style>
+  </head>
+  <body>
+    <div class="container-sign">
+      <div class="sign-info">
+        <div class="sign-descrption">
+          <div class="sign-logo">
+            <img src="./images/logo-text.png" alt="" />
+          </div>
+          <div class="heading"><h2>Welcome Back to Better Healthcare</h2></div>
+          <div class="para">
+            <p>
+              Access your medical records, connect with healthcare providers,
+              and manage your health journey all in one place
+            </p>
+          </div>
+          <div class="sign-icon-text">
+            <div class="icon-text">
+              <i class="fa fa-shield" aria-hidden="true"></i>
+              <div class="text">
+                <h5>Secure &amp; Private</h5>
+                <p>Your Health data is encrypted and protected</p>
+              </div>
+            </div>
+            <div class="icon-text">
+              <i class="fa fa-shield" aria-hidden="true"></i>
+              <div class="text">
+                <h5>Secure &amp; Private</h5>
+                <p>Your Health data is encrypted and protected</p>
+              </div>
+            </div>
+            <div class="icon-text">
+              <i class="fa fa-shield" aria-hidden="true"></i>
+              <div class="text">
+                <h5>Secure &amp; Private</h5>
+                <p>Your Health data is encrypted and protected</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="sign-input">
+          <div class="form-text">
+            <h3>Sign In</h3>
+            <p>Enter your credentials to access your account</p>
+          </div>
+
+          <!-- ERROR BANNER -->
+          <div class="error-msg" id="errorMsg"></div>
+
+          <form id="signinForm" onsubmit="handleSignIn(event)">
+            <div class="login-form">
+              <label for="signinEmail">Email Address:</label>
+              <span>
+                <i class="fa fa-envelope" aria-hidden="true"></i>
+                <input
+                  type="email"
+                  id="signinEmail"
+                  placeholder="bolaahmed@gmail.com"
+                  required
+                />
+              </span>
+            </div>
+            <div class="login-form">
+              <label for="signinPassword">Password</label>
+              <span>
+                <i class="fa fa-lock" aria-hidden="true"></i>
+                <input
+                  type="password"
+                  id="signinPassword"
+                  placeholder="*******"
+                  required
+                />
+                <i class="fa fa-eye" id="togglePassword"></i>
+              </span>
+            </div>
+            <div class="login-check">
+              <div class="remeber-me">
+                <label for="rememberMe">
+                  <input type="checkbox" id="rememberMe" /> Remember Me
+                </label>
+              </div>
+              <div class="forgot-pwd"><a href="./forgot-password.html">Forgot Password?</a></div>
+            </div>
+            <div class="login-form submit">
+              <button type="submit" id="signinBtn">Sign In</button>
+            </div>
+          </form>
+
+          <div class="divider">Or continue with</div>
+
+          <button type="button" class="google-btn" onclick="handleGoogleSignIn()">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg" alt="G">
+            Google
+          </button>
+          <p class="acc-signup">
+            Don't have an account?
+            <span><a href="./sign-up.html">Sign Up</a></span>
+          </p>
+        </div>
+      </div>
+    </div>
+    <script src="./script.js"></script>
+    <script>
+      var API_URL = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1"
+        ? "http://localhost:5000/api"
+        : "https://novabuk-backend.onrender.com/api";
+
+      // If already logged in, skip to home
+      if (localStorage.getItem("novabuk_token")) {
+        window.location.href = "./app-home.html";
+      }
+      
+      
+      async function handleSignIn(e) {
+        e.preventDefault();
+
+        const email = document.getElementById("signinEmail").value.trim();
+        const password = document.getElementById("signinPassword").value;
+        const btn = document.getElementById("signinBtn");
+        const errMsg = document.getElementById("errorMsg");
+
+        errMsg.classList.remove("show");
+        btn.disabled = true;
+        btn.textContent = "Signing in...";
+
+        try {
+          const res = await fetch(`${API_URL}/users/login`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email, password }),
+          });
+
+          const data = await res.json();
+
+          if (data.success) {
+            localStorage.setItem("novabuk_token", data.token);
+            localStorage.setItem("novabuk_user",  JSON.stringify(data.user));
+            // Use redirectTo from API: Patient→app-home, Doctor→clinic-queue
+            window.location.href = data.redirectTo || "./app-home.html";
+          } else {
+            if (data.isVerified === false) {
+                // User exists but not verified -> send to OTP page
+                localStorage.setItem("novabuk_verify_email", email);
+                window.location.href = "./verify-otp.html";
+                return;
+            }
+            errMsg.textContent = data.message || "Incorrect email or password.";
+            errMsg.classList.add("show");
+            btn.disabled = false;
+            btn.textContent = "Sign In";
+          }
+        } catch (err) {
+          errMsg.textContent = "Network error. Please check your connection.";
+          errMsg.classList.add("show");
+          btn.disabled = false;
+          btn.textContent = "Sign In";
+        }
+      }
+      function showBannerError(msg) {
+        const el = document.getElementById("errorMsg");
+        el.textContent = msg;
+        el.classList.add("show");
+      }
+
+      async function handleGoogleSignIn() {
+          // Initialize Google Identity Services
+          google.accounts.id.initialize({
+            client_id: "YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com", // Replace with real ID
+            callback: handleCredentialResponse
+          });
+          
+          google.accounts.id.prompt();
+      }
+
+      async function handleCredentialResponse(response) {
+          const btn = document.querySelector('.google-btn');
+          const originalText = btn.innerHTML;
+          btn.innerHTML = "Logging in...";
+          btn.disabled = true;
+
+          try {
+              const res = await fetch(`${API_URL}/users/google-login`, {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({ idToken: response.credential })
+              });
+
+              const data = await res.json();
+              if (data.success) {
+                  localStorage.setItem("novabuk_token", data.token);
+                  localStorage.setItem("novabuk_user", JSON.stringify(data.user));
+                  window.location.href = data.redirectTo || "./app-home.html";
+              } else {
+                  showBannerError(data.message || "Google login failed.");
+                  btn.innerHTML = originalText;
+                  btn.disabled = false;
+              }
+          } catch (err) {
+              showBannerError("Network error. Please try again.");
+              btn.innerHTML = originalText;
+              btn.disabled = false;
+          }
+      }
+    </script>
+
+    
+  </body>
+</html>
