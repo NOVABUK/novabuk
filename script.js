@@ -417,7 +417,7 @@ window.refreshNavAvatar = function () {
   const isAuthPage = [
     "sign-in", "sign-up", "forgot-password",
     "reset-password", "send-email",
-    "index", "about", "services", "contact",
+    "index", "about", "services", "contact","data-privacy",
     "blog", "blog-dynamic",
   ].some((p) => path.includes(p)) || path === "/" || path.endsWith("/");
 
