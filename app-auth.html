@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Welcome — NovaBuk</title>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,600;1,400&display=swap" rel="stylesheet" />
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -446,6 +447,28 @@
       .left-panel { display: none; }
       .right-panel { padding: 40px 24px; }
     }
+    .google-btn {
+      width: 100%;
+      height: 48px;
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      color: var(--dark);
+      font-weight: 600;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.2s;
+      margin-bottom: 16px;
+    }
+    .google-btn:hover {
+      background: #f8fafc;
+      border-color: var(--teal-light);
+    }
+    .google-btn img { width: 18px; }
   </style>
 </head>
 <body>
@@ -533,6 +556,13 @@
             Sign In
           </button>
 
+          <div class="divider">Or continue with</div>
+
+          <button type="button" class="google-btn" onclick="handleGoogleSignIn()">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg" alt="G">
+            Google
+          </button>
+
           <p class="switch-text">
             Don't have an account?
             <a onclick="switchTab('register')">Create one</a>
@@ -577,6 +607,13 @@
 
           <button class="submit-btn" id="registerBtn" onclick="handleRegister()">
             Create Account
+          </button>
+
+          <div class="divider">Or continue with</div>
+
+          <button type="button" class="google-btn" onclick="handleGoogleSignIn()">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg" alt="G">
+            Google
           </button>
 
           <p class="terms-text">
@@ -631,8 +668,58 @@
   </div>
 
   <script>
-    var API_URL = "http://localhost:5000/api";
-    //var API_URL = "http://localhost:5000/api"; // ← uncomment for local testing
+    var API_URL = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1"
+      ? "http://localhost:5000/api"
+      : "https://novabuk-backend.onrender.com/api";
+
+    async function handleGoogleSignIn() {
+      google.accounts.id.initialize({
+        client_id: "670613922043-k4qe1e335cgaaj0qqv4gsk6m2nvnp20v.apps.googleusercontent.com",
+        callback: handleCredentialResponse
+      });
+      google.accounts.id.prompt();
+    }
+
+    async function handleCredentialResponse(response) {
+      const btn = document.querySelector('.google-btn');
+      const originalText = btn.innerHTML;
+      btn.innerHTML = "Logging in...";
+      btn.disabled = true;
+
+      try {
+        const res = await fetch(`${API_URL}/users/google-login`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ idToken: response.credential })
+        });
+
+        const data = await res.json();
+        if (data.success) {
+          localStorage.setItem("novabuk_token", data.token);
+          localStorage.setItem("novabuk_user", JSON.stringify(data.user));
+          window.location.href = data.redirectTo || "./app-home.html";
+        } else {
+          showError(data.message || "Google login failed.");
+          btn.innerHTML = originalText;
+          btn.disabled = false;
+        }
+      } catch (err) {
+        showError("Network error. Please try again.");
+        btn.innerHTML = originalText;
+        btn.disabled = false;
+      }
+    }
+
+    function showError(msg) {
+      const banner = document.getElementById("errorBanner");
+      const msgEl = document.getElementById("errorMsg");
+      msgEl.textContent = msg;
+      banner.classList.add("show");
+    }
+
+    function clearErrors() {
+      document.getElementById("errorBanner").classList.remove("show");
+    }
 
     // ── REDIRECT IF ALREADY LOGGED IN ─────────────────────
     const existingToken = localStorage.getItem("novabuk_token");
