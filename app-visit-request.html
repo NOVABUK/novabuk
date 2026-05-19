@@ -1045,7 +1045,7 @@
         if (preferredDate)     body.preferredDate = preferredDate;
         if (selectedSymptomId) body.symptomLogId  = selectedSymptomId;
 
-        const res  = await fetch(`${API_URL}/visits/request`, {
+        const res  = await smartFetch(`${API_URL}/visits/request`, {
           method:  "POST",
           headers: {
             "Content-Type": "application/json",
@@ -1102,6 +1102,7 @@
     // ── INIT ─────────────────────────────────────────────
     initPage();
   </script>
+  <script src="./db.js"></script>
   <script src="./script.js"></script>
 </body>
 </html>

@@ -256,7 +256,7 @@ async function clinicFetch(url, options = {}) {
     ...(token ? { Authorization: `Bearer ${token}` } : {}),
   };
 
-  const res = await fetch(url, {
+  const res = await smartFetch(url, {
     ...options,
     headers,
     credentials: "include",
@@ -340,7 +340,7 @@ async function updateNotificationBadge() {
   if (!badge) return;
 
   try {
-    const res = await clinicFetch(`${API_BASE}/notifications/unread-count`);
+    const res = await clinicFetch(`${CLINIC_API}/notifications/unread-count`);
     const data = await res.json();
 
     if (data.success && data.count > 0) {
@@ -422,3 +422,133 @@ if (document.readyState === "loading") {
 
 // Check notifications every 30 seconds
 setInterval(updateNotificationBadge, 30000);
+
+// ── CLINIC NETWORK TOAST ────────────────────────────────────────
+// Mirrors the patient-side network toast in script.js.
+// Injected here so it works on EVERY clinic page automatically.
+// ──────────────────────────────────────────────────────────────
+(function initClinicNetworkUI() {
+  // 1. Inject the CSS (clinic pages use clinic.css, not styles-app.css)
+  if (!document.getElementById('clinicToastStyle')) {
+    const style = document.createElement('style');
+    style.id = 'clinicToastStyle';
+    style.textContent = `
+      .clinic-network-toast {
+        position: fixed;
+        top: -60px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: #323232;
+        color: white;
+        padding: 10px 24px;
+        border-radius: 8px;
+        font-family: 'Poppins', sans-serif;
+        font-size: 13px;
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.18);
+        z-index: 99999;
+        transition: top 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        pointer-events: none;
+        white-space: nowrap;
+      }
+      .clinic-network-toast.show { top: 20px; }
+      .clinic-network-toast.offline { background: #323232; }
+      .clinic-network-toast.online  { background: #2e7d32; }
+      .clinic-network-toast.warning { background: #b45309; }
+      .clinic-network-toast i { font-size: 15px; }
+    `;
+    document.head.appendChild(style);
+  }
+
+  // 2. Create the toast element (wait for body)
+  function createToast() {
+    if (document.getElementById('clinicNetworkToast')) return;
+    const toast = document.createElement('div');
+    toast.id = 'clinicNetworkToast';
+    toast.className = 'clinic-network-toast';
+    document.body.appendChild(toast);
+    return toast;
+  }
+
+  let toastTimeout;
+  let isToastForced = false;
+
+  function showClinicToast(message, isOnline, forceVisible = false) {
+    const toast = document.getElementById('clinicNetworkToast') || createToast();
+    if (!toast) return;
+
+    clearTimeout(toastTimeout);
+
+    let icon, cls;
+    if (isOnline === true) {
+      icon = 'fa-wifi'; cls = 'online';
+    } else if (isOnline === 'warning') {
+      icon = 'fa-triangle-exclamation'; cls = 'warning';
+    } else {
+      icon = 'fa-cloud-showers-water'; cls = 'offline';
+    }
+
+    toast.innerHTML = `<i class="fa-solid ${icon}"></i> <span>${message}</span>`;
+    toast.className = `clinic-network-toast show ${cls}`;
+    isToastForced = forceVisible;
+
+    if (!forceVisible) {
+      toastTimeout = setTimeout(() => {
+        toast.classList.remove('show');
+        isToastForced = false;
+      }, 3500);
+    }
+  }
+
+  // Expose to window so db.js sync conflict alerts also use this
+  window.showNetworkToast = showClinicToast;
+
+  // 3. Smart status check (mirrors patient side)
+  async function checkClinicStatus() {
+    if (typeof window.getOutboxCount !== 'function') return;
+    const count = await window.getOutboxCount();
+    const isOnline = navigator.onLine;
+
+    if (count > 0) {
+      if (isOnline) {
+        showClinicToast(`Syncing ${count} pending item(s)…`, true, true);
+        if (typeof window.syncOutbox === 'function') window.syncOutbox();
+      } else {
+        showClinicToast(`Offline — ${count} item(s) queued for sync.`, false, true);
+      }
+    } else {
+      if (!isOnline) {
+        if (!isToastForced) showClinicToast('You are offline. Working in offline mode.', false, true);
+      } else if (isToastForced) {
+        showClinicToast('All data synced successfully!', true, false);
+      }
+    }
+  }
+
+  // 4. Event listeners
+  window.addEventListener('offline', () => {
+    showClinicToast('You are offline. Changes will sync when reconnected.', false, true);
+    checkClinicStatus();
+  });
+
+  window.addEventListener('online', () => {
+    showClinicToast('Connection restored. Checking sync status…', true, false);
+    checkClinicStatus();
+  });
+
+  window.addEventListener('focus', () => checkClinicStatus());
+
+  // 5. Poll every 3 seconds (same as patient side)
+  setInterval(checkClinicStatus, 3000);
+
+  // 6. Run once DOM is ready
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => { createToast(); checkClinicStatus(); });
+  } else {
+    // Small delay so body exists
+    setTimeout(() => { createToast(); checkClinicStatus(); }, 50);
+  }
+})();

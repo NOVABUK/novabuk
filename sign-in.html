@@ -18,6 +18,8 @@
       href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Unbounded:wght@200..900&display=swap"
       rel="stylesheet"
     />
+    <link rel="manifest" href="./manifest.json">
+    <meta name="theme-color" content="#35bac9">
     <title>Sign In — NovaBuk</title>
     <script src="https://accounts.google.com/gsi/client" async defer></script>
     <style>
@@ -222,7 +224,6 @@
         </div>
       </div>
     </div>
-    <script src="./script.js"></script>
     <script>
       var API_URL = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1"
         ? "http://localhost:5000/api"
@@ -285,47 +286,136 @@
         el.classList.add("show");
       }
 
-      async function handleGoogleSignIn() {
-          // Initialize Google Identity Services
-          google.accounts.id.initialize({
-            client_id: "670613922043-k4qe1e335cgaaj0qqv4gsk6m2nvnp20v.apps.googleusercontent.com", // Updated with real ID
-            callback: handleCredentialResponse
-          });
-          
-          google.accounts.id.prompt();
+      // ── GOOGLE SIGN-IN ───────────────────────────────────────
+      // Initialize ONCE on page load, never on button click.
+      // Calling initialize() + prompt() on every click causes:
+      //   - "initialize() called multiple times" warning
+      //   - FedCM "only one request outstanding" error
+      //   - AbortError when the previous request is cancelled
+      // ───────────────────────────────────────────────
+      const GOOGLE_CLIENT_ID = "670613922043-k4qe1e335cgaaj0qqv4gsk6m2nvnp20v.apps.googleusercontent.com";
+      let googleInitialized = false;
+      let googlePromptInFlight = false; // prevent double-trigger
+
+      function initGoogleOnce() {
+        if (googleInitialized || typeof google === 'undefined') return;
+        google.accounts.id.initialize({
+          client_id: GOOGLE_CLIENT_ID,
+          callback: handleCredentialResponse,
+          cancel_on_tap_outside: true,
+          itp_support: true,
+          use_fedcm_for_prompt: true,
+        });
+        googleInitialized = true;
       }
 
-      async function handleCredentialResponse(response) {
-          const btn = document.querySelector('.google-btn');
-          const originalText = btn.innerHTML;
-          btn.innerHTML = "Logging in...";
-          btn.disabled = true;
+      function handleGoogleSignIn() {
+        if (!googleInitialized) {
+          initGoogleOnce(); // try one last time
+          if (!googleInitialized) {
+            showBannerError("Google Sign-In is still loading. Please wait 1-2 seconds and try again.");
+            return;
+          }
+        }
 
-          try {
-              const res = await fetch(`${API_URL}/users/google-login`, {
+        if (googlePromptInFlight) return; // ignore double-click
+        googlePromptInFlight = true;
+
+        google.accounts.id.prompt((notification) => {
+          // If the prompt is closed or finishes, we can allow another one
+          if (notification.isNotDisplayed() || notification.isSkippedMoment() || notification.isDismissedMoment()) {
+             googlePromptInFlight = false;
+             // If One Tap is suppressed, fall back to the account chooser popup
+             if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
+               openGooglePopup();
+             }
+          }
+        });
+      }
+
+      // Full popup fallback using OAuth2 Code flow
+      let popupClient;
+      function openGooglePopup() {
+        if (!popupClient) {
+          popupClient = google.accounts.oauth2.initCodeClient({
+            client_id: GOOGLE_CLIENT_ID,
+            scope: 'openid email profile',
+            ux_mode: 'popup',
+            callback: async (codeResponse) => {
+              const btn = document.querySelector('.google-btn');
+              btn.innerHTML = '<img src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg" alt="G" width="18"> Signing in…';
+              btn.disabled = true;
+              try {
+                const res = await fetch(`${API_URL}/users/google-login-code`, {
                   method: 'POST',
                   headers: { 'Content-Type': 'application/json' },
-                  body: JSON.stringify({ idToken: response.credential })
-              });
-
-              const data = await res.json();
-              if (data.success) {
+                  body: JSON.stringify({ code: codeResponse.code })
+                });
+                const data = await res.json();
+                if (data.success) {
                   localStorage.setItem("novabuk_token", data.token);
                   localStorage.setItem("novabuk_user", JSON.stringify(data.user));
                   window.location.href = data.redirectTo || "./app-home.html";
-              } else {
-                  showBannerError(data.message || "Google login failed.");
-                  btn.innerHTML = originalText;
+                } else {
+                  showBannerError(data.message || "Google sign-in failed. Please try again.");
+                  btn.innerHTML = '<img src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg" alt="G" width="18"> Google';
                   btn.disabled = false;
+                }
+              } catch (err) {
+                showBannerError("Network error. Please try again.");
+                btn.innerHTML = '<img src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg" alt="G" width="18"> Google';
+                btn.disabled = false;
               }
-          } catch (err) {
-              showBannerError("Network error. Please try again.");
-              btn.innerHTML = originalText;
-              btn.disabled = false;
-          }
+            },
+          });
+        }
+        popupClient.requestCode();
       }
-    </script>
 
-    
+      async function handleCredentialResponse(response) {
+        if (!response.credential) {
+          showBannerError("Google sign-in was cancelled. Please try again.");
+          return;
+        }
+        const btn = document.querySelector('.google-btn');
+        const orig = btn.innerHTML;
+        btn.innerHTML = '<img src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg" alt="G" width="18"> Signing in…';
+        btn.disabled = true;
+        try {
+          const res = await fetch(`${API_URL}/users/google-login`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ idToken: response.credential })
+          });
+          const data = await res.json();
+          if (data.success) {
+            localStorage.setItem("novabuk_token", data.token);
+            localStorage.setItem("novabuk_user", JSON.stringify(data.user));
+            window.location.href = data.redirectTo || "./app-home.html";
+          } else {
+            showBannerError(data.message || "Google login failed. Please try again.");
+            btn.innerHTML = orig;
+            btn.disabled = false;
+          }
+        } catch (err) {
+          showBannerError("Network error. Please check your connection.");
+          btn.innerHTML = orig;
+          btn.disabled = false;
+        }
+      }
+
+      // Auto-init as soon as the GSI script is ready
+      window.addEventListener('load', () => {
+        const poll = setInterval(() => {
+          if (typeof google !== 'undefined') {
+            clearInterval(poll);
+            initGoogleOnce();
+          }
+        }, 100);
+        setTimeout(() => clearInterval(poll), 5000);
+      });
+</script>
+    <script src="./db.js"></script>
+    <script src="./script.js"></script>
   </body>
 </html>

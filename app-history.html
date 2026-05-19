@@ -372,6 +372,7 @@
       </div>
     </div>
 
+    <script src="./db.js"></script>
     <script src="./script.js"></script>
     <script>
       var API_URL = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1"
@@ -399,7 +400,7 @@
       async function loadVisits() {
         document.getElementById("visitsList").innerHTML = '<div class="spinner"></div>';
         try {
-          const res  = await fetch(`${API_URL}/visits/my`, {
+          const res  = await smartFetch(`${API_URL}/visits/my`, {
             headers: { Authorization: `Bearer ${token}` },
             credentials: 'include'
           });
@@ -508,7 +509,7 @@
         document.getElementById("confirmCancelBtn").disabled = true;
 
         try {
-          const res  = await fetch(`${API_URL}/visits/${cancellingId}/cancel`, {
+          const res  = await smartFetch(`${API_URL}/visits/${cancellingId}/cancel`, {
             method: "PATCH",
             headers: { Authorization: `Bearer ${token}` }
           });

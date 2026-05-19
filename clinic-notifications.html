@@ -151,15 +151,18 @@
     </div>
   </div>
 
+  <script src="./db.js"></script>
   <script src="./clinic-shared.js"></script>
   <script>
     async function loadNotifications() {
       try {
-        const res = await clinicFetch(`${API_BASE}/notifications`);
+        const res = await clinicFetch(`${CLINIC_API}/notifications`);
         const data = await res.json();
+        if (!data.success) throw new Error(data.message || "Server error");
         renderNotifications(data.data || []);
       } catch (err) {
-        document.getElementById("notifList").innerHTML = `<div class="empty-state">Failed to load notifications.</div>`;
+        console.error("Notifications error:", err);
+        document.getElementById("notifList").innerHTML = `<div class="empty-state"><i class="fa-regular fa-bell-slash" style="font-size:32px; margin-bottom:12px; display:block; opacity:0.4;"></i><p>Failed to load notifications.</p><button onclick="loadNotifications()" style="margin-top:12px; padding:8px 20px; background:var(--teal); color:white; border:none; border-radius:8px; cursor:pointer; font-family:'Poppins',sans-serif; font-size:13px;">Retry</button></div>`;
       }
     }
 
@@ -272,21 +275,19 @@
 
     async function handleNotifClick(id, link) {
       try {
-        await clinicFetch(`${API_BASE}/notifications/${id}/read`, { method: 'PATCH' });
-        if (link) {
-          window.location.href = link;
-        } else {
-          loadNotifications();
-          updateNotificationBadge();
-        }
-      } catch (e) {
-        if (link) window.location.href = link;
+        await clinicFetch(`${CLINIC_API}/notifications/${id}/read`, { method: 'PATCH' });
+      } catch (e) { /* silent — marking read is non-critical */ }
+      if (link) {
+        window.location.href = link;
+      } else {
+        loadNotifications();
+        updateNotificationBadge();
       }
     }
 
     async function markAllRead() {
       try {
-        await clinicFetch(`${API_BASE}/notifications/mark-all-read`, { method: 'PATCH' });
+        await clinicFetch(`${CLINIC_API}/notifications/mark-all-read`, { method: 'PATCH' });
         loadNotifications();
         updateNotificationBadge();
       } catch (e) { }
