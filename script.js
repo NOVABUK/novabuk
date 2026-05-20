@@ -142,28 +142,28 @@ const icon = profileBtn ? profileBtn.querySelector("i") : null;
     // =====================================================================
     
     // 4. Inject mobile-only bottom utility links (Settings & Logout)
-    const ul = navMenu.querySelector("ul");
-    if (ul && !ul.querySelector(".mobile-only-link")) {
-      // Add a subtle divider
-      const divider = document.createElement("li");
-      divider.className = "mobile-only-link";
-      divider.style.height = "1px";
-      divider.style.background = "rgba(53, 186, 201, 0.15)";
-      divider.style.margin = "10px 1px";
-      ul.appendChild(divider);
+    // const ul = navMenu.querySelector("ul");
+    // if (ul && !ul.querySelector(".mobile-only-link")) {
+    //   // Add a subtle divider
+    //   const divider = document.createElement("li");
+    //   divider.className = "mobile-only-link";
+    //   divider.style.height = "1px";
+    //   divider.style.background = "rgba(53, 186, 201, 0.15)";
+    //   divider.style.margin = "100px 1px";
+    //   ul.appendChild(divider);
 
-      // Settings
-      const settingsLi = document.createElement("li");
-      settingsLi.className = "mobile-only-link";
-      settingsLi.innerHTML = `<a href="./app-setting.html?tab=privacy"><i class="fa-solid fa-gear"></i> <span>Settings</span></a>`;
-      ul.appendChild(settingsLi);
+    //   // Settings
+    //   const settingsLi = document.createElement("li");
+    //   settingsLi.className = "mobile-only-link";
+    //   settingsLi.innerHTML = `<a href="./app-setting.html?tab=privacy"><i class="fa-solid fa-gear"></i> <span>Settings</span></a>`;
+    //   ul.appendChild(settingsLi);
 
-      // Logout
-      const logoutLi = document.createElement("li");
-      logoutLi.className = "mobile-only-link";
-      logoutLi.innerHTML = `<a href="#" onclick="handleMenuSelect('logout')"><i class="fa-solid fa-right-from-bracket" style="color: #ff7675 !important;"></i> <span style="color: #ff7675;">Logout</span></a>`;
-      ul.appendChild(logoutLi);
-    }
+    //   // Logout
+    //   const logoutLi = document.createElement("li");
+    //   logoutLi.className = "mobile-only-link";
+    //   logoutLi.innerHTML = `<a href="#" onclick="handleMenuSelect('logout')"><i class="fa-solid fa-right-from-bracket" style="color: #ff7675 !important;"></i> <span style="color: #ff7675;">Logout</span></a>`;
+    //   ul.appendChild(logoutLi);
+    // }
     
     // =====================================================================
     // =====================================================================
@@ -642,11 +642,11 @@ window.refreshNavAvatar = function () {
             // No pending items. 
             if (!isOnline) {
                 // Just offline.
-                if (!isToastForced) showToast("You are offline. Working in offline mode.", false, true);
+                if (!isToastForced) showToast("working in offline mode.", false, true);
             } else if (isToastForced) {
                 // We were forced visible (e.g. syncing), but now count is 0 and we are online!
                 // So we are officially "Back online" and synced!
-                showToast("All data successfully synced!", true, false);
+                showToast("", true, false);
             }
         }
     }
@@ -654,7 +654,7 @@ window.refreshNavAvatar = function () {
     // 3. Listen for Explicit Network Changes
     window.addEventListener('offline', () => checkStatus());
     window.addEventListener('online', () => {
-        showToast("Connection restored. Checking sync status...", true, false);
+        showToast("Online", true, false);
         checkStatus();
     });
 

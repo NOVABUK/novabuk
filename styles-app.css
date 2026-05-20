@@ -4,6 +4,13 @@
   box-sizing: border-box;
 }
 
+body,
+html {
+  overflow-x: hidden;
+  height: auto;
+  /* background: linear-gradient(130deg, #7ecad7, #35bac9); */
+}
+
 /* Transition variables and gentle animations */
 :root {
   --trans-fast: 0.16s;
@@ -45,8 +52,8 @@
   margin: 14px;
   text-decoration: none;
   transition:
-  color 0.3s ease,
-  transform 0.3s ease;
+    color 0.3s ease,
+    transform 0.3s ease;
 }
 
 /* Nav toggle (hamburger) and responsive nav behavior */
@@ -187,6 +194,10 @@
   padding: 0px 10px;
 }
 
+#optNav {
+  display: none;
+}
+
 .nav-buttons ul li a,
 .user-profile {
   border: 1px solid #797979;
@@ -301,6 +312,7 @@
 main {
   background-color: #7ecad7;
   width: 100%;
+  height: auto;
   font-family: "Poppins", sans-serif;
 }
 
@@ -389,7 +401,7 @@ main {
 @media (max-width: 768px) {
   .main-info {
     margin: 0px 0px 0px 10px;
-    padding: 5px 0px 0px 5px;
+    padding: 5px 0px 0px 35px;
     flex-direction: column;
     align-items: flex-start;
   }
@@ -421,6 +433,7 @@ main {
 
   .main-body {
     width: 100%;
+    height: auto;
   }
 
   .box-one {
@@ -451,7 +464,7 @@ main {
     width: auto;
     margin-top: 5px;
   }
-  
+
   .cta-box a {
     padding: 8px 14px;
     font-size: 12px;
@@ -618,7 +631,8 @@ main {
     /* gap: 50px; */
     justify-content: space-between;
     align-items: center;
-    z-index: 10001 !important; /* Forces the navbar and its drawer to be completely above the backdrop (9998) */
+    z-index: 10001 !important;
+    /* Forces the navbar and its drawer to be completely above the backdrop (9998) */
   }
 
   .header .navbar-home {
@@ -642,6 +656,17 @@ main {
     order: 1;
   }
 
+  #optNav {
+    display: block;
+  }
+
+  .profile-opt {
+    display: flex;
+    align-items: flex-end;
+    position: absolute;
+    bottom: 0;
+  }
+
   .navMenu.open {
 
     display: block !important;
@@ -663,8 +688,9 @@ main {
     left: 0 !important;
     bottom: 0 !important;
     width: 280px !important;
-    height: 100% !important;
-    background: #f7fcfe !important; /* Lighter version of the patient background color */
+    height: auto !important;
+    background: #f7fcfe !important;
+    /* Lighter version of the patient background color */
     box-shadow: 4px 0 25px rgba(0, 0, 0, 0.15) !important;
     transform: translateX(-100%);
     transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
@@ -1263,7 +1289,7 @@ main {
   /* height: 24px; */
   display: flex;
   align-items: center;
-  margin: 5px ;
+  margin: 5px;
   justify-content: space-between;
   opacity: 1;
 }
@@ -1428,7 +1454,7 @@ main {
     width: 100%;
   }
 
-  .login-chec label span a{
+  .login-chec label span a {
     font-size: 14px;
     width: 100%;
   }
@@ -2202,47 +2228,51 @@ main {
 
 /* ── NETWORK TOAST (GLOBAL ONLINE/OFFLINE INDICATOR) ───────────────────────── */
 .network-toast {
-    position: fixed;
-    top: -60px; /* Hidden by default */
-    left: 50%;
-    transform: translateX(-50%);
-    background: #323232;
-    color: white;
-    padding: 10px 24px;
-    border-radius: 8px;
-    font-family: 'Poppins', sans-serif;
-    font-size: 13px;
-    font-weight: 500;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    z-index: 9999;
-    transition: top 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    pointer-events: none;
+  position: fixed;
+  top: -60px;
+  /* Hidden by default */
+  left: 50%;
+  transform: translateX(-50%);
+  background: #323232;
+  color: white;
+  padding: 10px 24px;
+  border-radius: 8px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: 9999;
+  transition: top 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  pointer-events: none;
 }
 
 .network-toast.show {
-    top: 20px; /* Slide down into view */
+  top: 20px;
+  /* Slide down into view */
 }
 
 .network-toast.offline {
-    background: #323232; /* Standard dark grey for offline */
+  background: #323232;
+  /* Standard dark grey for offline */
 }
 
 .network-toast.online {
-    background: #2e7d32; /* Google-style green for back online */
+  background: #2e7d32;
+  /* Google-style green for back online */
 }
 
 .network-toast i {
-    font-size: 16px;
+  font-size: 16px;
 }
 
 @media (max-width: 1023px) {
-    .sync-badge {
-        padding: 4px 8px;
-        font-size: 10px;
-    }
+  .sync-badge {
+    padding: 4px 8px;
+    font-size: 10px;
+  }
 }
 
 /* ================================================================
@@ -2335,11 +2365,13 @@ main {
 .nav-backdrop {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.55); /* Reduced light/dimmed background */
+  background: rgba(0, 0, 0, 0.55);
+  /* Reduced light/dimmed background */
   opacity: 0;
   visibility: hidden;
   transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  z-index: 9998; /* Directly underneath the slideout menu drawer */
+  z-index: 9998;
+  /* Directly underneath the slideout menu drawer */
   backdrop-filter: blur(2px);
   -webkit-backdrop-filter: blur(2px);
 }
@@ -2350,6 +2382,7 @@ main {
 }
 
 @media (max-width: 1023px) {
+
   /* Inner User Block styling for mobile drawer */
   .mobile-nav-user-block {
     display: flex;
@@ -2490,4 +2523,4 @@ main {
   .mobile-only-link {
     display: block !important;
   }
-}
+}
