@@ -121,7 +121,7 @@ const icon = profileBtn ? profileBtn.querySelector("i") : null;
 
   // 3. Add beautiful icons next to the navigation links inside the drawer
   if (navMenu) {
-    const links = navMenu.querySelectorAll("ul li a");
+    const links = navMenu.querySelectorAll(".nav-menu");
     const icons = {
       "Home": '<i class="fa-solid fa-house"></i>',
       "Symptoms Logging": '<i class="fa-solid fa-clipboard-list"></i>',
