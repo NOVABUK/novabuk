@@ -584,8 +584,8 @@ window.refreshNavAvatar = function () {
   const isAuthPage = [
     "sign-in", "sign-up", "forgot-password",
     "reset-password", "send-email",
-    "index", "about", "services", "contact","data-privacy",
-    "blog", "blog-dynamic",
+    "index", "about", "services", "contact","data-privacy","terms",
+    "blog", "blog-dynamic"
   ].some((p) => path.includes(p)) || path === "/" || path.endsWith("/");
 
   if (!token && !isAuthPage) {

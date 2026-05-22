@@ -1090,7 +1090,7 @@ main {
   align-items: center;
   justify-content: space-around;
   /* opacity: 1; */
-  padding: 10px 60px;
+  /* padding: 10px 60px; */
   background: rgba(0, 0, 255, 0.007);
 }
 
@@ -1187,6 +1187,7 @@ main {
   font-size: 12px;
 }
 
+
 .sign-input {
   display: flex;
   flex-direction: column;
@@ -1204,7 +1205,7 @@ main {
   display: flex;
   flex-direction: column;
   width: 100%;
-  /* height: 77px; */
+  height: 77px;
   opacity: 1;
   gap: 15px;
   margin-bottom: 30px;
@@ -1491,12 +1492,14 @@ main {
 
 /* SIGN UP */
 .signup-cont {
-  /* background-image: url(./images/signup-banner.jpg); */
-  /* height: 120vh; */
+  background-image: url(./images/signup-banner.jpg);
+  height: 400vh;
   background-size: cover;
   width: 100%;
 }
-
+.signup-input{
+  padding: 20px 0;
+}
 .signup-check input[type="radio"] {
   display: none;
   cursor: pointer;
