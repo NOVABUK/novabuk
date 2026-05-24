@@ -552,3 +552,11 @@ setInterval(updateNotificationBadge, 30000);
     setTimeout(() => { createToast(); checkClinicStatus(); }, 50);
   }
 })();
+// ── REGISTER SERVICE WORKER FOR CLINIC PAGES ──────────────────
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./sw.js')
+      .then((reg) => console.log('[Service Worker] Registered on clinic page!', reg))
+      .catch((err) => console.log('[Service Worker] Clinic registration failed:', err));
+  });
+}
