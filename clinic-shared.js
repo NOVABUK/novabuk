@@ -521,7 +521,7 @@ setInterval(updateNotificationBadge, 30000);
       }
     } else {
       if (!isOnline) {
-        if (!isToastForced) showClinicToast('You are offline. Working in offline mode.', false, true);
+        if (!isToastForced) showClinicToast('You are offline.', false, true);
       } else if (isToastForced) {
         showClinicToast('All data synced successfully!', true, false);
       }
@@ -530,7 +530,7 @@ setInterval(updateNotificationBadge, 30000);
 
   // 4. Event listeners
   window.addEventListener('offline', () => {
-    showClinicToast('You are offline. Changes will sync when reconnected.', false, true);
+    showClinicToast('You are offline.', false, true);
     checkClinicStatus();
   });
 

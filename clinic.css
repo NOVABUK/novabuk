@@ -414,7 +414,9 @@ header {
 .staff-dropdown-item.danger {
     color: #e53e3e;
 }
-
+.clinic-network-toast.show,.clinic-network-toast.offline, .clinic-network-toast.online{
+    top:40px
+}
 /* ============================================================
     CONTENT AREA
     padding-top gives breathing room below topbar.

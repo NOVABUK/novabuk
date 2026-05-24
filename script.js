@@ -642,7 +642,7 @@ window.refreshNavAvatar = function () {
             // No pending items. 
             if (!isOnline) {
                 // Just offline.
-                if (!isToastForced) showToast("working in offline mode.", false, true);
+                if (!isToastForced) showToast("offline.", false, true);
             } else if (isToastForced) {
                 // We were forced visible (e.g. syncing), but now count is 0 and we are online!
                 // So we are officially "Back online" and synced!

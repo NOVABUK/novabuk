@@ -2324,7 +2324,13 @@ main {
    NOVABUK — PREMIUM DYNAMIC BOTTOM MOBILE NAVIGATION BAR
    ================================================================ */
 @media (max-width: 768px) {
-
+  .network-toast{
+    top: 40px
+  }
+  .network-toast.show {
+    top: 40px;
+    /* Slide down into view */
+  }
   /* Make sure the hamburger toggle icon is visible on mobile */
   .nav-toggle,
   #navToggle {
