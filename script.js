@@ -64,12 +64,142 @@ function isClinicOpenNow(clinic) {
 
 const profileBtn = document.getElementById("userProfileBtn");
 const dropdownMenu = document.getElementById("settingsDropdown");
-// Added a check here to prevent the 'querySelector' error if button is missing
 const icon = profileBtn ? profileBtn.querySelector("i") : null;
+
+// ── MOBILE SIDEBAR DRAWER AND BACKDROP INITIALIZATION ──
+(function initSidebarDrawer() {
+  // 1. Create backdrop overlay dynamically if not exists
+  let backdrop = document.querySelector(".nav-backdrop");
+  if (!backdrop) {
+    backdrop = document.createElement("div");
+    backdrop.className = "nav-backdrop";
+    document.body.appendChild(backdrop);
+    
+    // Backdrop click collapses the drawer
+    backdrop.addEventListener("click", () => {
+      document.querySelectorAll(".nav-menu.open").forEach(menu => {
+        menu.classList.remove("open");
+        const navBtn = menu.closest('.navbar').querySelector("#navToggle");
+        if (navBtn) {
+          navBtn.style.opacity = "1";
+          navBtn.style.pointerEvents = "auto";
+        }
+      });
+      backdrop.classList.remove("show");
+      document.body.style.overflow = "";
+    });
+  }
+
+  // 2. Prepend user details block inside mobile nav menu
+  const navMenu = document.getElementById("navMenu");
+  if (navMenu && !navMenu.querySelector(".mobile-nav-user-block")) {
+    const user = JSON.parse(localStorage.getItem("novabuk_user") || "{}");
+    if (user.fullName) {
+      const userBlock = document.createElement("div");
+      userBlock.className = "mobile-nav-user-block";
+      
+      let avatarHtml = "";
+      if (user.avatarUrl) {
+        avatarHtml = `<img src="${user.avatarUrl}" alt="avatar" />`;
+      } else {
+        avatarHtml = `<span>${user.fullName.trim().charAt(0).toUpperCase()}</span>`;
+      }
+
+      userBlock.innerHTML = `
+        <div class="mobile-nav-avatar">${avatarHtml}</div>
+        <div class="mobile-nav-user-info">
+          <div class="mobile-nav-name">${user.fullName}</div>
+          <div class="mobile-nav-email">${user.email || ''}</div>
+        </div>
+        <button class="drawer-close-btn" onclick="document.querySelector('.nav-backdrop') && document.querySelector('.nav-backdrop').click()" aria-label="Close menu">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      `;
+      navMenu.insertBefore(userBlock, navMenu.firstChild);
+    }
+  }
+
+  // 3. Add beautiful icons next to the navigation links inside the drawer
+  if (navMenu) {
+    const links = navMenu.querySelectorAll(".nav-menu");
+    const icons = {
+      "Home": '<i class="fa-solid fa-house"></i>',
+      "Symptoms Logging": '<i class="fa-solid fa-clipboard-list"></i>',
+      "Clinic Directory": '<i class="fa-solid fa-hospital"></i>',
+      "History": '<i class="fa-solid fa-clock-rotate-left"></i>'
+    };
+    links.forEach(link => {
+      const text = link.textContent.trim();
+      if (icons[text] && !link.querySelector("i")) {
+        link.innerHTML = `${icons[text]} <span>${text}</span>`;
+      }
+    });
+
+    // =====================================================================
+    // =====================================================================
+    // ⬇️ SETTINGS AND LOGOUT LINKS ARE INJECTED HERE ⬇️
+    // =====================================================================
+    // =====================================================================
+    
+    // 4. Inject mobile-only bottom utility links (Settings & Logout)
+    // const ul = navMenu.querySelector("ul");
+    // if (ul && !ul.querySelector(".mobile-only-link")) {
+    //   // Add a subtle divider
+    //   const divider = document.createElement("li");
+    //   divider.className = "mobile-only-link";
+    //   divider.style.height = "1px";
+    //   divider.style.background = "rgba(53, 186, 201, 0.15)";
+    //   divider.style.margin = "100px 1px";
+    //   ul.appendChild(divider);
+
+    //   // Settings
+    //   const settingsLi = document.createElement("li");
+    //   settingsLi.className = "mobile-only-link";
+    //   settingsLi.innerHTML = `<a href="./app-setting.html?tab=privacy"><i class="fa-solid fa-gear"></i> <span>Settings</span></a>`;
+    //   ul.appendChild(settingsLi);
+
+    //   // Logout
+    //   const logoutLi = document.createElement("li");
+    //   logoutLi.className = "mobile-only-link";
+    //   logoutLi.innerHTML = `<a href="#" onclick="handleMenuSelect('logout')"><i class="fa-solid fa-right-from-bracket" style="color: #ff7675 !important;"></i> <span style="color: #ff7675;">Logout</span></a>`;
+    //   ul.appendChild(logoutLi);
+    // }
+    
+    // =====================================================================
+    // =====================================================================
+    // ⬆️ SETTINGS AND LOGOUT LINKS INJECTION ENDS HERE ⬆️
+    // =====================================================================
+    // =====================================================================
+  }
+})();
 
 if (profileBtn && dropdownMenu && icon) {
   profileBtn.addEventListener("click", (e) => {
     e.stopPropagation();
+    
+    // 1. Automatically close any open mobile navigation menus before opening settings
+    document.querySelectorAll(".nav-menu.open").forEach(menu => {
+      menu.classList.remove("open");
+      const navBtn = menu.closest('.navbar').querySelector("#navToggle");
+      if (navBtn) {
+        navBtn.style.opacity = "1";
+        navBtn.style.pointerEvents = "auto";
+      }
+    });
+    const loggedOutNav = document.getElementById("navMenu");
+    if (loggedOutNav && loggedOutNav.classList.contains("open")) {
+      loggedOutNav.classList.remove("open");
+      loggedOutNav.style.display = "none";
+      const loggedOutIcon = document.querySelector("#navToggleIcon i");
+      if (loggedOutIcon) {
+        loggedOutIcon.classList.add("fa-bars");
+        loggedOutIcon.classList.remove("fa-xmark");
+      }
+    }
+    const backdrop = document.querySelector(".nav-backdrop");
+    if (backdrop) backdrop.classList.remove("show");
+    document.body.style.overflow = "";
+
     dropdownMenu.classList.toggle("show");
     icon.classList.toggle("fa-angle-down");
     icon.classList.toggle("fa-angle-up");
@@ -80,14 +210,12 @@ if (profileBtn && dropdownMenu && icon) {
 // 1. Handle Active Link Highlighting (Fixes the Redirect/Active issue)
 function updateActiveLinks() {
   const allNavLinks = document.querySelectorAll(".nav-menu a");
-  // Get current filename (e.g., 'about.html')
   const currentPath = window.location.pathname.split("/").pop() || "index.html";
 
   allNavLinks.forEach((link) => {
     const linkHref = link.getAttribute("href");
     if (!linkHref) return;
     
-    // Clean the href for comparison
     const cleanHref = linkHref.replace("./", "");
     
     if (cleanHref === currentPath) {
@@ -100,27 +228,43 @@ function updateActiveLinks() {
 
 // 2. Mobile Toggle Logic (Handles both Navbars correctly)
 document.addEventListener("click", (e) => {
-  // Check if we clicked the toggle button or an icon inside it
   const toggleBtn = e.target.closest("#navToggle");
   
   if (toggleBtn) {
     e.preventDefault();
     e.stopPropagation();
+
+    // 2. Automatically close user settings dropdown menu before opening mobile nav
+    const dropdownMenu = document.getElementById("settingsDropdown");
+    if (dropdownMenu && dropdownMenu.classList.contains("show")) {
+      dropdownMenu.classList.remove("show");
+      const profileBtn = document.getElementById("userProfileBtn");
+      const icon = profileBtn ? profileBtn.querySelector("i") : null;
+      if (icon) {
+        icon.classList.add("fa-angle-down");
+        icon.classList.remove("fa-angle-up");
+      }
+    }
     
-    // Find the specific navbar this button belongs to
     const parentNav = toggleBtn.closest('.navbar');
     const navMenu = parentNav.querySelector(".nav-menu");
     const icon = toggleBtn.querySelector("i");
+    const backdrop = document.querySelector(".nav-backdrop");
 
     if (navMenu) {
       navMenu.classList.toggle("open");
       
-      // Update the icon specifically for this button
       if (icon) {
         if (navMenu.classList.contains("open")) {
-          icon.classList.replace("fa-bars", "fa-times");
+          if (backdrop) backdrop.classList.add("show");
+          document.body.style.overflow = "hidden";
+          toggleBtn.style.opacity = "0";
+          toggleBtn.style.pointerEvents = "none";
         } else {
-          icon.classList.replace("fa-times", "fa-bars");
+          if (backdrop) backdrop.classList.remove("show");
+          document.body.style.overflow = "";
+          toggleBtn.style.opacity = "1";
+          toggleBtn.style.pointerEvents = "auto";
         }
       }
     }
@@ -128,9 +272,27 @@ document.addEventListener("click", (e) => {
     // Close any open menus if clicking outside
     document.querySelectorAll(".nav-menu.open").forEach(menu => {
       menu.classList.remove("open");
-      const navIcon = menu.closest('.navbar').querySelector("#navToggle i");
-      if (navIcon) navIcon.classList.replace("fa-times", "fa-bars");
+      const navBtn = menu.closest('.navbar').querySelector("#navToggle");
+      if (navBtn) {
+        navBtn.style.opacity = "1";
+        navBtn.style.pointerEvents = "auto";
+      }
     });
+    const backdrop = document.querySelector(".nav-backdrop");
+    if (backdrop) backdrop.classList.remove("show");
+    document.body.style.overflow = "";
+
+    // 3. Automatically close user settings dropdown if clicked outside
+    const dropdownMenu = document.getElementById("settingsDropdown");
+    const profileBtn = document.getElementById("userProfileBtn");
+    if (dropdownMenu && dropdownMenu.classList.contains("show") && profileBtn && !profileBtn.contains(e.target) && !dropdownMenu.contains(e.target)) {
+      dropdownMenu.classList.remove("show");
+      const icon = profileBtn.querySelector("i");
+      if (icon) {
+        icon.classList.add("fa-angle-down");
+        icon.classList.remove("fa-angle-up");
+      }
+    }
   }
 });
 
@@ -300,11 +462,16 @@ const checkbox = document.getElementById("agreeTerms");
 const signUpBtn = document.getElementById("signupBtn");
 
 if (checkbox && signUpBtn) {
+  // Set initial state based on checkbox
+  signUpBtn.disabled = !checkbox.checked;
+
   checkbox.addEventListener("change", () => {
     if (checkbox.checked) {
       signUpBtn.classList.add("pop");
+      signUpBtn.disabled = false;
     } else {
       signUpBtn.classList.remove("pop");
+      signUpBtn.disabled = true;
     }
   });
 }
@@ -357,7 +524,7 @@ window.refreshNavAvatar = function () {
   // silently fetch it from the API and update localStorage + navbar
   const token = localStorage.getItem("novabuk_token");
   if (token && user.fullName && !user.avatarUrl) {
-    fetch(`${API_URL}/users/me`, {
+    smartFetch(`${API_URL}/users/me`, {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((r) => r.json())
@@ -417,14 +584,99 @@ window.refreshNavAvatar = function () {
   const isAuthPage = [
     "sign-in", "sign-up", "forgot-password",
     "reset-password", "send-email",
-    "index", "about", "services", "contact","data-privacy",
-    "blog", "blog-dynamic",
+    "index", "about", "services", "contact","data-privacy","terms",
+    "blog", "blog-dynamic"
   ].some((p) => path.includes(p)) || path === "/" || path.endsWith("/");
 
   if (!token && !isAuthPage) {
     window.location.href = "./index.html";
   }
-})(); // Fixed: Added () to execute the function
+})(); 
+
+(function initNetworkUI() {
+    let toastTimeout;
+    let isToastForced = false;
+
+    // 1. Create the toast element
+    const toast = document.createElement('div');
+    toast.id = 'networkToast';
+    toast.className = 'network-toast';
+    document.body.appendChild(toast);
+
+    function showToast(message, isOnline, forceVisible = false) {
+        clearTimeout(toastTimeout);
+        toast.innerHTML = isOnline 
+            ? `<i class="fa-solid fa-wifi"></i> <span>${message}</span>`
+            : `<i class="fa-solid fa-cloud-showers-water"></i> <span>${message}</span>`;
+        
+        toast.className = `network-toast show ${isOnline ? 'online' : 'offline'}`;
+        isToastForced = forceVisible;
+
+        // If not forced to stay visible, hide after 3.5 seconds
+        if (!forceVisible) {
+            toastTimeout = setTimeout(() => {
+                toast.classList.remove('show');
+                isToastForced = false;
+            }, 3500);
+        }
+    }
+    window.showNetworkToast = showToast;
+
+    // 2. Smart Polling for Outbox Status
+    async function checkStatus() {
+        if (typeof window.getOutboxCount !== 'function') return;
+        
+        const count = await window.getOutboxCount();
+        const isOnline = navigator.onLine;
+
+        if (count > 0) {
+            if (isOnline) {
+                // If we are online but have pending items, we must be trying to sync them
+                showToast(`Syncing ${count} pending item(s)...`, true, true);
+                if (typeof window.syncOutbox === 'function') window.syncOutbox();
+            } else {
+                // Offline with pending items
+                showToast(`Offline. ${count} item(s) waiting to sync.`, false, true);
+            }
+        } else {
+            // No pending items. 
+            if (!isOnline) {
+                // Just offline.
+                if (!isToastForced) showToast("offline.", false, true);
+            } else if (isToastForced) {
+                // We were forced visible (e.g. syncing), but now count is 0 and we are online!
+                // So we are officially "Back online" and synced!
+                showToast("", true, false);
+            }
+        }
+    }
+
+    // 3. Listen for Explicit Network Changes
+    window.addEventListener('offline', () => checkStatus());
+    window.addEventListener('online', () => {
+        showToast("Online", true, false);
+        checkStatus();
+    });
+
+    // Start polling status every 3 seconds to catch edge cases
+    setInterval(checkStatus, 3000);
+    checkStatus();
+
+    // 4. Exit Guard: Warning if trying to leave with pending data
+    window.addEventListener('beforeunload', (e) => {
+        if (typeof window.getOutboxCount === 'function') {
+            window.getOutboxCount().then(count => {
+                if (count > 0) {
+                    e.preventDefault();
+                    e.returnValue = 'You have unsaved medical data. Please wait for it to sync before leaving.';
+                }
+            });
+        }
+    });
+
+    // 5. Sync whenever window gets focus
+    window.addEventListener('focus', () => checkStatus());
+})();
 
 // ── SHARED INDEX/PUBLIC PAGE NAVBAR SYNC ─────────────────────
 // Handles the auth-aware navbar on index, about, services, blog, contact
@@ -560,7 +812,7 @@ window.addEventListener("storage", function (e) {
   // ── Fetch unread count (badge only) ─────────────────
   async function fetchUnreadCount() {
     try {
-      const res = await fetch(
+      const res = await smartFetch(
         `${API_URL}/notifications/unread-count`,
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -584,7 +836,7 @@ window.addEventListener("storage", function (e) {
   async function loadNotifications() {
     list.innerHTML = '<div class="nb-empty">Loading…</div>';
     try {
-      const res = await fetch(
+      const res = await smartFetch(
         `${API_URL}/notifications`,
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -644,7 +896,7 @@ window.addEventListener("storage", function (e) {
   // ── Mark single as read ──────────────────────────────
   async function markRead(id) {
     try {
-      await fetch(
+      await smartFetch(
         `${API_URL}/notifications/${id}/read`,
         {
           method: "PATCH",
@@ -657,7 +909,7 @@ window.addEventListener("storage", function (e) {
   // ── Mark all as read ─────────────────────────────────
   async function markAllRead() {
     try {
-      await fetch(
+      await smartFetch(
         `${API_URL}/notifications/mark-all-read`,
         {
           method: "PATCH",
@@ -787,10 +1039,10 @@ async function populateDropdown() {
   // ── Fetch pending visits count + last symptom in parallel ──
   try {
     const [visitsRes, symptomsRes] = await Promise.all([
-      fetch(`${API_URL}/visits/my?limit=1`, {
+      smartFetch(`${API_URL}/visits/my?limit=1`, {
         headers: { Authorization: `Bearer ${token}` },
       }),
-      fetch(`${API_URL}/symptoms?limit=1`, {
+      smartFetch(`${API_URL}/symptoms?limit=1`, {
         headers: { Authorization: `Bearer ${token}` },
       }),
     ]);
@@ -841,4 +1093,15 @@ async function populateDropdown() {
   } catch (e) {
     // Silent fail — user block already populated from localStorage
   }
+}
+
+
+
+// Register the Service Worker for Offline Support
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+     navigator.serviceWorker.register('./sw.js')
+      .then((reg) => console.log('[Service Worker] Registered!', reg))
+      .catch((err) => console.log('[Service Worker] Registration failed:', err));
+  });
 }

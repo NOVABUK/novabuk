@@ -6,7 +6,10 @@
     <meta name="robots" content="noindex, nofollow">
     <title>Patient Dashboard | NovaBuk</title>
     <link rel="icon" sizes="180x180" href="./images/image 19.png">
+    <link rel="manifest" href="./manifest.json">
+    <meta name="theme-color" content="#35bac9">
     <link rel="stylesheet" href="./styles-app.css" />
+    <!-- <link rel="stylesheet" href="./styles.css"> -->
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
@@ -45,6 +48,12 @@
             <li><a href="./app-clinics.html">Clinic Directory</a></li>
             <li><a href="./app-history.html">History</a></li>
           </ul>
+          <div class="profile-opt" id="optNav">
+            <ul>
+              <li><a href="./app-setting.html?tab=privacy"><i class="fa-solid fa-gear"></i> <span>Settings</span></a></li>
+              <li><a href="#" onclick="handleMenuSelect('logout')"><i class="fa-solid fa-right-from-bracket" style="color: #ff7675 !important;"></i> <span style="color: #ff7675;">Logout</span></a></li>
+            </ul>
+          </div>
         </div>
         <div class="nav-buttons navbtns">
           <ul>
@@ -118,11 +127,15 @@
         <div class="id-card-mini" id="novaBukIdCard" style="display:none; margin-top:20px; background:rgba(255,255,255,0.12); border:1px solid rgba(255,255,255,0.25); border-radius:14px; padding:14px 18px; backdrop-filter:blur(8px);">
             <div style="display:flex; justify-content:space-between; align-items:flex-start;">
               <div>
-                <p style="margin:0; font-size:10px; color:rgba(255,255,255,0.65); text-transform:uppercase; letter-spacing:1.2px; font-weight:600;">NovaBuk Patient ID</p>
+                <div class="show-Nb-id" style="display: flex; gap: 2em;align-items: center;">
+                  <p style="margin:0; font-size:10px; color:rgba(255,255,255,0.65); text-transform:uppercase; letter-spacing:1.2px; font-weight:600;">NovaBuk Patient ID</p>
+                <button id="toggleIdVisibility" style="background:none; border:none; color:white; cursor:pointer; opacity:0.7; "><i class="fa-solid fa-eye" id="eyeIcon"></i></button>
+                </div>
+
                 <div style="display:flex; align-items:center; gap:10px; margin-top:6px;">
                   <div id="displayNovaBukId" style="font-family:'Unbounded',sans-serif; font-size:1.1rem; font-weight:700; color:white; letter-spacing:0.5px;">NB-PENDING</div>
-                  <button id="toggleIdVisibility" style="background:none; border:none; color:white; cursor:pointer; opacity:0.7; padding:5px;"><i class="fa-solid fa-eye-slash" id="eyeIcon"></i></button>
                 </div>
+                
               </div>
               <!-- <div style="background:white; padding:6px; border-radius:8px; opacity:0.9;"> -->
                 <!-- <i class="fa-solid fa-qrcode" style="color:#0f2027; font-size:22px;"></i> -->
@@ -190,8 +203,9 @@
         </div>
 
         <div class="hero-detail">
-          <div class="hero-box">
-            <h4><span><i class="fa-solid fa-exclamation"></i></span> NovaBuk does not replace professional advice</h4>
+          <div class="hero-box warning">
+            <span><i class="fa-solid fa-exclamation"></i></span>
+            <h4> NovaBuk does not replace professional advice</h4>
           </div>
         </div>
 
@@ -234,7 +248,7 @@
       </div>
     </main>
 
-    
+    <script src="./db.js"></script>
     <script>
       var API_URL = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1"
         ? "http://localhost:5000/api"
@@ -258,13 +272,33 @@
         const firstName = user.fullName.split(" ")[0];
         document.getElementById("welcomeHeading").textContent = `Hi, ${firstName}!`;
       }
+
+      // Render Patient ID immediately if stored in localStorage
+      if (user.novaBukId) {
+        document.getElementById("novaBukIdCard").style.display = "block";
+        const idDisplay = document.getElementById("displayNovaBukId");
+        const eyeIcon = document.getElementById("eyeIcon");
+        idDisplay.textContent = user.novaBukId;
+        if (eyeIcon) eyeIcon.className = "fa-solid fa-eye";
+        
+        const toggleBtn = document.getElementById("toggleIdVisibility");
+        let isHidden = false;
+        if (toggleBtn) {
+          toggleBtn.onclick = (e) => {
+            e.stopPropagation();
+            isHidden = !isHidden;
+            idDisplay.textContent = isHidden ? "NB-****" : user.novaBukId;
+            eyeIcon.className = isHidden ? "fa-solid fa-eye-slash" : "fa-solid fa-eye";
+          };
+        }
+      }
       
       // Sync localStorage with latest user data (especially the novaBukId)
       (async function syncProfile() {
         const token = localStorage.getItem("novabuk_token");
         if (!token) return;
         try {
-          const res = await fetch(`${API_URL}/users/me`, {
+          const res = await smartFetch(`${API_URL}/users/me`, {
             headers: { Authorization: `Bearer ${token}` }
           });
           const data = await res.json();
@@ -289,12 +323,15 @@
               const idDisplay = document.getElementById("displayNovaBukId");
               const toggleBtn = document.getElementById("toggleIdVisibility");
               const eyeIcon = document.getElementById("eyeIcon");
-              let isHidden = true; // Default to hidden for privacy
+              let isHidden = false; // Visible by default based on request
               
               const realId = updatedUser.novaBukId;
               const maskedId = "NB-****";
               
-              idDisplay.textContent = maskedId;
+              idDisplay.textContent = realId;
+              if (eyeIcon) {
+                eyeIcon.className = "fa-solid fa-eye";
+              }
               
               if (toggleBtn) {
                 toggleBtn.onclick = (e) => {
@@ -343,8 +380,9 @@
       // ── FETCH HEALTH TIPS ────────────────────────────────
       async function loadHealthTips() {
         const container = document.getElementById("healthTipsContainer");
+        if (!container) return; // Prevent innerHTML error
         try {
-          const res = await fetch(`${API_URL}/tips`);
+          const res = await smartFetch(`${API_URL}/tips`);
           const data = await res.json();
           if (!data.success || !data.data.length) {
             container.innerHTML = `<div style="min-width:100%; text-align:center; padding:20px; color:#aaa; font-size:0.85rem;">No health tips available yet. Check back later!</div>`;
@@ -373,94 +411,95 @@
     </script>
 
     <script src="./script.js"></script>
-  <script>
-  // ── ONBOARDING CHECKLIST ─────────────────────────────
-  (async function initChecklist() {
-    // Don't show if already dismissed
-    if (localStorage.getItem("novabuk_checklist_done") === "1") return;
+    <script>
+    // ── ONBOARDING CHECKLIST ─────────────────────────────
+    (async function initChecklist() {
+      // Don't show if already dismissed
+      if (localStorage.getItem("novabuk_checklist_done") === "1") return;
 
-    const token = localStorage.getItem("novabuk_token");
-    if (!token) return;
+      const token = localStorage.getItem("novabuk_token");
+      if (!token) return;
 
-    try {
-      const res  = await fetch(`${API_URL}/users/me`, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
-      const data = await res.json();
-      if (!data.success) return;
+      try {
+        const res  = await fetch(`${API_URL}/users/me`, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        const data = await res.json();
+        if (!data.success) return;
 
-      const u  = data.user;
-      const hp = u.healthProfile || {};
+        const u  = data.user;
+        const hp = u.healthProfile || {};
 
-      const steps = [
-        {
-          id: "step-profile",
-          label: "Complete your profile",
-          sub: "Add your name, phone, and address",
-          done: !!(u.phone && u.address),
-          href: "./app-setting.html?tab=profile",
-        },
-        {
-          id: "step-health",
-          label: "Set up your health profile",
-          sub: "Add age range, conditions & allergies",
-          done: !!(hp.ageRange || (hp.existingConditions && hp.existingConditions.length)),
-          href: "./app-setting.html?tab=profile",
-        },
-        {
-          id: "step-symptom",
-          label: "Log your first symptom",
-          sub: "Tell us how you're feeling today",
-          done: u.profileComplete === true,
-          href: "./complaints.html",
-        },
-      ];
+        const steps = [
+          {
+            id: "step-profile",
+            label: "Complete your profile",
+            sub: "Add your name, phone, and address",
+            done: !!(u.phone && u.address),
+            href: "./app-setting.html?tab=profile",
+          },
+          {
+            id: "step-health",
+            label: "Set up your health profile",
+            sub: "Add age range, conditions & allergies",
+            done: !!(hp.ageRange || (hp.existingConditions && hp.existingConditions.length)),
+            href: "./app-setting.html?tab=profile",
+          },
+          {
+            id: "step-symptom",
+            label: "Log your first symptom",
+            sub: "Tell us how you're feeling today",
+            done: u.profileComplete === true,
+            href: "./complaints.html",
+          },
+        ];
 
-      const completed = steps.filter(s => s.done).length;
+        const completed = steps.filter(s => s.done).length;
 
-      // If all done, mark dismissed and hide
-      if (completed === steps.length) {
-        localStorage.setItem("novabuk_checklist_done", "1");
-        return;
+        // If all done, mark dismissed and hide
+        if (completed === steps.length) {
+          localStorage.setItem("novabuk_checklist_done", "1");
+          return;
+        }
+
+        // Render
+        const container = document.getElementById("onboardingChecklist");
+        const itemsEl   = document.getElementById("checklistItems");
+        const barEl     = document.getElementById("checklistBar");
+        const progEl    = document.getElementById("checklistProgress");
+
+        barEl.style.width  = `${Math.round((completed / steps.length) * 100)}%`;
+        progEl.textContent = `${completed} of ${steps.length} complete`;
+
+        steps.forEach(step => {
+          const div = document.createElement("div");
+          div.style.cssText = `display:flex; align-items:center; gap:12px; padding:12px 14px; border-radius:10px; border:1.5px solid ${step.done ? "#b2e0ea" : "#eee"}; background:${step.done ? "#f0fbfc" : "#fafafa"}; cursor:${step.done ? "default" : "pointer"};`;
+          if (!step.done) div.onclick = () => window.location.href = step.href;
+          div.innerHTML = `
+            <div style="width:22px; height:22px; border-radius:50%; border:2px solid ${step.done ? "#35bac9" : "#ccc"}; background:${step.done ? "#35bac9" : "white"}; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+              ${step.done ? '<i class="fa-solid fa-check" style="color:white;font-size:10px;"></i>' : ""}
+            </div>
+            <div style="flex:1;">
+              <p style="margin:0; font-family:poppins,sans-serif; font-size:13px; font-weight:600; color:${step.done ? "#888" : "#0f2027"}; text-decoration:${step.done ? "line-through" : "none"};">${step.label}</p>
+              <p style="margin:2px 0 0; font-family:poppins,sans-serif; font-size:11px; color:#aaa;">${step.sub}</p>
+            </div>
+            ${!step.done ? '<i class="fa-solid fa-arrow-right" style="color:#35bac9; font-size:12px;"></i>' : ""}
+          `;
+          itemsEl.appendChild(div);
+        });
+
+        container.style.display = "block";
+      } catch (err) {
+        console.log("Checklist load failed:", err);
       }
+    })();
 
-      // Render
-      const container = document.getElementById("onboardingChecklist");
-      const itemsEl   = document.getElementById("checklistItems");
-      const barEl     = document.getElementById("checklistBar");
-      const progEl    = document.getElementById("checklistProgress");
-
-      barEl.style.width  = `${Math.round((completed / steps.length) * 100)}%`;
-      progEl.textContent = `${completed} of ${steps.length} complete`;
-
-      steps.forEach(step => {
-        const div = document.createElement("div");
-        div.style.cssText = `display:flex; align-items:center; gap:12px; padding:12px 14px; border-radius:10px; border:1.5px solid ${step.done ? "#b2e0ea" : "#eee"}; background:${step.done ? "#f0fbfc" : "#fafafa"}; cursor:${step.done ? "default" : "pointer"};`;
-        if (!step.done) div.onclick = () => window.location.href = step.href;
-        div.innerHTML = `
-          <div style="width:22px; height:22px; border-radius:50%; border:2px solid ${step.done ? "#35bac9" : "#ccc"}; background:${step.done ? "#35bac9" : "white"}; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
-            ${step.done ? '<i class="fa-solid fa-check" style="color:white;font-size:10px;"></i>' : ""}
-          </div>
-          <div style="flex:1;">
-            <p style="margin:0; font-family:poppins,sans-serif; font-size:13px; font-weight:600; color:${step.done ? "#888" : "#0f2027"}; text-decoration:${step.done ? "line-through" : "none"};">${step.label}</p>
-            <p style="margin:2px 0 0; font-family:poppins,sans-serif; font-size:11px; color:#aaa;">${step.sub}</p>
-          </div>
-          ${!step.done ? '<i class="fa-solid fa-arrow-right" style="color:#35bac9; font-size:12px;"></i>' : ""}
-        `;
-        itemsEl.appendChild(div);
-      });
-
-      container.style.display = "block";
-    } catch (err) {
-      console.log("Checklist load failed:", err);
+    function dismissChecklist() {
+      localStorage.setItem("novabuk_checklist_done", "1");
+      const el = document.getElementById("onboardingChecklist");
+      if (el) { el.style.opacity = "0"; el.style.transition = "opacity 0.3s"; setTimeout(() => el.style.display = "none", 300); }
     }
-  })();
-
-  function dismissChecklist() {
-    localStorage.setItem("novabuk_checklist_done", "1");
-    const el = document.getElementById("onboardingChecklist");
-    if (el) { el.style.opacity = "0"; el.style.transition = "opacity 0.3s"; setTimeout(() => el.style.display = "none", 300); }
-  }
-  </script>
+    
+    </script>
   </body>
 </html>

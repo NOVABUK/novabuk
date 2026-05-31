@@ -174,7 +174,7 @@ async function uploadSettingsAvatar(input) {
   if (circle) circle.style.opacity = "0.5";
   showFeedback("profileFeedback", "Uploading photo…", "success");
   try {
-    const signRes = await fetch(`${API_URL}/uploads/cloudinary/sign`, {
+    const signRes = await smartFetch(`${API_URL}/uploads/cloudinary/sign`, {
       method: "POST", headers: { Authorization: `Bearer ${token}` }
     });
     const signData = await signRes.json();
@@ -183,7 +183,7 @@ async function uploadSettingsAvatar(input) {
     formData.append("api_key", signData.api_key);
     formData.append("timestamp", signData.timestamp);
     formData.append("signature", signData.signature);
-    const uploadRes = await fetch(
+    const uploadRes = await smartFetch(
       `https://api.cloudinary.com/v1_1/${signData.cloud_name}/image/upload`,
       { method: "POST", body: formData }
     );
@@ -195,7 +195,7 @@ async function uploadSettingsAvatar(input) {
         circle.style.opacity = "1";
       }
       // Save to backend
-      await fetch(`${API_URL}/users/update`, {
+      await smartFetch(`${API_URL}/users/update`, {
         method: "PUT",
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
         body: JSON.stringify({ avatarUrl: uploadData.secure_url }),
@@ -222,7 +222,7 @@ async function removeSettingsAvatar() {
 
   try {
     showFeedback("profileFeedback", "Removing photo…", "success");
-    await fetch(`${API_URL}/users/update`, {
+    await smartFetch(`${API_URL}/users/update`, {
       method: "PUT",
       headers: { "Content-Type": "application/json", Authorization: `Bearer ${userToken}` },
       body: JSON.stringify({ avatarUrl: "" }),
@@ -247,7 +247,7 @@ async function removeSettingsAvatar() {
 
 async function loadProfilePage(area) {
   try {
-    const res = await fetch(`${API_URL}/users/settings`, { headers: { Authorization: `Bearer ${token}` } });
+    const res = await smartFetch(`${API_URL}/users/settings`, { headers: { Authorization: `Bearer ${token}` } });
     const data = await res.json();
     const u = data.success ? data.data.profile : {};
     const hp = u.healthProfile || {};
@@ -515,7 +515,7 @@ async function saveProfile() {
 
   try {
     // Single API call — unified profile route
-    const res = await fetch(`${API_URL}/users/profile`, {
+    const res = await smartFetch(`${API_URL}/users/profile`, {
       method: "PUT",
       headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
       body: JSON.stringify({
@@ -551,7 +551,7 @@ async function saveProfile() {
 // ── PRIVACY PAGE ──────────────────────────────────────────
 async function loadPrivacyPage(area) {
   try {
-    const res = await fetch(`${API_URL}/users/settings`, { headers: { Authorization: `Bearer ${token}` } });
+    const res = await smartFetch(`${API_URL}/users/settings`, { headers: { Authorization: `Bearer ${token}` } });
     const data = await res.json();
     const ps = data.success ? (data.data.privacySettings || {}) : {};
 
@@ -586,7 +586,7 @@ async function loadPrivacyPage(area) {
 
 async function savePrivacy(key, value) {
   try {
-    await fetch(`${API_URL}/users/privacy-settings`, {
+    await smartFetch(`${API_URL}/users/privacy-settings`, {
       method: "PUT",
       headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
       body: JSON.stringify({ [key]: value }),
@@ -600,7 +600,7 @@ async function savePrivacy(key, value) {
 // ── NOTIFICATION PAGE ─────────────────────────────────────
 async function loadNotificationPage(area) {
   try {
-    const res = await fetch(`${API_URL}/users/settings`, { headers: { Authorization: `Bearer ${token}` } });
+    const res = await smartFetch(`${API_URL}/users/settings`, { headers: { Authorization: `Bearer ${token}` } });
     const data = await res.json();
     const ns = data.success ? (data.data.notificationSettings || {}) : {};
 
@@ -628,7 +628,7 @@ async function loadNotificationPage(area) {
 
 async function saveNotification(key, value) {
   try {
-    await fetch(`${API_URL}/users/notification-settings`, {
+    await smartFetch(`${API_URL}/users/notification-settings`, {
       method: "PUT",
       headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
       body: JSON.stringify({ [key]: value }),
@@ -681,7 +681,7 @@ async function changePassword() {
   btn.textContent = "Updating...";
 
   try {
-    const res = await fetch(`${API_URL}/users/change-password`, {
+    const res = await smartFetch(`${API_URL}/users/change-password`, {
       method: "PUT",
       headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
       body: JSON.stringify({ currentPassword, newPassword }),
@@ -699,4 +699,14 @@ async function changePassword() {
     btn.disabled = false;
     btn.textContent = "Update Password";
   }
+}
+
+
+// Register the Service Worker for Offline Support
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./sw.js')
+      .then((reg) => console.log('[Service Worker] Registered!', reg))
+      .catch((err) => console.log('[Service Worker] Registration failed:', err));
+  });
 }

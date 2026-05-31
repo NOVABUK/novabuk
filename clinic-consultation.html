@@ -179,6 +179,22 @@
       box-shadow: 0 0 0 4px rgba(53, 186, 201, 0.08);
     }
 
+    .stale-warning {
+      display: none;
+      background: #fff5f5;
+      color: #c53030;
+      padding: 10px 16px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 600;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 16px;
+      border: 1px solid #feb2b2;
+    }
+    .stale-warning i { font-size: 14px; }
+    .stale-warning.show { display: flex; }
+
     /* History Section */
     .history-list {
       display: flex;
@@ -429,6 +445,12 @@
 
     <!-- NEW SINGLE COLUMN LAYOUT -->
     <div class="consultation-container" id="consultationWrap" style="display:none;">
+      
+      <!-- Stale Data Warning -->
+      <div id="staleWarning" class="stale-warning">
+        <i class="fa-solid fa-triangle-exclamation"></i>
+        <span>Offline Mode: Showing data from <span id="staleTime">...</span>. Some details may have changed on the server.</span>
+      </div>
 
       <!-- Patient Summary Card -->
       <div class="patient-summary">
@@ -519,6 +541,8 @@
     
   </main>
 
+  
+  <script src="./db.js"></script>
   <script src="./clinic-shared.js"></script>
   <script>
     // ── READ VISIT ID FROM URL ───────────────────────────────
@@ -532,6 +556,18 @@
     async function loadVisit() {
       try {
         const res = await clinicFetch(`${CLINIC_API}/visits/${visitId}`);
+        
+        // Show stale warning if data came from cache
+        if (res.lastUpdated) {
+          const warnEl = document.getElementById("staleWarning");
+          const timeEl = document.getElementById("staleTime");
+          if (warnEl && timeEl) {
+            const timeAgo = Math.floor((Date.now() - res.lastUpdated) / 60000);
+            timeEl.textContent = timeAgo === 0 ? "just now" : `${timeAgo}m ago`;
+            warnEl.classList.add("show");
+          }
+        }
+
         const data = await res.json();
         if (!data.success) throw new Error(data.message);
 
@@ -689,11 +725,16 @@
     async function doSave() {
       if (isDone) return;
       try {
-        await clinicFetch(`${CLINIC_API}/visits/${visitId}/notes`, {
+        const res = await clinicFetch(`${CLINIC_API}/visits/${visitId}/notes`, {
           method: "PATCH",
           body: JSON.stringify(getFormData()),
         });
-        setSaveStatus("saved");
+        const data = await res.json();
+        if (data.offline) {
+            setSaveStatus("saved-offline");
+        } else {
+            setSaveStatus("saved");
+        }
       } catch {
         setSaveStatus("error");
       }
@@ -702,9 +743,10 @@
     function setSaveStatus(state) {
       const dot = document.getElementById("saveDot");
       const text = document.getElementById("saveText");
-      if (state === "saving") { dot.className = "save-dot saving"; text.textContent = "Saving…"; }
-      if (state === "saved") { dot.className = "save-dot"; text.textContent = "Saved"; }
-      if (state === "error") { dot.className = "save-dot error"; text.textContent = "Not saved"; }
+      if (state === "saving") { dot.className = "save-dot saving"; dot.style.background = ""; text.textContent = "Saving…"; }
+      if (state === "saved") { dot.className = "save-dot"; dot.style.background = ""; text.textContent = "Saved"; }
+      if (state === "saved-offline") { dot.className = "save-dot"; dot.style.background = "#ff9800"; text.textContent = "Saved Offline"; }
+      if (state === "error") { dot.className = "save-dot error"; dot.style.background = ""; text.textContent = "Not saved"; }
     }
 
     function getFormData() {
@@ -736,9 +778,14 @@
         const data = await res.json();
         if (data.success) {
           isDone = true;
-          document.getElementById("completeBar").innerHTML = `<div style="color:var(--teal); font-weight:700;"><i class="fa-solid fa-circle-check"></i> Consultation Completed Successfully.</div>`;
-          setSaveStatus("saved");
-          setTimeout(() => window.location.href = "./clinic-queue.html", 1500);
+          if (data.offline) {
+             document.getElementById("completeBar").innerHTML = `<div style="color:#ff9800; font-weight:700;"><i class="fa-solid fa-clock"></i> Completed Offline. Will sync when connected.</div>`;
+             setSaveStatus("saved-offline");
+          } else {
+             document.getElementById("completeBar").innerHTML = `<div style="color:var(--teal); font-weight:700;"><i class="fa-solid fa-circle-check"></i> Consultation Completed Successfully.</div>`;
+             setSaveStatus("saved");
+          }
+          setTimeout(() => window.location.href = "./clinic-queue.html", 2500);
         }
       } catch {
         btnLg.disabled = false;

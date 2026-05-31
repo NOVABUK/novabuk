@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" sizes="180x180" href="./images/image 19.png">
+    <link rel="manifest" href="./manifest.json">
+    <meta name="theme-color" content="#35bac9">
     
     <title>NovaBuk | AI-Driven Digital Healthcare Records in Africa</title>
     <meta name="description" content="NovaBuk is an intelligent digital health ecosystem connecting patients, doctors, and clinics across Africa with AI-driven digital medical records.">
@@ -22,6 +24,7 @@
     <!-- css links -->
     <link rel="stylesheet" href="./styles.css" />
     <link rel="stylesheet" href="./styles-app.css" />
+    <link rel="stylesheet" href="./styles-new-sections.css" />
 
     <!-- font awesome cdn -->
     <link
@@ -129,6 +132,12 @@
               <li><a href="./blog-dynamic.html">Blog</a></li>
               <li><a href="./contact.html">Contact</a></li>
             </ul>
+            <div class="profile-opt" id="optNav">
+              <ul>
+                <li><a href="./app-setting.html?tab=privacy"><i class="fa-solid fa-gear"></i> <span>Settings</span></a></li>
+                <li><a href="#" onclick="handleMenuSelect('logout')"><i class="fa-solid fa-right-from-bracket" style="color: #ff7675 !important;"></i> <span style="color: #ff7675;">Logout</span></a></li>
+              </ul>
+            </div>
           </div>
           <div class="nav-buttons navbtns">
             <ul>
@@ -223,6 +232,26 @@
       </div>
       <!-- main section -->
       <div class="main">
+          <!-- Stats Section -->
+          <div class="nb-stats nb-reveal">
+            <div class="nb-stat-item">
+              <span class="nb-stat-number" data-target="15">0</span>
+              <span class="nb-stat-label">Pilot Clinics</span>
+            </div>
+            <div class="nb-stat-item">
+              <span class="nb-stat-number" data-target="5000">0</span>
+              <span class="nb-stat-label">Records Digitized</span>
+            </div>
+            <div class="nb-stat-item">
+              <span class="nb-stat-number" data-target="50">0</span>
+              <span class="nb-stat-label">Providers</span>
+            </div>
+            <div class="nb-stat-item">
+              <span class="nb-stat-number" data-target="4">0</span>
+              <span class="nb-stat-label">Cities Covered</span>
+            </div>
+          </div>
+
           <div class="middle">
               <h2>The Future of Healthcare, Simplified</h2>
               <p>NovaBuk is building an intelligent digital health ecosystem that connects patients, doctors,clinics and pharmacies-making healthcare smarter, faster and more accessible.</p>
@@ -254,6 +283,39 @@
                   <img src="./images/mainframe3.png" alt="">
               </div>
           </div>
+
+          <!-- How It Works Section -->
+          <div class="nb-section nb-how-it-works nb-reveal">
+            <h3 class="nb-section-title">How It Works</h3>
+            <p class="nb-section-subtitle">Get started with NovaBuk in a few simple steps and experience healthcare meet innovation.</p>
+            <div class="nb-steps">
+              <div class="nb-step">
+                <div class="nb-step-icon"><i class="fa-solid fa-user-plus"></i></div>
+                <span class="nb-step-number">Step 1</span>
+                <h4>Sign Up</h4>
+                <p>Create your free secure account in less than 60 seconds.</p>
+              </div>
+              <div class="nb-step">
+                <div class="nb-step-icon"><i class="fa-solid fa-link"></i></div>
+                <span class="nb-step-number">Step 2</span>
+                <h4>Connect</h4>
+                <p>Link with your preferred healthcare provider or clinic.</p>
+              </div>
+              <div class="nb-step">
+                <div class="nb-step-icon"><i class="fa-solid fa-folder-open"></i></div>
+                <span class="nb-step-number">Step 3</span>
+                <h4>Record</h4>
+                <p>Your visits, prescriptions, and lab tests digitize automatically.</p>
+              </div>
+              <div class="nb-step">
+                <div class="nb-step-icon"><i class="fa-solid fa-brain"></i></div>
+                <span class="nb-step-number">Step 4</span>
+                <h4>Insights</h4>
+                <p>Get AI-powered health trends and personalized summaries.</p>
+              </div>
+            </div>
+          </div>
+
           <div class="main-image-last">
               <div class="main-head">
                   <div class="main-blur">
@@ -267,6 +329,163 @@
                   <img src="./images/image 19.png" alt="">
               </div>
           </div>
+
+          <!-- Trust Logos Bar -->
+          <div class="nb-trust nb-reveal">
+            <p class="nb-trust-label">Trusted by Innovation Partners & Clinics</p>
+            <div class="nb-trust-logos">
+              <div class="nb-trust-item"><i class="fa-solid fa-circle-h"></i> <span>MedLink</span></div>
+              <div class="nb-trust-item"><i class="fa-solid fa-shield-halved"></i> <span>NigSafe</span></div>
+              <div class="nb-trust-item"><i class="fa-solid fa-kit-medical"></i> <span>CareTech</span></div>
+              <div class="nb-trust-item"><i class="fa-solid fa-seedling"></i> <span>SaaSHealth</span></div>
+            </div>
+          </div>
+
+          <!-- Testimonials Section -->
+          <div class="nb-section nb-testimonials nb-reveal">
+            <h3 class="nb-section-title">What Our Users Say</h3>
+            <p class="nb-section-subtitle">Real feedback from healthcare providers and patients across Nigeria.</p>
+            <div class="nb-testimonials-track">
+              <div class="nb-testimonial-card">
+                <div class="nb-testimonial-stars">★★★★★</div>
+                <p class="nb-testimonial-text">"NovaBuk cut our clinic's patient wait times by almost 40%. The digital health records are an absolute game changer."</p>
+                <div class="nb-testimonial-author">
+                  <div class="nb-testimonial-avatar">DA</div>
+                  <div class="nb-testimonial-info">
+                    <h5>Dr. Adebayo</h5>
+                    <span>Clinic Director, Lagos</span>
+                  </div>
+                </div>
+              </div>
+              <div class="nb-testimonial-card">
+                <div class="nb-testimonial-stars">★★★★★</div>
+                <p class="nb-testimonial-text">"I can finally access my family's medical history in one place. No more carrying paper files from clinic to clinic."</p>
+                <div class="nb-testimonial-author">
+                  <div class="nb-testimonial-avatar">AE</div>
+                  <div class="nb-testimonial-info">
+                    <h5>Amina E.</h5>
+                    <span>Patient</span>
+                  </div>
+                </div>
+              </div>
+              <div class="nb-testimonial-card">
+                <div class="nb-testimonial-stars">★★★★★</div>
+                <p class="nb-testimonial-text">"Onboarding our staff was seamless. We went paperless in less than a week. The UI is incredibly intuitive."</p>
+                <div class="nb-testimonial-author">
+                  <div class="nb-testimonial-avatar">CO</div>
+                  <div class="nb-testimonial-info">
+                    <h5>Chinedu O.</h5>
+                    <span>Clinic Administrator</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Pricing Section -->
+          <div class="nb-section nb-pricing nb-reveal">
+            <h3 class="nb-section-title">Simple, Transparent Pricing</h3>
+            <p class="nb-section-subtitle">Flexible packages designed for patients and clinics of all sizes.</p>
+            
+            <div class="nb-pricing-toggle">
+              <button type="button" class="nb-toggle-btn active" data-period="monthly">Monthly</button>
+              <button type="button" class="nb-toggle-btn" data-period="annually">Annually</button>
+            </div>
+
+            <div class="nb-pricing-cards">
+              <!-- Patient Plan -->
+              <div class="nb-price-card">
+                <h4>Patient Basic</h4>
+                <p class="nb-price-desc">For individuals to track health records</p>
+                <div class="nb-price-amount">₦0<span>/mo</span></div>
+                <p class="nb-price-period">Free forever</p>
+                <ul class="nb-price-features">
+                  <li><i class="fa-solid fa-check"></i> Basic Health Records</li>
+                  <li><i class="fa-solid fa-check"></i> 1 Connected Clinic</li>
+                  <li><i class="fa-solid fa-check"></i> Medical Appointment Booking</li>
+                  <li><i class="fa-solid fa-xmark"></i> AI Insights & Ann Alerts</li>
+                  <li><i class="fa-solid fa-xmark"></i> NLP Symptom Checker</li>
+                </ul>
+                <a href="./sign-up.html" class="nb-price-btn">Get Started</a>
+              </div>
+              <!-- Clinic Starter Plan -->
+              <div class="nb-price-card popular">
+                <span class="nb-price-badge">Most Popular</span>
+                <h4>Clinic Starter</h4>
+                <p class="nb-price-desc">For small clinics and private practices</p>
+                <div class="nb-price-amount nb-dynamic-price" data-monthly="25000" data-annual="20000">₦25,000<span>/mo</span></div>
+                <p class="nb-price-period">Billed monthly</p>
+                <ul class="nb-price-features">
+                  <li><i class="fa-solid fa-check"></i> Up to 3 Doctors/Staff</li>
+                  <li><i class="fa-solid fa-check"></i> Unlimited Digital Records</li>
+                  <li><i class="fa-solid fa-check"></i> Smart Reminders & Scheduling</li>
+                  <li><i class="fa-solid fa-check"></i> Core EHR Dashboard</li>
+                  <li><i class="fa-solid fa-xmark"></i> Advanced AI Analytics</li>
+                </ul>
+                <a href="https://tally.so/r/PdAKA1" target="_blank" class="nb-price-btn">Join Pilot</a>
+              </div>
+              <!-- Clinic Pro Plan -->
+              <div class="nb-price-card">
+                <h4>Clinic Pro</h4>
+                <p class="nb-price-desc">For growing medical clinics</p>
+                <div class="nb-price-amount nb-dynamic-price" data-monthly="60000" data-annual="48000">₦60,000<span>/mo</span></div>
+                <p class="nb-price-period">Billed monthly</p>
+                <ul class="nb-price-features">
+                  <li><i class="fa-solid fa-check"></i> Unlimited Doctors/Staff</li>
+                  <li><i class="fa-solid fa-check"></i> AI Prescription Safety Check</li>
+                  <li><i class="fa-solid fa-check"></i> NLP Symptom Checker</li>
+                  <li><i class="fa-solid fa-check"></i> Predictive Patient Analytics</li>
+                  <li><i class="fa-solid fa-check"></i> Premium Support 24/7</li>
+                </ul>
+                <a href="https://tally.so/r/PdAKA1" target="_blank" class="nb-price-btn">Contact Sales</a>
+              </div>
+            </div>
+          </div>
+
+          <!-- FAQ Section -->
+          <div class="nb-section nb-faq nb-reveal">
+            <h3 class="nb-section-title">Frequently Asked Questions</h3>
+            <p class="nb-section-subtitle">Everything you need to know about the NovaBuk platform.</p>
+            <div class="nb-faq-container">
+              <div class="nb-faq-item">
+                <div class="nb-faq-question">
+                  <span>Is my health data secure with NovaBuk?</span>
+                  <i class="fa-solid fa-chevron-down"></i>
+                </div>
+                <div class="nb-faq-answer">
+                  <p>Absolutely. We use end-to-end industry-standard encryption for data storage and transfer. Our operations align with NDPR (Nigeria Data Protection Regulation) and HIPAA guidelines to guarantee complete patient privacy.</p>
+                </div>
+              </div>
+              <div class="nb-faq-item">
+                <div class="nb-faq-question">
+                  <span>How do clinics get onboarded?</span>
+                  <i class="fa-solid fa-chevron-down"></i>
+                </div>
+                <div class="nb-faq-answer">
+                  <p>Onboarding is quick and easy. Simply click the "Join Our Pilot Clinics" button, fill in the interest form, and our support team will reach out to help migrate your files and train your staff in less than 48 hours.</p>
+                </div>
+              </div>
+              <div class="nb-faq-item">
+                <div class="nb-faq-question">
+                  <span>Is NovaBuk free for patients to use?</span>
+                  <i class="fa-solid fa-chevron-down"></i>
+                </div>
+                <div class="nb-faq-answer">
+                  <p>Yes, patient accounts are free forever. You can log personal symptoms, view medical histories shared by your clinic, and book appointments without any charges.</p>
+                </div>
+              </div>
+              <div class="nb-faq-item">
+                <div class="nb-faq-question">
+                  <span>Does NovaBuk work offline?</span>
+                  <i class="fa-solid fa-chevron-down"></i>
+                </div>
+                <div class="nb-faq-answer">
+                  <p>Yes, NovaBuk includes offline capabilities. Clinics can continue to log patient details and visits during connectivity drops, and the records will synchronize securely with the cloud once the network is restored.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
       </div>
       <footer>
         <div class="navba">
@@ -297,7 +516,7 @@
         <div class="navfoot">
           <div class="foot-menu" id="foot-menu-two">
             <ul style="display: flex">
-              <li><a href="./text.txt">Terms of Service</a></li>
+              <li><a href="./terms.html">Terms of Service</a></li>
               <li><a href="./data-privacy.html">Policy Privacy</a></li>
             </ul>
           </div>
@@ -315,6 +534,7 @@
       </footer>
     </div>
 
+    <script src="./db.js"></script>
     <script src="./script.js"></script>
     <!-- <script>
       (function initIndexNav() {
@@ -412,6 +632,120 @@
         else if (value === 'settings')  { window.location.href = './app-setting.html?tab=profile'; }
         else if (value === 'notification') { window.location.href = './app-setting.html?tab=notification'; }
       };
+    </script>
+
+    <!-- Floating WhatsApp widget -->
+    <a href="https://wa.me/2348134684154?text=Hello%20NovaBuk,%20I'd%20like%20to%20inquire%20about%20your%20services." class="nb-whatsapp-float" target="_blank" aria-label="Chat on WhatsApp">
+      <i class="fa-brands fa-whatsapp"></i>
+      <span class="nb-whatsapp-tooltip">Chat with us</span>
+    </a>
+
+    <!-- New sections scripts -->
+    <script>
+      // Scroll Reveal Animation
+      const revealElements = document.querySelectorAll('.nb-reveal');
+      const checkReveal = () => {
+        const triggerBottom = window.innerHeight * 0.85;
+        revealElements.forEach(el => {
+          const elTop = el.getBoundingClientRect().top;
+          if (elTop < triggerBottom) {
+            el.classList.add('nb-visible');
+          }
+        });
+      };
+      window.addEventListener('scroll', checkReveal);
+      window.addEventListener('load', checkReveal);
+
+      // FAQ Accordion Toggle
+      document.querySelectorAll('.nb-faq-question').forEach(q => {
+        q.addEventListener('click', () => {
+          const item = q.parentElement;
+          const isActive = item.classList.contains('active');
+          
+          // Close other FAQ items
+          document.querySelectorAll('.nb-faq-item').forEach(el => el.classList.remove('active'));
+          
+          if (!isActive) {
+            item.classList.add('active');
+          }
+        });
+      });
+
+      // Pricing toggle functionality
+      const toggleBtns = document.querySelectorAll('.nb-toggle-btn');
+      if (toggleBtns.length > 0) {
+        toggleBtns.forEach(btn => {
+          btn.addEventListener('click', () => {
+            toggleBtns.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            const period = btn.getAttribute('data-period');
+            const priceAmounts = document.querySelectorAll('.nb-dynamic-price');
+            const periodLabels = document.querySelectorAll('.nb-price-period');
+            
+            priceAmounts.forEach(price => {
+              const monthly = parseInt(price.getAttribute('data-monthly'));
+              const annual = parseInt(price.getAttribute('data-annual'));
+              if (period === 'annually') {
+                price.innerHTML = `₦${(annual).toLocaleString()}<span>/mo</span>`;
+              } else {
+                price.innerHTML = `₦${(monthly).toLocaleString()}<span>/mo</span>`;
+              }
+            });
+            
+            periodLabels.forEach(lbl => {
+              if (lbl.parentElement.querySelector('h4').textContent !== 'Patient Basic') {
+                lbl.textContent = period === 'annually' ? 'Billed annually' : 'Billed monthly';
+              }
+            });
+          });
+        });
+      }
+
+      // Stats Counter animation
+      const statNumbers = document.querySelectorAll('.nb-stat-number');
+      let statsAnimated = false;
+      const animateStats = () => {
+        if (statsAnimated) return;
+        statNumbers.forEach(num => {
+          const target = parseInt(num.getAttribute('data-target'));
+          const duration = 1500;
+          const start = 0;
+          const startTime = performance.now();
+          
+          const updateCount = (timestamp) => {
+            const elapsed = timestamp - startTime;
+            const progress = Math.min(elapsed / duration, 1);
+            const current = Math.floor(progress * (target - start) + start);
+            
+            if (target >= 1000) {
+              num.textContent = current.toLocaleString() + '+';
+            } else {
+              num.textContent = current + (target === 4 || target === 15 ? '+' : '');
+            }
+            
+            if (progress < 1) {
+              requestAnimationFrame(updateCount);
+            } else {
+              num.textContent = target.toLocaleString() + '+';
+            }
+          };
+          requestAnimationFrame(updateCount);
+        });
+        statsAnimated = true;
+      };
+
+      // Check if stats are in view to start animation
+      const checkStatsInView = () => {
+        const statsSection = document.querySelector('.nb-stats');
+        if (!statsSection) return;
+        const rect = statsSection.getBoundingClientRect();
+        if (rect.top < window.innerHeight && rect.bottom >= 0) {
+          animateStats();
+          window.removeEventListener('scroll', checkStatsInView);
+        }
+      };
+      window.addEventListener('scroll', checkStatsInView);
+      window.addEventListener('load', checkStatsInView);
     </script>
   </body>
 </html>

@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Welcome — NovaBuk</title>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,600;1,400&display=swap" rel="stylesheet" />
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -446,6 +447,28 @@
       .left-panel { display: none; }
       .right-panel { padding: 40px 24px; }
     }
+    .google-btn {
+      width: 100%;
+      height: 48px;
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      color: var(--dark);
+      font-weight: 600;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.2s;
+      margin-bottom: 16px;
+    }
+    .google-btn:hover {
+      background: #f8fafc;
+      border-color: var(--teal-light);
+    }
+    .google-btn img { width: 18px; }
   </style>
 </head>
 <body>
@@ -533,6 +556,13 @@
             Sign In
           </button>
 
+          <div class="divider">Or continue with</div>
+
+          <button type="button" class="google-btn" onclick="handleGoogleSignIn()">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg" alt="G">
+            Google
+          </button>
+
           <p class="switch-text">
             Don't have an account?
             <a onclick="switchTab('register')">Create one</a>
@@ -577,6 +607,13 @@
 
           <button class="submit-btn" id="registerBtn" onclick="handleRegister()">
             Create Account
+          </button>
+
+          <div class="divider">Or continue with</div>
+
+          <button type="button" class="google-btn" onclick="handleGoogleSignIn()">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg" alt="G">
+            Google
           </button>
 
           <p class="terms-text">
@@ -631,8 +668,161 @@
   </div>
 
   <script>
-    var API_URL = "http://localhost:5000/api";
-    //var API_URL = "http://localhost:5000/api"; // ← uncomment for local testing
+    var API_URL = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1"
+      ? "http://localhost:5000/api"
+      : "https://novabuk-backend.onrender.com/api";
+
+    // ── GOOGLE SIGN-IN ─────────────────────────────────────────
+    // Initialize ONCE when the page loads — not on every button click.
+    // Using prompt() on every click causes Chrome/Firefox to silently
+    // suppress the popup after the first dismissal.
+    //
+    // Strategy:
+    //   • On load  → try One Tap (auto popup, subtle).
+    //   • On click → force a new popup using google.accounts.id.prompt()
+    //                with a moment check. If One Tap is suppressed,
+    //                fall back to a full popup window via oauth2.initTokenClient.
+    // ──────────────────────────────────────────────────────────
+
+    const GOOGLE_CLIENT_ID = "670613922043-k4qe1e335cgaaj0qqv4gsk6m2nvnp20v.apps.googleusercontent.com";
+    let googleInitialized = false;
+    let tokenClient; // OAuth2 popup fallback
+
+    function initGoogleOnce() {
+      if (googleInitialized) return;
+      if (typeof google === 'undefined') return;
+
+      google.accounts.id.initialize({
+        client_id: GOOGLE_CLIENT_ID,
+        callback: handleCredentialResponse,
+        cancel_on_tap_outside: true,
+        itp_support: true,
+        use_fedcm_for_prompt: true,
+      });
+
+      googleInitialized = true;
+    }
+
+    // Called when Google returns a credential (id_token)
+    async function handleCredentialResponse(response) {
+      if (!response.credential) {
+        showError("Google sign-in was cancelled or failed. Please try again.");
+        return;
+      }
+      await sendTokenToBackend(response.credential);
+    }
+
+    // Send the id_token to our backend for verification
+    async function sendTokenToBackend(idToken) {
+      const btns = document.querySelectorAll('.google-btn');
+      const originalHTMLs = Array.from(btns).map(b => b.innerHTML);
+      btns.forEach(b => { b.innerHTML = '<i class="fa-brands fa-google"></i> Signing in…'; b.disabled = true; });
+
+      try {
+        const res = await fetch(`${API_URL}/users/google-login`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ idToken })
+        });
+
+        const data = await res.json();
+        if (data.success) {
+          localStorage.setItem("novabuk_token", data.token);
+          localStorage.setItem("novabuk_user", JSON.stringify(data.user));
+          window.location.href = data.redirectTo || "./app-home.html";
+        } else {
+          showError(data.message || "Google login failed. Please try again.");
+          btns.forEach((b, i) => { b.innerHTML = originalHTMLs[i]; b.disabled = false; });
+        }
+      } catch (err) {
+        showError("Network error. Please check your connection and try again.");
+        btns.forEach((b, i) => { b.innerHTML = originalHTMLs[i]; b.disabled = false; });
+      }
+    }
+
+    let googlePromptInFlight = false;
+    function handleGoogleSignIn() {
+      if (!googleInitialized) {
+        initGoogleOnce();
+        if (!googleInitialized) {
+          showError("Google sign-in is still loading. Please wait a moment and try again.");
+          return;
+        }
+      }
+
+      if (googlePromptInFlight) return;
+      googlePromptInFlight = true;
+
+      // Try One Tap prompt first
+      google.accounts.id.prompt((notification) => {
+        if (notification.isNotDisplayed() || notification.isSkippedMoment() || notification.isDismissedMoment()) {
+          googlePromptInFlight = false;
+          if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
+            openGooglePopup();
+          }
+        }
+      });
+    }
+
+    // Popup fallback — opens a real Google account chooser window
+    function openGooglePopup() {
+      // Use a direct OAuth popup via google.accounts.oauth2
+      if (!tokenClient) {
+        tokenClient = google.accounts.oauth2.initCodeClient({
+          client_id: GOOGLE_CLIENT_ID,
+          scope: 'openid email profile',
+          ux_mode: 'popup',
+          callback: async (codeResponse) => {
+            // Exchange auth code for token via backend
+            try {
+              const btns = document.querySelectorAll('.google-btn');
+              btns.forEach(b => { b.innerHTML = '<i class="fa-brands fa-google"></i> Signing in…'; b.disabled = true; });
+              const res = await fetch(`${API_URL}/users/google-login-code`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ code: codeResponse.code })
+              });
+              const data = await res.json();
+              if (data.success) {
+                localStorage.setItem("novabuk_token", data.token);
+                localStorage.setItem("novabuk_user", JSON.stringify(data.user));
+                window.location.href = data.redirectTo || "./app-home.html";
+              } else {
+                showError(data.message || "Google sign-in failed. Please try again.");
+                btns.forEach(b => { b.innerHTML = `<img src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg"> Google`; b.disabled = false; });
+              }
+            } catch (err) {
+              showError("Network error during Google sign-in.");
+            }
+          },
+        });
+      }
+      tokenClient.requestCode();
+    }
+
+    // Auto-init as soon as Google's GSI script is ready
+    window.addEventListener('load', () => {
+      // Poll briefly until google is available
+      const poll = setInterval(() => {
+        if (typeof google !== 'undefined') {
+          clearInterval(poll);
+          initGoogleOnce();
+        }
+      }, 100);
+      setTimeout(() => clearInterval(poll), 5000); // Give up after 5s
+    });
+
+
+    function showError(msg) {
+      const banner = document.getElementById("errorBanner");
+      const msgEl = document.getElementById("errorMsg");
+      msgEl.textContent = msg;
+      banner.classList.add("show");
+    }
+
+    function clearErrors() {
+      document.getElementById("errorBanner").classList.remove("show");
+    }
 
     // ── REDIRECT IF ALREADY LOGGED IN ─────────────────────
     const existingToken = localStorage.getItem("novabuk_token");

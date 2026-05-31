@@ -4,9 +4,31 @@
   box-sizing: border-box;
 }
 
-body,
 html {
+  height: 100%;
+}
+
+body {
   overflow-x: hidden;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Ensure containers stretch to fill available space */
+.container, 
+.container-sign, 
+.app-container {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+/* Make main content areas grow to push footers down */
+.main, 
+.app-main, 
+.middle {
+  flex: 1;
 }
 
 /* Transition variables and gentle animations */
