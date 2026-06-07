@@ -24,7 +24,7 @@
 
   <!-- CSS Links -->
   <link rel="stylesheet" href="./styles.css" />
-  <link rel="stylesheet" href="./styles-app.css" />
+  <!-- <link rel="stylesheet" href="./styles-app.css" /> -->
   <link rel="stylesheet" href="./styles-new-sections.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
     integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw=="
@@ -34,10 +34,393 @@
   <link
     href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900&family=Unbounded:wght@200..900&display=swap"
     rel="stylesheet" />
+
+     <link
+      href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,400&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
+
+    <style>
+
+      /* ─── RESET & TOKENS ──────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --teal:        #35bac9;
+      --teal-mid:    #7ecad7;
+      --navy:        #0d2f38;
+      --navy-soft:   #174554;
+      --bg:          #f5fbfc;
+      --surface:     #ffffff;
+      --border:      rgba(13,47,56,0.08);
+      --muted:       #4a6a72;
+      --text:        #0d2f38;
+      --radius-lg:   28px;
+      --radius-md:   18px;
+      --radius-sm:   12px;
+      --shadow-sm:   0 2px 12px rgba(13,47,56,0.06);
+      --shadow-md:   0 8px 32px rgba(13,47,56,0.10);
+      --shadow-glow: 0 8px 32px rgba(53,186,201,0.22);
+    }
+      /* ─── MISSION ─────────────────────────────────────── */
+    .mission-section {
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+    .mission-inner {
+      display: grid;
+      grid-template-columns: 1fr 1.6fr;
+      gap: 60px;
+      align-items: start;
+    }
+    .mission-copy { position: sticky; top: 100px; }
+
+    .mission-cards {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+    .mission-card {
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 28px;
+      display: flex;
+      align-items: flex-start;
+      gap: 20px;
+      background: var(--bg);
+      transition: box-shadow 0.25s, transform 0.25s;
+    }
+    .mission-card:hover {
+      box-shadow: var(--shadow-md);
+      transform: translateY(-2px);
+    }
+    .mission-icon {
+      width: 52px; height: 52px; flex-shrink: 0;
+      border-radius: 14px;
+      background: rgba(53,186,201,0.10);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.3rem;
+      color: var(--teal);
+    }
+    .mission-card h4 {
+      font-size: 1rem; font-weight: 700;
+      color: var(--navy); margin-bottom: 6px;
+    }
+    .mission-card p {
+      font-size: 0.92rem; color: var(--muted); line-height: 1.65;
+    }
+
+    /* ─── CHALLENGES ──────────────────────────────────── */
+    .challenges-section {
+      border-radius: var(--radius-lg);
+      margin: 0 32px;
+      background: var(--navy);
+      color: white;
+      padding: 72px 64px;
+      position: relative;
+      overflow: hidden;
+    }
+    .challenges-section::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 60% 70% at 90% 20%, rgba(53,186,201,0.18) 0%, transparent 60%);
+      pointer-events: none;
+    }
+    .challenges-inner {
+      display: grid;
+      grid-template-columns: 1fr 1.5fr;
+      gap: 60px;
+      align-items: start;
+      position: relative;
+    }
+    .challenges-section .section-label { color: var(--teal-mid); }
+    .challenges-section .section-label::before { background: var(--teal-mid); }
+    .challenges-section .section-title { color: #fff; max-width: 380px; }
+    .challenges-section .section-body { color: rgba(255,255,255,0.6); }
+
+    .challenges-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    .challenge-card {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.10);
+      border-radius: var(--radius-md);
+      padding: 24px;
+      transition: background 0.25s;
+    }
+    .challenge-card:hover { background: rgba(255,255,255,0.10); }
+    .challenge-icon {
+      width: 44px; height: 44px;
+      border-radius: 12px;
+      background: rgba(53,186,201,0.15);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.1rem; color: var(--teal-mid);
+      margin-bottom: 14px;
+    }
+    .challenge-card h4 {
+      font-size: 0.97rem; font-weight: 700;
+      color: #fff; margin-bottom: 6px;
+    }
+    .challenge-card p {
+      font-size: 0.87rem; color: rgba(255,255,255,0.55); line-height: 1.6;
+    }
+
+    /* ─── TEAM ────────────────────────────────────────── */
+    .team-section { background: var(--surface); border-top: 1px solid var(--border); }
+    .team-header { text-align: center; margin-bottom: 52px; }
+    .team-header .section-label { justify-content: center; }
+    .team-header .section-label::before { display: none; }
+    .team-header .section-title { margin: 0 auto; text-align: center; }
+
+    .team-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+    .team-card {
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      background: var(--bg);
+      transition: box-shadow 0.25s, transform 0.25s;
+    }
+    .team-card:hover {
+      box-shadow: var(--shadow-md);
+      transform: translateY(-4px);
+    }
+    .team-photo {
+      aspect-ratio: 3/2.6;
+      overflow: hidden;
+      background: linear-gradient(135deg, rgba(53,186,201,0.15), rgba(13,47,56,0.08));
+      display: flex; align-items: center; justify-content: center;
+    }
+    .team-photo img { width: 100%; height: 100%; object-fit: cover; }
+    .team-photo-placeholder {
+      font-size: 4rem; color: rgba(53,186,201,0.4);
+    }
+    .team-info {
+      padding: 22px 22px 18px;
+    }
+    .team-info h4 {
+      font-size: 1.06rem; font-weight: 700;
+      color: var(--navy); margin-bottom: 4px;
+    }
+    .team-info .role {
+      font-size: 0.85rem; color: var(--teal); font-weight: 600;
+    }
+    .team-social {
+      margin-top: 14px; display: flex; gap: 10px;
+    }
+    .team-social a {
+      width: 34px; height: 34px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.85rem; color: var(--muted);
+      transition: all 0.2s;
+    }
+    .team-social a:hover { border-color: var(--teal); color: var(--teal); }
+
+    /* ─── CTA STRIP ───────────────────────────────────── */
+    .cta-strip {
+      background: linear-gradient(135deg, var(--navy) 0%, var(--navy-soft) 100%);
+      border-radius: var(--radius-lg);
+      margin: 0 32px 80px;
+      padding: 60px 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 40px;
+      position: relative;
+      overflow: hidden;
+    }
+    .cta-strip::before {
+      content: '';
+      position: absolute;
+      right: -60px; top: -60px;
+      width: 280px; height: 280px;
+      border-radius: 50%;
+      background: rgba(53,186,201,0.12);
+    }
+    .cta-copy h2 {
+      font-size: clamp(1.5rem, 2.5vw, 2.2rem);
+      color: #fff; margin-bottom: 10px;
+    }
+    .cta-copy p { color: rgba(255,255,255,0.6); font-size: 1rem; }
+    .cta-actions { display: flex; gap: 12px; flex-shrink: 0; }
+    .btn-white {
+      background: #fff; color: var(--navy);
+      font-weight: 700;
+    }
+    .btn-white:hover { background: var(--teal); color: #fff; }
+    .btn-outline-white {
+      background: transparent;
+      border: 1.5px solid rgba(255,255,255,0.3);
+      color: #fff; font-weight: 600;
+    }
+    .btn-outline-white:hover { border-color: #fff; }
+
+    /* ─── FOOTER ──────────────────────────────────────── */
+    .site-footer {
+      background: var(--navy);
+      color: rgba(255,255,255,0.7);
+    }
+    .footer-inner {
+      display: grid;
+      grid-template-columns: 1.6fr 1fr 1fr 1.4fr;
+      gap: 48px;
+      padding: 60px 32px 40px;
+      max-width: 1260px;
+      margin: 0 auto;
+    }
+    .footer-brand .brand { color: #fff; margin-bottom: 12px; }
+    .footer-brand p { font-size: 0.9rem; line-height: 1.7; max-width: 260px; }
+    .footer-col h4 {
+      font-size: 0.88rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.08em; color: #fff; margin-bottom: 16px;
+    }
+    .footer-col a {
+      display: block; font-size: 0.9rem;
+      color: rgba(255,255,255,0.6);
+      margin-bottom: 10px; transition: color 0.2s;
+    }
+    .footer-col a:hover { color: var(--teal-mid); }
+
+    .newsletter-form {
+      display: flex; gap: 8px; margin-top: 4px;
+    }
+    .newsletter-form input {
+      flex: 1; padding: 10px 14px;
+      border-radius: var(--radius-sm);
+      border: 1px solid rgba(255,255,255,0.15);
+      background: rgba(255,255,255,0.08);
+      color: #fff; font-size: 0.88rem;
+    }
+    .newsletter-form input::placeholder { color: rgba(255,255,255,0.35); }
+    .newsletter-form button {
+      padding: 10px 18px;
+      border-radius: var(--radius-sm);
+      background: var(--teal); color: #fff;
+      font-size: 0.88rem; font-weight: 600;
+      white-space: nowrap;
+    }
+    .footer-bottom {
+      border-top: 1px solid rgba(255,255,255,0.08);
+      max-width: 1260px; margin: 0 auto;
+      padding: 20px 32px;
+      display: flex; align-items: center; justify-content: space-between;
+      font-size: 0.82rem; color: rgba(255,255,255,0.35);
+    }
+
+    /* ─── MOBILE NAV DRAWER ───────────────────────────── */
+    .mobile-drawer {
+      display: none;
+      position: fixed;
+      inset: 0; z-index: 200;
+    }
+    .drawer-overlay {
+      position: absolute; inset: 0;
+      background: rgba(0,0,0,0.4);
+      backdrop-filter: blur(4px);
+    }
+    .drawer-panel {
+      position: absolute; top: 0; right: 0; bottom: 0;
+      width: min(320px, 90vw);
+      background: var(--surface);
+      padding: 24px;
+      overflow-y: auto;
+      transform: translateX(100%);
+      transition: transform 0.3s ease;
+    }
+    .mobile-drawer.open { display: block; }
+    .mobile-drawer.open .drawer-panel { transform: translateX(0); }
+    .drawer-close {
+      display: flex; justify-content: flex-end;
+      margin-bottom: 24px;
+    }
+    .drawer-close button {
+      background: none; border: none; font-size: 1.4rem;
+      color: var(--text); cursor: pointer;
+    }
+    .drawer-nav { display: flex; flex-direction: column; gap: 4px; margin-bottom: 28px; }
+    .drawer-nav a {
+      padding: 12px 14px;
+      border-radius: var(--radius-sm);
+      font-weight: 600; font-size: 1rem;
+      color: var(--text); transition: background 0.2s;
+    }
+    .drawer-nav a:hover, .drawer-nav a.active {
+      background: rgba(53,186,201,0.09); color: var(--teal);
+    }
+    .drawer-actions { display: flex; flex-direction: column; gap: 10px; }
+    .drawer-actions .btn { width: 100%; justify-content: center; }
+
+    /* ─── RESPONSIVE ──────────────────────────────────── */
+    @media (max-width: 1024px) {
+      .hero-inner { grid-template-columns: 1fr; gap: 48px; }
+      .hero-visual { order: -1; }
+      .hero h1 { font-size: clamp(2.2rem, 6vw, 3rem); }
+      .hero-badge.badge-1 { bottom: -10px; left: 12px; }
+      .hero-badge.badge-2 { top: -10px; right: 12px; }
+      .mission-inner { grid-template-columns: 1fr; gap: 40px; }
+      .mission-copy { position: static; }
+      .challenges-inner { grid-template-columns: 1fr; gap: 40px; }
+      .challenges-grid { grid-template-columns: 1fr 1fr; }
+      .footer-inner { grid-template-columns: 1fr 1fr; gap: 36px; }
+    }
+
+    @media (max-width: 768px) {
+      .main-nav, .header-actions { display: none; }
+      .nav-toggle { display: block; }
+      .shell { padding: 0 20px; }
+      .header-inner { padding: 14px 20px; }
+      section { padding: 56px 0; }
+      .hero { padding: 60px 0 48px; }
+      .hero-stats { grid-template-columns: repeat(2, 1fr); }
+      .team-grid { grid-template-columns: 1fr 1fr; }
+      .challenges-section { margin: 0 20px; padding: 48px 32px; }
+      .challenges-grid { grid-template-columns: 1fr; }
+      .cta-strip {
+        flex-direction: column; align-items: flex-start;
+        margin: 0 20px 60px; padding: 44px 36px;
+      }
+      .cta-actions { flex-wrap: wrap; }
+      .footer-inner { grid-template-columns: 1fr; padding: 48px 20px 32px; }
+      .footer-bottom { flex-direction: column; gap: 8px; padding: 20px; }
+      .newsletter-form { flex-direction: column; }
+    }
+
+    @media (max-width: 480px) {
+      .team-grid { grid-template-columns: 1fr; max-width: 360px; margin: 0 auto; }
+      .hero-stats { grid-template-columns: repeat(2, 1fr); }
+      .hero-badge { display: none; }
+      .challenges-section { margin: 0 12px; padding: 40px 24px; }
+      .cta-strip { margin: 0 12px 48px; padding: 36px 24px; }
+    }
+
+    /* ─── ANIMATIONS ──────────────────────────────────── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(22px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .fade-up { animation: fadeUp 0.6s ease forwards; }
+    .delay-1 { animation-delay: 0.1s; opacity: 0; }
+    .delay-2 { animation-delay: 0.2s; opacity: 0; }
+    .delay-3 { animation-delay: 0.3s; opacity: 0; }
+    .delay-4 { animation-delay: 0.4s; opacity: 0; }
+    </style>
 </head>
 
 <body>
-  <div class="container">
+  <div class="page-shell">
     <!-- Header Section  -->
     <div class="header">
       <!-- Logged out state -->
@@ -176,169 +559,242 @@
 
       </div>
 
-      <div class="hero">
-        <div class="hero-content">
-          <h1>Healthcare Meets <br> Innovation</h1>
-          <p>Empowering Africa's Healthcare with AI-driven Digital Records</p>
-        </div>
-      </div>
-      <div class="header-img-about slider">
-        <div class="slides">
-          <div><img src="./images/image 40.png" alt=""></div>
-          <div class="img-size"><img src="./images/Group 1000013935.png" alt=""></div>
-          <div><img src="./images/image 38 (1).png" alt=""></div>
-          <div class="img-size"><img src="./images/Group 1000013936.png" alt=""></div>
-        </div>
-      </div>
+      
     </div>
-    <div class="main">
-      <div class="middle">
-        <h2>Our story</h2>
-        <p>NovaBuk is building an intelligent digital health ecosystem that connects patients, providers,
-          doctors,clinics and pharmacies-making healthcare smarter, faster and more accessible.</p>
-      </div>
-
-      <!-- Mission / Vision / Values Section -->
-      <div class="nb-section nb-mission nb-reveal">
-        <h3 class="nb-section-title">Our Compass</h3>
-        <p class="nb-section-subtitle">The guiding principles behind our effort to transform health outcomes across Africa.</p>
-        <div class="nb-mission-cards">
-          <div class="nb-mission-card">
-            <div class="nb-mission-card-icon"><i class="fa-solid fa-bullseye"></i></div>
-            <h4>Our Mission</h4>
-            <p>To digitize every health record in Africa, equipping providers with intelligent tools for predictive and personalized care.</p>
+    <main>
+      <section class="hero-section">
+        <div class="hero-copy">
+          <span class="eyebrow">ABOUT NOVABUK</span>
+          <h1>Built for Africa.<br />Driven by Purpose.</h1>
+          <p>
+            NovaBuk is on a mission to transform healthcare in Africa through
+            intelligent, secure, and connected digital records.
+          </p>
+          <div class="hero-buttons">
+            <button class="primary-button">Our Story</button>
+            <button class="ghost-button">Meet the Team</button>
           </div>
-          <div class="nb-mission-card">
-            <div class="nb-mission-card-icon"><i class="fa-solid fa-eye"></i></div>
-            <h4>Our Vision</h4>
-            <p>A fully connected African continent where medical journeys are secure, portable, and data-driven for every individual.</p>
+          <div class="metrics-strip" style="margin-top: 22px">
+            <div><strong>50+</strong> Clinics</div>
+            <div><strong>10K+</strong> Patients</div>
+            <div><strong>4</strong> Countries</div>
+            <div><strong>99.9%</strong> Uptime</div>
           </div>
-          <div class="nb-mission-card">
-            <div class="nb-mission-card-icon"><i class="fa-solid fa-hand-holding-heart"></i></div>
-            <h4>Our Values</h4>
-            <p>Security first, patient-centric design, innovation-focused service delivery, and absolute trust in everything we build.</p>
-          </div>
-        </div>
-        <div class="nb-values-strip">
-          <span class="nb-value-tag"><i class="fa-solid fa-shield-halved"></i> HIPAA Aligned</span>
-          <span class="nb-value-tag"><i class="fa-solid fa-server"></i> NDPR Compliant</span>
-          <span class="nb-value-tag"><i class="fa-solid fa-bolt"></i> Ultra Fast</span>
-          <span class="nb-value-tag"><i class="fa-solid fa-clock"></i> 99.9% Uptime</span>
-        </div>
-      </div>
-
-      <div class="main-img-about">
-        <div class="main-head-about">
-          <h2>For Patients</h2>
-          <p>Manage your medical records anytime, anywhere</p>
-        </div>
-        <div class="main-image-about">
-          <img src="./images/image 30.png" alt="">
-        </div>
-      </div>
-      <div class="main-img-about">
-        <div class="main-image-about" id="about-img">
-          <img src="./images/image 36.png" style="border-top-right-radius: none; mix-blend-mode: multiply;" alt="">
-        </div>
-        <div class="main-head-about" id="head-about">
-          <h2>For Doctors</h2>
-          <p>Smarter consultations with real-time health insights</p>
-        </div>
-      </div>
-      <div class="main-image-last">
-        <div class="main-head">
-          <h3>Get Started With <span style="color: #81ccda;font-style: normal;">NovaBuk</span></h3>
-          <p>We're managing healthcare Africa, one digital record at a time. Our mission is to empower every health
-            provider with intelligent tools to deliver care that's efficient, personalized and predictive</p>
-          <div class="anchor"><a href="" class="main-anchor">Get Started</a></div>
         </div>
 
-        <div class="main-image">
-          <img src="./images/image 19.png" alt="">
+        <div class="hero-visual">
+          <div class="hero-main-image">
+            <img src="./images/hero-banner.jpeg" alt="Doctors using tablet" />
+          </div>
+        </div>
+      </section>
+
+        <!-- ══════════════════════════════════
+          MISSION / VISION / PROMISE
+      ══════════════════════════════════ -->
+      <section class="mission-section">
+        <div class="shell">
+          <div class="mission-inner">
+            <!-- sticky copy -->
+            <div class="mission-copy">
+              <p class="section-label">Our Foundation</p>
+              <h2 class="section-title">Making Healthcare Accessible, Intelligent &amp; Connected</h2>
+              <p class="section-body">
+                We believe every patient deserves quality care, regardless of location or circumstance.
+                These principles guide everything we build.
+              </p>
+            </div>
+
+            <!-- cards -->
+            <div class="mission-cards">
+              <div class="mission-card">
+                <div class="mission-icon"><i class="fa-solid fa-rocket"></i></div>
+                <div>
+                  <h4>Our Mission</h4>
+                  <p>Making healthcare accessible, intelligent, and connected for every person across the African continent through technology that actually works in local contexts.</p>
+                </div>
+              </div>
+              <div class="mission-card">
+                <div class="mission-icon"><i class="fa-solid fa-eye"></i></div>
+                <div>
+                  <h4>Our Vision</h4>
+                  <p>A future where every African has access to their full health information — anytime, anywhere — and providers have the tools to deliver world-class care.</p>
+                </div>
+              </div>
+              <div class="mission-card">
+                <div class="mission-icon"><i class="fa-solid fa-handshake"></i></div>
+                <div>
+                  <h4>Our Promise</h4>
+                  <p>Secure data. Smarter care. Better decisions. We are committed to protecting patient privacy while enabling the insights that improve health outcomes across communities.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ══════════════════════════════════
+          CHALLENGES (DARK)
+      ══════════════════════════════════ -->
+      <section style="padding: 80px 0;">
+        <div class="challenges-section">
+          <div class="challenges-inner">
+            <div>
+              <p class="section-label">Why It Matters</p>
+              <h2 class="section-title">The Challenges We're Working to Solve</h2>
+              <p class="section-body">
+                Healthcare systems face similar structural problems across the continent.
+                NovaBuk exists to change that — one clinic at a time.
+              </p>
+            </div>
+
+            <div class="challenges-grid">
+              <div class="challenge-card">
+                <div class="challenge-icon"><i class="fa-solid fa-file-circle-xmark"></i></div>
+                <h4>Lost Records</h4>
+                <p>Paper-based systems lead to incomplete or missing medical records that follow patients across visits.</p>
+              </div>
+              <div class="challenge-card">
+                <div class="challenge-icon"><i class="fa-solid fa-gears"></i></div>
+                <h4>Inefficient Workflows</h4>
+                <p>Manual processes and lack of automation slow down healthcare delivery and burden clinical staff.</p>
+              </div>
+              <div class="challenge-card">
+                <div class="challenge-icon"><i class="fa-solid fa-comments"></i></div>
+                <h4>Communication Gaps</h4>
+                <p>Fragmented provider communication leads to duplicated tests, errors, and delayed patient care.</p>
+              </div>
+              <div class="challenge-card">
+                <div class="challenge-icon"><i class="fa-solid fa-chart-simple"></i></div>
+                <h4>No Data Insights</h4>
+                <p>Without structured data, clinics and hospitals cannot identify trends or make informed operational decisions.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ══════════════════════════════════
+          TEAM
+      ══════════════════════════════════ -->
+      <section class="team-section">
+        <div class="shell">
+          <div class="team-header">
+            <p class="section-label">Our People</p>
+            <h2 class="section-title">A Team With Deep Passion for Healthcare</h2>
+            <p class="section-body" style="margin: 14px auto 0; text-align: center; max-width: 560px;">
+              We are a team of builders, clinicians, and designers dedicated to transforming
+              healthcare delivery across Africa.
+            </p>
+          </div>
+
+          <div class="team-grid">
+            <!-- card 1 -->
+            <div class="team-card">
+              <div class="team-photo">
+                <img src="./images/image 33.png" alt="Faith Michael"
+                    onerror="this.parentNode.innerHTML='<div class=\'team-photo-placeholder\'><i class=\'fa-solid fa-user\'></i></div>'" />
+              </div>
+              <div class="team-info">
+                <h4>Faith Michael</h4>
+                <p class="role">CEO &amp; Founder</p>
+                <div class="team-social">
+                  <a href="#" aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
+                  <a href="#" aria-label="Twitter"><i class="fa-brands fa-x-twitter"></i></a>
+                </div>
+              </div>
+            </div>
+            <!-- card 2 -->
+            <div class="team-card">
+              <div class="team-photo">
+                <img src="./images/image 33.png" alt="Team Member"
+                    onerror="this.parentNode.innerHTML='<div class=\'team-photo-placeholder\'><i class=\'fa-solid fa-user\'></i></div>'" />
+              </div>
+              <div class="team-info">
+                <h4>David Okonkwo</h4>
+                <p class="role">CTO</p>
+                <div class="team-social">
+                  <a href="#" aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
+                  <a href="#" aria-label="GitHub"><i class="fa-brands fa-github"></i></a>
+                </div>
+              </div>
+            </div>
+            <!-- card 3 -->
+            <div class="team-card">
+              <div class="team-photo">
+                <img src="./images/image 33.png" alt="Team Member"
+                    onerror="this.parentNode.innerHTML='<div class=\'team-photo-placeholder\'><i class=\'fa-solid fa-user\'></i></div>'" />
+              </div>
+              <div class="team-info">
+                <h4>Amara Bello</h4>
+                <p class="role">Head of Product</p>
+                <div class="team-social">
+                  <a href="#" aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
+                  <a href="#" aria-label="Twitter"><i class="fa-brands fa-x-twitter"></i></a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ══════════════════════════════════
+          CTA STRIP
+      ══════════════════════════════════ -->
+      <div class="cta-strip">
+        <div class="cta-copy">
+          <h2>Ready to Transform Your Clinic?</h2>
+          <p>Join 50+ healthcare facilities already running on NovaBuk.</p>
+        </div>
+        <div class="cta-actions">
+          <button class="btn btn-white">Book a Demo <i class="fa-solid fa-arrow-right" style="font-size:0.8em"></i></button>
+          <button class="btn btn-outline-white">Talk to Sales</button>
         </div>
       </div>
 
-      <!-- Team Section -->
-      <div class="nb-section nb-team nb-reveal">
-        <h3 class="nb-section-title">Meet Our Team</h3>
-        <p class="nb-section-subtitle">The builders, doctors, and innovators behind NovaBuk's health ecosystem.</p>
-        <div class="nb-team-grid">
-          <!-- Member 1 -->
-          <div class="nb-team-card">
-            <div class="nb-team-avatar">NE</div>
-            <h4>Nelson E.</h4>
-            <div class="nb-team-role">Founder & CEO</div>
-            <p>Product Designer & HealthTech visionary passionate about African digital healthcare transformation.</p>
-            <a href="https://linkedin.com" target="_blank"><i class="fa-brands fa-linkedin"></i></a>
-          </div>
-          <!-- Member 2 -->
-          <div class="nb-team-card">
-            <div class="nb-team-avatar">OO</div>
-            <h4>Oluwaseun O.</h4>
-            <div class="nb-team-role">Chief Technology Officer</div>
-            <p>Full-stack architect with a focus on high-performance cloud databases and secure health systems.</p>
-            <a href="https://linkedin.com" target="_blank"><i class="fa-brands fa-linkedin"></i></a>
-          </div>
-          <!-- Member 3 -->
-          <div class="nb-team-card">
-            <div class="nb-team-avatar">DR</div>
-            <h4>Dr. Halima A.</h4>
-            <div class="nb-team-role">Medical Director</div>
-            <p>Clinical advisor ensuring our platform logic conforms to standard medical and HIPAA regulations.</p>
-            <a href="https://linkedin.com" target="_blank"><i class="fa-brands fa-linkedin"></i></a>
-          </div>
-          <!-- Member 4 -->
-          <div class="nb-team-card">
-            <div class="nb-team-avatar">CO</div>
-            <h4>Chidi O.</h4>
-            <div class="nb-team-role">Operations Lead</div>
-            <p>Growth lead orchestrating our pilot onboarding and customer relations across Nigeria.</p>
-            <a href="https://linkedin.com" target="_blank"><i class="fa-brands fa-linkedin"></i></a>
-          </div>
-        </div>
-      </div>
+      
+    </main>
 
-    </div>
-    <footer>
-      <div class="navba">
-        <div class="logo"><img src="./images/logo.png" alt="" /></div>
-        <div class="foot-menu">
-          <ul>
-            <li><a href="./index.html">Home</a></li>
-            <li><a href="./about.html">About Us</a></li>
-            <li><a href="./services.html">Features</a></li>
-            <li><a href="./contact.html">Contact</a></li>
-          </ul>
+
+    <!-- ── FOOTER ─────────────────────────────────────── -->
+    <footer class="site-footer">
+      <div class="footer-inner">
+        <div class="footer-top">
+          <div class="footer-brand-col footer-col">
+            <div class="brand">Nova<span style="color:var(--primary)">Buk</span></div>
+            <p>AI-powered healthcare records platform built for Africa. Secure. Connected. Intelligent.</p>
+          </div>
+          <div class="footer-col">
+            <h5>Product</h5>
+            <a href="#">Features</a>
+            <a href="#">Security</a>
+            <a href="#">Pricing</a>
+            <a href="#">Integrations</a>
+          </div>
+          <div class="footer-col">
+            <h5>Company</h5>
+            <a href="#">About Us</a>
+            <a href="#">Careers</a>
+            <a href="#">Blog</a>
+            <a href="#">Contact</a>
+          </div>
+          <div class="footer-col">
+            <h5>Newsletter</h5>
+            <p style="font-size:0.88rem;margin-bottom:14px">Get the latest updates and news from NovaBuk.</p>
+            <form class="newsletter-form" onsubmit="return false">
+              <input type="email" placeholder="your@email.com" />
+              <button type="submit">Subscribe</button>
+            </form>
+          </div>
         </div>
-        <div class="foot-menu" id="foot-menu">
-          <ul>
-            <li>
-              <a href="#"><i class="fa-brands fa-instagram"></i></a>
-            </li>
-            <li>
-              <a href="#"><i class="fa-brands fa-twitter"></i></a>
-            </li>
-            <li>
-              <a href="#"><i class="fa-brands fa-linkedin"></i></a>
-            </li>
-          </ul>
-        </div>
-      </div>
-      <div class="line"></div>
-      <div class="navfoot">
-        <div class="foot-menu" id="foot-menu-two">
-          <ul style="display: flex">
-            <li><a href="./terms.html">Terms of Service</a></li>
-            <li><a href="./data-privacy.html">Policy Privacy</a></li>
-          </ul>
-        </div>
-        <div class="foot-menu">
-          <ul style="display: flex">
-            <li>
-              <a href="">&copy; Copyright 2025
-                NovaBuk.All rights reserved</a>
-            </li>
-          </ul>
+
+        <div class="footer-bottom">
+          <span>&copy; 2025 NovaBuk Technologies Ltd. All rights reserved.</span>
+          <div style="display:flex;gap:20px;flex-wrap:wrap">
+            <a href="#">Privacy Policy</a>
+            <a href="#">Terms of Service</a>
+            <a href="#">Security</a>
+          </div>
         </div>
       </div>
     </footer>

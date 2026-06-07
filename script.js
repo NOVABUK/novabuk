@@ -371,6 +371,73 @@ function setMenuState(isOpen, clickedButton) {
 
 
 
+// ── HERO ROTATOR (cycles hero paragraph and images, including ones inside HTML comments) ──
+(function initHeroRotator() {
+  const heroDescEl = document.querySelector('.hero-desc');
+  const slidesWrapper = document.querySelector('.header-img .slides');
+
+  if (!heroDescEl || !slidesWrapper) return;
+
+  // Collect existing image srcs from visible slides
+  const existingImgs = Array.from(slidesWrapper.querySelectorAll('img')).map(i => i.getAttribute('src'));
+
+  // Collect image srcs and paragraph texts from HTML comments (if any)
+  const commentIterator = document.createNodeIterator(document.documentElement, NodeFilter.SHOW_COMMENT);
+  let cnode;
+  const commentedImgSrcs = [];
+  const commentedTexts = [];
+  while ((cnode = commentIterator.nextNode())) {
+    const txt = cnode.nodeValue || '';
+    // find img src attributes inside the comment
+    const imgRe = /<img[^>]+src=["']([^"']+)["']/gi;
+    let m;
+    while ((m = imgRe.exec(txt))) {
+      commentedImgSrcs.push(m[1]);
+    }
+
+    // find hero paragraph content inside comments
+    const pRe = /<p[^>]*class=["']?hero-desc["']?[^>]*>([\s\S]*?)<\/p>/gi;
+    while ((m = pRe.exec(txt))) {
+      const clean = m[1].replace(/<[^>]+>/g, '').trim();
+      if (clean) commentedTexts.push(clean);
+    }
+  }
+
+  // Final arrays (unique)
+  const imageSrcs = Array.from(new Set(existingImgs.concat(commentedImgSrcs))).filter(Boolean);
+  const texts = Array.from(new Set([heroDescEl.textContent.trim()].concat(commentedTexts))).filter(Boolean);
+
+  // If no images found, nothing to rotate
+  if (imageSrcs.length === 0) return;
+
+  // Replace slides wrapper with a single dynamic image for simpler swapping
+  slidesWrapper.innerHTML = `<img id="heroDynamicImg" src="${imageSrcs[0]}" alt="hero" class="hero-slide active">`;
+  const heroImg = document.getElementById('heroDynamicImg');
+
+  let index = 0;
+  const total = Math.max(imageSrcs.length, texts.length);
+
+  function tick() {
+    index = (index + 1) % total;
+    // update text if available
+    if (texts.length > 0) {
+      heroDescEl.textContent = texts[index % texts.length];
+    }
+    // update image
+    if (imageSrcs.length > 0 && heroImg) {
+      heroImg.src = imageSrcs[index % imageSrcs.length];
+    }
+  }
+
+  // Start rotation (every 4 seconds)
+  const interval = setInterval(tick, 4000);
+
+  // Pause on hover
+  slidesWrapper.addEventListener('mouseenter', () => clearInterval(interval));
+  slidesWrapper.addEventListener('mouseleave', () => setInterval(tick, 4000));
+
+})();
+
 
 
 // ── LOGGED OUT HAMBURGER MENU (Desktop) ──────────────────
@@ -1105,3 +1172,124 @@ if ('serviceWorker' in navigator) {
       .catch((err) => console.log('[Service Worker] Registration failed:', err));
   });
 }
+
+// ================================================================
+// NOVABUK — HERO SLIDER & DYNAMIC PARAGRAPH
+// ================================================================
+(function initHeroSlider() {
+  const slidesContainer = document.querySelector('.header-img.slider .slides');
+  const slides = document.querySelectorAll('.header-img.slider .slides img.hero-slide');
+  const paragraph = document.querySelector('.hero-text-side .hero-desc');
+  
+  if (!slidesContainer || slides.length === 0 || !paragraph) return;
+  
+  // Custom paragraphs matching banner1, banner2, and banner3
+  const texts = [
+    "Empowering Africa's Healthcare with AI-driven Digital Records",
+    "Smarter consultations with real-time patient health records and AI insights.",
+    "Connecting patients, doctors, clinics and pharmacies for a unified health ecosystem."
+  ];
+  
+  let currentIndex = 0;
+  const slideInterval = 5000; // 5 seconds
+  let timer;
+  
+  function showSlide(index) {
+    if (index >= slides.length) index = 0;
+    if (index < 0) index = slides.length - 1;
+    
+    currentIndex = index;
+    
+    // Smooth text transition
+    paragraph.classList.add('fade-out');
+    setTimeout(() => {
+      paragraph.textContent = texts[currentIndex];
+      paragraph.classList.remove('fade-out');
+    }, 400);
+    
+    // Smooth image transition
+    const isMobile = window.innerWidth <= 1300;
+    if (isMobile) {
+      // On mobile/tablet, scroll the active image into view
+      const activeSlide = slides[currentIndex];
+      if (activeSlide) {
+        activeSlide.scrollIntoView({
+          behavior: 'smooth',
+          block: 'nearest',
+          inline: 'center'
+        });
+      }
+    } else {
+      // On desktop, toggle active class for cross-fade
+      slides.forEach((slide, i) => {
+        if (i === currentIndex) {
+          slide.classList.add('active');
+        } else {
+          slide.classList.remove('active');
+        }
+      });
+    }
+  }
+  
+  function startAutoplay() {
+    timer = setInterval(() => {
+      showSlide(currentIndex + 1);
+    }, slideInterval);
+  }
+  
+  function stopAutoplay() {
+    clearInterval(timer);
+  }
+  
+  // Set initial active state for desktop
+  slides.forEach((slide, i) => {
+    if (i === 0) {
+      slide.classList.add('active');
+    } else {
+      slide.classList.remove('active');
+    }
+  });
+  
+  startAutoplay();
+  
+  // On mobile/tablet, handle manual swipe detection to sync text
+  let isScrolling;
+  slidesContainer.addEventListener('scroll', () => {
+    // Only detect manual scroll on mobile/tablet view
+    if (window.innerWidth > 1300) return;
+    
+    window.clearTimeout(isScrolling);
+    isScrolling = setTimeout(() => {
+      const containerRect = slidesContainer.getBoundingClientRect();
+      const containerCenter = containerRect.left + containerRect.width / 2;
+      
+      let closestIndex = 0;
+      let minDistance = Infinity;
+      
+      slides.forEach((slide, i) => {
+        const slideRect = slide.getBoundingClientRect();
+        const slideCenter = slideRect.left + slideRect.width / 2;
+        const distance = Math.abs(slideCenter - containerCenter);
+        
+        if (distance < minDistance) {
+          minDistance = distance;
+          closestIndex = i;
+        }
+      });
+      
+      if (closestIndex !== currentIndex) {
+        stopAutoplay();
+        currentIndex = closestIndex;
+        
+        // Update text
+        paragraph.classList.add('fade-out');
+        setTimeout(() => {
+          paragraph.textContent = texts[currentIndex];
+          paragraph.classList.remove('fade-out');
+        }, 400);
+        
+        startAutoplay();
+      }
+    }, 150);
+  });
+})();
