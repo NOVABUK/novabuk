@@ -23,6 +23,7 @@
     <link rel="stylesheet" href="./styles-app.css" />
     <link rel="stylesheet" href="./styles-about.css">
     <link rel="stylesheet" href="./styles-blog.css" />
+    <link rel="stylesheet" href="./styles-new-sections.css">
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
@@ -38,7 +39,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   </head>
   <body>
-    <div class="container">
+    <div class="page-shell">
       <!-- Header Section -->
       <div class="header">
         <div class="nav" id="loggedOutNav">
@@ -261,42 +262,47 @@
       </section>
 
       <!-- Footer -->
-      <footer class="main-footer">
-        <div class="footer-content">
-            <div class="footer-brand">
-                <div class="logo-foot">
-                    <img src="./images/logo.png" alt="Logo" />
-                </div>
-                <p>Where Technology meets Care. Empowering Africa's Healthcare with AI-driven Digital Records.</p>
-                <div class="social-links">
-                    <a href="https://www.instagram.com/novabukofficial?utm_source=qr&igsh=M2ZzM2ozeWQwN3hu" target="_blank"><i class="fa-brands fa-instagram"></i></a>
-                    <a href="https://x.com/NovaBukApp?t=r1xoJKvpfA1QSnGpHVdk_Q&s=o8" target="_blank"><i class="fa-brands fa-twitter"></i></a>
-                    <a href="https://www.linkedin.com/company/novabuk/" target="_blank"><i class="fa-brands fa-linkedin"></i></a>
-                </div>
-            </div>
-
-            <div class="footer-col">
-                <h4>Quick Links</h4>
-                <ul>
-                    <li><a href="./about.html">About us</a></li>
-                    <li><a href="./contact.html">Contact</a></li>
-                    <li><a href="./services.html">Features</a></li>
-                </ul>
-            </div>
-
-            <div class="footer-col">
-                <h4>Contact</h4>
-                <ul class="contact-list">
-                    <li><i class="fa-solid fa-phone"></i> +234 813 468 4154</li>
-                    <li><i class="fa-solid fa-envelope"></i> hello@novabuk.com</li>
-                    <li><i class="fa-solid fa-globe"></i> www.novabuk.com</li>
-                </ul>
-            </div>
+      <footer class="site-footer">
+        <div class="footer-brand">
+          <div class="brand"><img src="./images/logo.png" alt=""></div>
+          <p>AI-powered healthcare records platform built for Africa.</p>
         </div>
-        
-        <div class="footer-bottom">
-            <!-- <div class="line"></div> -->
-            <p>&copy; 2025 NovaBuk HealthTech. All rights reserved.</p>
+        <div class="footer-links">
+          <!-- <div>
+            <h4>Product</h4>
+            <a href="#">Features</a>
+            <a href="#">Security</a>
+            <a href="#">Pricing</a>
+            <a href="#">Changelog</a>
+          </div> -->
+          <div>
+            <h4>Solutions</h4>
+            <a href="#">For Clinics</a>
+            <a href="#">For Doctors</a>
+            <a href="#">For Pharmacies</a>
+            <a href="#">For Patients</a>
+          </div>
+          <div>
+            <h4>Resources</h4>
+            <a href="#">Help Center</a>
+            <a href="#">Documentation</a>
+            <a href="#">Community</a>
+          </div>
+          <div>
+            <h4>Company</h4>
+            <a href="#">About Us</a>
+            <a href="#">Careers</a>
+            <a href="#">Partners</a>
+            <a href="#">Contact Us</a>
+          </div>
+        </div>
+        <div class="newsletter">
+          <h4>Newsletter</h4>
+          <p>Get the latest updates and news about NovaBuk.</p>
+          <form class="newsletter-form">
+            <input type="email" placeholder="Enter your email" />
+            <button type="submit">Subscribe</button>
+          </form>
         </div>
       </footer>
     </div>

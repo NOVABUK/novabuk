@@ -44,379 +44,6 @@
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
     />
 
-    <style>
-
-      /* ─── RESET & TOKENS ──────────────────────────────── */
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    :root {
-      --teal:        #35bac9;
-      --teal-mid:    #7ecad7;
-      --navy:        #0d2f38;
-      --navy-soft:   #174554;
-      --bg:          #f5fbfc;
-      --surface:     #ffffff;
-      --border:      rgba(13,47,56,0.08);
-      --muted:       #4a6a72;
-      --text:        #0d2f38;
-      --radius-lg:   28px;
-      --radius-md:   18px;
-      --radius-sm:   12px;
-      --shadow-sm:   0 2px 12px rgba(13,47,56,0.06);
-      --shadow-md:   0 8px 32px rgba(13,47,56,0.10);
-      --shadow-glow: 0 8px 32px rgba(53,186,201,0.22);
-    }
-      /* ─── MISSION ─────────────────────────────────────── */
-    .mission-section {
-      background: var(--surface);
-      border-top: 1px solid var(--border);
-      border-bottom: 1px solid var(--border);
-    }
-    .mission-inner {
-      display: grid;
-      grid-template-columns: 1fr 1.6fr;
-      gap: 60px;
-      align-items: start;
-    }
-    .mission-copy { position: sticky; top: 100px; }
-
-    .mission-cards {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 16px;
-    }
-    .mission-card {
-      border: 1px solid var(--border);
-      border-radius: var(--radius-md);
-      padding: 28px;
-      display: flex;
-      align-items: flex-start;
-      gap: 20px;
-      background: var(--bg);
-      transition: box-shadow 0.25s, transform 0.25s;
-    }
-    .mission-card:hover {
-      box-shadow: var(--shadow-md);
-      transform: translateY(-2px);
-    }
-    .mission-icon {
-      width: 52px; height: 52px; flex-shrink: 0;
-      border-radius: 14px;
-      background: rgba(53,186,201,0.10);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 1.3rem;
-      color: var(--teal);
-    }
-    .mission-card h4 {
-      font-size: 1rem; font-weight: 700;
-      color: var(--navy); margin-bottom: 6px;
-    }
-    .mission-card p {
-      font-size: 0.92rem; color: var(--muted); line-height: 1.65;
-    }
-
-    /* ─── CHALLENGES ──────────────────────────────────── */
-    .challenges-section {
-      border-radius: var(--radius-lg);
-      margin: 0 32px;
-      background: var(--navy);
-      color: white;
-      padding: 72px 64px;
-      position: relative;
-      overflow: hidden;
-    }
-    .challenges-section::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: radial-gradient(ellipse 60% 70% at 90% 20%, rgba(53,186,201,0.18) 0%, transparent 60%);
-      pointer-events: none;
-    }
-    .challenges-inner {
-      display: grid;
-      grid-template-columns: 1fr 1.5fr;
-      gap: 60px;
-      align-items: start;
-      position: relative;
-    }
-    .challenges-section .section-label { color: var(--teal-mid); }
-    .challenges-section .section-label::before { background: var(--teal-mid); }
-    .challenges-section .section-title { color: #fff; max-width: 380px; }
-    .challenges-section .section-body { color: rgba(255,255,255,0.6); }
-
-    .challenges-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 16px;
-    }
-    .challenge-card {
-      background: rgba(255,255,255,0.06);
-      border: 1px solid rgba(255,255,255,0.10);
-      border-radius: var(--radius-md);
-      padding: 24px;
-      transition: background 0.25s;
-    }
-    .challenge-card:hover { background: rgba(255,255,255,0.10); }
-    .challenge-icon {
-      width: 44px; height: 44px;
-      border-radius: 12px;
-      background: rgba(53,186,201,0.15);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 1.1rem; color: var(--teal-mid);
-      margin-bottom: 14px;
-    }
-    .challenge-card h4 {
-      font-size: 0.97rem; font-weight: 700;
-      color: #fff; margin-bottom: 6px;
-    }
-    .challenge-card p {
-      font-size: 0.87rem; color: rgba(255,255,255,0.55); line-height: 1.6;
-    }
-
-    /* ─── TEAM ────────────────────────────────────────── */
-    .team-section { background: var(--surface); border-top: 1px solid var(--border); }
-    .team-header { text-align: center; margin-bottom: 52px; }
-    .team-header .section-label { justify-content: center; }
-    .team-header .section-label::before { display: none; }
-    .team-header .section-title { margin: 0 auto; text-align: center; }
-
-    .team-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 24px;
-    }
-    .team-card {
-      border: 1px solid var(--border);
-      border-radius: var(--radius-lg);
-      overflow: hidden;
-      background: var(--bg);
-      transition: box-shadow 0.25s, transform 0.25s;
-    }
-    .team-card:hover {
-      box-shadow: var(--shadow-md);
-      transform: translateY(-4px);
-    }
-    .team-photo {
-      aspect-ratio: 3/2.6;
-      overflow: hidden;
-      background: linear-gradient(135deg, rgba(53,186,201,0.15), rgba(13,47,56,0.08));
-      display: flex; align-items: center; justify-content: center;
-    }
-    .team-photo img { width: 100%; height: 100%; object-fit: cover; }
-    .team-photo-placeholder {
-      font-size: 4rem; color: rgba(53,186,201,0.4);
-    }
-    .team-info {
-      padding: 22px 22px 18px;
-    }
-    .team-info h4 {
-      font-size: 1.06rem; font-weight: 700;
-      color: var(--navy); margin-bottom: 4px;
-    }
-    .team-info .role {
-      font-size: 0.85rem; color: var(--teal); font-weight: 600;
-    }
-    .team-social {
-      margin-top: 14px; display: flex; gap: 10px;
-    }
-    .team-social a {
-      width: 34px; height: 34px;
-      border-radius: 8px;
-      border: 1px solid var(--border);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 0.85rem; color: var(--muted);
-      transition: all 0.2s;
-    }
-    .team-social a:hover { border-color: var(--teal); color: var(--teal); }
-
-    /* ─── CTA STRIP ───────────────────────────────────── */
-    .cta-strip {
-      background: linear-gradient(135deg, var(--navy) 0%, var(--navy-soft) 100%);
-      border-radius: var(--radius-lg);
-      margin: 0 32px 80px;
-      padding: 60px 64px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 40px;
-      position: relative;
-      overflow: hidden;
-    }
-    .cta-strip::before {
-      content: '';
-      position: absolute;
-      right: -60px; top: -60px;
-      width: 280px; height: 280px;
-      border-radius: 50%;
-      background: rgba(53,186,201,0.12);
-    }
-    .cta-copy h2 {
-      font-size: clamp(1.5rem, 2.5vw, 2.2rem);
-      color: #fff; margin-bottom: 10px;
-    }
-    .cta-copy p { color: rgba(255,255,255,0.6); font-size: 1rem; }
-    .cta-actions { display: flex; gap: 12px; flex-shrink: 0; }
-    .btn-white {
-      background: #fff; color: var(--navy);
-      font-weight: 700;
-    }
-    .btn-white:hover { background: var(--teal); color: #fff; }
-    .btn-outline-white {
-      background: transparent;
-      border: 1.5px solid rgba(255,255,255,0.3);
-      color: #fff; font-weight: 600;
-    }
-    .btn-outline-white:hover { border-color: #fff; }
-
-    /* ─── FOOTER ──────────────────────────────────────── */
-    .site-footer {
-      background: var(--navy);
-      color: rgba(255,255,255,0.7);
-    }
-    .footer-inner {
-      display: grid;
-      grid-template-columns: 1.6fr 1fr 1fr 1.4fr;
-      gap: 48px;
-      padding: 60px 32px 40px;
-      max-width: 1260px;
-      margin: 0 auto;
-    }
-    .footer-brand .brand { color: #fff; margin-bottom: 12px; }
-    .footer-brand p { font-size: 0.9rem; line-height: 1.7; max-width: 260px; }
-    .footer-col h4 {
-      font-size: 0.88rem; font-weight: 700; text-transform: uppercase;
-      letter-spacing: 0.08em; color: #fff; margin-bottom: 16px;
-    }
-    .footer-col a {
-      display: block; font-size: 0.9rem;
-      color: rgba(255,255,255,0.6);
-      margin-bottom: 10px; transition: color 0.2s;
-    }
-    .footer-col a:hover { color: var(--teal-mid); }
-
-    .newsletter-form {
-      display: flex; gap: 8px; margin-top: 4px;
-    }
-    .newsletter-form input {
-      flex: 1; padding: 10px 14px;
-      border-radius: var(--radius-sm);
-      border: 1px solid rgba(255,255,255,0.15);
-      background: rgba(255,255,255,0.08);
-      color: #fff; font-size: 0.88rem;
-    }
-    .newsletter-form input::placeholder { color: rgba(255,255,255,0.35); }
-    .newsletter-form button {
-      padding: 10px 18px;
-      border-radius: var(--radius-sm);
-      background: var(--teal); color: #fff;
-      font-size: 0.88rem; font-weight: 600;
-      white-space: nowrap;
-    }
-    .footer-bottom {
-      border-top: 1px solid rgba(255,255,255,0.08);
-      max-width: 1260px; margin: 0 auto;
-      padding: 20px 32px;
-      display: flex; align-items: center; justify-content: space-between;
-      font-size: 0.82rem; color: rgba(255,255,255,0.35);
-    }
-
-    /* ─── MOBILE NAV DRAWER ───────────────────────────── */
-    .mobile-drawer {
-      display: none;
-      position: fixed;
-      inset: 0; z-index: 200;
-    }
-    .drawer-overlay {
-      position: absolute; inset: 0;
-      background: rgba(0,0,0,0.4);
-      backdrop-filter: blur(4px);
-    }
-    .drawer-panel {
-      position: absolute; top: 0; right: 0; bottom: 0;
-      width: min(320px, 90vw);
-      background: var(--surface);
-      padding: 24px;
-      overflow-y: auto;
-      transform: translateX(100%);
-      transition: transform 0.3s ease;
-    }
-    .mobile-drawer.open { display: block; }
-    .mobile-drawer.open .drawer-panel { transform: translateX(0); }
-    .drawer-close {
-      display: flex; justify-content: flex-end;
-      margin-bottom: 24px;
-    }
-    .drawer-close button {
-      background: none; border: none; font-size: 1.4rem;
-      color: var(--text); cursor: pointer;
-    }
-    .drawer-nav { display: flex; flex-direction: column; gap: 4px; margin-bottom: 28px; }
-    .drawer-nav a {
-      padding: 12px 14px;
-      border-radius: var(--radius-sm);
-      font-weight: 600; font-size: 1rem;
-      color: var(--text); transition: background 0.2s;
-    }
-    .drawer-nav a:hover, .drawer-nav a.active {
-      background: rgba(53,186,201,0.09); color: var(--teal);
-    }
-    .drawer-actions { display: flex; flex-direction: column; gap: 10px; }
-    .drawer-actions .btn { width: 100%; justify-content: center; }
-
-    /* ─── RESPONSIVE ──────────────────────────────────── */
-    @media (max-width: 1024px) {
-      .hero-inner { grid-template-columns: 1fr; gap: 48px; }
-      .hero-visual { order: -1; }
-      .hero h1 { font-size: clamp(2.2rem, 6vw, 3rem); }
-      .hero-badge.badge-1 { bottom: -10px; left: 12px; }
-      .hero-badge.badge-2 { top: -10px; right: 12px; }
-      .mission-inner { grid-template-columns: 1fr; gap: 40px; }
-      .mission-copy { position: static; }
-      .challenges-inner { grid-template-columns: 1fr; gap: 40px; }
-      .challenges-grid { grid-template-columns: 1fr 1fr; }
-      .footer-inner { grid-template-columns: 1fr 1fr; gap: 36px; }
-    }
-
-    @media (max-width: 768px) {
-      .main-nav, .header-actions { display: none; }
-      .nav-toggle { display: block; }
-      .shell { padding: 0 20px; }
-      .header-inner { padding: 14px 20px; }
-      section { padding: 56px 0; }
-      .hero { padding: 60px 0 48px; }
-      .hero-stats { grid-template-columns: repeat(2, 1fr); }
-      .team-grid { grid-template-columns: 1fr 1fr; }
-      .challenges-section { margin: 0 20px; padding: 48px 32px; }
-      .challenges-grid { grid-template-columns: 1fr; }
-      .cta-strip {
-        flex-direction: column; align-items: flex-start;
-        margin: 0 20px 60px; padding: 44px 36px;
-      }
-      .cta-actions { flex-wrap: wrap; }
-      .footer-inner { grid-template-columns: 1fr; padding: 48px 20px 32px; }
-      .footer-bottom { flex-direction: column; gap: 8px; padding: 20px; }
-      .newsletter-form { flex-direction: column; }
-    }
-
-    @media (max-width: 480px) {
-      .team-grid { grid-template-columns: 1fr; max-width: 360px; margin: 0 auto; }
-      .hero-stats { grid-template-columns: repeat(2, 1fr); }
-      .hero-badge { display: none; }
-      .challenges-section { margin: 0 12px; padding: 40px 24px; }
-      .cta-strip { margin: 0 12px 48px; padding: 36px 24px; }
-    }
-
-    /* ─── ANIMATIONS ──────────────────────────────────── */
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(22px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-    .fade-up { animation: fadeUp 0.6s ease forwards; }
-    .delay-1 { animation-delay: 0.1s; opacity: 0; }
-    .delay-2 { animation-delay: 0.2s; opacity: 0; }
-    .delay-3 { animation-delay: 0.3s; opacity: 0; }
-    .delay-4 { animation-delay: 0.4s; opacity: 0; }
-    </style>
 </head>
 
 <body>
@@ -592,212 +219,378 @@
         <!-- ══════════════════════════════════
           MISSION / VISION / PROMISE
       ══════════════════════════════════ -->
-      <section class="mission-section">
-        <div class="shell">
-          <div class="mission-inner">
-            <!-- sticky copy -->
-            <div class="mission-copy">
-              <p class="section-label">Our Foundation</p>
-              <h2 class="section-title">Making Healthcare Accessible, Intelligent &amp; Connected</h2>
-              <p class="section-body">
-                We believe every patient deserves quality care, regardless of location or circumstance.
-                These principles guide everything we build.
-              </p>
+      <div class="trust">
+  <div class="container">
+    <div class="trust-label">Trusted by Healthcare Teams Across Africa</div>
+    <div class="trust-row">
+      <div class="trust-item">
+        <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+        LifeCare <span class="trust-item-sub">&nbsp;Clinic</span>
+      </div>
+      <div class="trust-item">
+        <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="9"/><path d="M8.5 12a3.5 3.5 0 1 0 7 0 3.5 3.5 0 0 0-7 0z"/></svg>
+        GreenLife <span class="trust-item-sub">&nbsp;Pharmacy</span>
+      </div>
+      <div class="trust-item">
+        <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="4"/><path d="M9 12h6M12 9v6" stroke-linecap="round"/></svg>
+        City Hospital <span class="trust-item-sub">&nbsp;Health Care</span>
+      </div>
+      <div class="trust-item">
+        <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 0 1 0 18M3 12h18" stroke-linecap="round"/></svg>
+        MetroCare <span class="trust-item-sub">&nbsp;Clinics</span>
+      </div>
+      <div class="trust-item">
+        <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        HealthPlus <span class="trust-item-sub">&nbsp;Clinics</span>
+      </div>
+    </div>
+  </div>
+      </div>
+
+      <!-- ══════════ MISSION ══════════ -->
+      <div class="mission-wrap">
+        <div class="container">
+          <div class="label label-dot reveal">Our Mission</div>
+          <div class="mission-inner reveal reveal-delay-1">
+            <div class="mission-grid">
+              <div class="mission-intro">
+                <h2>Making Healthcare Accessible, Intelligent and Connected.</h2>
+                <div class="mission-divider"></div>
+                <p>We believe every patient deserves safe, fast and continuous care — no matter where they are.</p>
+              </div>
+
+              <div class="mission-wrap-card">
+                <div class="m-card reveal reveal-delay-2">
+                  <div class="m-card-icon">
+                    <i class="fas fa-bullseye"></i>
+                  </div>
+                  <h3>Our Mission</h3>
+                  <p>To digitize and connect healthcare records across Africa, empowering providers and improving patient outcomes.</p>
+                </div>
+
+                <div class="m-card reveal reveal-delay-3">
+                  <div class="m-card-icon" style="background:#FFF1F4">
+                    <i class="fas fa-eye"></i>
+                  </div>
+                  <h3>Our Vision</h3>
+                  <p>A future where every African has access to their health information, anytime, anywhere.</p>
+                </div>
+
+                <!-- <div class="m-card reveal reveal-delay-4">
+                  <div class="m-card-icon" style="background:#F0FDF4">
+                    <i class="fas fa-shield-alt" style="color:#16A34A"></i>
+                  </div>
+                  <h3>Our Promise</h3>
+                  <p>Secure data. Smarter care. Better decisions. Stronger communities.</p>
+                </div> -->
+              </div><!-- /mission-wrap-card -->
+
+            </div><!-- /mission-grid -->
+          </div><!-- /mission-inner -->
+        </div><!-- /container -->
+      </div><!-- /mission-wrap -->
+
+      <!-- ══════════ STORY / TIMELINE ══════════ -->
+      <div class="story-wrap">
+        <div class="container">
+          <div class="label label-dot reveal">Our Story</div>
+          <div class="story-grid">
+            <div class="reveal reveal-delay-1">
+              <h2>Solving Real Problems with Real Impact</h2>
+              <p>NovaBuk was born out of a simple observation — healthcare records in Africa are fragmented, manual and difficult to access.</p>
+              <a href="#" class="btn btn-ghost">Read Our Full Story
+                <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              </a>
             </div>
 
-            <!-- cards -->
-            <div class="mission-cards">
-              <div class="mission-card">
-                <div class="mission-icon"><i class="fa-solid fa-rocket"></i></div>
-                <div>
-                  <h4>Our Mission</h4>
-                  <p>Making healthcare accessible, intelligent, and connected for every person across the African continent through technology that actually works in local contexts.</p>
+            <div class="timeline reveal reveal-delay-2">
+              <div class="tl-track">
+                <div class="tl-item">
+                  <div class="tl-icon-wrap" style="border-color:#DBEAFE">
+                    <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="#1B4FE4" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M12 2v2M12 20v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M2 12h2M20 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" stroke-linecap="round"/></svg>
+                  </div>
+                  <div class="tl-dot" style="background:#1B4FE4"></div>
+                  <div class="tl-year">2021</div>
+                  <div class="tl-name">The Idea</div>
+                  <div class="tl-desc">Identified the gap in healthcare record management across African clinics.</div>
+                </div>
+                <div class="tl-item">
+                  <div class="tl-icon-wrap" style="border-color:#D1FAE5">
+                    <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="#22C55E" stroke-width="1.8"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+                  </div>
+                  <div class="tl-dot" style="background:#22C55E"></div>
+                  <div class="tl-year">2022</div>
+                  <div class="tl-name">First Prototype</div>
+                  <div class="tl-desc">Built and began pilot testing with partner clinics.</div>
+                </div>
+                <div class="tl-item">
+                  <div class="tl-icon-wrap" style="border-color:#E0E7FF">
+                    <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="#6366F1" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M9 12l2 2 4-4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  </div>
+                  <div class="tl-dot" style="background:#6366F1"></div>
+                  <div class="tl-year">2023</div>
+                  <div class="tl-name">Pilot Launch</div>
+                  <div class="tl-desc">Onboarded clinics and collected real-world feedback.</div>
+                </div>
+                <div class="tl-item">
+                  <div class="tl-icon-wrap" style="border-color:#FEE2E2">
+                    <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="#EF4444" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M2 12h20M12 3a15 15 0 0 1 4 9 15 15 0 0 1-4 9 15 15 0 0 1-4-9 15 15 0 0 1 4-9z" stroke-linecap="round"/></svg>
+                  </div>
+                  <div class="tl-dot" style="background:#EF4444"></div>
+                  <div class="tl-year">2024</div>
+                  <div class="tl-name">Expanding Impact</div>
+                  <div class="tl-desc">Scaling across more regions with AI-powered tools.</div>
+                </div>
+                <div class="tl-item">
+                  <div class="tl-icon-wrap" style="border-color:#FEF3C7">
+                    <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="#F59E0B" stroke-width="1.8"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                  </div>
+                  <div class="tl-dot" style="background:#F59E0B"></div>
+                  <div class="tl-year">2025+</div>
+                  <div class="tl-name">The Future</div>
+                  <div class="tl-desc">Transforming healthcare across Africa and beyond.</div>
                 </div>
               </div>
-              <div class="mission-card">
-                <div class="mission-icon"><i class="fa-solid fa-eye"></i></div>
-                <div>
-                  <h4>Our Vision</h4>
-                  <p>A future where every African has access to their full health information — anytime, anywhere — and providers have the tools to deliver world-class care.</p>
+
+              <!-- ── MOBILE SPINE TIMELINE ── -->
+              <div class="tl-mobile">
+
+                <div class="tl-mob-item" style="--tl-color:#1B4FE4;--tl-bg:#EBF0FF">
+                  <div class="tl-mob-left">
+                    <div class="tl-mob-icon">
+                      <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="#1B4FE4" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M12 2v2M12 20v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M2 12h2M20 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" stroke-linecap="round"/></svg>
+                    </div>
+                  </div>
+                  <div class="tl-mob-card" data-year="2021">
+                    <div class="tl-mob-year-badge"><span class="tl-mob-dot"></span>2021</div>
+                    <div class="tl-mob-name">The Idea</div>
+                    <div class="tl-mob-desc">Identified the gap in healthcare record management across African clinics — and knew something had to change.</div>
+                  </div>
                 </div>
-              </div>
-              <div class="mission-card">
-                <div class="mission-icon"><i class="fa-solid fa-handshake"></i></div>
-                <div>
-                  <h4>Our Promise</h4>
-                  <p>Secure data. Smarter care. Better decisions. We are committed to protecting patient privacy while enabling the insights that improve health outcomes across communities.</p>
+
+                <div class="tl-mob-item" style="--tl-color:#22C55E;--tl-bg:#DCFCE7">
+                  <div class="tl-mob-left">
+                    <div class="tl-mob-icon">
+                      <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="#22C55E" stroke-width="1.8"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+                    </div>
+                  </div>
+                  <div class="tl-mob-card" data-year="2022">
+                    <div class="tl-mob-year-badge"><span class="tl-mob-dot"></span>2022</div>
+                    <div class="tl-mob-name">First Prototype</div>
+                    <div class="tl-mob-desc">Built our first prototype and began pilot testing with partner clinics across Nigeria.</div>
+                  </div>
                 </div>
-              </div>
+
+                <div class="tl-mob-item" style="--tl-color:#6366F1;--tl-bg:#EEF2FF">
+                  <div class="tl-mob-left">
+                    <div class="tl-mob-icon">
+                      <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="#6366F1" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M9 12l2 2 4-4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    </div>
+                  </div>
+                  <div class="tl-mob-card" data-year="2023">
+                    <div class="tl-mob-year-badge"><span class="tl-mob-dot"></span>2023</div>
+                    <div class="tl-mob-name">Pilot Launch</div>
+                    <div class="tl-mob-desc">Onboarded clinics at scale, collected real-world feedback, and iterated fast to build better.</div>
+                  </div>
+                </div>
+
+                <div class="tl-mob-item" style="--tl-color:#EF4444;--tl-bg:#FEF2F2">
+                  <div class="tl-mob-left">
+                    <div class="tl-mob-icon">
+                      <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="#EF4444" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M2 12h20M12 3a15 15 0 0 1 4 9 15 15 0 0 1-4 9 15 15 0 0 1-4-9 15 15 0 0 1 4-9z" stroke-linecap="round"/></svg>
+                    </div>
+                  </div>
+                  <div class="tl-mob-card" data-year="2024">
+                    <div class="tl-mob-year-badge"><span class="tl-mob-dot"></span>2024</div>
+                    <div class="tl-mob-name">Expanding Impact</div>
+                    <div class="tl-mob-desc">Scaled across more regions and launched AI-powered healthcare tools that change how care is delivered.</div>
+                  </div>
+                </div>
+
+                <div class="tl-mob-item" style="--tl-color:#F59E0B;--tl-bg:#FFFBEB">
+                  <div class="tl-mob-left">
+                    <div class="tl-mob-icon">
+                      <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="#F59E0B" stroke-width="1.8"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                    </div>
+                  </div>
+                  <div class="tl-mob-card" data-year="2025">
+                    <div class="tl-mob-year-badge"><span class="tl-mob-dot"></span>2025+</div>
+                    <div class="tl-mob-name">The Future</div>
+                    <div class="tl-mob-desc">Continuing to innovate and transform healthcare across Africa and beyond — the journey has only just begun.</div>
+                  </div>
+                </div>
+
+              </div><!-- /tl-mobile -->
+
             </div>
           </div>
-        </div>
-      </section>
-
-      <!-- ══════════════════════════════════
-          CHALLENGES (DARK)
-      ══════════════════════════════════ -->
-      <section style="padding: 80px 0;">
-        <div class="challenges-section">
-          <div class="challenges-inner">
-            <div>
-              <p class="section-label">Why It Matters</p>
-              <h2 class="section-title">The Challenges We're Working to Solve</h2>
-              <p class="section-body">
-                Healthcare systems face similar structural problems across the continent.
-                NovaBuk exists to change that — one clinic at a time.
-              </p>
-            </div>
-
-            <div class="challenges-grid">
-              <div class="challenge-card">
-                <div class="challenge-icon"><i class="fa-solid fa-file-circle-xmark"></i></div>
-                <h4>Lost Records</h4>
-                <p>Paper-based systems lead to incomplete or missing medical records that follow patients across visits.</p>
-              </div>
-              <div class="challenge-card">
-                <div class="challenge-icon"><i class="fa-solid fa-gears"></i></div>
-                <h4>Inefficient Workflows</h4>
-                <p>Manual processes and lack of automation slow down healthcare delivery and burden clinical staff.</p>
-              </div>
-              <div class="challenge-card">
-                <div class="challenge-icon"><i class="fa-solid fa-comments"></i></div>
-                <h4>Communication Gaps</h4>
-                <p>Fragmented provider communication leads to duplicated tests, errors, and delayed patient care.</p>
-              </div>
-              <div class="challenge-card">
-                <div class="challenge-icon"><i class="fa-solid fa-chart-simple"></i></div>
-                <h4>No Data Insights</h4>
-                <p>Without structured data, clinics and hospitals cannot identify trends or make informed operational decisions.</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- ══════════════════════════════════
-          TEAM
-      ══════════════════════════════════ -->
-      <section class="team-section">
-        <div class="shell">
-          <div class="team-header">
-            <p class="section-label">Our People</p>
-            <h2 class="section-title">A Team With Deep Passion for Healthcare</h2>
-            <p class="section-body" style="margin: 14px auto 0; text-align: center; max-width: 560px;">
-              We are a team of builders, clinicians, and designers dedicated to transforming
-              healthcare delivery across Africa.
-            </p>
-          </div>
-
-          <div class="team-grid">
-            <!-- card 1 -->
-            <div class="team-card">
-              <div class="team-photo">
-                <img src="./images/image 33.png" alt="Faith Michael"
-                    onerror="this.parentNode.innerHTML='<div class=\'team-photo-placeholder\'><i class=\'fa-solid fa-user\'></i></div>'" />
-              </div>
-              <div class="team-info">
-                <h4>Faith Michael</h4>
-                <p class="role">CEO &amp; Founder</p>
-                <div class="team-social">
-                  <a href="#" aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
-                  <a href="#" aria-label="Twitter"><i class="fa-brands fa-x-twitter"></i></a>
-                </div>
-              </div>
-            </div>
-            <!-- card 2 -->
-            <div class="team-card">
-              <div class="team-photo">
-                <img src="./images/image 33.png" alt="Team Member"
-                    onerror="this.parentNode.innerHTML='<div class=\'team-photo-placeholder\'><i class=\'fa-solid fa-user\'></i></div>'" />
-              </div>
-              <div class="team-info">
-                <h4>David Okonkwo</h4>
-                <p class="role">CTO</p>
-                <div class="team-social">
-                  <a href="#" aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
-                  <a href="#" aria-label="GitHub"><i class="fa-brands fa-github"></i></a>
-                </div>
-              </div>
-            </div>
-            <!-- card 3 -->
-            <div class="team-card">
-              <div class="team-photo">
-                <img src="./images/image 33.png" alt="Team Member"
-                    onerror="this.parentNode.innerHTML='<div class=\'team-photo-placeholder\'><i class=\'fa-solid fa-user\'></i></div>'" />
-              </div>
-              <div class="team-info">
-                <h4>Amara Bello</h4>
-                <p class="role">Head of Product</p>
-                <div class="team-social">
-                  <a href="#" aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
-                  <a href="#" aria-label="Twitter"><i class="fa-brands fa-x-twitter"></i></a>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- ══════════════════════════════════
-          CTA STRIP
-      ══════════════════════════════════ -->
-      <div class="cta-strip">
-        <div class="cta-copy">
-          <h2>Ready to Transform Your Clinic?</h2>
-          <p>Join 50+ healthcare facilities already running on NovaBuk.</p>
-        </div>
-        <div class="cta-actions">
-          <button class="btn btn-white">Book a Demo <i class="fa-solid fa-arrow-right" style="font-size:0.8em"></i></button>
-          <button class="btn btn-outline-white">Talk to Sales</button>
         </div>
       </div>
 
-      
+      <!-- ══════════ CHALLENGES ══════════ -->
+      <section class="challenges">
+        <div class="container">
+          <div class="ch-grid">
+            <div class="ch-left reveal">
+              <div class="label label-dot">Why It Matters</div>
+              <h2>The Challenges We Are Working To Solve</h2>
+              <p>Healthcare systems across Africa face similar challenges. NovaBuk exists to change that.</p>
+              <a href="#" class="btn btn-ghost-white">
+                Learn How We Help
+                <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              </a>
+            </div>
+
+            <div class="ch-cards reveal reveal-delay-2">
+              <div class="dotted-line"></div>
+              <div class="ch-card">
+                <div class="ch-icon">
+                  <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="rgba(255,255,255,.75)" stroke-width="1.7"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+                </div>
+                <h4>Lost Records</h4>
+                <p>Paper-based systems lead to lost or incomplete patient data.</p>
+              </div>
+              <div class="dotted-line"></div>
+              <div class="ch-card">
+                <div class="ch-icon">
+                  <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="rgba(255,255,255,.75)" stroke-width="1.7"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 14"/></svg>
+                </div>
+                <h4>Slow Processes</h4>
+                <p>Manual workflows slow down care and increase errors.</p>
+              </div>
+              <div class="dotted-line"></div>
+              <div class="ch-card">
+                <div class="ch-icon">
+                  <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="rgba(255,255,255,.75)" stroke-width="1.7"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                </div>
+                <h4>Limited Access</h4>
+                <p>Patients can't easily access their health information.</p>
+              </div>
+              <div class="dotted-line"></div>
+              <div class="ch-card">
+                <div class="ch-icon">
+                  <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="rgba(255,255,255,.75)" stroke-width="1.7"><rect x="2" y="3" width="7" height="7" rx="1"/><rect x="15" y="3" width="7" height="7" rx="1"/><rect x="2" y="14" width="7" height="7" rx="1"/><rect x="15" y="14" width="7" height="7" rx="1"/><path d="M9 6.5h6M9 17.5h6M12 10v4" stroke-linecap="round"/></svg>
+                </div>
+                <h4>Fragmented Systems</h4>
+                <p>Disjointed tools make it hard for providers to work efficiently.</p>
+              </div>
+              <!-- <div class="ch-card">
+                <div class="ch-icon">
+                  <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="rgba(255,255,255,.75)" stroke-width="1.7"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3" stroke-linecap="round"/></svg>
+                </div>
+                <h4>High Costs</h4>
+                <p>Inefficiencies drive up costs for clinics and patients.</p>
+              </div> -->
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ══════════ TEAM ══════════ -->
+      <div class="team-wrap">
+        <div class="container">
+          <div class="label label-dot reveal">The People Behind NovaBuk</div>
+          <div class="team-grid">
+            <div class="reveal reveal-delay-1">
+              <h2>A Team with Deep Passion for Healthcare &amp; Technology</h2>
+              <p>We are a diverse team of healthcare professionals, engineers, and innovators building the future of healthcare in Africa.</p>
+              <a href="#" class="btn btn-ghost">
+                <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="9" cy="7" r="4"/><path d="M3 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/><path d="M21 21v-2a4 4 0 0 0-3-3.85"/></svg>
+                Meet the Team
+              </a>
+            </div>
+
+            <div class="team-cards reveal reveal-delay-2">
+              <div class="team-card">
+                <div class="team-avatar">EA</div>
+                <div class="team-info">
+                  <h4>Emmanuel Ayodele</h4>
+                  <p class="role">Co-founder &amp; CEO</p>
+                  <a href="#" class="li-btn" aria-label="LinkedIn">
+                    <svg width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="#fff" stroke-width="2.2"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+                  </a>
+                </div>
+              </div>
+              <div class="team-card">
+                <div class="team-avatar" style="background:linear-gradient(145deg,#C7EEFF,#D8F5FF)">CO</div>
+                <div class="team-info">
+                  <h4>Dr. Chinedu Okoye</h4>
+                  <p class="role">Co-founder &amp; Medical Lead</p>
+                  <a href="#" class="li-btn" aria-label="LinkedIn">
+                    <svg width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="#fff" stroke-width="2.2"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+                  </a>
+                </div>
+              </div>
+              <div class="team-card">
+                <div class="team-avatar" style="background:linear-gradient(145deg,#D4EDDA,#E8F8EC)">TA</div>
+                <div class="team-info">
+                  <h4>Tunde Adebayo</h4>
+                  <p class="role">CTO</p>
+                  <a href="#" class="li-btn" aria-label="LinkedIn">
+                    <svg width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="#fff" stroke-width="2.2"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+                  </a>
+                </div>
+              </div>
+              <div class="team-card">
+                <div class="team-avatar" style="background:linear-gradient(145deg,#F8E0FF,#FDF0FF)">AI</div>
+                <div class="team-info">
+                  <h4>Aisha Ibrahim</h4>
+                  <p class="role">Head of Operations</p>
+                  <a href="#" class="li-btn" aria-label="LinkedIn">
+                    <svg width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="#fff" stroke-width="2.2"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
     </main>
-
-
     <!-- ── FOOTER ─────────────────────────────────────── -->
     <footer class="site-footer">
-      <div class="footer-inner">
-        <div class="footer-top">
-          <div class="footer-brand-col footer-col">
-            <div class="brand">Nova<span style="color:var(--primary)">Buk</span></div>
-            <p>AI-powered healthcare records platform built for Africa. Secure. Connected. Intelligent.</p>
-          </div>
-          <div class="footer-col">
-            <h5>Product</h5>
+        <div class="footer-brand">
+          <div class="brand"><img src="./images/logo.png" alt=""></div>
+          <p>AI-powered healthcare records platform built for Africa.</p>
+        </div>
+        <div class="footer-links">
+          <!-- <div>
+            <h4>Product</h4>
             <a href="#">Features</a>
             <a href="#">Security</a>
             <a href="#">Pricing</a>
-            <a href="#">Integrations</a>
+            <a href="#">Changelog</a>
+          </div> -->
+          <div>
+            <h4>Solutions</h4>
+            <a href="#">For Clinics</a>
+            <a href="#">For Doctors</a>
+            <a href="#">For Pharmacies</a>
+            <a href="#">For Patients</a>
           </div>
-          <div class="footer-col">
-            <h5>Company</h5>
+          <div>
+            <h4>Resources</h4>
+            <a href="#">Help Center</a>
+            <a href="#">Documentation</a>
+            <a href="#">Community</a>
+          </div>
+          <div>
+            <h4>Company</h4>
             <a href="#">About Us</a>
             <a href="#">Careers</a>
-            <a href="#">Blog</a>
-            <a href="#">Contact</a>
-          </div>
-          <div class="footer-col">
-            <h5>Newsletter</h5>
-            <p style="font-size:0.88rem;margin-bottom:14px">Get the latest updates and news from NovaBuk.</p>
-            <form class="newsletter-form" onsubmit="return false">
-              <input type="email" placeholder="your@email.com" />
-              <button type="submit">Subscribe</button>
-            </form>
+            <a href="#">Partners</a>
+            <a href="#">Contact Us</a>
           </div>
         </div>
-
-        <div class="footer-bottom">
-          <span>&copy; 2025 NovaBuk Technologies Ltd. All rights reserved.</span>
-          <div style="display:flex;gap:20px;flex-wrap:wrap">
-            <a href="#">Privacy Policy</a>
-            <a href="#">Terms of Service</a>
-            <a href="#">Security</a>
-          </div>
+        <div class="newsletter">
+          <h4>Newsletter</h4>
+          <p>Get the latest updates and news about NovaBuk.</p>
+          <form class="newsletter-form">
+            <input type="email" placeholder="Enter your email" />
+            <button type="submit">Subscribe</button>
+          </form>
         </div>
-      </div>
-    </footer>
+      </footer>
   </div>
 
   <script src="./db.js"></script>
@@ -824,19 +617,18 @@
 
   <!-- New sections scripts -->
   <script>
-    // Scroll Reveal Animation
-    const revealElements = document.querySelectorAll('.nb-reveal');
-    const checkReveal = () => {
-      const triggerBottom = window.innerHeight * 0.85;
-      revealElements.forEach(el => {
-        const elTop = el.getBoundingClientRect().top;
-        if (elTop < triggerBottom) {
-          el.classList.add('nb-visible');
+    // Scroll Reveal Animation — handles both .reveal and .nb-reveal classes
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach(el => {
+        if (el.isIntersecting) {
+          el.target.classList.add('visible');
+          el.target.classList.add('nb-visible');
+          revealObserver.unobserve(el.target);
         }
       });
-    };
-    window.addEventListener('scroll', checkReveal);
-    window.addEventListener('load', checkReveal);
+    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+    document.querySelectorAll('.reveal, .nb-reveal').forEach(el => revealObserver.observe(el));
   </script>
 </body>
 

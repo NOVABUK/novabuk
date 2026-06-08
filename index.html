@@ -42,7 +42,7 @@
 
     <!-- css links -->
     <link rel="stylesheet" href="./styles.css" />
-    <!-- <link rel="stylesheet" href="./styles-app.css" /> -->
+    <link rel="stylesheet" href="./styles-app.css" />
     <link rel="stylesheet" href="./styles-new-sections.css" />
 
     <!-- font awesome cdn -->
@@ -291,7 +291,7 @@
                 See How It Works <span><i class="fas fa-play-circle"></i></span>
               </button>
             </div>
-            <div class="metrics-strip">
+            <!-- <div class="metrics-strip">
               <div>
                 <strong><i class="fas fa-lock"></i></strong> End to end
                 encryption
@@ -307,7 +307,7 @@
               <div>
                 <strong><i class="fas fa-file-medical"></i></strong> EHR
               </div>
-            </div>
+            </div> -->
             <div class="metrics-strip">
               <div style="display: flex; align-items: center; gap: 10px">
                 <div
@@ -454,6 +454,7 @@
             Get started with NovaBuk in a few simple steps and experience
             healthcare meet innovation.
           </p>
+          <!-- Desktop 4-column track -->
           <div class="nb-steps">
             <div class="nb-step">
               <div class="nb-step-icon"><i class="fas fa-user-plus"></i></div>
@@ -471,16 +472,49 @@
               <div class="nb-step-icon"><i class="fas fa-folder-open"></i></div>
               <span class="nb-step-number">Step 3</span>
               <h4>Record</h4>
-              <p>
-                Your visits, prescriptions, and lab tests digitize
-                automatically.
-              </p>
+              <p>Your visits, prescriptions, and lab tests digitize automatically.</p>
             </div>
             <div class="nb-step">
               <div class="nb-step-icon"><i class="fas fa-brain"></i></div>
               <span class="nb-step-number">Step 4</span>
               <h4>Insights</h4>
               <p>Get AI-powered health trends and personalized summaries.</p>
+            </div>
+          </div>
+
+          <!-- Mobile spine timeline (hidden on desktop, shown on mobile) -->
+          <div class="nb-steps-mobile">
+            <div class="nb-step-mob">
+              <div class="nb-step-mob-num"><i class="fas fa-user-plus"></i></div>
+              <div class="nb-step-mob-body" data-step="1">
+                <div class="nb-step-mob-label">Step 1</div>
+                <h4>Sign Up</h4>
+                <p>Create your free secure account in less than 60 seconds.</p>
+              </div>
+            </div>
+            <div class="nb-step-mob">
+              <div class="nb-step-mob-num"><i class="fas fa-link"></i></div>
+              <div class="nb-step-mob-body" data-step="2">
+                <div class="nb-step-mob-label">Step 2</div>
+                <h4>Connect</h4>
+                <p>Link with your preferred healthcare provider or clinic.</p>
+              </div>
+            </div>
+            <div class="nb-step-mob">
+              <div class="nb-step-mob-num"><i class="fas fa-folder-open"></i></div>
+              <div class="nb-step-mob-body" data-step="3">
+                <div class="nb-step-mob-label">Step 3</div>
+                <h4>Record</h4>
+                <p>Your visits, prescriptions, and lab tests digitize automatically.</p>
+              </div>
+            </div>
+            <div class="nb-step-mob">
+              <div class="nb-step-mob-num"><i class="fas fa-brain"></i></div>
+              <div class="nb-step-mob-body" data-step="4">
+                <div class="nb-step-mob-label">Step 4</div>
+                <h4>Insights</h4>
+                <p>Get AI-powered health trends and personalized summaries.</p>
+              </div>
             </div>
           </div>
         </div>
@@ -555,7 +589,7 @@
           <div class="dark-hero-copy">
             <p class="eyebrow light">WHY NOVABUK</p>
             <h2>
-              Built For Challenges of African HEalthcare
+              Built For Challenges of African Healthcare
             </h2>
             <ul class="dark-list">
               <li>Works offline, syncs when online</li>
@@ -681,20 +715,18 @@
             <!-- Patient Plan -->
             <div class="nb-price-card">
               <h4>Patient Basic</h4>
-              <p class="nb-price-desc">
-                For individuals to track health records
-              </p>
+              <p class="nb-price-desc">For individuals to track health records</p>
               <div class="nb-price-amount">₦0<span>/mo</span></div>
               <p class="nb-price-period">Free forever</p>
+              <div class="mob-price-expand">
+                <span class="mob-price-expand-label">See what's included</span>
+                <span class="mob-price-expand-icon"><i class="fas fa-chevron-down"></i></span>
+              </div>
               <ul class="nb-price-features">
                 <li><i class="fa-solid fa-check"></i> Basic Health Records</li>
                 <li><i class="fa-solid fa-check"></i> 1 Connected Clinic</li>
-                <li>
-                  <i class="fa-solid fa-check"></i> Medical Appointment Booking
-                </li>
-                <li>
-                  <i class="fa-solid fa-xmark"></i> AI Insights & Ann Alerts
-                </li>
+                <li><i class="fa-solid fa-check"></i> Medical Appointment Booking</li>
+                <li><i class="fa-solid fa-xmark"></i> AI Insights & Ann Alerts</li>
                 <li><i class="fa-solid fa-xmark"></i> NLP Symptom Checker</li>
               </ul>
               <a href="./sign-up.html" class="nb-price-btn">Get Started</a>
@@ -703,66 +735,40 @@
             <div class="nb-price-card popular">
               <span class="nb-price-badge">Most Popular</span>
               <h4>Clinic Starter</h4>
-              <p class="nb-price-desc">
-                For small clinics and private practices
-              </p>
-              <div
-                class="nb-price-amount nb-dynamic-price"
-                data-monthly="25000"
-                data-annual="20000"
-              >
-                ₦25,000<span>/mo</span>
-              </div>
+              <p class="nb-price-desc">For small clinics and private practices</p>
+              <div class="nb-price-amount nb-dynamic-price" data-monthly="25000" data-annual="20000">₦25,000<span>/mo</span></div>
               <p class="nb-price-period">Billed monthly</p>
+              <div class="mob-price-expand">
+                <span class="mob-price-expand-label">See what's included</span>
+                <span class="mob-price-expand-icon"><i class="fas fa-chevron-down"></i></span>
+              </div>
               <ul class="nb-price-features">
                 <li><i class="fa-solid fa-check"></i> Up to 3 Doctors/Staff</li>
-                <li>
-                  <i class="fa-solid fa-check"></i> Unlimited Digital Records
-                </li>
-                <li>
-                  <i class="fa-solid fa-check"></i> Smart Reminders & Scheduling
-                </li>
+                <li><i class="fa-solid fa-check"></i> Unlimited Digital Records</li>
+                <li><i class="fa-solid fa-check"></i> Smart Reminders & Scheduling</li>
                 <li><i class="fa-solid fa-check"></i> Core EHR Dashboard</li>
                 <li><i class="fa-solid fa-xmark"></i> Advanced AI Analytics</li>
               </ul>
-              <a
-                href="https://tally.so/r/PdAKA1"
-                target="_blank"
-                class="nb-price-btn"
-                >Join Pilot</a
-              >
+              <a href="https://tally.so/r/PdAKA1" target="_blank" class="nb-price-btn">Join Pilot</a>
             </div>
             <!-- Clinic Pro Plan -->
             <div class="nb-price-card">
               <h4>Clinic Pro</h4>
               <p class="nb-price-desc">For growing medical clinics</p>
-              <div
-                class="nb-price-amount nb-dynamic-price"
-                data-monthly="60000"
-                data-annual="48000"
-              >
-                ₦60,000<span>/mo</span>
-              </div>
+              <div class="nb-price-amount nb-dynamic-price" data-monthly="60000" data-annual="48000">₦60,000<span>/mo</span></div>
               <p class="nb-price-period">Billed monthly</p>
+              <div class="mob-price-expand">
+                <span class="mob-price-expand-label">See what's included</span>
+                <span class="mob-price-expand-icon"><i class="fas fa-chevron-down"></i></span>
+              </div>
               <ul class="nb-price-features">
-                <li>
-                  <i class="fa-solid fa-check"></i> Unlimited Doctors/Staff
-                </li>
-                <li>
-                  <i class="fa-solid fa-check"></i> AI Prescription Safety Check
-                </li>
+                <li><i class="fa-solid fa-check"></i> Unlimited Doctors/Staff</li>
+                <li><i class="fa-solid fa-check"></i> AI Prescription Safety Check</li>
                 <li><i class="fa-solid fa-check"></i> NLP Symptom Checker</li>
-                <li>
-                  <i class="fa-solid fa-check"></i> Predictive Patient Analytics
-                </li>
+                <li><i class="fa-solid fa-check"></i> Predictive Patient Analytics</li>
                 <li><i class="fa-solid fa-check"></i> Premium Support 24/7</li>
               </ul>
-              <a
-                href="https://tally.so/r/PdAKA1"
-                target="_blank"
-                class="nb-price-btn"
-                >Contact Sales</a
-              >
+              <a href="https://tally.so/r/PdAKA1" target="_blank" class="nb-price-btn">Contact Sales</a>
             </div>
           </div>
         </div>
@@ -850,17 +856,17 @@
 
       <footer class="site-footer">
         <div class="footer-brand">
-          <div class="brand">NovaBuk</div>
+          <div class="brand"><img src="./images/logo.png" alt=""></div>
           <p>AI-powered healthcare records platform built for Africa.</p>
         </div>
         <div class="footer-links">
-          <div>
+          <!-- <div>
             <h4>Product</h4>
             <a href="#">Features</a>
             <a href="#">Security</a>
             <a href="#">Pricing</a>
             <a href="#">Changelog</a>
-          </div>
+          </div> -->
           <div>
             <h4>Solutions</h4>
             <a href="#">For Clinics</a>
@@ -1007,269 +1013,87 @@
       };
     </script>
 
-    <!-- Floating WhatsApp widget -->
-    <a
-      href="https://wa.me/2348134684154?text=Hello%20NovaBuk,%20I'd%20like%20to%20inquire%20about%20your%20services."
-      class="nb-whatsapp-float"
-      target="_blank"
-      aria-label="Chat on WhatsApp"
-    >
-      <i class="fa-brands fa-whatsapp"></i>
-      <span class="nb-whatsapp-tooltip">Chat with us</span>
-    </a>
 
-    <!-- New sections scripts -->
+
     <script>
-      // Scroll Reveal Animation
-      const revealElements = document.querySelectorAll(".nb-reveal");
-      const checkReveal = () => {
-        const triggerBottom = window.innerHeight * 0.85;
-        revealElements.forEach((el) => {
-          const elTop = el.getBoundingClientRect().top;
-          if (elTop < triggerBottom) {
-            el.classList.add("nb-visible");
-          }
-        });
-      };
-      window.addEventListener("scroll", checkReveal);
-      window.addEventListener("load", checkReveal);
+      /* ── Generic scroll-snap dot tracker ── */
+      function trackScrollDots(scrollEl, dotsEl) {
+        if (!scrollEl || !dotsEl) return;
+        const dots = dotsEl.querySelectorAll('span');
+        scrollEl.addEventListener('scroll', () => {
+          const idx = Math.round(scrollEl.scrollLeft / scrollEl.clientWidth);
+          dots.forEach((d, i) => d.classList.toggle('active', i === idx));
+        }, { passive: true });
+      }
+      trackScrollDots(document.querySelector('.role-grid'), document.getElementById('rolesHint'));
+      trackScrollDots(document.querySelector('.nb-testimonials-track'), document.getElementById('testimDots'));
 
-      // FAQ Accordion Toggle
-      document.querySelectorAll(".nb-faq-question").forEach((q) => {
-        q.addEventListener("click", () => {
-          const item = q.parentElement;
-          const isActive = item.classList.contains("active");
+      /* ── Pricing accordion — tap the expand row OR the card header to open ── */
+      function isMobile() { return window.innerWidth <= 860; }
 
-          // Close other FAQ items
-          document
-            .querySelectorAll(".nb-faq-item")
-            .forEach((el) => el.classList.remove("active"));
-
-          if (!isActive) {
-            item.classList.add("active");
-          }
+      document.querySelectorAll('.nb-price-card').forEach(card => {
+        const toggle = card.querySelector('.mob-price-expand');
+        if (!toggle) return;
+        toggle.addEventListener('click', (e) => {
+          e.stopPropagation();
+          if (!isMobile()) return;
+          const isOpen = card.classList.contains('mob-expanded');
+          // close all cards first
+          document.querySelectorAll('.nb-price-card').forEach(c => c.classList.remove('mob-expanded'));
+          // open this one if it was closed
+          if (!isOpen) card.classList.add('mob-expanded');
         });
       });
 
-      // Pricing toggle functionality
-      const toggleBtns = document.querySelectorAll(".nb-toggle-btn");
-      if (toggleBtns.length > 0) {
-        toggleBtns.forEach((btn) => {
-          btn.addEventListener("click", () => {
-            toggleBtns.forEach((b) => b.classList.remove("active"));
-            btn.classList.add("active");
-            const period = btn.getAttribute("data-period");
-            const priceAmounts = document.querySelectorAll(".nb-dynamic-price");
-            const periodLabels = document.querySelectorAll(".nb-price-period");
-
-            priceAmounts.forEach((price) => {
-              const monthly = parseInt(price.getAttribute("data-monthly"));
-              const annual = parseInt(price.getAttribute("data-annual"));
-              if (period === "annually") {
-                price.innerHTML = `₦${annual.toLocaleString()}<span>/mo</span>`;
-              } else {
-                price.innerHTML = `₦${monthly.toLocaleString()}<span>/mo</span>`;
-              }
-            });
-
-            periodLabels.forEach((lbl) => {
-              if (
-                lbl.parentElement.querySelector("h4").textContent !==
-                "Patient Basic"
-              ) {
-                lbl.textContent =
-                  period === "annually" ? "Billed annually" : "Billed monthly";
-              }
-            });
-          });
-        });
+      /* Auto-expand the popular card on mobile on load */
+      function autoExpandPopular() {
+        if (isMobile()) {
+          document.querySelectorAll('.nb-price-card').forEach(c => c.classList.remove('mob-expanded'));
+          const pop = document.querySelector('.nb-price-card.popular');
+          if (pop) pop.classList.add('mob-expanded');
+        }
       }
+      autoExpandPopular();
+      window.addEventListener('resize', autoExpandPopular, { passive: true });
 
-      // Stats Counter animation
-      const statNumbers = document.querySelectorAll(".nb-stat-number");
-      let statsAnimated = false;
-      const animateStats = () => {
-        if (statsAnimated) return;
-        statNumbers.forEach((num) => {
-          const target = parseInt(num.getAttribute("data-target"));
-          const duration = 1500;
-          const start = 0;
-          const startTime = performance.now();
-
-          const updateCount = (timestamp) => {
-            const elapsed = timestamp - startTime;
-            const progress = Math.min(elapsed / duration, 1);
-            const current = Math.floor(progress * (target - start) + start);
-
-            if (target >= 1000) {
-              num.textContent = current.toLocaleString() + "+";
-            } else {
-              num.textContent =
-                current + (target === 4 || target === 15 ? "+" : "");
-            }
-
-            if (progress < 1) {
-              requestAnimationFrame(updateCount);
-            } else {
-              num.textContent = target.toLocaleString() + "+";
-            }
-          };
-          requestAnimationFrame(updateCount);
+      /* ── FAQ accordion ── */
+      document.querySelectorAll('.nb-faq-question').forEach(q => {
+        q.addEventListener('click', () => {
+          const item = q.closest('.nb-faq-item');
+          const wasOpen = item.classList.contains('active');
+          document.querySelectorAll('.nb-faq-item').forEach(i => i.classList.remove('active'));
+          if (!wasOpen) item.classList.add('active');
         });
-        statsAnimated = true;
-      };
+      });
 
-      // Check if stats are in view to start animation
-      const checkStatsInView = () => {
-        const statsSection = document.querySelector(".nb-stats");
-        if (!statsSection) return;
-        const rect = statsSection.getBoundingClientRect();
-        if (rect.top < window.innerHeight && rect.bottom >= 0) {
-          animateStats();
-          window.removeEventListener("scroll", checkStatsInView);
-        }
-      };
-      window.addEventListener("scroll", checkStatsInView);
-      window.addEventListener("load", checkStatsInView);
-
-      // ── Testimonial Slider ─────────────────────────
-      (function initTestimonialSlider() {
-        const track = document.getElementById("testimonialTrack");
-        const prevBtn = document.getElementById("testimonialPrev");
-        const nextBtn = document.getElementById("testimonialNext");
-        const dotsContainer = document.getElementById("testimonialDots");
-        if (!track || !prevBtn || !nextBtn || !dotsContainer) return;
-
-        const cards = Array.from(track.querySelectorAll(".nb-testimonial-card"));
-        if (cards.length === 0) return;
-
-        let currentIndex = 0;
-        let visibleCount = 1;
-        let maxIndex = 0;
-        let autoplayTimer = null;
-
-        function getGap() {
-          return parseFloat(getComputedStyle(track).gap) || 30;
-        }
-
-        function calcVisibleCount() {
-          const viewport = track.parentElement;
-          if (!viewport) return 1;
-          const viewportWidth = viewport.offsetWidth;
-          const cardWidth = cards[0].offsetWidth;
-          const gap = getGap();
-          const count = Math.floor((viewportWidth + gap) / (cardWidth + gap));
-          return Math.max(1, Math.min(count, cards.length));
-        }
-
-        function buildDots() {
-          dotsContainer.innerHTML = "";
-          const totalDots = maxIndex + 1;
-          for (let i = 0; i < totalDots; i++) {
-            const dot = document.createElement("button");
-            dot.className = "nb-slider-dot" + (i === currentIndex ? " active" : "");
-            dot.setAttribute("aria-label", "Go to slide " + (i + 1));
-            dot.addEventListener("click", () => goTo(i));
-            dotsContainer.appendChild(dot);
-          }
-        }
-
-        function updateButtons() {
-          prevBtn.disabled = currentIndex <= 0;
-          nextBtn.disabled = currentIndex >= maxIndex;
-        }
-
-        function updateDots() {
-          const dots = dotsContainer.querySelectorAll(".nb-slider-dot");
-          dots.forEach((d, i) => {
-            d.classList.toggle("active", i === currentIndex);
+      /* ── Pricing toggle (monthly / annual) ── */
+      document.querySelectorAll('.nb-toggle-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          document.querySelectorAll('.nb-toggle-btn').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          const period = btn.dataset.period;
+          document.querySelectorAll('.nb-dynamic-price').forEach(el => {
+            const val = period === 'annually' ? el.dataset.annual : el.dataset.monthly;
+            el.innerHTML = '₦' + Number(val).toLocaleString() + '<span>/mo</span>';
           });
-        }
-
-        function slide() {
-          const cardWidth = cards[0].offsetWidth;
-          const gap = getGap();
-          const offset = currentIndex * (cardWidth + gap);
-          track.style.transform = "translateX(-" + offset + "px)";
-          updateButtons();
-          updateDots();
-        }
-
-        function goTo(index) {
-          currentIndex = Math.max(0, Math.min(index, maxIndex));
-          slide();
-        }
-
-        function goNext() {
-          if (currentIndex < maxIndex) {
-            goTo(currentIndex + 1);
-          } else {
-            goTo(0); // loop back
-          }
-        }
-
-        function goPrev() {
-          if (currentIndex > 0) goTo(currentIndex - 1);
-        }
-
-        function recalc() {
-          visibleCount = calcVisibleCount();
-          maxIndex = Math.max(0, cards.length - visibleCount);
-          if (currentIndex > maxIndex) currentIndex = maxIndex;
-          buildDots();
-          slide();
-        }
-
-        // Event listeners
-        prevBtn.addEventListener("click", goPrev);
-        nextBtn.addEventListener("click", goNext);
-
-        // Touch / swipe support
-        let touchStartX = 0;
-        let touchEndX = 0;
-        const slider = document.getElementById("testimonialSlider");
-
-        slider.addEventListener("touchstart", (e) => {
-          touchStartX = e.changedTouches[0].screenX;
-        }, { passive: true });
-
-        slider.addEventListener("touchend", (e) => {
-          touchEndX = e.changedTouches[0].screenX;
-          const diff = touchStartX - touchEndX;
-          if (Math.abs(diff) > 50) {
-            if (diff > 0) goNext();
-            else goPrev();
-          }
-        }, { passive: true });
-
-        // Auto-advance every 5 seconds
-        function startAutoplay() {
-          stopAutoplay();
-          autoplayTimer = setInterval(goNext, 5000);
-        }
-
-        function stopAutoplay() {
-          if (autoplayTimer) {
-            clearInterval(autoplayTimer);
-            autoplayTimer = null;
-          }
-        }
-
-        // Pause on hover
-        slider.addEventListener("mouseenter", stopAutoplay);
-        slider.addEventListener("mouseleave", startAutoplay);
-
-        // Recalculate on resize
-        let resizeTimeout;
-        window.addEventListener("resize", () => {
-          clearTimeout(resizeTimeout);
-          resizeTimeout = setTimeout(recalc, 150);
+          document.querySelectorAll('.nb-price-period').forEach(el => {
+            el.textContent = period === 'annually' ? 'Billed annually' : 'Billed monthly';
+          });
         });
+      });
 
-        // Initialize
-        recalc();
-        startAutoplay();
-      })();
+      /* ── Scroll reveal — single clean observer, no inline style conflicts ── */
+      const revealIO = new IntersectionObserver(entries => {
+        entries.forEach(e => {
+          if (e.isIntersecting) {
+            e.target.classList.add('nb-visible');
+            e.target.classList.add('visible');
+            revealIO.unobserve(e.target);
+          }
+        });
+      }, { threshold: 0.08, rootMargin: '0px 0px -32px 0px' });
+
+      document.querySelectorAll('.nb-reveal, .reveal').forEach(el => revealIO.observe(el));
     </script>
   </body>
 </html>

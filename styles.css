@@ -11,8 +11,6 @@ html {
 body {
   overflow-x: hidden;
   min-height: 100vh;
-  display: flex;
-  flex-direction: column;
 }
 
 /* Ensure containers stretch to fill available space */
@@ -24,8 +22,7 @@ body {
   flex: 1;
 }
 
-/* Make main content areas grow to push footers down */
-.main, 
+ 
 .app-main, 
 .middle {
   flex: 1;
@@ -129,6 +126,17 @@ img {
   font-weight: 300;
   font-style: normal;
 } */
+
+.header .logo img {
+  width: 100%;
+  height: 50px;
+  /* margin-left: 80px; */
+}
+.brand img{
+  width: 50%;
+  height: 100;
+  /* object-fit: contain; */
+}
 
 .nav-links ul li a {
   color: black;
@@ -481,10 +489,14 @@ footer .navfoot .nav-menu ul {
 @media (max-width: 768px) {}
 
 @media (max-width: 1023px) {
+  .header{
+    padding-bottom: 40px;
+  }
 
   /*  Navbar Layout  */
-  .header .logo img {
-    width: 100px;
+  .header .logo img , .brand img{
+    width: auto;
+    /* height: ; */
   }
 
   .header .nav {

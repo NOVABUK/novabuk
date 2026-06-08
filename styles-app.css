@@ -11,8 +11,8 @@ html {
 body {
   overflow-x: hidden;
   min-height: 100vh;
-  display: flex;
-  flex-direction: column;
+  /* display: flex; */
+  /* flex-direction: column; */
 }
 
 /* Ensure containers stretch to fill available space */
@@ -335,7 +335,7 @@ body {
 }
 
 main {
-  background-color: #7ecad7;
+  /* background-color: #7ecad7; */
   width: 100%;
   height: auto;
   font-family: "Poppins", sans-serif;

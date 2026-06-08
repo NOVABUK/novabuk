@@ -355,7 +355,7 @@
 /* Newsletter Section */
 .newsletter-section {
   background: linear-gradient(135deg, #7ecad7, #35bac9);
-  padding: 60px 20px;
+  padding: 60px 20px !important;
   text-align: center;
   color: white;
 }
@@ -378,13 +378,13 @@
 }
 
 .newsletter-form {
-  display: flex;
+  display: flex !important;
   gap: 10px;
   margin-top: 25px;
 }
 
 .newsletter-form input {
-  flex: 1;
+  flex: 1 !important;
   padding: 14px 16px;
   border: none;
   border-radius: 8px;
