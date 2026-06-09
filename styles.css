@@ -128,6 +128,8 @@ img {
 } */
 
 .header .logo img {
+  /* background-color: white; */
+  mix-blend-mode: hard-light;
   width: 100%;
   height: 50px;
   /* margin-left: 80px; */
@@ -156,7 +158,8 @@ img {
   align-items: center;
   padding: 20px 0;
   z-index: 1000;
-  background: linear-gradient(130deg, #7ecad7, #35bac9);
+  /* background: linear-gradient(130deg, #7ecad7, #35bac9); */
+  background-color: #35bac9;
 }
 
 /* Ensure hamburger is hidden on desktop */
@@ -193,6 +196,7 @@ img {
 
 .signup-btns ul {
   display: flex;
+  align-items: center;
 }
 
 .nav-links ul li,
@@ -1788,6 +1792,7 @@ footer .navfoot .nav-menu ul {
   background: linear-gradient(130deg, #7ecad7, #35bac9) !important;
   position: relative;
   overflow: hidden;
+  padding-bottom: 70px;
 }
 
 

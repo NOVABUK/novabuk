@@ -2331,6 +2331,10 @@ main {
     top: 40px;
     /* Slide down into view */
   }
+  /* Hide the network toast on small mobile to avoid the black pill overlay */
+  .network-toast {
+    display: none !important;
+  }
   /* Make sure the hamburger toggle icon is visible on mobile */
   .nav-toggle,
   #navToggle {
