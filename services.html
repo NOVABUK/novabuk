@@ -1,551 +1,755 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" sizes="180x180" href="./images/logo.png">
-    
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" sizes="180x180" href="./images/logo.png" />
+
     <title>NovaBuk Features | AI-Driven Healthcare Solutions for Africa</title>
-    <meta name="description" content="Explore NovaBuk's powerful features: Secure Digital Medical Records (EHR), AI-driven health insights, smart appointment scheduling, and seamless clinic connectivity for modern healthcare in Africa.">
-    <meta name="keywords" content="Digital Health Records Africa, AI Healthcare Insights, Clinic Management Software, Telemedicine Africa, Patient EHR Portal, NovaBuk Features">
-    <meta name="author" content="NovaBuk">
-    <meta name="robots" content="index, follow">
+    <meta
+      name="description"
+      content="Explore NovaBuk's powerful features: Secure Digital Medical Records (EHR), AI-driven health insights, smart appointment scheduling, and seamless clinic connectivity for modern healthcare in Africa."
+    />
+    <meta
+      name="keywords"
+      content="Digital Health Records Africa, AI Healthcare Insights, Clinic Management Software, Telemedicine Africa, Patient EHR Portal, NovaBuk Features"
+    />
+    <meta name="author" content="NovaBuk" />
+    <meta name="robots" content="index, follow" />
 
     <!-- Open Graph / Social Media -->
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://www.novabuk.com/services.html">
-    <meta property="og:title" content="NovaBuk Features - Smart Healthcare Simplified">
-    <meta property="og:description" content="Discover how AI and digital records are transforming the patient experience across Africa. Join NovaBuk today.">
-    <meta property="og:image" content="https://www.novabuk.com/images/og-services.png">
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://www.novabuk.com/services.html" />
+    <meta
+      property="og:title"
+      content="NovaBuk Features - Smart Healthcare Simplified"
+    />
+    <meta
+      property="og:description"
+      content="Discover how AI and digital records are transforming the patient experience across Africa. Join NovaBuk today."
+    />
+    <meta
+      property="og:image"
+      content="https://www.novabuk.com/images/og-services.png"
+    />
 
     <!-- CSS and Fonts -->
     <link rel="stylesheet" href="./styles.css" />
     <link rel="stylesheet" href="./styles-app.css" />
-    <link rel="stylesheet" href="./styles-about.css">
+    <link rel="stylesheet" href="./styles-about.css" />
     <link rel="stylesheet" href="./styles-new-sections.css" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Unbounded:wght@200..900&display=swap" rel="stylesheet">
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Unbounded:wght@200..900&display=swap"
+      rel="stylesheet"
+    />
 
     <script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "Organization",
-  "name": "NovaBuk",
-  "url": "https://www.novabuk.com",
-  "logo": "https://www.novabuk.com/images/logo.png",
-  "description": "AI-driven digital health ecosystem for Africa.",
-  "sameAs": [
-    "https://x.com/NovaBukApp",
-    "https://www.linkedin.com/company/novabuk/",
-    "https://www.instagram.com/novabukofficial"
-  ]
-}
-</script>
-</head>
-<body>
+      {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "NovaBuk",
+        "url": "https://www.novabuk.com",
+        "logo": "https://www.novabuk.com/images/logo.png",
+        "description": "AI-driven digital health ecosystem for Africa.",
+        "sameAs": [
+          "https://x.com/NovaBukApp",
+          "https://www.linkedin.com/company/novabuk/",
+          "https://www.instagram.com/novabukofficial"
+        ]
+      }
+    </script>
+  </head>
+  <body>
     <div class="page-shell">
-        <div class="header">
-            <div class="nav" id="loggedOutNav">
-                <div class="idx-loggedout" id="idxLoggedOut">
-                    <div class="logo">
-                    <img src="./images/logo.png" alt="NovaBuk" />
-                    </div>
-                </div>
-                <nav class="nav-links" id="navMenu">
-                    <ul>
-                    <li><a href="index.html">Home</a></li>
-                    <li><a href="./about.html">About Us</a></li>
-                    <li><a href="./services.html">Services</a></li>
-                    <li><a href="./blog-dynamic.html">Blog</a></li>
-                    <li><a href="./contact.html">Contact Us</a></li>
-                    <!-- Mobile hamburger — auth links shown when logged out -->
-                    <li class="mobile-only" id="mobileSignUp">
-                        <a href="./sign-up.html" class="btn-signin">Sign Up</a>
-                    </li>
-                    <li class="mobile-only" id="mobileLogin">
-                        <a href="./sign-in.html" class="btn-getstarted">Login</a>
-                    </li>
-                    </ul>
-                </nav>
-
-                <!-- Logged out right: Sign Up + Login buttons -->
-                <div class="signup-btns idx-loggedout" id="idxAuthBtns">
-                    <ul>
-                    <li><a href="./sign-up.html">Sign Up</a></li>
-                    <li><a href="./sign-in.html">Login</a></li>
-                    </ul>
-                </div>
-
-                <!-- Bar icon for logged out on mobile -->
-                <div class="nav-icon" id="navToggleIcon">
-                    <i class="fa fa-bars"></i>
-                </div>
-          
+      <div class="header">
+        <div class="nav" id="loggedOutNav">
+          <div class="idx-loggedout" id="idxLoggedOut">
+            <div class="logo">
+              <img src="./images/logo.png" alt="NovaBuk" />
             </div>
+          </div>
+          <nav class="nav-links" id="navMenu">
+            <ul>
+              <li><a href="index.html">Home</a></li>
+              <li><a href="./about.html">About Us</a></li>
+              <li><a href="./services.html">Services</a></li>
+              <li><a href="./blog-dynamic.html">Blog</a></li>
+              <li><a href="./contact.html">Contact Us</a></li>
+              <!-- Mobile hamburger — auth links shown when logged out -->
+              <li class="mobile-only" id="mobileSignUp">
+                <a href="./sign-up.html" class="btn-signin">Sign Up</a>
+              </li>
+              <li class="mobile-only" id="mobileLogin">
+                <a href="./sign-in.html" class="btn-getstarted">Login</a>
+              </li>
+            </ul>
+          </nav>
 
-        
-            <!-- ── LOGGED IN STATE ──────────────────────────────── -->
+          <!-- Logged out right: Sign Up + Login buttons -->
+          <div class="signup-btns idx-loggedout" id="idxAuthBtns">
+            <ul>
+              <li><a href="./sign-up.html">Sign Up</a></li>
+              <li><a href="./sign-in.html">Login</a></li>
+            </ul>
+          </div>
 
-            <div class="navbar navbar-home" id="loggedInNav" style="display: none;">
-            
-            <div class="btn-log" style="display:flex">
-                <button id="navToggle" class="nav-toggle" aria-label="Toggle navigation">
-                <i class="fas fa-bars"></i>
-                </button>
-                <div class="logo"><img src="./images/logo.png" alt="" /></div>
-            </div>
+          <!-- Bar icon for logged out on mobile -->
+          <div class="nav-icon" id="navToggleIcon">
+            <i class="fa fa-bars"></i>
+          </div>
+        </div>
 
-            <!-- <button id="navToggle" class="nav-toggle" aria-label="Toggle navigation">
+        <!-- ── LOGGED IN STATE ──────────────────────────────── -->
+
+        <div class="navbar navbar-home" id="loggedInNav" style="display: none">
+          <div class="btn-log" style="display: flex">
+            <button
+              id="navToggle"
+              class="nav-toggle"
+              aria-label="Toggle navigation"
+            >
+              <i class="fas fa-bars"></i>
+            </button>
+            <div class="logo"><img src="./images/logo.png" alt="" /></div>
+          </div>
+
+          <!-- <button id="navToggle" class="nav-toggle" aria-label="Toggle navigation">
                 <i class="fas fa-bars"></i>
             </button> -->
 
-            <div class="nav-menu navMenu" id="navMenu">
-                <ul>
-                    <li><a href="./index.html" class="active">Home</a></li>
-                    <li><a href="./about.html">About</a></li>
-                    <li><a href="./services.html">Features</a></li>
-                    <li><a href="./blog-dynamic.html">Blog</a></li>
-                    <li><a href="./contact.html">Contact</a></li>
-                </ul>
-                <div class="profile-opt" id="optNav">
-                    <ul>
-                    <li><a href="./app-setting.html?tab=privacy"><i class="fa-solid fa-gear"></i> <span>Settings</span></a></li>
-                    <li><a href="#" onclick="handleMenuSelect('logout')"><i class="fa-solid fa-right-from-bracket" style="color: #ff7675 !important;"></i> <span style="color: #ff7675;">Logout</span></a></li>
-                    </ul>
-                </div>
+          <div class="nav-menu navMenu" id="navMenu">
+            <ul>
+              <li><a href="./index.html" class="active">Home</a></li>
+              <li><a href="./about.html">About</a></li>
+              <li><a href="./services.html">Features</a></li>
+              <li><a href="./blog-dynamic.html">Blog</a></li>
+              <li><a href="./contact.html">Contact</a></li>
+            </ul>
+            <div class="profile-opt" id="optNav">
+              <ul>
+                <li>
+                  <a href="./app-setting.html?tab=privacy"
+                    ><i class="fa-solid fa-gear"></i> <span>Settings</span></a
+                  >
+                </li>
+                <li>
+                  <a href="#" onclick="handleMenuSelect('logout')"
+                    ><i
+                      class="fa-solid fa-right-from-bracket"
+                      style="color: #ff7675 !important"
+                    ></i>
+                    <span style="color: #ff7675">Logout</span></a
+                  >
+                </li>
+              </ul>
             </div>
-            <div class="nav-buttons navbtns">
-                <ul>
-                <li>
-                    <a href="#">
-                    <i class="fa-solid fa-briefcase-medical"></i>
-                    </a>
-                </li>
-                <li>
-                    <a href="./app-history.html">
-                    <i class="fa-regular fa-bell"></i>
-                    </a>
-                </li>
-                <li>
-                    <div class="user-profile" id="userProfileBtn">
-                    <div class="profile-check"><span><div class="nav-avatar" style="font-size: 1.5em; font-family:'poppins',san-serif;" id="navAvatar"></div></span>
-                    <span class="dropdown-arrow"><i class="fa-solid fa-angle-down"></i></span></div>
-                    <div class="dropdown-menu" id="settingsDropdown">
-                        <!-- User identity block -->
-                        <div class="dd-user-block">
-                        <div class="dd-avatar-sm" id="ddAvatar"></div>
-                        <div class="dd-user-info">
-                            <p class="dd-name" id="ddName">—</p>
-                            <p class="dd-email" id="ddEmail">—</p>
-                        </div>
-                        </div>
-                        <div class="dd-divider"></div>
-                        <!-- Quick actions -->
-                        <div class="dropdown-item" onclick="handleMenuSelect('dashboard')">
-                        <span><i class="fa-solid fa-house"></i></span> Dashboard
-                        </div>
-                        <div class="dropdown-item" onclick="handleMenuSelect('visits')">
-                        <span><i class="fa-solid fa-calendar-check"></i></span>
-                        My Visits
-                        <span class="dd-visits-badge" id="ddVisitsBadge" style="display:none"></span>
-                        </div>
-                        <div class="dropdown-item" onclick="handleMenuSelect('profile')">
-                        <span><i class="fa-solid fa-heart-pulse"></i></span> My Health Profile
-                        </div>
-                        <div class="dd-symptom-hint" id="ddSymptomHint" style="display:none">
-                        <i class="fa-regular fa-clock"></i>
-                        <span id="ddSymptomText">Last symptom logged: —</span>
-                        <a href="./complaints.html" class="dd-log-now">Log now →</a>
-                        </div>
-                        <div class="dd-divider"></div>
-                        <div class="dropdown-item" onclick="handleMenuSelect('settings')">
-                        <span><i class="fa-solid fa-gear"></i></span> Settings
-                        </div>
-                        <div class="dd-divider"></div>
-                        <div class="dropdown-item dd-logout" onclick="handleMenuSelect('logout')">
-                        <span><i class="fa-solid fa-right-from-bracket"></i></span> Logout
-                        </div>
+          </div>
+          <div class="nav-buttons navbtns">
+            <ul>
+              <li>
+                <a href="#">
+                  <i class="fa-solid fa-briefcase-medical"></i>
+                </a>
+              </li>
+              <li>
+                <a href="./app-history.html">
+                  <i class="fa-regular fa-bell"></i>
+                </a>
+              </li>
+              <li>
+                <div class="user-profile" id="userProfileBtn">
+                  <div class="profile-check">
+                    <span
+                      ><div
+                        class="nav-avatar"
+                        style="
+                          font-size: 1.5em;
+                          font-family: &quot;poppins&quot;, san-serif;
+                        "
+                        id="navAvatar"
+                      ></div
+                    ></span>
+                    <span class="dropdown-arrow"
+                      ><i class="fa-solid fa-angle-down"></i
+                    ></span>
+                  </div>
+                  <div class="dropdown-menu" id="settingsDropdown">
+                    <!-- User identity block -->
+                    <div class="dd-user-block">
+                      <div class="dd-avatar-sm" id="ddAvatar"></div>
+                      <div class="dd-user-info">
+                        <p class="dd-name" id="ddName">—</p>
+                        <p class="dd-email" id="ddEmail">—</p>
+                      </div>
                     </div>
+                    <div class="dd-divider"></div>
+                    <!-- Quick actions -->
+                    <div
+                      class="dropdown-item"
+                      onclick="handleMenuSelect('dashboard')"
+                    >
+                      <span><i class="fa-solid fa-house"></i></span> Dashboard
                     </div>
-                </li>
-                </ul>
-            </div>
-            
-            </div>
-        </div>
-
-        <!-- ══ HERO ══ -->
-        <div class="svc-hero">
-          <div class="svc-hero-inner">
-
-            <span class="svc-eyebrow">
-              <i class="fas fa-circle-dot"></i> NovaBuk Features
-            </span>
-
-            <h1>
-              Everything your clinic needs,<br>
-              <span class="svc-h1-accent">in one place.</span>
-            </h1>
-
-            <p>Secure records, smart scheduling, AI-driven insights — built for African healthcare.</p>
-
-            <div class="svc-actions">
-              <a href="https://tally.so/r/PdAKA1" target="_blank" class="svc-btn-primary">Join Our Pilot &rarr;</a>
-              <a href="#features-toggle" class="svc-btn-ghost">Explore Features</a>
-            </div>
-
-            <div class="svc-stats">
-              <div class="svc-stat">
-                <strong>50+</strong>
-                <span>Clinics</span>
-              </div>
-              <div class="svc-stat-divider"></div>
-              <div class="svc-stat">
-                <strong>10,000+</strong>
-                <span>Patients Served</span>
-              </div>
-              <div class="svc-stat-divider"></div>
-              <div class="svc-stat">
-                <strong>4</strong>
-                <span>States In Nigeria</span>
-              </div>
-            </div>
-
+                    <div
+                      class="dropdown-item"
+                      onclick="handleMenuSelect('visits')"
+                    >
+                      <span><i class="fa-solid fa-calendar-check"></i></span>
+                      My Visits
+                      <span
+                        class="dd-visits-badge"
+                        id="ddVisitsBadge"
+                        style="display: none"
+                      ></span>
+                    </div>
+                    <div
+                      class="dropdown-item"
+                      onclick="handleMenuSelect('profile')"
+                    >
+                      <span><i class="fa-solid fa-heart-pulse"></i></span> My
+                      Health Profile
+                    </div>
+                    <div
+                      class="dd-symptom-hint"
+                      id="ddSymptomHint"
+                      style="display: none"
+                    >
+                      <i class="fa-regular fa-clock"></i>
+                      <span id="ddSymptomText">Last symptom logged: —</span>
+                      <a href="./complaints.html" class="dd-log-now"
+                        >Log now →</a
+                      >
+                    </div>
+                    <div class="dd-divider"></div>
+                    <div
+                      class="dropdown-item"
+                      onclick="handleMenuSelect('settings')"
+                    >
+                      <span><i class="fa-solid fa-gear"></i></span> Settings
+                    </div>
+                    <div class="dd-divider"></div>
+                    <div
+                      class="dropdown-item dd-logout"
+                      onclick="handleMenuSelect('logout')"
+                    >
+                      <span
+                        ><i class="fa-solid fa-right-from-bracket"></i
+                      ></span>
+                      Logout
+                    </div>
+                  </div>
+                </div>
+              </li>
+            </ul>
           </div>
         </div>
+      </div>
 
-    </div>
-        
-    <div class="main" style="padding-top: 30px;">
-        <div class="toggle-container">
-            <div id="mvp-toggle" class="toggle-button active"><h4>Pilot Baic</h4></div>
-            <div id="ai-toggle"  class="toggle-button"><h4>Premium</h4></div>
-        </div>
-        <div id="mvp-content" class="content-panel active-content">
-            <div class="feature-grid">
-                <div class="feature-card">
-                    <div class="icon-box"><i class="fas fa-user-friends"></i></div>
-                    <h4>User Profiles</h4>
-                    <p>Secure logins for patients, doctors, and admins.</p>
-                </div>
-                
-                <div class="feature-card">
-                    <div class="icon-box"><i class="fas fa-file-medical"></i></div>
-                    <h4>Electronic Health Records (EHR)</h4>
-                    <p>Centralized, easy-to-access patient history.</p>
-                </div>
-                
-                <div class="feature-card">
-                    <div class="icon-box"><i class="fas fa-calendar-alt"></i></div>
-                    <h4>Appointments</h4>
-                    <p>Book and manage visits seamlessly with reminders.</p>
-                </div>
-                
-                <div class="feature-card">
-                    <div class="icon-box"><i class="fas fa-prescription-bottle"></i></div>
-                    <h4>Digital Prescriptions</h4>
-                    <p>Doctors issues prescription ditigally to pharmacies.</p>
-                </div>
-                
-                <div class="feature-card">
-                    <div class="icon-box"><i class="fas fa-th-large"></i></div>
-                    <h4>Admin Dashbord</h4>
-                    <p>Clinic-level control for record tracking and reports.</p>
-                </div>
-                
-                <div class="feature-card">
-                    <div class="icon-box"><i class="fas fa-cloud"></i></div>
-                    <h4>Secured Cloud Storage</h4>
-                    <p>Encrypted backups and reliable hosting.</p>
-                </div>
-            </div>    
-        </div>
+      <!-- ══ HERO ══ -->
+      <div class="svc-hero">
+        <div class="svc-hero-inner">
+          <span class="svc-eyebrow">
+            <i class="fas fa-circle-dot"></i> NovaBuk Features
+          </span>
 
-        <div id="ai-content" class="content-panel">
-            <div class="feature-grid">
-                <div class="feature-card">
-                    <div class="icon-box"><i class="fas fa-clock"></i></div>
-                    <h4>Smart Appointment Suggestions(ANN)</h4>
-                    <p>Optimize schedules and reduce patient wait times.</p>
-                </div>
-                
-                <div class="feature-card">
-                    <div class="icon-box"><i class="fas fa-shield-alt"></i></div>
-                    <h4>prescription Safety Check(ANN)</h4>
-                    <p>Detects dosages conflicts automatically.</p>
-                </div>
-                
-                <div class="feature-card">
-                    <div class="icon-box"><i class="fas fa-calendar-alt"></i></div>
-                    <h4>EHR Insights</h4>
-                    <p>Spot trends and critical patterns in patient history.</p>
-                </div>
-                
-                <div class="feature-card">
-                    <div class="icon-box"><i class="fa-solid fa-brain"></i></div>
-                    <h4>NLP-Powered symptom Checker</h4>
-                    <p>chat or type symptomto get AI suggestions.</p>
-                </div>
-                
-                <div class="feature-card">
-                    <div class="icon-box"><i class="fas fa-comment-dots"></i></div>
-                    <h4>Lab Result Interpratation</h4>
-                    <p>AI translates complex lab reports into simple insights.</p>
-                </div>
-                
-                <div class="feature-card">
-                    <div class="icon-box"><i class="fas fa-flask"></i></div>
-                    <h4>Medication Adherence Predication</h4>
-                    <p>Predict and remind patients to saty on track.</p>
-                </div>
-            </div>    
-        </div>
+          <h1>
+            Everything your clinic needs,<br />
+            <span class="svc-h1-accent">in one place.</span>
+          </h1>
 
-        <!-- Pricing Section -->
-        <div class="nb-section nb-pricing nb-reveal">
-          <h3 class="nb-section-title">Simple, Transparent Pricing</h3>
-          <p class="nb-section-subtitle">Flexible packages designed for patients and clinics of all sizes.</p>
-          
-          <div class="nb-pricing-toggle">
-            <button type="button" class="nb-toggle-btn active" data-period="monthly">Monthly</button>
-            <button type="button" class="nb-toggle-btn" data-period="annually">Annually</button>
+          <p>
+            Secure records, smart scheduling, AI-driven insights — built for
+            African healthcare.
+          </p>
+
+          <div class="svc-actions">
+            <a
+              href="https://tally.so/r/PdAKA1"
+              target="_blank"
+              class="svc-btn-primary"
+              >Join Our Pilot &rarr;</a
+            >
+            <a href="#features-toggle" class="svc-btn-ghost"
+              >Explore Features</a
+            >
           </div>
 
-          <div class="nb-pricing-cards">
-            <!-- Patient Plan -->
-            <div class="nb-price-card">
-              <h4>Patient Basic</h4>
-              <p class="nb-price-desc">For individuals to track health records</p>
-              <div class="nb-price-amount">₦0<span>/mo</span></div>
-              <p class="nb-price-period">Free forever</p>
-              <ul class="nb-price-features">
-                <li><i class="fa-solid fa-check"></i> Basic Health Records</li>
-                <li><i class="fa-solid fa-check"></i> 1 Connected Clinic</li>
-                <li><i class="fa-solid fa-check"></i> Medical Appointment Booking</li>
-                <li><i class="fa-solid fa-xmark"></i> AI Insights & Ann Alerts</li>
-                <li><i class="fa-solid fa-xmark"></i> NLP Symptom Checker</li>
-              </ul>
-              <a href="./sign-up.html" class="nb-price-btn">Get Started</a>
+          <div class="svc-stats">
+            <div class="svc-stat">
+              <strong>50+</strong>
+              <span>Clinics</span>
             </div>
-            <!-- Clinic Starter Plan -->
-            <div class="nb-price-card popular">
-              <span class="nb-price-badge">Most Popular</span>
-              <h4>Clinic Starter</h4>
-              <p class="nb-price-desc">For small clinics and private practices</p>
-              <div class="nb-price-amount nb-dynamic-price" data-monthly="25000" data-annual="20000">₦25,000<span>/mo</span></div>
-              <p class="nb-price-period">Billed monthly</p>
-              <ul class="nb-price-features">
-                <li><i class="fa-solid fa-check"></i> Up to 3 Doctors/Staff</li>
-                <li><i class="fa-solid fa-check"></i> Unlimited Digital Records</li>
-                <li><i class="fa-solid fa-check"></i> Smart Reminders & Scheduling</li>
-                <li><i class="fa-solid fa-check"></i> Core EHR Dashboard</li>
-                <li><i class="fa-solid fa-xmark"></i> Advanced AI Analytics</li>
-              </ul>
-              <a href="https://tally.so/r/PdAKA1" target="_blank" class="nb-price-btn">Join Pilot</a>
+            <div class="svc-stat-divider"></div>
+            <div class="svc-stat">
+              <strong>10,000+</strong>
+              <span>Patients Served</span>
             </div>
-            <!-- Clinic Pro Plan -->
-            <div class="nb-price-card">
-              <h4>Clinic Pro</h4>
-              <p class="nb-price-desc">For growing medical clinics</p>
-              <div class="nb-price-amount nb-dynamic-price" data-monthly="60000" data-annual="48000">₦60,000<span>/mo</span></div>
-              <p class="nb-price-period">Billed monthly</p>
-              <ul class="nb-price-features">
-                <li><i class="fa-solid fa-check"></i> Unlimited Doctors/Staff</li>
-                <li><i class="fa-solid fa-check"></i> AI Prescription Safety Check</li>
-                <li><i class="fa-solid fa-check"></i> NLP Symptom Checker</li>
-                <li><i class="fa-solid fa-check"></i> Predictive Patient Analytics</li>
-                <li><i class="fa-solid fa-check"></i> Premium Support 24/7</li>
-              </ul>
-              <a href="https://tally.so/r/PdAKA1" target="_blank" class="nb-price-btn">Contact Sales</a>
+            <div class="svc-stat-divider"></div>
+            <div class="svc-stat">
+              <strong>4</strong>
+              <span>States In Nigeria</span>
             </div>
           </div>
         </div>
-
-        <section class="modal-box">
-            <div class="modal-header">
-                <h3>Basic vs Premium</h3>
-                <p>Choose the plan that best fits your healthcare needs</p>
-            </div>
-            <div class="comparison-table">
-                <div class="comp-row header">
-                    <div class="col-feature">Packages</div>
-                    <div class="col-status">Basic</div>
-                    <div class="col-status">Premium</div>
-                </div>
-
-                <div class="comp-row">
-                    <div class="col-feature">Basic Health Records</div>
-                    <div class="col-status"><i class="fa-solid fa-check check"></i></div>
-                    <div class="col-status"><i class="fa-solid fa-check check"></i></div>
-                </div>
-
-                <div class="comp-row">
-                    <div class="col-feature">AI Insights</div>
-                    <div class="col-status"><i class="fa-solid fa-xmark xmark"></i></div>
-                    <div class="col-status"><i class="fa-solid fa-check check"></i></div>
-                </div>
-
-                <div class="comp-row">
-                    <div class="col-feature">Smart Scheduling</div>
-                    <div class="col-status"><i class="fa-solid fa-xmark xmark"></i></div>
-                    <div class="col-status"><i class="fa-solid fa-check check"></i></div>
-                </div>
-
-                <div class="comp-row">
-                    <div class="col-feature">Offline-first built architecture </div>
-                    <div class="col-status"><i class="fa-solid fa-check check"></i></div>
-                    <div class="col-status"><i class="fa-solid fa-check check"></i></div>
-                </div>
-
-                <div class="comp-row">
-                    <div class="col-feature">Add Walk-in Patients</div>
-                    <div class="col-status"><i class="fa-solid fa-check check"></i></div>
-                    <div class="col-status"><i class="fa-solid fa-check check"></i></div>
-                </div>
-
-                <div class="comp-row">
-                    <div class="col-feature">Unlimited patients</div>
-                    <div class="col-status"><i class="fa-solid fa-check check"></i></div>
-                    <div class="col-status"><i class="fa-solid fa-check check"></i></div>
-                </div>
-
-                <div class="comp-row">
-                    <div class="col-feature">Health history and summary</div>
-                    <div class="col-status"><i class="fa-solid fa-check check"></i></div>
-                    <div class="col-status"><i class="fa-solid fa-check check"></i></div>
-                </div>
-
-                <div class="comp-row">
-                    <div class="col-feature">Teleconsultation</div>
-                    <div class="col-status"><i class="fa-solid fa-check check"></i></div>
-                    <div class="col-status"><i class="fa-solid fa-check check"></i></div>
-                </div>
-                
-                <div class="comp-row">
-                    <div class="col-feature">Predictive Analysis</div>
-                    <div class="col-status"><i class="fa-solid fa-xmark xmark"></i></div>
-                    <div class="col-status"><i class="fa-solid fa-check check"></i></div>
-                </div>
-                <div class="comp-row">
-                    <div class="col-feature">Digital Prescription</div>
-                    <div class="col-status"><i class="fa-solid fa-check check"></i></div>
-                    <div class="col-status"><i class="fa-solid fa-check check"></i></div>
-                </div>
-                <div class="comp-row">
-                    <div class="col-feature">Admin Dashboard</div>
-                    <div class="col-status"><i class="fa-solid fa-check check"></i></div>
-                    <div class="col-status"><i class="fa-solid fa-check check"></i></div>
-                </div>
-                <div class="comp-row">
-                    <div class="col-feature">Cloud Storage</div>
-                    <div class="col-status"><i class="fa-solid fa-check check"></i></div>
-                    <div class="col-status"><i class="fa-solid fa-check check"></i></div>
-                </div>
-                <div class="comp-row">
-                    <div class="col-feature">NLP Symptom Checker</div>
-                    <div class="col-status"><i class="fa-solid fa-xmark xmark"></i></div>
-                    <div class="col-status"><i class="fa-solid fa-check check"></i></div>
-                </div>
-                <div class="comp-row">
-                    <div class="col-feature">Lab Result AI</div>
-                    <div class="col-status"><i class="fa-solid fa-xmark xmark"></i></div>
-                    <div class="col-status"><i class="fa-solid fa-check check"></i></div>
-                </div>
-            </div>
-        </section>
-
-        <div class="foot-banner">
-            <div class="foot-banner-text">
-                <h5>Powered by Artificial Intelligence</h5>
-                <p>Our AI features are designed to enhance healthcare delivery, improve patient outcomes, and streamline clinical workflow.</p>
-            </div>
-            <div class="foot-banner-iconText">
-                <div class="icon-text">
-                    <i class="fas fa-brain"></i>
-                    <h4>Machine Learning</h4>
-                    <p>Advanced algorithms that learn healthcare data.</p>
-                </div>
-                <div class="icon-text">
-                    <i class="fas fa-language"></i>
-                    <h4>NLP</h4>
-                    <p>Understand and process medical language naturally.</p>
-                </div>
-                <div class="icon-text">
-                    <i class="fas fa-chart-line"></i>
-                    <h4>Predictive Analysis</h4>
-                    <p>Forecasting trends in patient health.</p>
-                </div>
-            </div>
-        </div>
+      </div>
     </div>
 
+    <div class="main" style="padding-top: 30px">
+      <div class="toggle-container">
+        <div id="mvp-toggle" class="toggle-button active">
+          <h4>Pilot Baic</h4>
+        </div>
+        <div id="ai-toggle" class="toggle-button"><h4>Premium</h4></div>
+      </div>
+      <div id="mvp-content" class="content-panel active-content">
+        <div class="feature-grid">
+          <div class="feature-card">
+            <div class="icon-box"><i class="fas fa-user-friends"></i></div>
+            <h4>User Profiles</h4>
+            <p>Secure logins for patients, doctors, and admins.</p>
+          </div>
+
+          <div class="feature-card">
+            <div class="icon-box"><i class="fas fa-file-medical"></i></div>
+            <h4>Electronic Health Records (EHR)</h4>
+            <p>Centralized, easy-to-access patient history.</p>
+          </div>
+
+          <div class="feature-card">
+            <div class="icon-box"><i class="fas fa-calendar-alt"></i></div>
+            <h4>Appointments</h4>
+            <p>Book and manage visits seamlessly with reminders.</p>
+          </div>
+
+          <div class="feature-card">
+            <div class="icon-box">
+              <i class="fas fa-prescription-bottle"></i>
+            </div>
+            <h4>Digital Prescriptions</h4>
+            <p>Doctors issues prescription ditigally to pharmacies.</p>
+          </div>
+
+          <div class="feature-card">
+            <div class="icon-box"><i class="fas fa-th-large"></i></div>
+            <h4>Admin Dashbord</h4>
+            <p>Clinic-level control for record tracking and reports.</p>
+          </div>
+
+          <div class="feature-card">
+            <div class="icon-box"><i class="fas fa-cloud"></i></div>
+            <h4>Secured Cloud Storage</h4>
+            <p>Encrypted backups and reliable hosting.</p>
+          </div>
+        </div>
+      </div>
+
+      <div id="ai-content" class="content-panel">
+        <div class="feature-grid">
+          <div class="feature-card">
+            <div class="icon-box"><i class="fas fa-clock"></i></div>
+            <h4>Smart Appointment Suggestions(ANN)</h4>
+            <p>Optimize schedules and reduce patient wait times.</p>
+          </div>
+
+          <div class="feature-card">
+            <div class="icon-box"><i class="fas fa-shield-alt"></i></div>
+            <h4>prescription Safety Check(ANN)</h4>
+            <p>Detects dosages conflicts automatically.</p>
+          </div>
+
+          <div class="feature-card">
+            <div class="icon-box"><i class="fas fa-calendar-alt"></i></div>
+            <h4>EHR Insights</h4>
+            <p>Spot trends and critical patterns in patient history.</p>
+          </div>
+
+          <div class="feature-card">
+            <div class="icon-box"><i class="fa-solid fa-brain"></i></div>
+            <h4>NLP-Powered symptom Checker</h4>
+            <p>chat or type symptomto get AI suggestions.</p>
+          </div>
+
+          <div class="feature-card">
+            <div class="icon-box"><i class="fas fa-comment-dots"></i></div>
+            <h4>Lab Result Interpratation</h4>
+            <p>AI translates complex lab reports into simple insights.</p>
+          </div>
+
+          <div class="feature-card">
+            <div class="icon-box"><i class="fas fa-flask"></i></div>
+            <h4>Medication Adherence Predication</h4>
+            <p>Predict and remind patients to saty on track.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Pricing Section -->
+      <div class="nb-section nb-pricing nb-reveal">
+        <h3 class="nb-section-title">Simple, Transparent Pricing</h3>
+        <p class="nb-section-subtitle">
+          Flexible packages designed for patients and clinics of all sizes.
+        </p>
+
+        <div class="nb-pricing-toggle">
+          <button
+            type="button"
+            class="nb-toggle-btn active"
+            data-period="monthly"
+          >
+            Monthly
+          </button>
+          <button type="button" class="nb-toggle-btn" data-period="annually">
+            Annually
+          </button>
+        </div>
+
+        <div class="nb-pricing-cards">
+          <!-- Patient Plan -->
+          <div class="nb-price-card">
+            <h4>Patient Basic</h4>
+            <p class="nb-price-desc">For individuals to track health records</p>
+            <div class="nb-price-amount">₦0<span>/mo</span></div>
+            <p class="nb-price-period">Free forever</p>
+            <ul class="nb-price-features">
+              <li><i class="fa-solid fa-check"></i> Basic Health Records</li>
+              <li><i class="fa-solid fa-check"></i> 1 Connected Clinic</li>
+              <li>
+                <i class="fa-solid fa-check"></i> Medical Appointment Booking
+              </li>
+              <li>
+                <i class="fa-solid fa-xmark"></i> AI Insights & Ann Alerts
+              </li>
+              <li><i class="fa-solid fa-xmark"></i> NLP Symptom Checker</li>
+            </ul>
+            <a href="./sign-up.html" class="nb-price-btn">Get Started</a>
+          </div>
+          <!-- Clinic Starter Plan -->
+          <div class="nb-price-card popular">
+            <span class="nb-price-badge">Most Popular</span>
+            <h4>Clinic Starter</h4>
+            <p class="nb-price-desc">For small clinics and private practices</p>
+            <div
+              class="nb-price-amount nb-dynamic-price"
+              data-monthly="25000"
+              data-annual="20000"
+            >
+              ₦25,000<span>/mo</span>
+            </div>
+            <p class="nb-price-period">Billed monthly</p>
+            <ul class="nb-price-features">
+              <li><i class="fa-solid fa-check"></i> Up to 3 Doctors/Staff</li>
+              <li>
+                <i class="fa-solid fa-check"></i> Unlimited Digital Records
+              </li>
+              <li>
+                <i class="fa-solid fa-check"></i> Smart Reminders & Scheduling
+              </li>
+              <li><i class="fa-solid fa-check"></i> Core EHR Dashboard</li>
+              <li><i class="fa-solid fa-xmark"></i> Advanced AI Analytics</li>
+            </ul>
+            <a
+              href="https://tally.so/r/PdAKA1"
+              target="_blank"
+              class="nb-price-btn"
+              >Join Pilot</a
+            >
+          </div>
+          <!-- Clinic Pro Plan -->
+          <div class="nb-price-card">
+            <h4>Clinic Pro</h4>
+            <p class="nb-price-desc">For growing medical clinics</p>
+            <div
+              class="nb-price-amount nb-dynamic-price"
+              data-monthly="60000"
+              data-annual="48000"
+            >
+              ₦60,000<span>/mo</span>
+            </div>
+            <p class="nb-price-period">Billed monthly</p>
+            <ul class="nb-price-features">
+              <li><i class="fa-solid fa-check"></i> Unlimited Doctors/Staff</li>
+              <li>
+                <i class="fa-solid fa-check"></i> AI Prescription Safety Check
+              </li>
+              <li><i class="fa-solid fa-check"></i> NLP Symptom Checker</li>
+              <li>
+                <i class="fa-solid fa-check"></i> Predictive Patient Analytics
+              </li>
+              <li><i class="fa-solid fa-check"></i> Premium Support 24/7</li>
+            </ul>
+            <a
+              href="https://tally.so/r/PdAKA1"
+              target="_blank"
+              class="nb-price-btn"
+              >Contact Sales</a
+            >
+          </div>
+        </div>
+      </div>
+
+      <section class="modal-box">
+        <div class="modal-header">
+          <h3>Basic vs Premium</h3>
+          <p>Choose the plan that best fits your healthcare needs</p>
+        </div>
+        <div class="comparison-table">
+          <div class="comp-row header">
+            <div class="col-feature">Packages</div>
+            <div class="col-status">Basic</div>
+            <div class="col-status">Premium</div>
+          </div>
+
+          <div class="comp-row">
+            <div class="col-feature">Basic Health Records</div>
+            <div class="col-status">
+              <i class="fa-solid fa-check check"></i>
+            </div>
+            <div class="col-status">
+              <i class="fa-solid fa-check check"></i>
+            </div>
+          </div>
+
+          <div class="comp-row">
+            <div class="col-feature">AI Insights</div>
+            <div class="col-status">
+              <i class="fa-solid fa-xmark xmark"></i>
+            </div>
+            <div class="col-status">
+              <i class="fa-solid fa-check check"></i>
+            </div>
+          </div>
+
+          <div class="comp-row">
+            <div class="col-feature">Smart Scheduling</div>
+            <div class="col-status">
+              <i class="fa-solid fa-xmark xmark"></i>
+            </div>
+            <div class="col-status">
+              <i class="fa-solid fa-check check"></i>
+            </div>
+          </div>
+
+          <div class="comp-row">
+            <div class="col-feature">Offline-first built architecture</div>
+            <div class="col-status">
+              <i class="fa-solid fa-check check"></i>
+            </div>
+            <div class="col-status">
+              <i class="fa-solid fa-check check"></i>
+            </div>
+          </div>
+
+          <div class="comp-row">
+            <div class="col-feature">Add Walk-in Patients</div>
+            <div class="col-status">
+              <i class="fa-solid fa-check check"></i>
+            </div>
+            <div class="col-status">
+              <i class="fa-solid fa-check check"></i>
+            </div>
+          </div>
+
+          <div class="comp-row">
+            <div class="col-feature">Unlimited patients</div>
+            <div class="col-status">
+              <i class="fa-solid fa-check check"></i>
+            </div>
+            <div class="col-status">
+              <i class="fa-solid fa-check check"></i>
+            </div>
+          </div>
+
+          <div class="comp-row">
+            <div class="col-feature">Health history and summary</div>
+            <div class="col-status">
+              <i class="fa-solid fa-check check"></i>
+            </div>
+            <div class="col-status">
+              <i class="fa-solid fa-check check"></i>
+            </div>
+          </div>
+
+          <div class="comp-row">
+            <div class="col-feature">Teleconsultation</div>
+            <div class="col-status">
+              <i class="fa-solid fa-check check"></i>
+            </div>
+            <div class="col-status">
+              <i class="fa-solid fa-check check"></i>
+            </div>
+          </div>
+
+          <div class="comp-row">
+            <div class="col-feature">Predictive Analysis</div>
+            <div class="col-status">
+              <i class="fa-solid fa-xmark xmark"></i>
+            </div>
+            <div class="col-status">
+              <i class="fa-solid fa-check check"></i>
+            </div>
+          </div>
+          <div class="comp-row">
+            <div class="col-feature">Digital Prescription</div>
+            <div class="col-status">
+              <i class="fa-solid fa-check check"></i>
+            </div>
+            <div class="col-status">
+              <i class="fa-solid fa-check check"></i>
+            </div>
+          </div>
+          <div class="comp-row">
+            <div class="col-feature">Admin Dashboard</div>
+            <div class="col-status">
+              <i class="fa-solid fa-check check"></i>
+            </div>
+            <div class="col-status">
+              <i class="fa-solid fa-check check"></i>
+            </div>
+          </div>
+          <div class="comp-row">
+            <div class="col-feature">Cloud Storage</div>
+            <div class="col-status">
+              <i class="fa-solid fa-check check"></i>
+            </div>
+            <div class="col-status">
+              <i class="fa-solid fa-check check"></i>
+            </div>
+          </div>
+          <div class="comp-row">
+            <div class="col-feature">NLP Symptom Checker</div>
+            <div class="col-status">
+              <i class="fa-solid fa-xmark xmark"></i>
+            </div>
+            <div class="col-status">
+              <i class="fa-solid fa-check check"></i>
+            </div>
+          </div>
+          <div class="comp-row">
+            <div class="col-feature">Lab Result AI</div>
+            <div class="col-status">
+              <i class="fa-solid fa-xmark xmark"></i>
+            </div>
+            <div class="col-status">
+              <i class="fa-solid fa-check check"></i>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div class="foot-banner">
+        <div class="foot-banner-text">
+          <h5>Powered by Artificial Intelligence</h5>
+          <p>
+            Our AI features are designed to enhance healthcare delivery, improve
+            patient outcomes, and streamline clinical workflow.
+          </p>
+        </div>
+        <div class="foot-banner-iconText">
+          <div class="icon-text">
+            <i class="fas fa-brain"></i>
+            <h4>Machine Learning</h4>
+            <p>Advanced algorithms that learn healthcare data.</p>
+          </div>
+          <div class="icon-text">
+            <i class="fas fa-language"></i>
+            <h4>NLP</h4>
+            <p>Understand and process medical language naturally.</p>
+          </div>
+          <div class="icon-text">
+            <i class="fas fa-chart-line"></i>
+            <h4>Predictive Analysis</h4>
+            <p>Forecasting trends in patient health.</p>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <footer class="site-footer">
-        <div class="footer-brand">
-          <div class="brand"><img src="./images/logo.png" alt=""></div>
-          <p>AI-powered healthcare records platform built for Africa.</p>
-        </div>
-        <div class="footer-links">
-          <!-- <div>
+      <div class="footer-brand">
+        <div class="brand"><img src="./images/logo.png" alt="" /></div>
+        <p>AI-powered healthcare records platform built for Africa.</p>
+      </div>
+      <div class="footer-links">
+        <!-- <div>
             <h4>Product</h4>
             <a href="#">Features</a>
             <a href="#">Security</a>
             <a href="#">Pricing</a>
             <a href="#">Changelog</a>
           </div> -->
-          <div>
-            <h4>Solutions</h4>
-            <a href="#">For Clinics</a>
-            <a href="#">For Doctors</a>
-            <a href="#">For Pharmacies</a>
-            <a href="#">For Patients</a>
-          </div>
-          <div>
-            <h4>Resources</h4>
-            <a href="./data-privacy.html">Data Privacy</a>
-            <a href="./terms.html">Terms of Service</a>
-            <a href="#">Community</a>
-          </div>
-          <div>
-            <h4>Company</h4>
-            <a href="#">About Us</a>
-            <a href="#">Careers</a>
-            <a href="#">Partners</a>
-            <a href="#">Contact Us</a>
-          </div>
+        <div>
+          <h4>Solutions</h4>
+          <a href="#">For Clinics</a>
+          <a href="#">For Doctors</a>
+          <a href="#">For Pharmacies</a>
+          <a href="#">For Patients</a>
         </div>
-        <div class="newsletter">
-          <h4>Newsletter</h4>
-          <p>Get the latest updates and news about NovaBuk.</p>
-          <form class="newsletter-form">
-            <input type="email" placeholder="Enter your email" />
-            <button type="submit">Subscribe</button>
-          </form>
+        <div>
+          <h4>Resources</h4>
+          <a href="./data-privacy.html">Data Privacy</a>
+          <a href="./terms.html">Terms of Service</a>
+          <a href="#">Community</a>
         </div>
+        <div>
+          <h4>Company</h4>
+          <a href="#">About Us</a>
+          <a href="#">Careers</a>
+          <a href="#">Partners</a>
+          <a href="#">Contact Us</a>
+        </div>
+      </div>
+      <div class="newsletter">
+        <h4>Newsletter</h4>
+        <p>Get the latest updates and news about NovaBuk.</p>
+        <form class="newsletter-form">
+          <input type="email" placeholder="Enter your email" />
+          <button type="submit">Subscribe</button>
+        </form>
+      </div>
     </footer>
-    
-
 
     <script src="./db.js"></script>
     <script src="./script.js"></script>
-    
+
     <script>
       // script.js runIndexNavSync() handles navbar state + bfcache restore
       // Only define handleMenuSelect here since it needs page-specific reload behaviour
-      window.handleMenuSelect = function(value) {
-        if      (value === 'logout')    { if (typeof showLogoutModal === 'function') showLogoutModal(); else { localStorage.removeItem('novabuk_token'); localStorage.removeItem('novabuk_user'); localStorage.removeItem('selectedClinic'); window.location.reload(); } }
-        else if (value === 'dashboard') { window.location.href = './app-home.html'; }
-        else if (value === 'visits')    { window.location.href = './app-history.html'; }
-        else if (value === 'profile')   { window.location.href = './app-setting.html?tab=profile'; }
-        else if (value === 'settings')  { window.location.href = './app-setting.html?tab=profile'; }
-        else if (value === 'notification') { window.location.href = './app-setting.html?tab=notification'; }
+      window.handleMenuSelect = function (value) {
+        if (value === "logout") {
+          if (typeof showLogoutModal === "function") showLogoutModal();
+          else {
+            localStorage.removeItem("novabuk_token");
+            localStorage.removeItem("novabuk_user");
+            localStorage.removeItem("selectedClinic");
+            window.location.reload();
+          }
+        } else if (value === "dashboard") {
+          window.location.href = "./app-home.html";
+        } else if (value === "visits") {
+          window.location.href = "./app-history.html";
+        } else if (value === "profile") {
+          window.location.href = "./app-setting.html?tab=profile";
+        } else if (value === "settings") {
+          window.location.href = "./app-setting.html?tab=profile";
+        } else if (value === "notification") {
+          window.location.href = "./app-setting.html?tab=notification";
+        }
       };
     </script>
 
     <!-- Floating WhatsApp widget -->
-    <a href="https://wa.me/2348134684154?text=Hello%20NovaBuk,%20I'd%20like%20to%20inquire%20about%20your%20services." class="nb-whatsapp-float" target="_blank" aria-label="Chat on WhatsApp">
+    <a
+      href="https://wa.me/2348134684154?text=Hello%20NovaBuk,%20I'd%20like%20to%20inquire%20about%20your%20services."
+      class="nb-whatsapp-float"
+      target="_blank"
+      aria-label="Chat on WhatsApp"
+    >
       <i class="fa-brands fa-whatsapp"></i>
       <span class="nb-whatsapp-tooltip">Chat with us</span>
     </a>
@@ -553,48 +757,52 @@
     <!-- New sections scripts -->
     <script>
       // Scroll Reveal Animation
-      const revealElements = document.querySelectorAll('.nb-reveal');
+      const revealElements = document.querySelectorAll(".nb-reveal");
       const checkReveal = () => {
         const triggerBottom = window.innerHeight * 0.85;
-        revealElements.forEach(el => {
+        revealElements.forEach((el) => {
           const elTop = el.getBoundingClientRect().top;
           if (elTop < triggerBottom) {
-            el.classList.add('nb-visible');
+            el.classList.add("nb-visible");
           }
         });
       };
-      window.addEventListener('scroll', checkReveal);
-      window.addEventListener('load', checkReveal);
+      window.addEventListener("scroll", checkReveal);
+      window.addEventListener("load", checkReveal);
 
       // Pricing toggle functionality
-      const toggleBtns = document.querySelectorAll('.nb-toggle-btn');
+      const toggleBtns = document.querySelectorAll(".nb-toggle-btn");
       if (toggleBtns.length > 0) {
-        toggleBtns.forEach(btn => {
-          btn.addEventListener('click', () => {
-            toggleBtns.forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            const period = btn.getAttribute('data-period');
-            const priceAmounts = document.querySelectorAll('.nb-dynamic-price');
-            const periodLabels = document.querySelectorAll('.nb-price-period');
-            
-            priceAmounts.forEach(price => {
-              const monthly = parseInt(price.getAttribute('data-monthly'));
-              const annual = parseInt(price.getAttribute('data-annual'));
-              if (period === 'annually') {
-                price.innerHTML = `₦${(annual).toLocaleString()}<span>/mo</span>`;
+        toggleBtns.forEach((btn) => {
+          btn.addEventListener("click", () => {
+            toggleBtns.forEach((b) => b.classList.remove("active"));
+            btn.classList.add("active");
+            const period = btn.getAttribute("data-period");
+            const priceAmounts = document.querySelectorAll(".nb-dynamic-price");
+            const periodLabels = document.querySelectorAll(".nb-price-period");
+
+            priceAmounts.forEach((price) => {
+              const monthly = parseInt(price.getAttribute("data-monthly"));
+              const annual = parseInt(price.getAttribute("data-annual"));
+              if (period === "annually") {
+                price.innerHTML = `₦${annual.toLocaleString()}<span>/mo</span>`;
               } else {
-                price.innerHTML = `₦${(monthly).toLocaleString()}<span>/mo</span>`;
+                price.innerHTML = `₦${monthly.toLocaleString()}<span>/mo</span>`;
               }
             });
-            
-            periodLabels.forEach(lbl => {
-              if (lbl.parentElement.querySelector('h4').textContent !== 'Patient Basic') {
-                lbl.textContent = period === 'annually' ? 'Billed annually' : 'Billed monthly';
+
+            periodLabels.forEach((lbl) => {
+              if (
+                lbl.parentElement.querySelector("h4").textContent !==
+                "Patient Basic"
+              ) {
+                lbl.textContent =
+                  period === "annually" ? "Billed annually" : "Billed monthly";
               }
             });
           });
         });
       }
     </script>
-</body>
+  </body>
 </html>

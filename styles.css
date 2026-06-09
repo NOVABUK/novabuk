@@ -209,7 +209,7 @@ img {
 }
 
 .nav-links ul li a,
-li a {
+li a .signup-btns ul li a {
   color: #fff;
   display: flex;
   /* margin-left: 16px; */
@@ -217,7 +217,7 @@ li a {
 }
 
 .signup-btns ul li a {
-  border: 1px solid white;
+  border: 1px solid white !important;
   font-size: 20px;
   font-family: "Poppins", sans-serif;
   font-weight: 600;

@@ -16,8 +16,8 @@ body {
 }
 
 /* Ensure containers stretch to fill available space */
-.container, 
-.container-sign, 
+.container,
+.container-sign,
 .app-container,
 .app-page {
   display: flex;
@@ -26,8 +26,8 @@ body {
 }
 
 /* Make main content areas grow to push footers down */
-.main, 
-.app-main, 
+.main,
+.app-main,
 .middle,
 .container-setting {
   flex: 1;
@@ -67,7 +67,7 @@ body {
     transform: translateY(0);
   }
 }
-.nav-menu{
+.nav-menu {
   display: flex;
   gap: 3rem;
 }
@@ -357,7 +357,7 @@ main {
   padding: 20px;
 }
 
-.hero-box>.detail-border {
+.hero-box > .detail-border {
   background-color: white;
   border: 1px solid white;
   color: #000;
@@ -374,16 +374,16 @@ main {
   justify-content: space-between;
 }
 
-.box-one>.box-text {
+.box-one > .box-text {
   line-height: 1.5;
   width: 100%;
 }
 
-.box-one>.box-text h3 {
+.box-one > .box-text h3 {
   font-size: 24px;
 }
 
-.box-one>.box-text p {
+.box-one > .box-text p {
   font-size: 18px;
   font-weight: 500;
   opacity: 0.95;
@@ -405,10 +405,10 @@ main {
   align-items: center;
   gap: 20px;
 }
-.warning h4{
+.warning h4 {
   font-size: 24px;
 }
-.warning>span i {
+.warning > span i {
   width: 50px;
   height: 50px;
   border: 2px solid;
@@ -448,7 +448,7 @@ main {
     padding: 0px 0px;
   }
 
-  .hero-box>.detail-border {
+  .hero-box > .detail-border {
     padding: 24px 18px;
     width: 100%;
     display: flex;
@@ -499,13 +499,13 @@ main {
     color: white !important;
   }
 
-  .box-one>.box-text h3 {
+  .box-one > .box-text h3 {
     font-size: 18px;
     margin-bottom: 4px;
     color: #1a202c;
   }
 
-  .box-one>.box-text p {
+  .box-one > .box-text p {
     font-size: 12px;
     font-weight: 500;
     color: #4a5568;
@@ -517,7 +517,6 @@ main {
     margin-left: auto;
     padding: 10px 0px;
   }
-
 }
 
 /* LOG COMPLAINTS SECTION */
@@ -530,13 +529,13 @@ main {
   display: block;
 }
 
-#form>label {
+#form > label {
   font-size: 1.7rem;
   font-weight: 500;
   color: #1a1a1a;
 }
 
-#form>textarea {
+#form > textarea {
   width: 100%;
   height: 350px;
   padding: 10px;
@@ -547,16 +546,16 @@ main {
   margin-top: 8px;
 }
 
-#form>textarea:focus {
+#form > textarea:focus {
   outline: none;
   border-color: #35bac9;
 }
 
-#form>textarea::placeholder {
+#form > textarea::placeholder {
   color: #999;
 }
 
-#form>p {
+#form > p {
   font-size: 1.8rem;
   margin-top: 50px;
   opacity: 0.95;
@@ -624,7 +623,7 @@ main {
   outline-offset: 2px;
 }
 
-#form>button {
+#form > button {
   margin-top: 20px;
   padding: 35px 20px;
   width: 100%;
@@ -645,13 +644,10 @@ main {
   margin-top: 50px;
 }
 
-
-
 /* ============================================
    MOBILE NAVBAR STYLES FOR APP PAGES
    ============================================ */
 @media (max-width: 1023px) {
-
   /*  Navbar Layout  */
   .header .navbar {
     width: 100%;
@@ -696,7 +692,6 @@ main {
   }
 
   .navMenu.open {
-
     display: block !important;
     position: absolute;
     top: 40px;
@@ -705,7 +700,6 @@ main {
     background: linear-gradient(130deg, #7ecad7, #35bac9);
     padding: 12px 16px;
     z-index: 999 !important;
-
   }
 
   /* Navigation Menu styled as a Premium Sidebar Drawer */
@@ -768,7 +762,6 @@ main {
     /* padding: 8px 10px; */
   }
 
-
   /* Icons row inside the toggle */
   .nav-buttons ul {
     flex-direction: row !important;
@@ -790,7 +783,6 @@ main {
     font-size: 16px !important;
     /* padding: 8px !important; */
   }
-
 
   /* Dropdown opens upward on mobile to avoid clipping */
   .dropdown-menu {
@@ -827,7 +819,6 @@ main {
 }
 
 @media (max-width: 575px) {
-
   /*  Navbar Layout  */
   .header .navbar {
     width: 100%;
@@ -863,13 +854,11 @@ main {
     order: 4;
   }
 
-
   .nav-buttons ul {
     flex-direction: column;
     width: 100%;
     /* padding: 8px 10px; */
   }
-
 
   /* Icons row inside the toggle */
   .nav-buttons ul {
@@ -899,7 +888,6 @@ main {
     font-size: 14px !important;
     /* padding: 8px !important; */
   }
-
 }
 
 /* PROFILE SESSION */
@@ -918,14 +906,14 @@ main {
   font-size: 18px;
 }
 
-.container-form>.form-session>.profile-hero {
+.container-form > .form-session > .profile-hero {
   display: flex;
   align-items: center;
   gap: 230px;
   margin-bottom: 30px;
 }
 
-.profile-hero>.icon-profile a {
+.profile-hero > .icon-profile a {
   text-decoration: none;
   color: #000;
   font-size: 32px;
@@ -964,7 +952,7 @@ main {
   border-radius: 50%;
 }
 
-.avatar>.avatar-edit i {
+.avatar > .avatar-edit i {
   font-size: 1.5rem;
   position: absolute;
   bottom: 0;
@@ -994,14 +982,14 @@ main {
   margin-bottom: 30px;
 }
 
-.detail-form>label {
+.detail-form > label {
   display: block;
   width: 100%;
   /* margin-bottom: 20px; */
 }
 
 .detail-form input,
-.detail-form>button {
+.detail-form > button {
   width: 100%;
   padding: 12px;
   border-radius: 8px;
@@ -1035,7 +1023,7 @@ main {
     padding: 20px 0px;
   }
 
-  .container-form>.form-session>.profile-hero {
+  .container-form > .form-session > .profile-hero {
     display: flex;
     align-items: center;
     text-align: center;
@@ -1043,7 +1031,7 @@ main {
     margin-bottom: 10px auto;
   }
 
-  .profile-hero>.icon-profile a {
+  .profile-hero > .icon-profile a {
     text-decoration: none;
     color: #000;
     font-size: 32px;
@@ -1064,7 +1052,7 @@ main {
     margin-left: 80px;
   }
 
-  .avatar>.avatar-edit i {
+  .avatar > .avatar-edit i {
     left: 150px;
   }
 
@@ -1080,7 +1068,6 @@ main {
   background-size: contain;
   height: 100vh;
   width: 100%;
-
 }
 
 .sign-info {
@@ -1104,7 +1091,7 @@ main {
   gap: 30px;
 }
 
-.sign-descrption>.sign-logo img {
+.sign-descrption > .sign-logo img {
   /* width: 112px; */
   /* height: 36px; */
   opacity: 1;
@@ -1121,7 +1108,7 @@ main {
   color: #ffffff;
 }
 
-.sign-descrption>.para>p {
+.sign-descrption > .para > p {
   width: 476px;
   opacity: 1;
   color: #ffffff;
@@ -1132,7 +1119,7 @@ main {
   line-height: 1.5;
 }
 
-.sign-descrption>.sign-icon-text {
+.sign-descrption > .sign-icon-text {
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -1141,7 +1128,7 @@ main {
   gap: 30px;
 }
 
-.sign-descrption>.sign-icon-text>.icon-text {
+.sign-descrption > .sign-icon-text > .icon-text {
   display: flex;
   align-items: center;
   gap: 10px;
@@ -1152,7 +1139,7 @@ main {
   display: none !important;
 }
 
-.sign-descrption>.sign-icon-text>.icon-text i {
+.sign-descrption > .sign-icon-text > .icon-text i {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1167,7 +1154,7 @@ main {
   background: #3199c780;
 }
 
-.sign-descrption>.sign-icon-text>.icon-text>.text {
+.sign-descrption > .sign-icon-text > .icon-text > .text {
   width: 100%;
   opacity: 1;
   display: flex;
@@ -1175,18 +1162,17 @@ main {
   gap: 5px;
 }
 
-.sign-descrption>.sign-icon-text>.icon-text>.text>h5,
-.sign-descrption>.sign-icon-text>.icon-text>.text>p {
+.sign-descrption > .sign-icon-text > .icon-text > .text > h5,
+.sign-descrption > .sign-icon-text > .icon-text > .text > p {
   font-size: 14px;
   color: #ffffff;
   font-weight: 500;
   font-family: "poppins", sans-serif;
 }
 
-.sign-descrption>.sign-icon-text>.icon-text>.text>p {
+.sign-descrption > .sign-icon-text > .icon-text > .text > p {
   font-size: 12px;
 }
-
 
 .sign-input {
   display: flex;
@@ -1211,7 +1197,7 @@ main {
   margin-bottom: 30px;
 }
 
-.form-text>h3 {
+.form-text > h3 {
   font-family: Poppins;
   font-weight: 700;
   font-style: Bold;
@@ -1222,7 +1208,7 @@ main {
   width: 400px;
 }
 
-.form-text>p {
+.form-text > p {
   font-family: Poppins;
   font-weight: 400;
   font-style: Regular;
@@ -1404,7 +1390,7 @@ main {
   margin-left: 15px;
 }
 
-.sign-input>p {
+.sign-input > p {
   width: 100%;
   height: 23px;
   opacity: 1;
@@ -1419,7 +1405,7 @@ main {
   letter-spacing: 1%;
 }
 
-.sign-input>p span a {
+.sign-input > p span a {
   color: #3cb1c3;
   text-decoration: none;
 }
@@ -1440,7 +1426,7 @@ main {
     /* padding: 0; */
   }
 
-  .sign-info>.sign-descrption {
+  .sign-info > .sign-descrption {
     width: 100%;
     margin: 0 auto;
     text-align: center;
@@ -1452,17 +1438,17 @@ main {
     height: 40px;
   }
 
-  .heading>h2 {
+  .heading > h2 {
     font-size: 24px;
     width: 100%;
   }
 
-  .sign-info>.sign-descrption>.sign-logo {
+  .sign-info > .sign-descrption > .sign-logo {
     display: block;
   }
 
-  .sign-info>.sign-descrption>.para,
-  .sign-info>.sign-descrption>.sign-icon-text {
+  .sign-info > .sign-descrption > .para,
+  .sign-info > .sign-descrption > .sign-icon-text {
     display: none;
     padding: 0px 0px;
   }
@@ -1489,7 +1475,6 @@ main {
   }
 }
 
-
 /* SIGN UP */
 .signup-cont {
   background-image: url(./images/signup-banner.jpg);
@@ -1497,7 +1482,7 @@ main {
   background-size: cover;
   width: 100%;
 }
-.signup-input{
+.signup-input {
   padding: 20px 0;
 }
 .signup-check input[type="radio"] {
@@ -1511,7 +1496,7 @@ main {
   justify-content: center;
 }
 
-.signup-check input[type="radio"]:checked+label {
+.signup-check input[type="radio"]:checked + label {
   background: #35bac9;
   text-align: center;
   border-color: #35bac9;
@@ -1533,7 +1518,7 @@ main {
   gap: 10px;
   border-radius: 10px;
   padding: 10px;
-  font-family: 'poppins', sans-serif;
+  font-family: "poppins", sans-serif;
   border-width: 1px;
   border: 1px solid black;
   cursor: pointer;
@@ -1569,12 +1554,12 @@ main {
     margin-bottom: 20px;
   }
 
-  .hero-box>.detail-border {
+  .hero-box > .detail-border {
     padding: 20px 16px;
     gap: 20px;
   }
 
-  .box-one>.box-text h3 {
+  .box-one > .box-text h3 {
     font-size: 18px;
   }
 
@@ -1584,7 +1569,7 @@ main {
   }
 
   .login-check a {
-    font-family: 'poppins', sans-serif;
+    font-family: "poppins", sans-serif;
     font-weight: 400;
     font-style: Regular;
     font-size: 10px;
@@ -1598,16 +1583,16 @@ main {
     padding-right: 16px;
   }
 
-  #form>label {
+  #form > label {
     font-size: 1.2rem;
   }
 
-  #form>p {
+  #form > p {
     font-size: 1.2rem;
     margin-top: 28px;
   }
 
-  #form>textarea {
+  #form > textarea {
     height: 200px;
   }
 
@@ -1622,13 +1607,13 @@ main {
     padding: 14px;
   }
 
-  #form>button {
+  #form > button {
     font-size: 1.2rem;
     padding: 20px;
   }
 
   .login-check a {
-    font-family: 'poppins', sans-serif;
+    font-family: "poppins", sans-serif;
     font-weight: 400;
     font-style: Regular;
     font-size: 10px;
@@ -1636,17 +1621,16 @@ main {
 
   .login-check span {
     width: 100%;
-    font-family: 'poppins', sans-serif;
+    font-family: "poppins", sans-serif;
     font-weight: 400;
     font-style: Regular;
     font-size: 10px;
   }
 }
 
-
 /* ── PROFILE HEALTH PAGE ── */
 @media (max-width: 600px) {
-  .container-form>.form-session>.profile-hero {
+  .container-form > .form-session > .profile-hero {
     gap: 40px;
   }
 
@@ -1677,23 +1661,23 @@ main {
     border-radius: 16px;
   }
 
-  .form-text>h3 {
+  .form-text > h3 {
     font-size: 24px;
     width: 100%;
     height: auto;
   }
 }
 
-@media(max-width:375px) {
+@media (max-width: 375px) {
   .login-check a {
-    font-family: 'poppins', sans-serif;
+    font-family: "poppins", sans-serif;
     font-weight: 400;
     font-style: Regular;
     font-size: 9px;
   }
 
   .login-check label span {
-    font-family: 'poppins', sans-serif;
+    font-family: "poppins", sans-serif;
     font-weight: 400;
     font-style: Regular;
     font-size: 10px;
@@ -1708,10 +1692,22 @@ main {
     font-size: 8px;
     color: white !important;
   }
-  .box-text h3{font-size: 12px !important;width: auto !important;}
-  .box-text p{font-size: 10px !important;}
-  .warning h4{font-size: 12px; padding: 2px ;}
-  .warning span i{font-size: 12px; height: 30px; width: 30px;}
+  .box-text h3 {
+    font-size: 12px !important;
+    width: auto !important;
+  }
+  .box-text p {
+    font-size: 10px !important;
+  }
+  .warning h4 {
+    font-size: 12px;
+    padding: 2px;
+  }
+  .warning span i {
+    font-size: 12px;
+    height: 30px;
+    width: 30px;
+  }
 }
 
 /* ================================================================
@@ -1739,7 +1735,9 @@ main {
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background 0.2s, color 0.2s;
+  transition:
+    background 0.2s,
+    color 0.2s;
 }
 
 .nb-bell-btn:hover {
@@ -1758,7 +1756,7 @@ main {
   color: white;
   font-size: 10px;
   font-weight: 700;
-  font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
   border-radius: 10px;
   display: flex;
   align-items: center;
@@ -1810,7 +1808,7 @@ main {
 }
 
 .nb-dropdown-title {
-  font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
   font-size: 14px;
   font-weight: 600;
   color: #0f2027;
@@ -1819,7 +1817,7 @@ main {
 .nb-mark-all {
   background: none;
   border: none;
-  font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
   font-size: 11px;
   color: #35bac9;
   cursor: pointer;
@@ -1843,7 +1841,7 @@ main {
 .nb-empty {
   padding: 32px 16px;
   text-align: center;
-  font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
   font-size: 13px;
   color: #aaa;
   display: flex;
@@ -1925,7 +1923,7 @@ main {
 
 .nb-item-title {
   margin: 0 0 2px;
-  font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
   font-size: 12px;
   font-weight: 600;
   color: #0f2027;
@@ -1933,7 +1931,7 @@ main {
 
 .nb-item-msg {
   margin: 0 0 4px;
-  font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
   font-size: 11px;
   color: #718096;
   line-height: 1.4;
@@ -1943,7 +1941,7 @@ main {
 }
 
 .nb-item-time {
-  font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
   font-size: 10px;
   color: #aaa;
 }
@@ -1962,10 +1960,8 @@ main {
   .nb-dropdown {
     right: -100px;
     width: 290px;
-
   }
 }
-
 
 /* ================================================================
    NOVABUK — REDESIGNED DROPDOWN MENU
@@ -1997,7 +1993,7 @@ main {
   border-radius: 50%;
   background: #35bac9;
   color: white;
-  font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
   font-weight: 700;
   font-size: 1.1rem;
   display: flex;
@@ -2020,7 +2016,7 @@ main {
 
 .dd-name {
   margin: 0 0 2px;
-  font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
   font-size: 13px;
   font-weight: 600;
   color: white;
@@ -2031,7 +2027,7 @@ main {
 
 .dd-email {
   margin: 0;
-  font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
   font-size: 11px;
   color: rgba(255, 255, 255, 0.5);
   white-space: nowrap;
@@ -2050,7 +2046,7 @@ main {
 .dropdown-menu .dropdown-item,
 .dropdown-menu .dropdown-item a {
   padding: 11px 16px;
-  font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
   font-size: 13px;
   color: #2d3748;
   /* display: flex; */
@@ -2084,7 +2080,7 @@ main {
   margin-left: auto;
   background: #35bac9;
   color: white;
-  font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
   font-size: 1px;
   font-weight: 600;
   padding: 2px 28px;
@@ -2100,7 +2096,7 @@ main {
   align-items: center;
   gap: 6px;
   padding: 6px 16px 10px 46px;
-  font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
   font-size: 11px;
   color: #999;
 }
@@ -2136,7 +2132,6 @@ main {
 .dropdown-menu .dd-logout:hover {
   background: #fff5f5;
 }
-
 
 /* ================================================================
    NOVABUK — LOGOUT CONFIRMATION MODAL
@@ -2188,7 +2183,7 @@ main {
 }
 
 .nb-logout-title {
-  font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
   font-size: 18px;
   font-weight: 700;
   color: #0f2027;
@@ -2196,7 +2191,7 @@ main {
 }
 
 .nb-logout-msg {
-  font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
   font-size: 13px;
   color: #718096;
   line-height: 1.5;
@@ -2214,7 +2209,7 @@ main {
   border: 1.5px solid #e2e8f0;
   background: white;
   border-radius: 10px;
-  font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
   font-size: 13px;
   font-weight: 600;
   color: #4a5568;
@@ -2233,7 +2228,7 @@ main {
   border: none;
   background: #e53e3e;
   border-radius: 10px;
-  font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
   font-size: 13px;
   font-weight: 600;
   color: white;
@@ -2257,7 +2252,6 @@ main {
 }
 
 @media (max-width: 375px) {
-
   html,
   body {
     min-width: auto;
@@ -2282,7 +2276,7 @@ main {
   color: white;
   padding: 10px 24px;
   border-radius: 8px;
-  font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
   font-size: 13px;
   font-weight: 500;
   display: flex;
@@ -2324,8 +2318,8 @@ main {
    NOVABUK — PREMIUM DYNAMIC BOTTOM MOBILE NAVIGATION BAR
    ================================================================ */
 @media (max-width: 768px) {
-  .network-toast{
-    top: 40px
+  .network-toast {
+    top: 40px;
   }
   .network-toast.show {
     top: 40px;
@@ -2376,7 +2370,7 @@ main {
     justify-content: center;
     color: #718096;
     text-decoration: none !important;
-    font-family: 'Poppins', sans-serif;
+    font-family: "Poppins", sans-serif;
     font-size: 10px;
     font-weight: 550;
     gap: 4px;
@@ -2424,7 +2418,9 @@ main {
   /* Reduced light/dimmed background */
   opacity: 0;
   visibility: hidden;
-  transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition:
+    opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+    visibility 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   z-index: 9998;
   /* Directly underneath the slideout menu drawer */
   backdrop-filter: blur(2px);
@@ -2437,7 +2433,6 @@ main {
 }
 
 @media (max-width: 1023px) {
-
   /* Inner User Block styling for mobile drawer */
   .mobile-nav-user-block {
     display: flex;
@@ -2458,7 +2453,7 @@ main {
     align-items: center;
     justify-content: center;
     font-weight: 700;
-    font-family: 'Poppins', sans-serif;
+    font-family: "Poppins", sans-serif;
     font-size: 1.2rem;
     color: white;
     border: 2px solid white;
@@ -2498,7 +2493,7 @@ main {
   }
 
   .mobile-nav-name {
-    font-family: 'Poppins', sans-serif;
+    font-family: "Poppins", sans-serif;
     font-size: 14px;
     font-weight: 700;
     color: white;
@@ -2509,7 +2504,7 @@ main {
   }
 
   .mobile-nav-email {
-    font-family: 'Poppins', sans-serif;
+    font-family: "Poppins", sans-serif;
     font-size: 11px;
     color: rgba(255, 255, 255, 0.85);
     white-space: nowrap;
@@ -2527,7 +2522,7 @@ main {
     padding: 12px 1px !important;
     color: #4a5568 !important;
     text-decoration: none !important;
-    font-family: 'Poppins', sans-serif !important;
+    font-family: "Poppins", sans-serif !important;
     font-size: 14px !important;
     font-weight: 600 !important;
     border-radius: 12px !important;

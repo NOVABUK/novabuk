@@ -73,7 +73,7 @@ a {
 }
 
 .main-nav a {
-  color: var(--muted);
+  /* color: var(--muted); */
   font-size: 0.95rem;
   font-weight: 500;
 }
@@ -631,10 +631,10 @@ h1 {
   grid-template-columns: 1.5fr 2fr 1fr;
   gap: 28px;
 }
-.site-footer .brand{
+.site-footer .brand {
   width: 80%;
 }
-.brand img{
+.brand img {
   width: 100px;
   height: auto;
   object-fit: cover;
@@ -1085,8 +1085,6 @@ h1 {
   transform: translateY(-3px);
 }
 
-
-
 @media (max-width: 1180px) {
   .hero-section,
   .dark-hero-section,
@@ -1192,7 +1190,7 @@ h1 {
 }
 
 @media (max-width: 768px) {
-  .eyebrow{
+  .eyebrow {
     padding: 8px 16px;
     font-size: 0.62rem;
     display: block;
@@ -1201,7 +1199,9 @@ h1 {
   .nb-section {
     padding: 50px 20px;
   }
-  .metrics-strip{display: none !important;}
+  .metrics-strip {
+    display: none !important;
+  }
   .nb-section-title {
     font-size: 24px;
   }
@@ -1248,9 +1248,9 @@ h1 {
 }
 
 @media (max-width: 480px) {
-  .eyebrow{
+  .eyebrow {
     padding: 8px 16px;
-    font-size:10px !important;
+    font-size: 10px !important;
     /* display: block; */
     /* width: 100%; */
   }
@@ -1294,18 +1294,18 @@ h1 {
     right: 20px;
   }
 }
-@media(max-width: 375px) {
-  .eyebrow{
+@media (max-width: 375px) {
+  .eyebrow {
     padding: 6px 12px;
-    font-size:0.5rem !important;
+    font-size: 0.5rem !important;
     /* display: block; */
     /* width: 100%; */
   }
-  .nb-price-badge{
-    width:60%;
+  .nb-price-badge {
+    width: 60%;
   }
 }
-@media(max-width: 350px) {
+@media (max-width: 350px) {
   .dark-hero-copy h2 {
     /* width:60%; */
     font-size: 18px !important;
@@ -2351,7 +2351,11 @@ button {
   margin-bottom: 14px;
 }
 .m-card {
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.92), rgba(255, 255, 255, 0.72));
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.92),
+    rgba(255, 255, 255, 0.72)
+  );
   border: 1px solid rgba(255, 255, 255, 0.75);
   backdrop-filter: blur(22px);
   -webkit-backdrop-filter: blur(22px);
@@ -3689,10 +3693,10 @@ button {
     margin-bottom: 0;
     color: white;
   }
-  .footer-brand p{
+  .footer-brand p {
     color: white;
   }
-  .brand img{
+  .brand img {
     width: 100px;
     height: auto;
     background-color: white;

@@ -1,41 +1,57 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" sizes="180x180" href="./images/logo.png" />
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="icon" sizes="180x180" href="./images/logo.png">
+    <title>About NovaBuk | Our Mission to Transform African Healthcare</title>
+    <meta
+      name="description"
+      content="Learn about NovaBuk's story and our mission to build an intelligent digital health ecosystem for patients and doctors across Africa using AI-driven digital medical records."
+    />
+    <meta
+      name="keywords"
+      content="NovaBuk Story, HealthTech Africa, Digital Health Mission, Medical Records Innovation, African Healthcare Future"
+    />
+    <meta name="author" content="NovaBuk" />
+    <meta name="robots" content="index, follow" />
 
-  <title>About NovaBuk | Our Mission to Transform African Healthcare</title>
-  <meta name="description"
-    content="Learn about NovaBuk's story and our mission to build an intelligent digital health ecosystem for patients and doctors across Africa using AI-driven digital medical records.">
-  <meta name="keywords"
-    content="NovaBuk Story, HealthTech Africa, Digital Health Mission, Medical Records Innovation, African Healthcare Future">
-  <meta name="author" content="NovaBuk">
-  <meta name="robots" content="index, follow">
+    <!-- Open Graph / Social Media -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://www.novabuk.com/about.html" />
+    <meta
+      property="og:title"
+      content="About NovaBuk - Scaling Healthcare with Innovation"
+    />
+    <meta
+      property="og:description"
+      content="Empowering every health provider in Africa with intelligent tools. See how we're changing the game."
+    />
+    <meta
+      property="og:image"
+      content="https://www.novabuk.com/images/og-about.png"
+    />
 
-  <!-- Open Graph / Social Media -->
-  <meta property="og:type" content="website">
-  <meta property="og:url" content="https://www.novabuk.com/about.html">
-  <meta property="og:title" content="About NovaBuk - Scaling Healthcare with Innovation">
-  <meta property="og:description"
-    content="Empowering every health provider in Africa with intelligent tools. See how we're changing the game.">
-  <meta property="og:image" content="https://www.novabuk.com/images/og-about.png">
+    <!-- CSS Links -->
+    <link rel="stylesheet" href="./styles.css" />
+    <link rel="stylesheet" href="./styles-app.css" />
+    <link rel="stylesheet" href="./styles-new-sections.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
+      integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900&family=Unbounded:wght@200..900&display=swap"
+      rel="stylesheet"
+    />
 
-  <!-- CSS Links -->
-  <link rel="stylesheet" href="./styles.css" />
-  <link rel="stylesheet" href="./styles-app.css" />
-  <link rel="stylesheet" href="./styles-new-sections.css" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
-    integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw=="
-    crossorigin="anonymous" referrerpolicy="no-referrer" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link
-    href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900&family=Unbounded:wght@200..900&display=swap"
-    rel="stylesheet" />
-
-     <link
+    <link
       href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,400&display=swap"
       rel="stylesheet"
     />
@@ -43,516 +59,918 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
     />
+  </head>
 
-</head>
+  <body>
+    <div class="page-shell">
+      <!-- Header Section  -->
+      <div class="header">
+        <!-- Logged out state -->
+        <div class="nav" id="loggedOutNav">
+          <div class="idx-loggedout" id="idxLoggedOut">
+            <div class="logo">
+              <img src="./images/logo.png" alt="NovaBuk" />
+            </div>
+          </div>
+          <nav class="nav-links" id="navMenu">
+            <ul>
+              <li><a href="index.html">Home</a></li>
+              <li><a href="./about.html">About Us</a></li>
+              <li><a href="./services.html">Services</a></li>
+              <li><a href="./blog-dynamic.html">Blog</a></li>
+              <li><a href="./contact.html">Contact Us</a></li>
+              <!-- Mobile hamburger — auth links shown when logged out -->
+              <li class="mobile-only" id="mobileSignUp">
+                <a href="./sign-up.html" class="btn-signin">Sign Up</a>
+              </li>
+              <li class="mobile-only" id="mobileLogin">
+                <a href="./sign-in.html" class="btn-getstarted">Login</a>
+              </li>
+            </ul>
+          </nav>
 
-<body>
-  <div class="page-shell">
-    <!-- Header Section  -->
-    <div class="header">
-      <!-- Logged out state -->
-      <div class="nav" id="loggedOutNav">
-        <div class="idx-loggedout" id="idxLoggedOut">
-          <div class="logo">
-            <img src="./images/logo.png" alt="NovaBuk" />
+          <!-- Logged out right: Sign Up + Login buttons -->
+          <div class="signup-btns idx-loggedout" id="idxAuthBtns">
+            <ul>
+              <li><a href="./sign-up.html">Sign Up</a></li>
+              <li><a href="./sign-in.html">Login</a></li>
+            </ul>
+          </div>
+
+          <!-- Bar icon for logged out on mobile -->
+          <div class="nav-icon" id="navToggleIcon">
+            <i class="fa fa-bars"></i>
           </div>
         </div>
-        <nav class="nav-links" id="navMenu">
-          <ul>
-            <li><a href="index.html">Home</a></li>
-            <li><a href="./about.html">About Us</a></li>
-            <li><a href="./services.html">Services</a></li>
-            <li><a href="./blog-dynamic.html">Blog</a></li>
-            <li><a href="./contact.html">Contact Us</a></li>
-            <!-- Mobile hamburger — auth links shown when logged out -->
-            <li class="mobile-only" id="mobileSignUp">
-              <a href="./sign-up.html" class="btn-signin">Sign Up</a>
-            </li>
-            <li class="mobile-only" id="mobileLogin">
-              <a href="./sign-in.html" class="btn-getstarted">Login</a>
-            </li>
-          </ul>
-        </nav>
 
-        <!-- Logged out right: Sign Up + Login buttons -->
-        <div class="signup-btns idx-loggedout" id="idxAuthBtns">
-          <ul>
-            <li><a href="./sign-up.html">Sign Up</a></li>
-            <li><a href="./sign-in.html">Login</a></li>
-          </ul>
-        </div>
+        <!-- ── LOGGED IN STATE ──────────────────────────────── -->
 
-        <!-- Bar icon for logged out on mobile -->
-        <div class="nav-icon" id="navToggleIcon">
-          <i class="fa fa-bars"></i>
-        </div>
+        <div class="navbar navbar-home" id="loggedInNav" style="display: none">
+          <div class="btn-log" style="display: flex">
+            <button
+              id="navToggle"
+              class="nav-toggle"
+              aria-label="Toggle navigation"
+            >
+              <i class="fas fa-bars"></i>
+            </button>
+            <div class="logo"><img src="./images/logo.png" alt="" /></div>
+          </div>
 
-
-      </div>
-
-
-      <!-- ── LOGGED IN STATE ──────────────────────────────── -->
-
-      <div class="navbar navbar-home" id="loggedInNav" style="display: none;">
-
-        <div class="btn-log" style="display:flex">
-          <button id="navToggle" class="nav-toggle" aria-label="Toggle navigation">
-            <i class="fas fa-bars"></i>
-          </button>
-          <div class="logo"><img src="./images/logo.png" alt="" /></div>
-        </div>
-
-        <!-- <button id="navToggle" class="nav-toggle" aria-label="Toggle navigation">
+          <!-- <button id="navToggle" class="nav-toggle" aria-label="Toggle navigation">
             <i class="fas fa-bars"></i>
           </button> -->
 
-        <div class="nav-menu navMenu" id="navMenu">
-          <ul>
-            <li><a href="./index.html" class="active">Home</a></li>
-            <li><a href="./about.html">About</a></li>
-            <li><a href="./services.html">Features</a></li>
-            <li><a href="./blog-dynamic.html">Blog</a></li>
-            <li><a href="./contact.html">Contact</a></li>
-          </ul>
-          <div class="profile-opt" id="optNav">
+          <div class="nav-menu navMenu" id="navMenu">
             <ul>
-              <li><a href="./app-setting.html?tab=privacy"><i class="fa-solid fa-gear"></i> <span>Settings</span></a>
+              <li><a href="./index.html" class="active">Home</a></li>
+              <li><a href="./about.html">About</a></li>
+              <li><a href="./services.html">Features</a></li>
+              <li><a href="./blog-dynamic.html">Blog</a></li>
+              <li><a href="./contact.html">Contact</a></li>
+            </ul>
+            <div class="profile-opt" id="optNav">
+              <ul>
+                <li>
+                  <a href="./app-setting.html?tab=privacy"
+                    ><i class="fa-solid fa-gear"></i> <span>Settings</span></a
+                  >
+                </li>
+                <li>
+                  <a href="#" onclick="handleMenuSelect('logout')"
+                    ><i
+                      class="fa-solid fa-right-from-bracket"
+                      style="color: #ff7675 !important"
+                    ></i>
+                    <span style="color: #ff7675">Logout</span></a
+                  >
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div class="nav-buttons navbtns">
+            <ul>
+              <li>
+                <a href="#">
+                  <i class="fa-solid fa-briefcase-medical"></i>
+                </a>
               </li>
-              <li><a href="#" onclick="handleMenuSelect('logout')"><i class="fa-solid fa-right-from-bracket"
-                    style="color: #ff7675 !important;"></i> <span style="color: #ff7675;">Logout</span></a></li>
+              <li>
+                <a href="./app-history.html">
+                  <i class="fa-regular fa-bell"></i>
+                </a>
+              </li>
+              <li>
+                <div class="user-profile" id="userProfileBtn">
+                  <div class="profile-check">
+                    <span>
+                      <div
+                        class="nav-avatar"
+                        style="
+                          font-size: 1.5em;
+                          font-family: &quot;poppins&quot;, san-serif;
+                        "
+                        id="navAvatar"
+                      ></div>
+                    </span>
+                    <span class="dropdown-arrow"
+                      ><i class="fa-solid fa-angle-down"></i
+                    ></span>
+                  </div>
+                  <div class="dropdown-menu" id="settingsDropdown">
+                    <!-- User identity block -->
+                    <div class="dd-user-block">
+                      <div class="dd-avatar-sm" id="ddAvatar"></div>
+                      <div class="dd-user-info">
+                        <p class="dd-name" id="ddName">—</p>
+                        <p class="dd-email" id="ddEmail">—</p>
+                      </div>
+                    </div>
+                    <div class="dd-divider"></div>
+                    <!-- Quick actions -->
+                    <div
+                      class="dropdown-item"
+                      onclick="handleMenuSelect('dashboard')"
+                    >
+                      <span><i class="fa-solid fa-house"></i></span> Dashboard
+                    </div>
+                    <div
+                      class="dropdown-item"
+                      onclick="handleMenuSelect('visits')"
+                    >
+                      <span><i class="fa-solid fa-calendar-check"></i></span>
+                      My Visits
+                      <span
+                        class="dd-visits-badge"
+                        id="ddVisitsBadge"
+                        style="display: none"
+                      ></span>
+                    </div>
+                    <div
+                      class="dropdown-item"
+                      onclick="handleMenuSelect('profile')"
+                    >
+                      <span><i class="fa-solid fa-heart-pulse"></i></span> My
+                      Health Profile
+                    </div>
+                    <div
+                      class="dd-symptom-hint"
+                      id="ddSymptomHint"
+                      style="display: none"
+                    >
+                      <i class="fa-regular fa-clock"></i>
+                      <span id="ddSymptomText">Last symptom logged: —</span>
+                      <a href="./complaints.html" class="dd-log-now"
+                        >Log now →</a
+                      >
+                    </div>
+                    <div class="dd-divider"></div>
+                    <div
+                      class="dropdown-item"
+                      onclick="handleMenuSelect('settings')"
+                    >
+                      <span><i class="fa-solid fa-gear"></i></span> Settings
+                    </div>
+                    <div class="dd-divider"></div>
+                    <div
+                      class="dropdown-item dd-logout"
+                      onclick="handleMenuSelect('logout')"
+                    >
+                      <span
+                        ><i class="fa-solid fa-right-from-bracket"></i
+                      ></span>
+                      Logout
+                    </div>
+                  </div>
+                </div>
+              </li>
             </ul>
           </div>
         </div>
-        <div class="nav-buttons navbtns">
-          <ul>
-            <li>
-              <a href="#">
-                <i class="fa-solid fa-briefcase-medical"></i>
-              </a>
-            </li>
-            <li>
-              <a href="./app-history.html">
-                <i class="fa-regular fa-bell"></i>
-              </a>
-            </li>
-            <li>
-              <div class="user-profile" id="userProfileBtn">
-                <div class="profile-check"><span>
-                    <div class="nav-avatar" style="font-size: 1.5em; font-family:'poppins',san-serif;" id="navAvatar">
-                    </div>
-                  </span>
-                  <span class="dropdown-arrow"><i class="fa-solid fa-angle-down"></i></span>
-                </div>
-                <div class="dropdown-menu" id="settingsDropdown">
-                  <!-- User identity block -->
-                  <div class="dd-user-block">
-                    <div class="dd-avatar-sm" id="ddAvatar"></div>
-                    <div class="dd-user-info">
-                      <p class="dd-name" id="ddName">—</p>
-                      <p class="dd-email" id="ddEmail">—</p>
-                    </div>
-                  </div>
-                  <div class="dd-divider"></div>
-                  <!-- Quick actions -->
-                  <div class="dropdown-item" onclick="handleMenuSelect('dashboard')">
-                    <span><i class="fa-solid fa-house"></i></span> Dashboard
-                  </div>
-                  <div class="dropdown-item" onclick="handleMenuSelect('visits')">
-                    <span><i class="fa-solid fa-calendar-check"></i></span>
-                    My Visits
-                    <span class="dd-visits-badge" id="ddVisitsBadge" style="display:none"></span>
-                  </div>
-                  <div class="dropdown-item" onclick="handleMenuSelect('profile')">
-                    <span><i class="fa-solid fa-heart-pulse"></i></span> My Health Profile
-                  </div>
-                  <div class="dd-symptom-hint" id="ddSymptomHint" style="display:none">
-                    <i class="fa-regular fa-clock"></i>
-                    <span id="ddSymptomText">Last symptom logged: —</span>
-                    <a href="./complaints.html" class="dd-log-now">Log now →</a>
-                  </div>
-                  <div class="dd-divider"></div>
-                  <div class="dropdown-item" onclick="handleMenuSelect('settings')">
-                    <span><i class="fa-solid fa-gear"></i></span> Settings
-                  </div>
-                  <div class="dd-divider"></div>
-                  <div class="dropdown-item dd-logout" onclick="handleMenuSelect('logout')">
-                    <span><i class="fa-solid fa-right-from-bracket"></i></span> Logout
-                  </div>
-                </div>
-              </div>
-            </li>
-          </ul>
-        </div>
-
       </div>
+      <main>
+        <section class="hero-section">
+          <div class="hero-copy">
+            <span class="eyebrow">ABOUT NOVABUK</span>
+            <h1>Built for Africa.<br />Driven by Purpose.</h1>
+            <p>
+              NovaBuk is on a mission to transform healthcare in Africa through
+              intelligent, secure, and connected digital records.
+            </p>
+            <div class="hero-buttons">
+              <button class="primary-button">Our Story</button>
+              <button class="ghost-button">Meet the Team</button>
+            </div>
+            <div class="metrics-strip" style="margin-top: 22px">
+              <div><strong>50+</strong> Clinics</div>
+              <div><strong>10K+</strong> Patients</div>
+              <div><strong>4</strong> Countries</div>
+              <div><strong>99.9%</strong> Uptime</div>
+            </div>
+          </div>
 
-      
-    </div>
-    <main>
-      <section class="hero-section">
-        <div class="hero-copy">
-          <span class="eyebrow">ABOUT NOVABUK</span>
-          <h1>Built for Africa.<br />Driven by Purpose.</h1>
-          <p>
-            NovaBuk is on a mission to transform healthcare in Africa through
-            intelligent, secure, and connected digital records.
-          </p>
-          <div class="hero-buttons">
-            <button class="primary-button">Our Story</button>
-            <button class="ghost-button">Meet the Team</button>
+          <div class="hero-visual">
+            <div class="hero-main-image">
+              <img src="./images/hero-banner.jpeg" alt="Doctors using tablet" />
+            </div>
           </div>
-          <div class="metrics-strip" style="margin-top: 22px">
-            <div><strong>50+</strong> Clinics</div>
-            <div><strong>10K+</strong> Patients</div>
-            <div><strong>4</strong> Countries</div>
-            <div><strong>99.9%</strong> Uptime</div>
-          </div>
-        </div>
-
-        <div class="hero-visual">
-          <div class="hero-main-image">
-            <img src="./images/hero-banner.jpeg" alt="Doctors using tablet" />
-          </div>
-        </div>
-      </section>
+        </section>
 
         <!-- ══════════════════════════════════
           MISSION / VISION / PROMISE
       ══════════════════════════════════ -->
-      <div class="trust">
-  <div class="container">
-    <div class="trust-label">Trusted by Healthcare Teams Across Africa</div>
-    <div class="trust-row">
-      <div class="trust-item">
-        <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-        LifeCare <span class="trust-item-sub">&nbsp;Clinic</span>
-      </div>
-      <div class="trust-item">
-        <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="9"/><path d="M8.5 12a3.5 3.5 0 1 0 7 0 3.5 3.5 0 0 0-7 0z"/></svg>
-        GreenLife <span class="trust-item-sub">&nbsp;Pharmacy</span>
-      </div>
-      <div class="trust-item">
-        <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="4"/><path d="M9 12h6M12 9v6" stroke-linecap="round"/></svg>
-        City Hospital <span class="trust-item-sub">&nbsp;Health Care</span>
-      </div>
-      <div class="trust-item">
-        <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 0 1 0 18M3 12h18" stroke-linecap="round"/></svg>
-        MetroCare <span class="trust-item-sub">&nbsp;Clinics</span>
-      </div>
-      <div class="trust-item">
-        <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-        HealthPlus <span class="trust-item-sub">&nbsp;Clinics</span>
-      </div>
-    </div>
-  </div>
-      </div>
-
-      <!-- ══════════ MISSION ══════════ -->
-      <div class="mission-wrap">
-        <div class="container">
-          <div class="label label-dot reveal">Our Mission</div>
-          <div class="mission-inner reveal reveal-delay-1">
-            <div class="mission-grid">
-              <div class="mission-intro">
-                <h2>
-                  Managing healthcare Africa, one digital record at a time.
-                  <!-- Making Healthcare Accessible, Intelligent and Connected. -->
-                </h2>
-                <div class="mission-divider"></div>
-                <p>We believe every patient deserves safe, fast and continuous care — no matter where they are.</p>
+        <div class="trust">
+          <div class="container">
+            <div class="trust-label">
+              Trusted by Healthcare Teams Across Africa
+            </div>
+            <div class="trust-row">
+              <div class="trust-item">
+                <svg
+                  width="18"
+                  height="18"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  stroke-width="1.5"
+                >
+                  <path
+                    d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"
+                  />
+                </svg>
+                LifeCare <span class="trust-item-sub">&nbsp;Clinic</span>
               </div>
+              <div class="trust-item">
+                <svg
+                  width="18"
+                  height="18"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  stroke-width="1.5"
+                >
+                  <circle cx="12" cy="12" r="9" />
+                  <path d="M8.5 12a3.5 3.5 0 1 0 7 0 3.5 3.5 0 0 0-7 0z" />
+                </svg>
+                GreenLife <span class="trust-item-sub">&nbsp;Pharmacy</span>
+              </div>
+              <div class="trust-item">
+                <svg
+                  width="18"
+                  height="18"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  stroke-width="1.5"
+                >
+                  <rect x="3" y="3" width="18" height="18" rx="4" />
+                  <path d="M9 12h6M12 9v6" stroke-linecap="round" />
+                </svg>
+                City Hospital
+                <span class="trust-item-sub">&nbsp;Health Care</span>
+              </div>
+              <div class="trust-item">
+                <svg
+                  width="18"
+                  height="18"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  stroke-width="1.5"
+                >
+                  <circle cx="12" cy="12" r="9" />
+                  <path
+                    d="M12 3a9 9 0 0 1 0 18M3 12h18"
+                    stroke-linecap="round"
+                  />
+                </svg>
+                MetroCare <span class="trust-item-sub">&nbsp;Clinics</span>
+              </div>
+              <div class="trust-item">
+                <svg
+                  width="18"
+                  height="18"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  stroke-width="1.5"
+                >
+                  <polygon
+                    points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"
+                  />
+                </svg>
+                HealthPlus <span class="trust-item-sub">&nbsp;Clinics</span>
+              </div>
+            </div>
+          </div>
+        </div>
 
-              <div class="mission-wrap-card">
-                <div class="m-card reveal reveal-delay-2">
-                  <div class="m-card-icon">
-                    <i class="fas fa-bullseye"></i>
-                  </div>
-                  <h3>Our Mission</h3>
-                  <p> Our mission is to empower every health provider with intelligent tools to deliver care that's efficient, personalized and predictive</p>
+        <!-- ══════════ MISSION ══════════ -->
+        <div class="mission-wrap">
+          <div class="container">
+            <div class="label label-dot reveal">Our Mission</div>
+            <div class="mission-inner reveal reveal-delay-1">
+              <div class="mission-grid">
+                <div class="mission-intro">
+                  <h2>
+                    Managing healthcare Africa, one digital record at a time.
+                    <!-- Making Healthcare Accessible, Intelligent and Connected. -->
+                  </h2>
+                  <div class="mission-divider"></div>
+                  <p>
+                    We believe every patient deserves safe, fast and continuous
+                    care — no matter where they are.
+                  </p>
                 </div>
 
-                <div class="m-card reveal reveal-delay-3">
-                  <div class="m-card-icon" style="background:#FFF1F4">
-                    <i class="fas fa-eye"></i>
+                <div class="mission-wrap-card">
+                  <div class="m-card reveal reveal-delay-2">
+                    <div class="m-card-icon">
+                      <i class="fas fa-bullseye"></i>
+                    </div>
+                    <h3>Our Mission</h3>
+                    <p>
+                      Our mission is to empower every health provider with
+                      intelligent tools to deliver care that's efficient,
+                      personalized and predictive
+                    </p>
                   </div>
-                  <h3>Our Vision</h3>
-                  <p>A future where every African has access to their health information, anytime, anywhere.</p>
-                </div>
 
-                <!-- <div class="m-card reveal reveal-delay-4">
+                  <div class="m-card reveal reveal-delay-3">
+                    <div class="m-card-icon" style="background: #fff1f4">
+                      <i class="fas fa-eye"></i>
+                    </div>
+                    <h3>Our Vision</h3>
+                    <p>
+                      A future where every African has access to their health
+                      information, anytime, anywhere.
+                    </p>
+                  </div>
+
+                  <!-- <div class="m-card reveal reveal-delay-4">
                   <div class="m-card-icon" style="background:#F0FDF4">
                     <i class="fas fa-shield-alt" style="color:#16A34A"></i>
                   </div>
                   <h3>Our Promise</h3>
                   <p>Secure data. Smarter care. Better decisions. Stronger communities.</p>
                 </div> -->
-              </div><!-- /mission-wrap-card -->
-
-            </div><!-- /mission-grid -->
-          </div><!-- /mission-inner -->
-        </div><!-- /container -->
-      </div><!-- /mission-wrap -->
-
-      <!-- ══════════ STORY / TIMELINE ══════════ -->
-      <div class="story-wrap">
-        <div class="container">
-          <div class="label label-dot reveal">Our Story</div>
-          <div class="story-grid">
-            <div class="reveal reveal-delay-1">
-              <h2>Solving Real Problems with Real Impact</h2>
-              <p>NovaBuk is building an intelligent digital health ecosystem that connects patients, providers, doctors,clinics and pharmacies-making healthcare smarter, faster and more accessible.</p>
-              <a href="#" class="btn btn-ghost">Read Our Full Story
-                <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-              </a>
-              <div class="image-story"><img src="./images/image 40.png" alt=""></div>
+                </div>
+                <!-- /mission-wrap-card -->
+              </div>
+              <!-- /mission-grid -->
             </div>
+            <!-- /mission-inner -->
+          </div>
+          <!-- /container -->
+        </div>
+        <!-- /mission-wrap -->
 
-            <div class="timeline reveal reveal-delay-2">
-              <div class="tl-track">
-                <div class="tl-item">
-                  <div class="tl-icon-wrap" style="border-color:#DBEAFE">
-                    <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="#1B4FE4" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M12 2v2M12 20v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M2 12h2M20 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" stroke-linecap="round"/></svg>
-                  </div>
-                  <div class="tl-dot" style="background:#1B4FE4"></div>
-                  <div class="tl-year">2021</div>
-                  <div class="tl-name">The Idea</div>
-                  <div class="tl-desc">Identified the gap in healthcare record management across African clinics.</div>
-                </div>
-                <div class="tl-item">
-                  <div class="tl-icon-wrap" style="border-color:#D1FAE5">
-                    <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="#22C55E" stroke-width="1.8"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
-                  </div>
-                  <div class="tl-dot" style="background:#22C55E"></div>
-                  <div class="tl-year">2022</div>
-                  <div class="tl-name">First Prototype</div>
-                  <div class="tl-desc">Built and began pilot testing with partner clinics.</div>
-                </div>
-                <div class="tl-item">
-                  <div class="tl-icon-wrap" style="border-color:#E0E7FF">
-                    <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="#6366F1" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M9 12l2 2 4-4" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                  </div>
-                  <div class="tl-dot" style="background:#6366F1"></div>
-                  <div class="tl-year">2023</div>
-                  <div class="tl-name">Pilot Launch</div>
-                  <div class="tl-desc">Onboarded clinics and collected real-world feedback.</div>
-                </div>
-                <div class="tl-item">
-                  <div class="tl-icon-wrap" style="border-color:#FEE2E2">
-                    <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="#EF4444" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M2 12h20M12 3a15 15 0 0 1 4 9 15 15 0 0 1-4 9 15 15 0 0 1-4-9 15 15 0 0 1 4-9z" stroke-linecap="round"/></svg>
-                  </div>
-                  <div class="tl-dot" style="background:#EF4444"></div>
-                  <div class="tl-year">2024</div>
-                  <div class="tl-name">Expanding Impact</div>
-                  <div class="tl-desc">Scaling across more regions with AI-powered tools.</div>
-                </div>
-                <div class="tl-item">
-                  <div class="tl-icon-wrap" style="border-color:#FEF3C7">
-                    <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="#F59E0B" stroke-width="1.8"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-                  </div>
-                  <div class="tl-dot" style="background:#F59E0B"></div>
-                  <div class="tl-year">2025+</div>
-                  <div class="tl-name">The Future</div>
-                  <div class="tl-desc">Transforming healthcare across Africa and beyond.</div>
+        <!-- ══════════ STORY / TIMELINE ══════════ -->
+        <div class="story-wrap">
+          <div class="container">
+            <div class="label label-dot reveal">Our Story</div>
+            <div class="story-grid">
+              <div class="reveal reveal-delay-1">
+                <h2>Solving Real Problems with Real Impact</h2>
+                <p>
+                  NovaBuk is building an intelligent digital health ecosystem
+                  that connects patients, providers, doctors,clinics and
+                  pharmacies-making healthcare smarter, faster and more
+                  accessible.
+                </p>
+                <a href="#" class="btn btn-ghost"
+                  >Read Our Full Story
+                  <svg
+                    width="14"
+                    height="14"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    stroke-width="2.2"
+                  >
+                    <path d="M5 12h14M12 5l7 7-7 7" />
+                  </svg>
+                </a>
+                <div class="image-story">
+                  <img src="./images/image 40.png" alt="" />
                 </div>
               </div>
 
-              <!-- ── MOBILE SPINE TIMELINE ── -->
-              <div class="tl-mobile">
-
-                <div class="tl-mob-item" style="--tl-color:#1B4FE4;--tl-bg:#EBF0FF">
-                  <div class="tl-mob-left">
-                    <div class="tl-mob-icon">
-                      <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="#1B4FE4" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M12 2v2M12 20v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M2 12h2M20 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" stroke-linecap="round"/></svg>
+              <div class="timeline reveal reveal-delay-2">
+                <div class="tl-track">
+                  <div class="tl-item">
+                    <div class="tl-icon-wrap" style="border-color: #dbeafe">
+                      <svg
+                        width="16"
+                        height="16"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="#1B4FE4"
+                        stroke-width="1.8"
+                      >
+                        <circle cx="12" cy="12" r="3" />
+                        <path
+                          d="M12 2v2M12 20v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M2 12h2M20 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"
+                          stroke-linecap="round"
+                        />
+                      </svg>
+                    </div>
+                    <div class="tl-dot" style="background: #1b4fe4"></div>
+                    <div class="tl-year">2021</div>
+                    <div class="tl-name">The Idea</div>
+                    <div class="tl-desc">
+                      Identified the gap in healthcare record management across
+                      African clinics.
                     </div>
                   </div>
-                  <div class="tl-mob-card" data-year="2021">
-                    <div class="tl-mob-year-badge"><span class="tl-mob-dot"></span>2021</div>
-                    <div class="tl-mob-name">The Idea</div>
-                    <div class="tl-mob-desc">Identified the gap in healthcare record management across African clinics — and knew something had to change.</div>
+                  <div class="tl-item">
+                    <div class="tl-icon-wrap" style="border-color: #d1fae5">
+                      <svg
+                        width="16"
+                        height="16"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="#22C55E"
+                        stroke-width="1.8"
+                      >
+                        <path d="M12 2L2 7l10 5 10-5-10-5z" />
+                        <path d="M2 17l10 5 10-5M2 12l10 5 10-5" />
+                      </svg>
+                    </div>
+                    <div class="tl-dot" style="background: #22c55e"></div>
+                    <div class="tl-year">2022</div>
+                    <div class="tl-name">First Prototype</div>
+                    <div class="tl-desc">
+                      Built and began pilot testing with partner clinics.
+                    </div>
+                  </div>
+                  <div class="tl-item">
+                    <div class="tl-icon-wrap" style="border-color: #e0e7ff">
+                      <svg
+                        width="16"
+                        height="16"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="#6366F1"
+                        stroke-width="1.8"
+                      >
+                        <rect x="3" y="3" width="18" height="18" rx="3" />
+                        <path
+                          d="M9 12l2 2 4-4"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        />
+                      </svg>
+                    </div>
+                    <div class="tl-dot" style="background: #6366f1"></div>
+                    <div class="tl-year">2023</div>
+                    <div class="tl-name">Pilot Launch</div>
+                    <div class="tl-desc">
+                      Onboarded clinics and collected real-world feedback.
+                    </div>
+                  </div>
+                  <div class="tl-item">
+                    <div class="tl-icon-wrap" style="border-color: #fee2e2">
+                      <svg
+                        width="16"
+                        height="16"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="#EF4444"
+                        stroke-width="1.8"
+                      >
+                        <circle cx="12" cy="12" r="9" />
+                        <path
+                          d="M2 12h20M12 3a15 15 0 0 1 4 9 15 15 0 0 1-4 9 15 15 0 0 1-4-9 15 15 0 0 1 4-9z"
+                          stroke-linecap="round"
+                        />
+                      </svg>
+                    </div>
+                    <div class="tl-dot" style="background: #ef4444"></div>
+                    <div class="tl-year">2024</div>
+                    <div class="tl-name">Expanding Impact</div>
+                    <div class="tl-desc">
+                      Scaling across more regions with AI-powered tools.
+                    </div>
+                  </div>
+                  <div class="tl-item">
+                    <div class="tl-icon-wrap" style="border-color: #fef3c7">
+                      <svg
+                        width="16"
+                        height="16"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="#F59E0B"
+                        stroke-width="1.8"
+                      >
+                        <polygon
+                          points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"
+                        />
+                      </svg>
+                    </div>
+                    <div class="tl-dot" style="background: #f59e0b"></div>
+                    <div class="tl-year">2025+</div>
+                    <div class="tl-name">The Future</div>
+                    <div class="tl-desc">
+                      Transforming healthcare across Africa and beyond.
+                    </div>
                   </div>
                 </div>
 
-                <div class="tl-mob-item" style="--tl-color:#22C55E;--tl-bg:#DCFCE7">
-                  <div class="tl-mob-left">
-                    <div class="tl-mob-icon">
-                      <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="#22C55E" stroke-width="1.8"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+                <!-- ── MOBILE SPINE TIMELINE ── -->
+                <div class="tl-mobile">
+                  <div
+                    class="tl-mob-item"
+                    style="--tl-color: #1b4fe4; --tl-bg: #ebf0ff"
+                  >
+                    <div class="tl-mob-left">
+                      <div class="tl-mob-icon">
+                        <svg
+                          width="22"
+                          height="22"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="#1B4FE4"
+                          stroke-width="1.8"
+                        >
+                          <circle cx="12" cy="12" r="3" />
+                          <path
+                            d="M12 2v2M12 20v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M2 12h2M20 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"
+                            stroke-linecap="round"
+                          />
+                        </svg>
+                      </div>
+                    </div>
+                    <div class="tl-mob-card" data-year="2021">
+                      <div class="tl-mob-year-badge">
+                        <span class="tl-mob-dot"></span>2021
+                      </div>
+                      <div class="tl-mob-name">The Idea</div>
+                      <div class="tl-mob-desc">
+                        Identified the gap in healthcare record management
+                        across African clinics — and knew something had to
+                        change.
+                      </div>
                     </div>
                   </div>
-                  <div class="tl-mob-card" data-year="2022">
-                    <div class="tl-mob-year-badge"><span class="tl-mob-dot"></span>2022</div>
-                    <div class="tl-mob-name">First Prototype</div>
-                    <div class="tl-mob-desc">Built our first prototype and began pilot testing with partner clinics across Nigeria.</div>
-                  </div>
-                </div>
 
-                <div class="tl-mob-item" style="--tl-color:#6366F1;--tl-bg:#EEF2FF">
-                  <div class="tl-mob-left">
-                    <div class="tl-mob-icon">
-                      <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="#6366F1" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M9 12l2 2 4-4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  <div
+                    class="tl-mob-item"
+                    style="--tl-color: #22c55e; --tl-bg: #dcfce7"
+                  >
+                    <div class="tl-mob-left">
+                      <div class="tl-mob-icon">
+                        <svg
+                          width="22"
+                          height="22"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="#22C55E"
+                          stroke-width="1.8"
+                        >
+                          <path d="M12 2L2 7l10 5 10-5-10-5z" />
+                          <path d="M2 17l10 5 10-5M2 12l10 5 10-5" />
+                        </svg>
+                      </div>
+                    </div>
+                    <div class="tl-mob-card" data-year="2022">
+                      <div class="tl-mob-year-badge">
+                        <span class="tl-mob-dot"></span>2022
+                      </div>
+                      <div class="tl-mob-name">First Prototype</div>
+                      <div class="tl-mob-desc">
+                        Built our first prototype and began pilot testing with
+                        partner clinics across Nigeria.
+                      </div>
                     </div>
                   </div>
-                  <div class="tl-mob-card" data-year="2023">
-                    <div class="tl-mob-year-badge"><span class="tl-mob-dot"></span>2023</div>
-                    <div class="tl-mob-name">Pilot Launch</div>
-                    <div class="tl-mob-desc">Onboarded clinics at scale, collected real-world feedback, and iterated fast to build better.</div>
-                  </div>
-                </div>
 
-                <div class="tl-mob-item" style="--tl-color:#EF4444;--tl-bg:#FEF2F2">
-                  <div class="tl-mob-left">
-                    <div class="tl-mob-icon">
-                      <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="#EF4444" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M2 12h20M12 3a15 15 0 0 1 4 9 15 15 0 0 1-4 9 15 15 0 0 1-4-9 15 15 0 0 1 4-9z" stroke-linecap="round"/></svg>
+                  <div
+                    class="tl-mob-item"
+                    style="--tl-color: #6366f1; --tl-bg: #eef2ff"
+                  >
+                    <div class="tl-mob-left">
+                      <div class="tl-mob-icon">
+                        <svg
+                          width="22"
+                          height="22"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="#6366F1"
+                          stroke-width="1.8"
+                        >
+                          <rect x="3" y="3" width="18" height="18" rx="3" />
+                          <path
+                            d="M9 12l2 2 4-4"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                          />
+                        </svg>
+                      </div>
+                    </div>
+                    <div class="tl-mob-card" data-year="2023">
+                      <div class="tl-mob-year-badge">
+                        <span class="tl-mob-dot"></span>2023
+                      </div>
+                      <div class="tl-mob-name">Pilot Launch</div>
+                      <div class="tl-mob-desc">
+                        Onboarded clinics at scale, collected real-world
+                        feedback, and iterated fast to build better.
+                      </div>
                     </div>
                   </div>
-                  <div class="tl-mob-card" data-year="2024">
-                    <div class="tl-mob-year-badge"><span class="tl-mob-dot"></span>2024</div>
-                    <div class="tl-mob-name">Expanding Impact</div>
-                    <div class="tl-mob-desc">Scaled across more regions and launched AI-powered healthcare tools that change how care is delivered.</div>
-                  </div>
-                </div>
 
-                <div class="tl-mob-item" style="--tl-color:#F59E0B;--tl-bg:#FFFBEB">
-                  <div class="tl-mob-left">
-                    <div class="tl-mob-icon">
-                      <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="#F59E0B" stroke-width="1.8"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                  <div
+                    class="tl-mob-item"
+                    style="--tl-color: #ef4444; --tl-bg: #fef2f2"
+                  >
+                    <div class="tl-mob-left">
+                      <div class="tl-mob-icon">
+                        <svg
+                          width="22"
+                          height="22"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="#EF4444"
+                          stroke-width="1.8"
+                        >
+                          <circle cx="12" cy="12" r="9" />
+                          <path
+                            d="M2 12h20M12 3a15 15 0 0 1 4 9 15 15 0 0 1-4 9 15 15 0 0 1-4-9 15 15 0 0 1 4-9z"
+                            stroke-linecap="round"
+                          />
+                        </svg>
+                      </div>
+                    </div>
+                    <div class="tl-mob-card" data-year="2024">
+                      <div class="tl-mob-year-badge">
+                        <span class="tl-mob-dot"></span>2024
+                      </div>
+                      <div class="tl-mob-name">Expanding Impact</div>
+                      <div class="tl-mob-desc">
+                        Scaled across more regions and launched AI-powered
+                        healthcare tools that change how care is delivered.
+                      </div>
                     </div>
                   </div>
-                  <div class="tl-mob-card" data-year="2025">
-                    <div class="tl-mob-year-badge"><span class="tl-mob-dot"></span>2025+</div>
-                    <div class="tl-mob-name">The Future</div>
-                    <div class="tl-mob-desc">Continuing to innovate and transform healthcare across Africa and beyond — the journey has only just begun.</div>
+
+                  <div
+                    class="tl-mob-item"
+                    style="--tl-color: #f59e0b; --tl-bg: #fffbeb"
+                  >
+                    <div class="tl-mob-left">
+                      <div class="tl-mob-icon">
+                        <svg
+                          width="22"
+                          height="22"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="#F59E0B"
+                          stroke-width="1.8"
+                        >
+                          <polygon
+                            points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"
+                          />
+                        </svg>
+                      </div>
+                    </div>
+                    <div class="tl-mob-card" data-year="2025">
+                      <div class="tl-mob-year-badge">
+                        <span class="tl-mob-dot"></span>2025+
+                      </div>
+                      <div class="tl-mob-name">The Future</div>
+                      <div class="tl-mob-desc">
+                        Continuing to innovate and transform healthcare across
+                        Africa and beyond — the journey has only just begun.
+                      </div>
+                    </div>
                   </div>
                 </div>
-
-              </div><!-- /tl-mobile -->
-
+                <!-- /tl-mobile -->
+              </div>
             </div>
           </div>
         </div>
-      </div>
 
-      <!-- ══════════ CHALLENGES ══════════ -->
-      <section class="challenges">
-        <div class="container">
-          <div class="ch-grid">
-            <div class="ch-left reveal">
-              <div class="label label-dot">Why It Matters</div>
-              <h2>The Challenges We Are Working To Solve</h2>
-              <p>Healthcare systems across Africa face similar challenges. NovaBuk exists to change that.</p>
-              <a href="#" class="btn btn-ghost-white">
-                Learn How We Help
-                <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-              </a>
-            </div>
+        <!-- ══════════ CHALLENGES ══════════ -->
+        <section class="challenges">
+          <div class="container">
+            <div class="ch-grid">
+              <div class="ch-left reveal">
+                <div class="label label-dot">Why It Matters</div>
+                <h2>The Challenges We Are Working To Solve</h2>
+                <p>
+                  Healthcare systems across Africa face similar challenges.
+                  NovaBuk exists to change that.
+                </p>
+                <a href="#" class="btn btn-ghost-white">
+                  Learn How We Help
+                  <svg
+                    width="14"
+                    height="14"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    stroke-width="2.2"
+                  >
+                    <path d="M5 12h14M12 5l7 7-7 7" />
+                  </svg>
+                </a>
+              </div>
 
-            <div class="ch-cards reveal reveal-delay-2">
-              <div class="dotted-line"></div>
-              <div class="ch-card">
-                <div class="ch-icon">
-                  <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="rgba(255,255,255,.75)" stroke-width="1.7"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+              <div class="ch-cards reveal reveal-delay-2">
+                <div class="dotted-line"></div>
+                <div class="ch-card">
+                  <div class="ch-icon">
+                    <svg
+                      width="20"
+                      height="20"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="rgba(255,255,255,.75)"
+                      stroke-width="1.7"
+                    >
+                      <path
+                        d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"
+                      />
+                      <polyline points="14 2 14 8 20 8" />
+                      <line x1="16" y1="13" x2="8" y2="13" />
+                      <line x1="16" y1="17" x2="8" y2="17" />
+                    </svg>
+                  </div>
+                  <h4>Lost Records</h4>
+                  <p>
+                    Paper-based systems lead to lost or incomplete patient data.
+                  </p>
                 </div>
-                <h4>Lost Records</h4>
-                <p>Paper-based systems lead to lost or incomplete patient data.</p>
-              </div>
-              <div class="dotted-line"></div>
-              <div class="ch-card">
-                <div class="ch-icon">
-                  <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="rgba(255,255,255,.75)" stroke-width="1.7"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 14"/></svg>
+                <div class="dotted-line"></div>
+                <div class="ch-card">
+                  <div class="ch-icon">
+                    <svg
+                      width="20"
+                      height="20"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="rgba(255,255,255,.75)"
+                      stroke-width="1.7"
+                    >
+                      <circle cx="12" cy="12" r="9" />
+                      <polyline points="12 7 12 12 15 14" />
+                    </svg>
+                  </div>
+                  <h4>Slow Processes</h4>
+                  <p>Manual workflows slow down care and increase errors.</p>
                 </div>
-                <h4>Slow Processes</h4>
-                <p>Manual workflows slow down care and increase errors.</p>
-              </div>
-              <div class="dotted-line"></div>
-              <div class="ch-card">
-                <div class="ch-icon">
-                  <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="rgba(255,255,255,.75)" stroke-width="1.7"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                <div class="dotted-line"></div>
+                <div class="ch-card">
+                  <div class="ch-icon">
+                    <svg
+                      width="20"
+                      height="20"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="rgba(255,255,255,.75)"
+                      stroke-width="1.7"
+                    >
+                      <rect x="3" y="11" width="18" height="11" rx="2" />
+                      <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                    </svg>
+                  </div>
+                  <h4>Limited Access</h4>
+                  <p>Patients can't easily access their health information.</p>
                 </div>
-                <h4>Limited Access</h4>
-                <p>Patients can't easily access their health information.</p>
-              </div>
-              <div class="dotted-line"></div>
-              <div class="ch-card">
-                <div class="ch-icon">
-                  <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="rgba(255,255,255,.75)" stroke-width="1.7"><rect x="2" y="3" width="7" height="7" rx="1"/><rect x="15" y="3" width="7" height="7" rx="1"/><rect x="2" y="14" width="7" height="7" rx="1"/><rect x="15" y="14" width="7" height="7" rx="1"/><path d="M9 6.5h6M9 17.5h6M12 10v4" stroke-linecap="round"/></svg>
+                <div class="dotted-line"></div>
+                <div class="ch-card">
+                  <div class="ch-icon">
+                    <svg
+                      width="20"
+                      height="20"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="rgba(255,255,255,.75)"
+                      stroke-width="1.7"
+                    >
+                      <rect x="2" y="3" width="7" height="7" rx="1" />
+                      <rect x="15" y="3" width="7" height="7" rx="1" />
+                      <rect x="2" y="14" width="7" height="7" rx="1" />
+                      <rect x="15" y="14" width="7" height="7" rx="1" />
+                      <path
+                        d="M9 6.5h6M9 17.5h6M12 10v4"
+                        stroke-linecap="round"
+                      />
+                    </svg>
+                  </div>
+                  <h4>Fragmented Systems</h4>
+                  <p>
+                    Disjointed tools make it hard for providers to work
+                    efficiently.
+                  </p>
                 </div>
-                <h4>Fragmented Systems</h4>
-                <p>Disjointed tools make it hard for providers to work efficiently.</p>
-              </div>
-              <!-- <div class="ch-card">
+                <!-- <div class="ch-card">
                 <div class="ch-icon">
                   <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="rgba(255,255,255,.75)" stroke-width="1.7"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3" stroke-linecap="round"/></svg>
                 </div>
                 <h4>High Costs</h4>
                 <p>Inefficiencies drive up costs for clinics and patients.</p>
               </div> -->
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- ══════════ TEAM ══════════ -->
-      <div class="team-wrap">
-        <div class="container">
-          <div class="label label-dot reveal">The People Behind NovaBuk</div>
-          <div class="team-grid">
-            <div class="reveal reveal-delay-1">
-              <h2>A Team with Deep Passion for Healthcare &amp; Technology</h2>
-              <p>We are a diverse team of healthcare professionals, engineers, and innovators building the future of healthcare in Africa.</p>
-              <a href="#" class="btn btn-ghost">
-                <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="9" cy="7" r="4"/><path d="M3 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/><path d="M21 21v-2a4 4 0 0 0-3-3.85"/></svg>
-                Meet the Team
-              </a>
-            </div>
-
-            <div class="team-cards reveal reveal-delay-2">
-              <div class="team-card">
-                <div class="team-avatar">EA</div>
-                <div class="team-info">
-                  <h4>Faith Micheal Ibukun</h4>
-                  <p class="role">Founder &amp; CEO</p>
-                  <a href="#" class="li-btn" aria-label="LinkedIn">
-                    <i class="fab fa-linkedin-in"></i>
-                  </a>
-                  <a href="#" class="li-btn" aria-label="LinkedIn">
-                    <i class="fab fa-x"></i>
-                  </a>
-                </div>
-              </div>
-              <div class="team-card">
-                <div class="team-avatar" style="background:linear-gradient(145deg,#C7EEFF,#D8F5FF)">CO</div>
-                <div class="team-info">
-                  <h4>Olalade Olaniyi</h4>
-                  <p class="role">Co-founder &amp; Brand Manager</p>
-                  <a href="#" class="li-btn" aria-label="LinkedIn">
-                    <i class="fab fa-linkedin-in"></i>
-                  </a>
-                  <a href="#" class="li-btn" aria-label="LinkedIn">
-                    <i class="fab fa-x"></i>
-                  </a>
-                </div>
-              </div>
-              <div class="team-card">
-                <div class="team-avatar" style="background:linear-gradient(145deg,#D4EDDA,#E8F8EC)">TA</div>
-                <div class="team-info">
-                  <h4>Nelson Idoko</h4>
-                  <p class="role">CTO</p>
-                  <a href="#" class="li-btn" aria-label="LinkedIn">
-                    <i class="fab fa-linkedin-in"></i>
-                  </a>
-                  <a href="#" class="li-btn" aria-label="LinkedIn">
-                    <i class="fab fa-x"></i>
-                  </a>
-                </div>
               </div>
             </div>
           </div>
-        </div>
-      </div>
+        </section>
 
-    </main>
-    <footer class="site-footer">
+        <!-- ══════════ TEAM ══════════ -->
+        <div class="team-wrap">
+          <div class="container">
+            <div class="label label-dot reveal">The People Behind NovaBuk</div>
+            <div class="team-grid">
+              <div class="reveal reveal-delay-1">
+                <h2>
+                  A Team with Deep Passion for Healthcare &amp; Technology
+                </h2>
+                <p>
+                  We are a diverse team of healthcare professionals, engineers,
+                  and innovators building the future of healthcare in Africa.
+                </p>
+                <a href="#" class="btn btn-ghost">
+                  <svg
+                    width="15"
+                    height="15"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    stroke-width="2"
+                  >
+                    <circle cx="9" cy="7" r="4" />
+                    <path d="M3 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2" />
+                    <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                    <path d="M21 21v-2a4 4 0 0 0-3-3.85" />
+                  </svg>
+                  Meet the Team
+                </a>
+              </div>
+
+              <div class="team-cards reveal reveal-delay-2">
+                <div class="team-card">
+                  <div class="team-avatar">EA</div>
+                  <div class="team-info">
+                    <h4>Faith Micheal Ibukun</h4>
+                    <p class="role">Founder &amp; CEO</p>
+                    <a href="#" class="li-btn" aria-label="LinkedIn">
+                      <i class="fab fa-linkedin-in"></i>
+                    </a>
+                    <a href="#" class="li-btn" aria-label="LinkedIn">
+                      <i class="fab fa-x"></i>
+                    </a>
+                  </div>
+                </div>
+                <div class="team-card">
+                  <div
+                    class="team-avatar"
+                    style="
+                      background: linear-gradient(145deg, #c7eeff, #d8f5ff);
+                    "
+                  >
+                    CO
+                  </div>
+                  <div class="team-info">
+                    <h4>Olalade Olaniyi</h4>
+                    <p class="role">Co-founder &amp; Brand Manager</p>
+                    <a href="#" class="li-btn" aria-label="LinkedIn">
+                      <i class="fab fa-linkedin-in"></i>
+                    </a>
+                    <a href="#" class="li-btn" aria-label="LinkedIn">
+                      <i class="fab fa-x"></i>
+                    </a>
+                  </div>
+                </div>
+                <div class="team-card">
+                  <div
+                    class="team-avatar"
+                    style="
+                      background: linear-gradient(145deg, #d4edda, #e8f8ec);
+                    "
+                  >
+                    TA
+                  </div>
+                  <div class="team-info">
+                    <h4>Nelson Idoko</h4>
+                    <p class="role">CTO</p>
+                    <a href="#" class="li-btn" aria-label="LinkedIn">
+                      <i class="fab fa-linkedin-in"></i>
+                    </a>
+                    <a href="#" class="li-btn" aria-label="LinkedIn">
+                      <i class="fab fa-x"></i>
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+      <footer class="site-footer">
         <div class="footer-brand">
-          <div class="brand"><img src="./images/logo.png" alt=""></div>
+          <div class="brand"><img src="./images/logo.png" alt="" /></div>
           <p>AI-powered healthcare records platform built for Africa.</p>
         </div>
         <div class="footer-links">
@@ -593,45 +1011,67 @@
           </form>
         </div>
       </footer>
-  </div>
+    </div>
 
-  <script src="./db.js"></script>
-  <script src="./script.js"></script>
+    <script src="./db.js"></script>
+    <script src="./script.js"></script>
 
-  <script>
-    // script.js runIndexNavSync() handles navbar state + bfcache restore
-    // Only define handleMenuSelect here since it needs page-specific reload behaviour
-    window.handleMenuSelect = function (value) {
-      if (value === 'logout') { if (typeof showLogoutModal === 'function') showLogoutModal(); else { localStorage.removeItem('novabuk_token'); localStorage.removeItem('novabuk_user'); localStorage.removeItem('selectedClinic'); window.location.reload(); } }
-      else if (value === 'dashboard') { window.location.href = './app-home.html'; }
-      else if (value === 'visits') { window.location.href = './app-history.html'; }
-      else if (value === 'profile') { window.location.href = './app-setting.html?tab=profile'; }
-      else if (value === 'settings') { window.location.href = './app-setting.html?tab=profile'; }
-      else if (value === 'notification') { window.location.href = './app-setting.html?tab=notification'; }
-    };
-  </script>
-
-  <!-- Floating WhatsApp widget -->
-  <a href="https://wa.me/2348134684154?text=Hello%20NovaBuk,%20I'd%20like%20to%20inquire%20about%20your%20services." class="nb-whatsapp-float" target="_blank" aria-label="Chat on WhatsApp">
-    <i class="fa-brands fa-whatsapp"></i>
-    <span class="nb-whatsapp-tooltip">Chat with us</span>
-  </a>
-
-  <!-- New sections scripts -->
-  <script>
-    // Scroll Reveal Animation — handles both .reveal and .nb-reveal classes
-    const revealObserver = new IntersectionObserver((entries) => {
-      entries.forEach(el => {
-        if (el.isIntersecting) {
-          el.target.classList.add('visible');
-          el.target.classList.add('nb-visible');
-          revealObserver.unobserve(el.target);
+    <script>
+      // script.js runIndexNavSync() handles navbar state + bfcache restore
+      // Only define handleMenuSelect here since it needs page-specific reload behaviour
+      window.handleMenuSelect = function (value) {
+        if (value === "logout") {
+          if (typeof showLogoutModal === "function") showLogoutModal();
+          else {
+            localStorage.removeItem("novabuk_token");
+            localStorage.removeItem("novabuk_user");
+            localStorage.removeItem("selectedClinic");
+            window.location.reload();
+          }
+        } else if (value === "dashboard") {
+          window.location.href = "./app-home.html";
+        } else if (value === "visits") {
+          window.location.href = "./app-history.html";
+        } else if (value === "profile") {
+          window.location.href = "./app-setting.html?tab=profile";
+        } else if (value === "settings") {
+          window.location.href = "./app-setting.html?tab=profile";
+        } else if (value === "notification") {
+          window.location.href = "./app-setting.html?tab=notification";
         }
-      });
-    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+      };
+    </script>
 
-    document.querySelectorAll('.reveal, .nb-reveal').forEach(el => revealObserver.observe(el));
-  </script>
-</body>
+    <!-- Floating WhatsApp widget -->
+    <a
+      href="https://wa.me/2348134684154?text=Hello%20NovaBuk,%20I'd%20like%20to%20inquire%20about%20your%20services."
+      class="nb-whatsapp-float"
+      target="_blank"
+      aria-label="Chat on WhatsApp"
+    >
+      <i class="fa-brands fa-whatsapp"></i>
+      <span class="nb-whatsapp-tooltip">Chat with us</span>
+    </a>
 
+    <!-- New sections scripts -->
+    <script>
+      // Scroll Reveal Animation — handles both .reveal and .nb-reveal classes
+      const revealObserver = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((el) => {
+            if (el.isIntersecting) {
+              el.target.classList.add("visible");
+              el.target.classList.add("nb-visible");
+              revealObserver.unobserve(el.target);
+            }
+          });
+        },
+        { threshold: 0.1, rootMargin: "0px 0px -40px 0px" },
+      );
+
+      document
+        .querySelectorAll(".reveal, .nb-reveal")
+        .forEach((el) => revealObserver.observe(el));
+    </script>
+  </body>
 </html>

@@ -1,4 +1,4 @@
-const CACHE_NAME = "novabuk-v8"; // Updated version
+const CACHE_NAME = "novabuk-v9"; // Updated version
 const OFFLINE_PAGE = "./offline.html";
 const CLINIC_OFFLINE_PAGE = "./clinic-offline.html";
 const CLINIC_QUEUE_PAGE = "./clinic-queue.html";
