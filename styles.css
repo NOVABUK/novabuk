@@ -160,6 +160,7 @@ img {
   z-index: 1000;
   /* background: linear-gradient(130deg, #7ecad7, #35bac9); */
   background-color: #35bac9;
+  
 }
 
 /* Ensure hamburger is hidden on desktop */
@@ -209,7 +210,7 @@ img {
 }
 
 .nav-links ul li a,
-li a .signup-btns ul li a {
+li a, .signup-btns ul li a {
   color: #fff;
   display: flex;
   /* margin-left: 16px; */
@@ -224,7 +225,7 @@ li a .signup-btns ul li a {
   text-align: center;
   border-radius: 10px;
   padding: 10px 35px;
-  color: #2997a8;
+  color: white !important;
 }
 
 .signup-btns ul li a:hover {

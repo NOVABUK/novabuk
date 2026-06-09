@@ -168,6 +168,18 @@ h1 {
   line-height: 0.95;
   letter-spacing: -0.04em;
 }
+
+.nb-sign{
+  background: radial-gradient(
+    circle at top left,
+    rgba(30, 58, 138, 0.98),
+    rgba(15, 23, 42, 0.96)
+  ) !important;
+  /* display:none !important;  */
+}
+.nb-log{
+  color: #fff !important;
+}
 .hero-copy h1 {
   line-height: 1.2;
   font-weight: 400;
