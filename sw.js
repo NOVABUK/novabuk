@@ -1,5 +1,4 @@
 const CACHE_NAME = "novabuk-10"; // Updated version
-const CACHE_NAME = "novabuk-v8"; // Updated version
 const OFFLINE_PAGE = "./offline.html";
 const CLINIC_OFFLINE_PAGE = "./clinic-offline.html";
 const CLINIC_QUEUE_PAGE = "./clinic-queue.html";
@@ -118,7 +117,6 @@ self.addEventListener("fetch", (event) => {
           const networkResponse = await fetch(event.request, {
             cache: "no-store",
           });
-          const networkResponse = await fetch(event.request);
           if (networkResponse && networkResponse.ok) {
             const cache = await caches.open(CACHE_NAME);
             cache.put(event.request, networkResponse.clone());
