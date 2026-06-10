@@ -248,7 +248,9 @@ function confirmClinicLogout() {
 // Sends the same Bearer token that patients use — authDoctor
 // middleware on the server verifies the role.
 async function clinicFetch(url, options = {}) {
-  const token = localStorage.getItem("novabuk_token");
+  const token =
+    localStorage.getItem("novabuk_token") ||
+    localStorage.getItem("novabuk_clinic_token");
 
   const headers = {
     "Content-Type": "application/json",

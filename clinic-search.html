@@ -292,7 +292,7 @@
     async function doSearch(q) {
       try {
         const res = await clinicFetch(
-          `${CLINIC_API}/patients/search?q=${encodeURIComponent(q)}`
+          `${CLINIC_API}/patients/search?q=${encodeURIComponent(q)}&clinicId=${getClinicId() || ""}`
         );
         const data = await res.json();
         renderResults(data.data || [], q);
