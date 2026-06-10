@@ -155,7 +155,6 @@
           </ul>
           <div class="profile-opt" id="optNav">
             <ul>
-<<<<<<< HEAD
               <li>
                 <a href="./app-setting.html?tab=privacy"
                   ><i class="fa-solid fa-gear"></i> <span>Settings</span></a
@@ -170,10 +169,6 @@
                   <span style="color: #ff7675">Logout</span></a
                 >
               </li>
-=======
-              <li><a href="./app-setting.html?tab=privacy"><i class="fa-solid fa-gear"></i> <span>Settings</span></a></li>
-              <li><a href="#" onclick="handleMenuSelect('logout')"><i class="fa-solid fa-right-from-bracket" style="color: #ff7675 !important;"></i> <span style="color: #ff7675;">Logout</span></a></li>
->>>>>>> c1f93590dcf96710a7e7f3757141a65e7cc26281
             </ul>
           </div>
         </div>
@@ -359,16 +354,8 @@
 
         <div class="hero-detail">
           <div class="hero-box warning" id="hero-box">
-<<<<<<< HEAD
             <span><i class="fa-solid fa-exclamation"></i></span>
             <h4>NovaBuk does not replace professional advice</h4>
-=======
-            
-            <span><i class="fa-solid fa-exclamation"></i></span>
-            <h4>
-              NovaBuk does not replace professional advice
-            </h4>
->>>>>>> c1f93590dcf96710a7e7f3757141a65e7cc26281
           </div>
         </div>
       </div>
@@ -376,7 +363,6 @@
 
     <!-- Success Modal -->
     <div class="modal-overlay" id="successModal">
-<<<<<<< HEAD
       <div class="modal-box" style="text-align: center">
         <button class="modal-close" onclick="closeModal()">✕</button>
         <div
@@ -430,17 +416,6 @@
           style="display: block; width: 100%; text-align: center"
           >Visit Clinic</a
         >
-=======
-      <div class="modal-box" style="text-align:center;">
-        <button class="modal-close" onclick="closeModal()">✕</button>
-        <div class="icon-check" style="width:60px;height:60px;border-radius:50%;background:#35bac9;color:white;display:flex;align-items:center;justify-content:center;font-size:24px;margin:0 auto 15px;">
-          <i class="fa-solid fa-check"></i>
-        </div>
-        <h2 style="font-family:'Poppins', sans-serif; font-size:20px; color:#0f2027; margin-bottom:10px;">Log Submitted!</h2>
-        <p style="font-size:13px; color:#555; line-height:1.5; margin-bottom:20px;">Your symptoms have been logged in. It would be used to help us serve you better.</p>
-        <button class="modal-btn modal-btn-primary" onclick="logAnother()" style="width:100%; margin-bottom:10px;">Log another symptom</button>
-        <a href="./app-clinics.html" class="modal-btn modal-btn-secondary" style="display:block; width:100%; text-align:center;">Visit Clinic</a>
->>>>>>> c1f93590dcf96710a7e7f3757141a65e7cc26281
       </div>
     </div>
 
@@ -492,13 +467,8 @@
 
         try {
           const _token = localStorage.getItem("novabuk_token");
-<<<<<<< HEAD
           const res = await smartFetch(`${API_URL}/symptoms`, {
             method: "POST",
-=======
-          const res  = await smartFetch(`${API_URL}/symptoms`, {
-            method:  "POST",
->>>>>>> c1f93590dcf96710a7e7f3757141a65e7cc26281
             headers: {
               "Content-Type": "application/json",
               ...(_token ? { Authorization: `Bearer ${_token}` } : {}),
@@ -512,7 +482,6 @@
           if (data.success) {
             const modal = document.getElementById("successModal");
             if (data.offline) {
-<<<<<<< HEAD
               modal.querySelector("h2").textContent = "Saved Offline";
               modal.querySelector("p").innerHTML =
                 "Your symptoms have been saved locally.<br>They will automatically sync when you reconnect.";
@@ -529,20 +498,6 @@
             }
             modal.classList.add("show");
             submitBtn.disabled = false;
-=======
-                modal.querySelector('h2').textContent = 'Saved Offline';
-                modal.querySelector('p').innerHTML = 'Your symptoms have been saved locally.<br>They will automatically sync when you reconnect.';
-                modal.querySelector('.icon-check').innerHTML = '<i class="fa-solid fa-clock"></i>';
-                modal.querySelector('.icon-check').style.background = '#ff9800';
-            } else {
-                modal.querySelector('h2').textContent = 'Log Submitted!';
-                modal.querySelector('p').innerHTML = 'Your symptom log has been successfully submitted to NovaBuk.<br>You can review it in your history anytime.';
-                modal.querySelector('.icon-check').innerHTML = '<i class="fa-solid fa-check"></i>';
-                modal.querySelector('.icon-check').style.background = '#35bac9';
-            }
-            modal.classList.add("show");
-            submitBtn.disabled    = false;
->>>>>>> c1f93590dcf96710a7e7f3757141a65e7cc26281
             submitBtn.textContent = "Submit Symptoms";
           } else {
             feedback.textContent =

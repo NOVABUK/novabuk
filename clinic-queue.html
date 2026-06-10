@@ -797,24 +797,6 @@
        clinicLogout(), and the auth guard that redirects to login
        if no token is found.
   ============================================================ -->
-<<<<<<< HEAD
-=======
-
-  <script src="./db.js"></script>
-  <script src="./clinic-shared.js"></script>
-  <script>
-    // ============================================================
-    // STATE
-    // These variables live in memory while the page is open.
-    // allVisits  — the raw array from the API, never modified
-    // activeTab  — which tab is currently selected
-    // selectedWalkInUserId — the patient chosen in the walk-in modal
-    // ============================================================
-    let allVisits = [];
-    let activeTab = "Pending";
-    let selectedWalkInUserId = null;
-    let walkInSearchTimer = null;  // debounce timer (explained below)
->>>>>>> c1f93590dcf96710a7e7f3757141a65e7cc26281
 
     <script src="./db.js"></script>
     <script src="./clinic-shared.js"></script>
@@ -1114,7 +1096,6 @@
           btn.classList.remove("active");
         });
 
-<<<<<<< HEAD
         // Mark this tab as active
         clickedBtn.classList.add("active");
 
@@ -1193,24 +1174,6 @@
             alert("Failed to confirm the visit. Please try again.");
           }
         } catch (e) {
-=======
-        const data = await res.json();
-
-        if (data.success) {
-          if (data.offline) {
-             // Optimistically update the status in local memory
-             const visitIndex = allVisits.findIndex(v => v._id === visitId);
-             if (visitIndex > -1) {
-                allVisits[visitIndex].status = "Confirmed";
-             }
-             renderCards(); // Re-render the UI with the updated array
-          } else {
-             // Fetch fresh queue from server
-             loadQueue();
-          }
-        } else {
-          // Handle errors
->>>>>>> c1f93590dcf96710a7e7f3757141a65e7cc26281
           btn.textContent = originalText;
           btn.disabled = false;
           console.error("Accept visit failed", e);
@@ -1238,7 +1201,6 @@
       //   document.getElementById("staffDropdown").classList.remove("open");
       // });
 
-<<<<<<< HEAD
       // ============================================================
       // WALK-IN MODAL
       // ============================================================
@@ -1259,22 +1221,6 @@
         }
         document.getElementById("walkInModal").classList.add("open");
       }
-=======
-    // ============================================================
-    // WALK-IN MODAL
-    // ============================================================
-    function openWalkInModal() {
-      if (!navigator.onLine) {
-        if (typeof window.showNetworkToast === 'function') {
-          window.showNetworkToast("Walk-ins cannot be added while offline. A server connection is required to generate a secure medical ID.", false, true);
-        } else {
-          alert("Walk-ins cannot be added while offline. A server connection is required to generate a secure medical ID.");
-        }
-        return;
-      }
-      document.getElementById("walkInModal").classList.add("open");
-    }
->>>>>>> c1f93590dcf96710a7e7f3757141a65e7cc26281
 
       function closeWalkInModal() {
         document.getElementById("walkInModal").classList.remove("open");

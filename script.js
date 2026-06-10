@@ -3,24 +3,34 @@
 // ================================================================
 
 // Dynamic API URL based on environment
-var API_URL = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1"
-  ? "http://localhost:5000/api"
-  : "https://novabuk-backend.onrender.com/api";
+var API_URL =
+  window.location.hostname === "localhost" ||
+  window.location.hostname === "127.0.0.1"
+    ? "http://localhost:5000/api"
+    : "https://novabuk-backend.onrender.com/api";
 
 function isClinicOpenNow(clinic) {
   if (!clinic) return false;
-  
+
   // 1. Check global status first. If manually set to Closed, return false immediately.
   if (clinic.isOpen === false) return false;
-  
+
   // 2. If no operating hours are set at all, trust the global toggle
   if (!clinic.openingHours) return clinic.isOpen !== false;
 
   const now = new Date();
   const dayIndex = now.getDay(); // 0=Sun, 1=Mon...6=Sat
-  const daysMap = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"];
+  const daysMap = [
+    "sunday",
+    "monday",
+    "tuesday",
+    "wednesday",
+    "thursday",
+    "friday",
+    "saturday",
+  ];
   const currentDay = daysMap[dayIndex];
-  
+
   const hours = clinic.openingHours[currentDay];
 
   // If no hours set for this specific day, fallback to global status
@@ -45,14 +55,15 @@ function isClinicOpenNow(clinic) {
   const startMinutes = parseTime(hours.open);
   let endMinutes = parseTime(hours.close);
 
-  if (startMinutes === null || endMinutes === null) return clinic.isOpen !== false;
+  if (startMinutes === null || endMinutes === null)
+    return clinic.isOpen !== false;
 
-  // SMART GUESS: If end time is before start time (e.g. 9:00 to 3:55), 
+  // SMART GUESS: If end time is before start time (e.g. 9:00 to 3:55),
   // and end time is less than 12:00 PM (720 mins), assume they meant PM.
   if (endMinutes < startMinutes && endMinutes < 720) {
-    endMinutes += 720; 
+    endMinutes += 720;
   }
-  
+
   // Special case: Overnight clinics (e.g. 22:00 to 06:00)
   if (endMinutes < startMinutes) {
     // If current time is after start OR before end, it's open
@@ -74,12 +85,12 @@ const icon = profileBtn ? profileBtn.querySelector("i") : null;
     backdrop = document.createElement("div");
     backdrop.className = "nav-backdrop";
     document.body.appendChild(backdrop);
-    
+
     // Backdrop click collapses the drawer
     backdrop.addEventListener("click", () => {
-      document.querySelectorAll(".nav-menu.open").forEach(menu => {
+      document.querySelectorAll(".nav-menu.open").forEach((menu) => {
         menu.classList.remove("open");
-        const navBtn = menu.closest('.navbar').querySelector("#navToggle");
+        const navBtn = menu.closest(".navbar").querySelector("#navToggle");
         if (navBtn) {
           navBtn.style.opacity = "1";
           navBtn.style.pointerEvents = "auto";
@@ -97,7 +108,7 @@ const icon = profileBtn ? profileBtn.querySelector("i") : null;
     if (user.fullName) {
       const userBlock = document.createElement("div");
       userBlock.className = "mobile-nav-user-block";
-      
+
       let avatarHtml = "";
       if (user.avatarUrl) {
         avatarHtml = `<img src="${user.avatarUrl}" alt="avatar" />`;
@@ -109,7 +120,7 @@ const icon = profileBtn ? profileBtn.querySelector("i") : null;
         <div class="mobile-nav-avatar">${avatarHtml}</div>
         <div class="mobile-nav-user-info">
           <div class="mobile-nav-name">${user.fullName}</div>
-          <div class="mobile-nav-email">${user.email || ''}</div>
+          <div class="mobile-nav-email">${user.email || ""}</div>
         </div>
         <button class="drawer-close-btn" onclick="document.querySelector('.nav-backdrop') && document.querySelector('.nav-backdrop').click()" aria-label="Close menu">
           <i class="fa-solid fa-xmark"></i>
@@ -123,12 +134,12 @@ const icon = profileBtn ? profileBtn.querySelector("i") : null;
   if (navMenu) {
     const links = navMenu.querySelectorAll(".nav-menu");
     const icons = {
-      "Home": '<i class="fa-solid fa-house"></i>',
+      Home: '<i class="fa-solid fa-house"></i>',
       "Symptoms Logging": '<i class="fa-solid fa-clipboard-list"></i>',
       "Clinic Directory": '<i class="fa-solid fa-hospital"></i>',
-      "History": '<i class="fa-solid fa-clock-rotate-left"></i>'
+      History: '<i class="fa-solid fa-clock-rotate-left"></i>',
     };
-    links.forEach(link => {
+    links.forEach((link) => {
       const text = link.textContent.trim();
       if (icons[text] && !link.querySelector("i")) {
         link.innerHTML = `${icons[text]} <span>${text}</span>`;
@@ -140,7 +151,7 @@ const icon = profileBtn ? profileBtn.querySelector("i") : null;
     // ⬇️ SETTINGS AND LOGOUT LINKS ARE INJECTED HERE ⬇️
     // =====================================================================
     // =====================================================================
-    
+
     // 4. Inject mobile-only bottom utility links (Settings & Logout)
     // const ul = navMenu.querySelector("ul");
     // if (ul && !ul.querySelector(".mobile-only-link")) {
@@ -164,7 +175,7 @@ const icon = profileBtn ? profileBtn.querySelector("i") : null;
     //   logoutLi.innerHTML = `<a href="#" onclick="handleMenuSelect('logout')"><i class="fa-solid fa-right-from-bracket" style="color: #ff7675 !important;"></i> <span style="color: #ff7675;">Logout</span></a>`;
     //   ul.appendChild(logoutLi);
     // }
-    
+
     // =====================================================================
     // =====================================================================
     // ⬆️ SETTINGS AND LOGOUT LINKS INJECTION ENDS HERE ⬆️
@@ -176,11 +187,11 @@ const icon = profileBtn ? profileBtn.querySelector("i") : null;
 if (profileBtn && dropdownMenu && icon) {
   profileBtn.addEventListener("click", (e) => {
     e.stopPropagation();
-    
+
     // 1. Automatically close any open mobile navigation menus before opening settings
-    document.querySelectorAll(".nav-menu.open").forEach(menu => {
+    document.querySelectorAll(".nav-menu.open").forEach((menu) => {
       menu.classList.remove("open");
-      const navBtn = menu.closest('.navbar').querySelector("#navToggle");
+      const navBtn = menu.closest(".navbar").querySelector("#navToggle");
       if (navBtn) {
         navBtn.style.opacity = "1";
         navBtn.style.pointerEvents = "auto";
@@ -215,9 +226,9 @@ function updateActiveLinks() {
   allNavLinks.forEach((link) => {
     const linkHref = link.getAttribute("href");
     if (!linkHref) return;
-    
+
     const cleanHref = linkHref.replace("./", "");
-    
+
     if (cleanHref === currentPath) {
       link.classList.add("active");
     } else {
@@ -229,7 +240,7 @@ function updateActiveLinks() {
 // 2. Mobile Toggle Logic (Handles both Navbars correctly)
 document.addEventListener("click", (e) => {
   const toggleBtn = e.target.closest("#navToggle");
-  
+
   if (toggleBtn) {
     e.preventDefault();
     e.stopPropagation();
@@ -245,15 +256,15 @@ document.addEventListener("click", (e) => {
         icon.classList.remove("fa-angle-up");
       }
     }
-    
-    const parentNav = toggleBtn.closest('.navbar');
+
+    const parentNav = toggleBtn.closest(".navbar");
     const navMenu = parentNav.querySelector(".nav-menu");
     const icon = toggleBtn.querySelector("i");
     const backdrop = document.querySelector(".nav-backdrop");
 
     if (navMenu) {
       navMenu.classList.toggle("open");
-      
+
       if (icon) {
         if (navMenu.classList.contains("open")) {
           if (backdrop) backdrop.classList.add("show");
@@ -270,9 +281,9 @@ document.addEventListener("click", (e) => {
     }
   } else {
     // Close any open menus if clicking outside
-    document.querySelectorAll(".nav-menu.open").forEach(menu => {
+    document.querySelectorAll(".nav-menu.open").forEach((menu) => {
       menu.classList.remove("open");
-      const navBtn = menu.closest('.navbar').querySelector("#navToggle");
+      const navBtn = menu.closest(".navbar").querySelector("#navToggle");
       if (navBtn) {
         navBtn.style.opacity = "1";
         navBtn.style.pointerEvents = "auto";
@@ -285,7 +296,13 @@ document.addEventListener("click", (e) => {
     // 3. Automatically close user settings dropdown if clicked outside
     const dropdownMenu = document.getElementById("settingsDropdown");
     const profileBtn = document.getElementById("userProfileBtn");
-    if (dropdownMenu && dropdownMenu.classList.contains("show") && profileBtn && !profileBtn.contains(e.target) && !dropdownMenu.contains(e.target)) {
+    if (
+      dropdownMenu &&
+      dropdownMenu.classList.contains("show") &&
+      profileBtn &&
+      !profileBtn.contains(e.target) &&
+      !dropdownMenu.contains(e.target)
+    ) {
       dropdownMenu.classList.remove("show");
       const icon = profileBtn.querySelector("i");
       if (icon) {
@@ -305,7 +322,7 @@ const iconBar = navIcon ? navIcon.querySelector("i") : null;
 
 // Wire logged-out hamburger (navToggleIcon) click
 if (navIcon) {
-  navIcon.addEventListener("click", function(e) {
+  navIcon.addEventListener("click", function (e) {
     e.stopPropagation();
     const menu = document.getElementById("navMenu");
     if (!menu) return;
@@ -321,7 +338,7 @@ if (navIcon) {
 
 // Close menu when a nav link is clicked
 if (navLinks) {
-  navLinks.querySelectorAll("a").forEach(link => {
+  navLinks.querySelectorAll("a").forEach((link) => {
     link.addEventListener("click", () => {
       navLinks.classList.remove("open");
       navLinks.style.display = "";
@@ -369,25 +386,28 @@ function setMenuState(isOpen, clickedButton) {
   const navMenu = document.getElementById("navMenu");
 }
 
-
-
 // ── HERO ROTATOR (cycles hero paragraph and images, including ones inside HTML comments) ──
 (function initHeroRotator() {
-  const heroDescEl = document.querySelector('.hero-desc');
-  const slidesWrapper = document.querySelector('.header-img .slides');
+  const heroDescEl = document.querySelector(".hero-desc");
+  const slidesWrapper = document.querySelector(".header-img .slides");
 
   if (!heroDescEl || !slidesWrapper) return;
 
   // Collect existing image srcs from visible slides
-  const existingImgs = Array.from(slidesWrapper.querySelectorAll('img')).map(i => i.getAttribute('src'));
+  const existingImgs = Array.from(slidesWrapper.querySelectorAll("img")).map(
+    (i) => i.getAttribute("src"),
+  );
 
   // Collect image srcs and paragraph texts from HTML comments (if any)
-  const commentIterator = document.createNodeIterator(document.documentElement, NodeFilter.SHOW_COMMENT);
+  const commentIterator = document.createNodeIterator(
+    document.documentElement,
+    NodeFilter.SHOW_COMMENT,
+  );
   let cnode;
   const commentedImgSrcs = [];
   const commentedTexts = [];
   while ((cnode = commentIterator.nextNode())) {
-    const txt = cnode.nodeValue || '';
+    const txt = cnode.nodeValue || "";
     // find img src attributes inside the comment
     const imgRe = /<img[^>]+src=["']([^"']+)["']/gi;
     let m;
@@ -398,21 +418,25 @@ function setMenuState(isOpen, clickedButton) {
     // find hero paragraph content inside comments
     const pRe = /<p[^>]*class=["']?hero-desc["']?[^>]*>([\s\S]*?)<\/p>/gi;
     while ((m = pRe.exec(txt))) {
-      const clean = m[1].replace(/<[^>]+>/g, '').trim();
+      const clean = m[1].replace(/<[^>]+>/g, "").trim();
       if (clean) commentedTexts.push(clean);
     }
   }
 
   // Final arrays (unique)
-  const imageSrcs = Array.from(new Set(existingImgs.concat(commentedImgSrcs))).filter(Boolean);
-  const texts = Array.from(new Set([heroDescEl.textContent.trim()].concat(commentedTexts))).filter(Boolean);
+  const imageSrcs = Array.from(
+    new Set(existingImgs.concat(commentedImgSrcs)),
+  ).filter(Boolean);
+  const texts = Array.from(
+    new Set([heroDescEl.textContent.trim()].concat(commentedTexts)),
+  ).filter(Boolean);
 
   // If no images found, nothing to rotate
   if (imageSrcs.length === 0) return;
 
   // Replace slides wrapper with a single dynamic image for simpler swapping
   slidesWrapper.innerHTML = `<img id="heroDynamicImg" src="${imageSrcs[0]}" alt="hero" class="hero-slide active">`;
-  const heroImg = document.getElementById('heroDynamicImg');
+  const heroImg = document.getElementById("heroDynamicImg");
 
   let index = 0;
   const total = Math.max(imageSrcs.length, texts.length);
@@ -433,17 +457,13 @@ function setMenuState(isOpen, clickedButton) {
   const interval = setInterval(tick, 4000);
 
   // Pause on hover
-  slidesWrapper.addEventListener('mouseenter', () => clearInterval(interval));
-  slidesWrapper.addEventListener('mouseleave', () => setInterval(tick, 4000));
-
+  slidesWrapper.addEventListener("mouseenter", () => clearInterval(interval));
+  slidesWrapper.addEventListener("mouseleave", () => setInterval(tick, 4000));
 })();
-
-
 
 // ── LOGGED OUT HAMBURGER MENU (Desktop) ──────────────────
 (function initLoggedOutMenu() {
   const loggedoutHamburger = document.getElementById("loggedoutHamburger");
-
 })();
 
 const mvpToggle = document.getElementById("mvp-toggle");
@@ -553,7 +573,11 @@ window.refreshNavAvatar = function () {
   if (!navAvatarEl) return;
   const user = JSON.parse(localStorage.getItem("novabuk_user") || "{}");
   if (!user.fullName) return;
-  if (user.avatarUrl && user.avatarUrl !== "null" && user.avatarUrl !== "undefined") {
+  if (
+    user.avatarUrl &&
+    user.avatarUrl !== "null" &&
+    user.avatarUrl !== "undefined"
+  ) {
     navAvatarEl.innerHTML = `<img src="${user.avatarUrl}" alt="avatar" style="width:100%;height:100%;object-fit:cover;object-position:center top; border-radius:50%;" onerror="this.style.display='none'; this.parentElement.textContent='${user.fullName.trim().charAt(0).toUpperCase()}'" />`;
     navAvatarEl.style.padding = "0";
     navAvatarEl.style.fontSize = "0";
@@ -648,122 +672,126 @@ window.refreshNavAvatar = function () {
 
   // const token = localStorage.getItem('novabuk_token');
   const path = window.location.pathname;
-  const isAuthPage = [
-    "sign-in", "sign-up", "forgot-password",
-    "reset-password", "send-email",
-    "index", "about", "services", "contact","data-privacy","terms",
-    "blog", "blog-dynamic"
-  ].some((p) => path.includes(p)) || path === "/" || path.endsWith("/");
+  const isAuthPage =
+    [
+      "sign-in",
+      "sign-up",
+      "forgot-password",
+      "reset-password",
+      "send-email",
+      "index",
+      "about",
+      "services",
+      "contact",
+      "data-privacy",
+      "terms",
+      "blog",
+      "blog-dynamic",
+    ].some((p) => path.includes(p)) ||
+    path === "/" ||
+    path.endsWith("/");
 
   if (!token && !isAuthPage) {
     window.location.href = "./index.html";
   }
-})(); 
+})();
 
 (function initNetworkUI() {
-    let toastTimeout;
-    let isToastForced = false;
+  let toastTimeout;
+  let isToastForced = false;
 
-    // 1. Create the toast element
-    const toast = document.createElement('div');
-    toast.id = 'networkToast';
-    toast.className = 'network-toast';
-    document.body.appendChild(toast);
+  // 1. Create the toast element
+  const toast = document.createElement("div");
+  toast.id = "networkToast";
+  toast.className = "network-toast";
+  document.body.appendChild(toast);
 
-    function showToast(message, isOnline, forceVisible = false) {
-        clearTimeout(toastTimeout);
-        toast.innerHTML = isOnline 
-            ? `<i class="fa-solid fa-wifi"></i> <span>${message}</span>`
-            : `<i class="fa-solid fa-cloud-showers-water"></i> <span>${message}</span>`;
-        
-        toast.className = `network-toast show ${isOnline ? 'online' : 'offline'}`;
-        isToastForced = forceVisible;
+  function showToast(message, isOnline, forceVisible = false) {
+    clearTimeout(toastTimeout);
+    toast.innerHTML = isOnline
+      ? `<i class="fa-solid fa-wifi"></i> <span>${message}</span>`
+      : `<i class="fa-solid fa-cloud-showers-water"></i> <span>${message}</span>`;
 
-<<<<<<< HEAD
-        // Decide auto-hide timeout:
-        // - not forced: short (3.5s)
-        // - forced but offline: still auto-hide after 10s (avoid persistent offline pill)
-        // - forced and online (e.g. syncing): remain visible until cleared
-        let timeoutMs;
-        if (!forceVisible) {
-            timeoutMs = 3500;
-        } else if (isOnline === false) {
-            timeoutMs = 10000;
-        } else {
-            timeoutMs = null; // keep visible (e.g. syncing) until programmatically cleared
-        }
+    toast.className = `network-toast show ${isOnline ? "online" : "offline"}`;
+    isToastForced = forceVisible;
 
-        if (timeoutMs !== null) {
-            toastTimeout = setTimeout(() => {
-                toast.classList.remove('show');
-                isToastForced = false;
-            }, timeoutMs);
-=======
-        // If not forced to stay visible, hide after 3.5 seconds
-        if (!forceVisible) {
-            toastTimeout = setTimeout(() => {
-                toast.classList.remove('show');
-                isToastForced = false;
-            }, 3500);
->>>>>>> c1f93590dcf96710a7e7f3757141a65e7cc26281
-        }
-    }
-    window.showNetworkToast = showToast;
-
-    // 2. Smart Polling for Outbox Status
-    async function checkStatus() {
-        if (typeof window.getOutboxCount !== 'function') return;
-        
-        const count = await window.getOutboxCount();
-        const isOnline = navigator.onLine;
-
-        if (count > 0) {
-            if (isOnline) {
-                // If we are online but have pending items, we must be trying to sync them
-                showToast(`Syncing ${count} pending item(s)...`, true, true);
-                if (typeof window.syncOutbox === 'function') window.syncOutbox();
-            } else {
-                // Offline with pending items
-                showToast(`Offline. ${count} item(s) waiting to sync.`, false, true);
-            }
-        } else {
-            // No pending items. 
-            if (!isOnline) {
-                // Just offline.
-                if (!isToastForced) showToast("offline.", false, true);
-            } else if (isToastForced) {
-                // We were forced visible (e.g. syncing), but now count is 0 and we are online!
-                // So we are officially "Back online" and synced!
-                showToast("", true, false);
-            }
-        }
+    // Decide auto-hide timeout:
+    // - not forced: short (3.5s)
+    // - forced but offline: still auto-hide after 10s (avoid persistent offline pill)
+    // - forced and online (e.g. syncing): remain visible until cleared
+    let timeoutMs;
+    if (!forceVisible) {
+      timeoutMs = 3500;
+    } else if (isOnline === false) {
+      timeoutMs = 10000;
+    } else {
+      timeoutMs = null; // keep visible (e.g. syncing) until programmatically cleared
     }
 
-    // 3. Listen for Explicit Network Changes
-    window.addEventListener('offline', () => checkStatus());
-    window.addEventListener('online', () => {
-        showToast("Online", true, false);
-        checkStatus();
-    });
+    if (timeoutMs !== null) {
+      toastTimeout = setTimeout(() => {
+        toast.classList.remove("show");
+        isToastForced = false;
+      }, timeoutMs);
+    }
+  }
+  window.showNetworkToast = showToast;
 
-    // Start polling status every 3 seconds to catch edge cases
-    setInterval(checkStatus, 3000);
+  // 2. Smart Polling for Outbox Status
+  async function checkStatus() {
+    if (typeof window.getOutboxCount !== "function") return;
+
+    const count = await window.getOutboxCount();
+    const isOnline = navigator.onLine;
+
+    if (count > 0) {
+      if (isOnline) {
+        // If we are online but have pending items, we must be trying to sync them
+        showToast(`Syncing ${count} pending item(s)...`, true, true);
+        if (typeof window.syncOutbox === "function") window.syncOutbox();
+      } else {
+        // Offline with pending items
+        showToast(`Offline. ${count} item(s) waiting to sync.`, false, true);
+      }
+    } else {
+      // No pending items.
+      if (!isOnline) {
+        // Just offline.
+        if (!isToastForced) showToast("offline.", false, true);
+      } else if (isToastForced) {
+        // We were forced visible (e.g. syncing), but now count is 0 and we are online!
+        // So we are officially "Back online" and synced!
+        showToast("", true, false);
+      }
+    }
+  }
+
+  // 3. Listen for Explicit Network Changes
+  window.addEventListener("offline", () => checkStatus());
+  window.addEventListener("online", () => {
+    showToast("Online", true, false);
     checkStatus();
+  });
 
-    // 4. Exit Guard: Warning if trying to leave with pending data
-    window.addEventListener('beforeunload', (e) => {
-        if (typeof window.getOutboxCount === 'function') {
-            window.getOutboxCount().then(count => {
-                if (count > 0) {
-                    e.preventDefault();
-                    e.returnValue = 'You have unsaved medical data. Please wait for it to sync before leaving.';
-                }
-            });
+  // Start polling status every 3 seconds to catch edge cases
+  setInterval(checkStatus, 3000);
+  checkStatus();
+
+  // 4. Exit Guard: Warning if trying to leave with pending data
+  window.addEventListener("beforeunload", (e) => {
+    if (typeof window.getOutboxCount === "function") {
+      window.getOutboxCount().then((count) => {
+        if (count > 0) {
+          e.preventDefault();
+          e.returnValue =
+            "You have unsaved medical data. Please wait for it to sync before leaving.";
         }
-    });
+      });
+    }
+  });
 
-    // 5. Sync whenever window gets focus
-    window.addEventListener('focus', () => checkStatus());
+  // 5. Sync whenever window gets focus
+  window.addEventListener("focus", () => checkStatus());
 })();
 
 // ── SHARED INDEX/PUBLIC PAGE NAVBAR SYNC ─────────────────────
@@ -793,8 +821,10 @@ function runIndexNavSync() {
 
     // Role-based UI tweaks (Hide patient-only links for doctors)
     if (user.role === "Doctors") {
-      const patientLinks = document.querySelectorAll("[onclick*='visits'], [onclick*='profile'], #ddSymptomHint");
-      patientLinks.forEach(el => el.style.display = "none");
+      const patientLinks = document.querySelectorAll(
+        "[onclick*='visits'], [onclick*='profile'], #ddSymptomHint",
+      );
+      patientLinks.forEach((el) => (el.style.display = "none"));
     }
   } else {
     // USER IS LOGGED OUT
@@ -809,7 +839,7 @@ runIndexNavSync();
 // ── BFCACHE FIX ───────────────────────────────────────────────
 // When user navigates back/forward, browser may restore page from
 // bfcache without re-running scripts. pageshow fires reliably.
-window.addEventListener("pageshow", function(e) {
+window.addEventListener("pageshow", function (e) {
   if (e.persisted) {
     // Page was restored from bfcache — re-sync the navbar
     runIndexNavSync();
@@ -900,12 +930,9 @@ window.addEventListener("storage", function (e) {
   // ── Fetch unread count (badge only) ─────────────────
   async function fetchUnreadCount() {
     try {
-      const res = await smartFetch(
-        `${API_URL}/notifications/unread-count`,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        },
-      );
+      const res = await smartFetch(`${API_URL}/notifications/unread-count`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
       const data = await res.json();
       if (data.success) updateBadge(data.count);
     } catch (e) {}
@@ -924,12 +951,9 @@ window.addEventListener("storage", function (e) {
   async function loadNotifications() {
     list.innerHTML = '<div class="nb-empty">Loading…</div>';
     try {
-      const res = await smartFetch(
-        `${API_URL}/notifications`,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        },
-      );
+      const res = await smartFetch(`${API_URL}/notifications`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
       const data = await res.json();
 
       if (!data.success || data.data.length === 0) {
@@ -984,26 +1008,20 @@ window.addEventListener("storage", function (e) {
   // ── Mark single as read ──────────────────────────────
   async function markRead(id) {
     try {
-      await smartFetch(
-        `${API_URL}/notifications/${id}/read`,
-        {
-          method: "PATCH",
-          headers: { Authorization: `Bearer ${token}` },
-        },
-      );
+      await smartFetch(`${API_URL}/notifications/${id}/read`, {
+        method: "PATCH",
+        headers: { Authorization: `Bearer ${token}` },
+      });
     } catch (e) {}
   }
 
   // ── Mark all as read ─────────────────────────────────
   async function markAllRead() {
     try {
-      await smartFetch(
-        `${API_URL}/notifications/mark-all-read`,
-        {
-          method: "PATCH",
-          headers: { Authorization: `Bearer ${token}` },
-        },
-      );
+      await smartFetch(`${API_URL}/notifications/mark-all-read`, {
+        method: "PATCH",
+        headers: { Authorization: `Bearer ${token}` },
+      });
       updateBadge(0);
       // Update dots in open dropdown
       document.querySelectorAll(".nb-item.unread").forEach((el) => {
@@ -1139,12 +1157,9 @@ async function populateDropdown() {
     const visitsData = await visitsRes.json();
     if (visitsData.success) {
       // Fetch specifically pending count
-      const pendingRes = await fetch(
-        `${API_URL}/visits/my?limit=50`,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        },
-      );
+      const pendingRes = await fetch(`${API_URL}/visits/my?limit=50`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
       const pendingData = await pendingRes.json();
       if (pendingData.success) {
         const pendingCount = pendingData.data.filter(
@@ -1183,52 +1198,54 @@ async function populateDropdown() {
   }
 }
 
-
-
 // Register the Service Worker for Offline Support
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-     navigator.serviceWorker.register('./sw.js')
-      .then((reg) => console.log('[Service Worker] Registered!', reg))
-      .catch((err) => console.log('[Service Worker] Registration failed:', err));
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker
+      .register("./sw.js")
+      .then((reg) => console.log("[Service Worker] Registered!", reg))
+      .catch((err) =>
+        console.log("[Service Worker] Registration failed:", err),
+      );
   });
 }
-<<<<<<< HEAD
 
 // ================================================================
 // NOVABUK — HERO SLIDER & DYNAMIC PARAGRAPH
 // ================================================================
 (function initHeroSlider() {
-  const slidesContainer = document.querySelector('.header-img.slider .slides');
-  const slides = document.querySelectorAll('.header-img.slider .slides img.hero-slide');
-  const paragraph = document.querySelector('.hero-text-side .hero-desc');
-  
+  const slidesContainer = document.querySelector(".header-img.slider .slides");
+  const slides = document.querySelectorAll(
+    ".header-img.slider .slides img.hero-slide",
+  );
+  const paragraph = document.querySelector(".hero-text-side .hero-desc");
+
   if (!slidesContainer || slides.length === 0 || !paragraph) return;
-  
+
   // Custom paragraphs matching banner1, banner2, and banner3
   const texts = [
     "Empowering Africa's Healthcare with AI-driven Digital Records",
     "Smarter consultations with real-time patient health records and AI insights.",
-    "Connecting patients, doctors, clinics and pharmacies for a unified health ecosystem."
+    "Connecting patients, doctors, clinics and pharmacies for a unified health ecosystem.",
   ];
-  
+
   let currentIndex = 0;
   const slideInterval = 5000; // 5 seconds
   let timer;
-  
+
   function showSlide(index) {
     if (index >= slides.length) index = 0;
     if (index < 0) index = slides.length - 1;
-    
+
     currentIndex = index;
-    
+
     // Smooth text transition
-    paragraph.classList.add('fade-out');
+    paragraph.classList.add("fade-out");
     setTimeout(() => {
       paragraph.textContent = texts[currentIndex];
-      paragraph.classList.remove('fade-out');
+      paragraph.classList.remove("fade-out");
     }, 400);
-    
+
     // Smooth image transition
     const isMobile = window.innerWidth <= 1300;
     if (isMobile) {
@@ -1236,84 +1253,82 @@ if ('serviceWorker' in navigator) {
       const activeSlide = slides[currentIndex];
       if (activeSlide) {
         activeSlide.scrollIntoView({
-          behavior: 'smooth',
-          block: 'nearest',
-          inline: 'center'
+          behavior: "smooth",
+          block: "nearest",
+          inline: "center",
         });
       }
     } else {
       // On desktop, toggle active class for cross-fade
       slides.forEach((slide, i) => {
         if (i === currentIndex) {
-          slide.classList.add('active');
+          slide.classList.add("active");
         } else {
-          slide.classList.remove('active');
+          slide.classList.remove("active");
         }
       });
     }
   }
-  
+
   function startAutoplay() {
     timer = setInterval(() => {
       showSlide(currentIndex + 1);
     }, slideInterval);
   }
-  
+
   function stopAutoplay() {
     clearInterval(timer);
   }
-  
+
   // Set initial active state for desktop
   slides.forEach((slide, i) => {
     if (i === 0) {
-      slide.classList.add('active');
+      slide.classList.add("active");
     } else {
-      slide.classList.remove('active');
+      slide.classList.remove("active");
     }
   });
-  
+
   startAutoplay();
-  
+
   // On mobile/tablet, handle manual swipe detection to sync text
   let isScrolling;
-  slidesContainer.addEventListener('scroll', () => {
+  slidesContainer.addEventListener("scroll", () => {
     // Only detect manual scroll on mobile/tablet view
     if (window.innerWidth > 1300) return;
-    
+
     window.clearTimeout(isScrolling);
     isScrolling = setTimeout(() => {
       const containerRect = slidesContainer.getBoundingClientRect();
       const containerCenter = containerRect.left + containerRect.width / 2;
-      
+
       let closestIndex = 0;
       let minDistance = Infinity;
-      
+
       slides.forEach((slide, i) => {
         const slideRect = slide.getBoundingClientRect();
         const slideCenter = slideRect.left + slideRect.width / 2;
         const distance = Math.abs(slideCenter - containerCenter);
-        
+
         if (distance < minDistance) {
           minDistance = distance;
           closestIndex = i;
         }
       });
-      
+
       if (closestIndex !== currentIndex) {
         stopAutoplay();
         currentIndex = closestIndex;
-        
+
         // Update text
-        paragraph.classList.add('fade-out');
+        paragraph.classList.add("fade-out");
         setTimeout(() => {
           paragraph.textContent = texts[currentIndex];
-          paragraph.classList.remove('fade-out');
+          paragraph.classList.remove("fade-out");
         }, 400);
-        
+
         startAutoplay();
       }
     }, 150);
   });
 })();
-=======
->>>>>>> c1f93590dcf96710a7e7f3757141a65e7cc26281

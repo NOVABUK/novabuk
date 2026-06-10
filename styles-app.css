@@ -11,7 +11,6 @@ html {
 body {
   overflow-x: hidden;
   min-height: 100vh;
-<<<<<<< HEAD
   /* display: flex; */
   /* flex-direction: column; */
 }
@@ -19,15 +18,6 @@ body {
 /* Ensure containers stretch to fill available space */
 .container,
 .container-sign,
-=======
-  display: flex;
-  flex-direction: column;
-}
-
-/* Ensure containers stretch to fill available space */
-.container, 
-.container-sign, 
->>>>>>> c1f93590dcf96710a7e7f3757141a65e7cc26281
 .app-container,
 .app-page {
   display: flex;
@@ -36,13 +26,8 @@ body {
 }
 
 /* Make main content areas grow to push footers down */
-<<<<<<< HEAD
 .main,
 .app-main,
-=======
-.main, 
-.app-main, 
->>>>>>> c1f93590dcf96710a7e7f3757141a65e7cc26281
 .middle,
 .container-setting {
   flex: 1;
@@ -82,11 +67,7 @@ body {
     transform: translateY(0);
   }
 }
-<<<<<<< HEAD
 .nav-menu {
-=======
-.nav-menu{
->>>>>>> c1f93590dcf96710a7e7f3757141a65e7cc26281
   display: flex;
   gap: 3rem;
 }
@@ -433,17 +414,10 @@ body {
   align-items: center;
   gap: 20px;
 }
-<<<<<<< HEAD
 .warning h4 {
   font-size: 24px;
 }
 .warning > span i {
-=======
-.warning h4{
-  font-size: 24px;
-}
-.warning>span i {
->>>>>>> c1f93590dcf96710a7e7f3757141a65e7cc26281
   width: 50px;
   height: 50px;
   border: 2px solid;
@@ -483,11 +457,7 @@ body {
     padding: 0px 0px;
   }
 
-<<<<<<< HEAD
   .hero-box > .detail-border {
-=======
-  .hero-box>.detail-border {
->>>>>>> c1f93590dcf96710a7e7f3757141a65e7cc26281
     padding: 24px 18px;
     width: 100%;
     display: flex;
@@ -530,7 +500,6 @@ body {
   .cta-box {
     width: auto;
     margin-top: 5px;
-<<<<<<< HEAD
   }
 
   .cta-box a {
@@ -546,23 +515,6 @@ body {
   }
 
   .box-one > .box-text p {
-=======
-  }
-
-  .cta-box a {
-    padding: 8px 14px;
-    font-size: 12px;
-    color: white !important;
-  }
-
-  .box-one>.box-text h3 {
-    font-size: 18px;
-    margin-bottom: 4px;
-    color: #1a202c;
-  }
-
-  .box-one>.box-text p {
->>>>>>> c1f93590dcf96710a7e7f3757141a65e7cc26281
     font-size: 12px;
     font-weight: 500;
     color: #4a5568;
@@ -740,18 +692,6 @@ body {
   #optNav {
     display: block;
   }
-<<<<<<< HEAD
-=======
-
-  .profile-opt {
-    display: flex;
-    align-items: flex-end;
-    position: absolute;
-    bottom: 0;
-  }
-
-  .navMenu.open {
->>>>>>> c1f93590dcf96710a7e7f3757141a65e7cc26281
 
   .profile-opt {
     display: flex;
@@ -1208,11 +1148,7 @@ body {
   display: none !important;
 }
 
-<<<<<<< HEAD
 .sign-descrption > .sign-icon-text > .icon-text i {
-=======
-.sign-descrption>.sign-icon-text>.icon-text i {
->>>>>>> c1f93590dcf96710a7e7f3757141a65e7cc26281
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1556,11 +1492,7 @@ body {
   background-size: cover;
   width: 100%;
 }
-<<<<<<< HEAD
 .signup-input {
-=======
-.signup-input{
->>>>>>> c1f93590dcf96710a7e7f3757141a65e7cc26281
   padding: 20px 0;
 }
 .signup-check input[type="radio"] {
@@ -1574,11 +1506,7 @@ body {
   justify-content: center;
 }
 
-<<<<<<< HEAD
 .signup-check input[type="radio"]:checked + label {
-=======
-.signup-check input[type="radio"]:checked+label {
->>>>>>> c1f93590dcf96710a7e7f3757141a65e7cc26281
   background: #35bac9;
   text-align: center;
   border-color: #35bac9;
@@ -1774,7 +1702,6 @@ body {
     font-size: 8px;
     color: white !important;
   }
-<<<<<<< HEAD
   .box-text h3 {
     font-size: 12px !important;
     width: auto !important;
@@ -1791,12 +1718,6 @@ body {
     height: 30px;
     width: 30px;
   }
-=======
-  .box-text h3{font-size: 12px !important;width: auto !important;}
-  .box-text p{font-size: 10px !important;}
-  .warning h4{font-size: 12px; padding: 2px ;}
-  .warning span i{font-size: 12px; height: 30px; width: 30px;}
->>>>>>> c1f93590dcf96710a7e7f3757141a65e7cc26281
 }
 
 /* ================================================================
@@ -2365,11 +2286,7 @@ body {
   color: white;
   padding: 10px 24px;
   border-radius: 8px;
-<<<<<<< HEAD
   font-family: "Poppins", sans-serif;
-=======
-  font-family: 'Poppins', sans-serif;
->>>>>>> c1f93590dcf96710a7e7f3757141a65e7cc26281
   font-size: 13px;
   font-weight: 500;
   display: flex;
@@ -2411,25 +2328,17 @@ body {
    NOVABUK — PREMIUM DYNAMIC BOTTOM MOBILE NAVIGATION BAR
    ================================================================ */
 @media (max-width: 768px) {
-<<<<<<< HEAD
   .network-toast {
     top: 40px;
-=======
-  .network-toast{
-    top: 40px
->>>>>>> c1f93590dcf96710a7e7f3757141a65e7cc26281
   }
   .network-toast.show {
     top: 40px;
     /* Slide down into view */
   }
-<<<<<<< HEAD
   /* Hide the network toast on small mobile to avoid the black pill overlay */
   .network-toast {
     display: none !important;
   }
-=======
->>>>>>> c1f93590dcf96710a7e7f3757141a65e7cc26281
   /* Make sure the hamburger toggle icon is visible on mobile */
   .nav-toggle,
   #navToggle {
@@ -2441,11 +2350,7 @@ body {
     background: transparent;
     border: none;
     font-size: 20px;
-<<<<<<< HEAD
     color: #fff;
-=======
-    color: #35bac9;
->>>>>>> c1f93590dcf96710a7e7f3757141a65e7cc26281
     cursor: pointer;
     z-index: 1001;
   }
@@ -2475,11 +2380,7 @@ body {
     justify-content: center;
     color: #718096;
     text-decoration: none !important;
-<<<<<<< HEAD
     font-family: "Poppins", sans-serif;
-=======
-    font-family: 'Poppins', sans-serif;
->>>>>>> c1f93590dcf96710a7e7f3757141a65e7cc26281
     font-size: 10px;
     font-weight: 550;
     gap: 4px;
@@ -2527,13 +2428,9 @@ body {
   /* Reduced light/dimmed background */
   opacity: 0;
   visibility: hidden;
-<<<<<<< HEAD
   transition:
     opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1),
     visibility 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-=======
-  transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.3s cubic-bezier(0.4, 0, 0.2, 1);
->>>>>>> c1f93590dcf96710a7e7f3757141a65e7cc26281
   z-index: 9998;
   /* Directly underneath the slideout menu drawer */
   backdrop-filter: blur(2px);
@@ -2546,10 +2443,6 @@ body {
 }
 
 @media (max-width: 1023px) {
-<<<<<<< HEAD
-=======
-
->>>>>>> c1f93590dcf96710a7e7f3757141a65e7cc26281
   /* Inner User Block styling for mobile drawer */
   .mobile-nav-user-block {
     display: flex;
@@ -2570,11 +2463,7 @@ body {
     align-items: center;
     justify-content: center;
     font-weight: 700;
-<<<<<<< HEAD
     font-family: "Poppins", sans-serif;
-=======
-    font-family: 'Poppins', sans-serif;
->>>>>>> c1f93590dcf96710a7e7f3757141a65e7cc26281
     font-size: 1.2rem;
     color: white;
     border: 2px solid white;
@@ -2614,11 +2503,7 @@ body {
   }
 
   .mobile-nav-name {
-<<<<<<< HEAD
     font-family: "Poppins", sans-serif;
-=======
-    font-family: 'Poppins', sans-serif;
->>>>>>> c1f93590dcf96710a7e7f3757141a65e7cc26281
     font-size: 14px;
     font-weight: 700;
     color: white;
@@ -2629,11 +2514,7 @@ body {
   }
 
   .mobile-nav-email {
-<<<<<<< HEAD
     font-family: "Poppins", sans-serif;
-=======
-    font-family: 'Poppins', sans-serif;
->>>>>>> c1f93590dcf96710a7e7f3757141a65e7cc26281
     font-size: 11px;
     color: rgba(255, 255, 255, 0.85);
     white-space: nowrap;
@@ -2651,11 +2532,7 @@ body {
     padding: 12px 1px !important;
     color: #4a5568 !important;
     text-decoration: none !important;
-<<<<<<< HEAD
     font-family: "Poppins", sans-serif !important;
-=======
-    font-family: 'Poppins', sans-serif !important;
->>>>>>> c1f93590dcf96710a7e7f3757141a65e7cc26281
     font-size: 14px !important;
     font-weight: 600 !important;
     border-radius: 12px !important;
@@ -2708,8 +2585,4 @@ body {
   .mobile-only-link {
     display: block !important;
   }
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> c1f93590dcf96710a7e7f3757141a65e7cc26281
