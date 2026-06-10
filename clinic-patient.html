@@ -1,631 +1,522 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="robots" content="noindex, nofollow" />
-    <link rel="icon" sizes="180x180" href="./images/logo.png" />
-    <title>Patient Profile | NovaBuk Clinic</title>
-    <link rel="stylesheet" href="./clinic.css" />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
-    />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
-      rel="stylesheet"
-    />
-    <style>
-      .patient-header {
-        background: white;
-        border: 1px solid var(--border);
-        border-radius: 16px;
-        padding: 24px;
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="icon" sizes="180x180" href="./images/image 19.png">
+  <title>Patient Profile | NovaBuk Clinic</title>
+  <link rel="stylesheet" href="./clinic.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style> 
+    .patient-header {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 24px;
+      display: flex;
+      gap: 24px;
+      align-items: center;
+      margin-bottom: 24px;
+    }
+
+    .patient-info h2 {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--text-dark);
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .id-badge-sm {
+      font-size: 10px;
+      background: var(--teal-pale);
+      color: var(--teal-dark);
+      padding: 2px 8px;
+      border-radius: 6px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+    }
+
+    .patient-meta {
+      display: flex;
+      gap: 16px;
+      font-size: 13px;
+      color: var(--text-light);
+    }
+
+    .patient-meta span {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .patient-actions {
+      margin-left: auto;
+      display: flex;
+      gap: 12px;
+    }
+
+    .btn-action {
+      padding: 10px 18px;
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border: none;
+      transition: all 0.2s;
+    }
+
+    .btn-primary {
+      background: var(--teal);
+      color: white;
+    }
+
+    .btn-secondary {
+      background: var(--teal-pale);
+      color: var(--teal-dark);
+    }
+
+    .grid-details {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 24px;
+    }
+
+    .card {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+    }
+
+    .card-header {
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .card-header h3 {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-dark);
+    }
+
+    .card-body {
+      padding: 20px;
+    }
+
+    .info-list {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .info-item {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .info-label {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-light);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .info-value {
+      font-size: 14px;
+      color: var(--text-dark);
+      font-weight: 500;
+    }
+
+    .history-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .history-item {
+      padding: 12px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: all 0.2s;
+      cursor: pointer;
+    }
+
+    .history-item:hover {
+      border-color: var(--teal);
+      background: var(--teal-pale);
+    }
+
+    .history-left {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .history-date {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-dark);
+    }
+
+    .history-reason {
+      font-size: 12px;
+      color: var(--text-light);
+    }
+
+    @media(max-width:768px){
+      .patient-header{
+        flex-direction: column-reverse;
+      }
+      .patient-actions{
+        gap: 50px;
+      }
+      .patient-meta{
+        display: block;
         display: flex;
-        gap: 24px;
-        align-items: center;
-        margin-bottom: 24px;
+        gap: 3px;
+        padding: 0px;
       }
+    }
+  </style>
+</head>
 
-      .patient-info h2 {
-        font-size: 20px;
-        font-weight: 700;
-        color: var(--text-dark);
-        margin-bottom: 4px;
-        display: flex;
-        align-items: center;
-        gap: 10px;
-      }
-
-      .id-badge-sm {
-        font-size: 10px;
-        background: var(--teal-pale);
-        color: var(--teal-dark);
-        padding: 2px 8px;
-        border-radius: 6px;
-        font-weight: 700;
-        letter-spacing: 0.5px;
-      }
-
-      .patient-meta {
-        display: flex;
-        gap: 16px;
-        font-size: 13px;
-        color: var(--text-light);
-      }
-
-      .patient-meta span {
-        display: flex;
-        align-items: center;
-        gap: 6px;
-      }
-
-      .patient-actions {
-        margin-left: auto;
-        display: flex;
-        gap: 12px;
-      }
-
-      .btn-action {
-        padding: 10px 18px;
-        border-radius: 10px;
-        font-size: 13px;
-        font-weight: 600;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        border: none;
-        transition: all 0.2s;
-      }
-
-      .btn-primary {
-        background: var(--teal);
-        color: white;
-      }
-
-      .btn-secondary {
-        background: var(--teal-pale);
-        color: var(--teal-dark);
-      }
-
-      .grid-details {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-        gap: 24px;
-      }
-
-      .card {
-        background: white;
-        border: 1px solid var(--border);
-        border-radius: 16px;
-        overflow: hidden;
-      }
-
-      .card-header {
-        padding: 16px 20px;
-        border-bottom: 1px solid var(--border);
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-      }
-
-      .card-header h3 {
-        font-size: 14px;
-        font-weight: 700;
-        color: var(--text-dark);
-      }
-
-      .card-body {
-        padding: 20px;
-      }
-
-      .info-list {
-        display: flex;
-        flex-direction: column;
-        gap: 16px;
-      }
-
-      .info-item {
-        display: flex;
-        flex-direction: column;
-        gap: 4px;
-      }
-
-      .info-label {
-        font-size: 11px;
-        font-weight: 600;
-        color: var(--text-light);
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-      }
-
-      .info-value {
-        font-size: 14px;
-        color: var(--text-dark);
-        font-weight: 500;
-      }
-
-      .history-list {
-        display: flex;
-        flex-direction: column;
-        gap: 12px;
-      }
-
-      .history-item {
-        padding: 12px;
-        border: 1px solid var(--border);
-        border-radius: 12px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        transition: all 0.2s;
-        cursor: pointer;
-      }
-
-      .history-item:hover {
-        border-color: var(--teal);
-        background: var(--teal-pale);
-      }
-
-      .history-left {
-        display: flex;
-        flex-direction: column;
-        gap: 4px;
-      }
-
-      .history-date {
-        font-size: 13px;
-        font-weight: 600;
-        color: var(--text-dark);
-      }
-
-      .history-reason {
-        font-size: 12px;
-        color: var(--text-light);
-      }
-
-      @media (max-width: 768px) {
-        .patient-header {
-          flex-direction: column-reverse;
-        }
-        .patient-actions {
-          gap: 50px;
-        }
-        .patient-meta {
-          display: block;
-          display: flex;
-          gap: 3px;
-          padding: 0px;
-        }
-      }
-    </style>
-  </head>
-
-  <body>
-    <!-- Standard Topbar -->
-    <header>
-      <div class="logo">
-        <a href="./clinic-queue.html">
-          <img src="./images/logo.png" class="sidebar-logo" alt="NovaBuk" />
-        </a>
-        <div class="logo-detail">
-          <div class="topbar-left">
-            <div class="topbar-clinic clinic-name">Loading…</div>
-            <div class="topbar-date" id="topbarDate"></div>
-          </div>
+<body>
+  <!-- Standard Topbar -->
+  <header>
+    <div class="logo">
+      <a href="./clinic-queue.html">
+        <img src="./images/logo.png" class="sidebar-logo" alt="NovaBuk" />
+      </a>
+      <div class="logo-detail">
+        <div class="topbar-left">
+          <div class="topbar-clinic clinic-name">Loading…</div>
+          <div class="topbar-date" id="topbarDate"></div>
         </div>
       </div>
-
-      <div class="top-side">
-        <div class="topbar-actions">
-          <a
-            href="./clinic-search.html"
-            class="topbar-btn active"
-            title="Search patients"
-          >
-            <i class="fa-solid fa-magnifying-glass"></i>
-          </a>
-          <a
-            href="./clinic-notifications.html"
-            class="topbar-btn"
-            title="Notifications"
-          >
-            <i class="fa-solid fa-bell"></i>
-            <span
-              class="notification-badge"
-              id="topbarNotificationBadge"
-            ></span>
-          </a>
-          <!-- Staff chip — shows name + dropdown -->
-          <div
-            class="staff-chip"
-            id="staffChip"
-            onclick="toggleStaffMenu(event)"
-          >
-            <div class="staff-avatar-sm" id="topbarAvatar">?</div>
-            <span class="staff-name-sm staff-name">Staff</span>
-            <i
-              class="fa-solid fa-angle-down"
-              style="font-size: 10px; color: rgba(255, 255, 255, 0.5)"
-            ></i>
-            <div class="staff-dropdown" id="staffDropdown">
-              <div
-                class="staff-dropdown-item"
-                onclick="window.location.href = './clinic-settings.html'"
-              >
-                <i class="fa-solid fa-gear"></i> Settings
-              </div>
-              <div class="staff-dropdown-item danger" onclick="clinicLogout()">
-                <i class="fa-solid fa-right-from-bracket"></i> Logout
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </header>
-
-    <div class="all-content">
-      <aside class="sidebar" id="sidebar">
-        <div class="sidebar-icon">
-          <a
-            href="./clinic-queue.html"
-            class="sidebar-nav-btn"
-            data-tip="Today's Queue"
-          >
-            <i class="fa-solid fa-list-check"></i>
-          </a>
-          <a
-            href="./clinic-search.html"
-            class="sidebar-nav-btn active"
-            data-tip="Search Patients"
-          >
-            <i class="fa-solid fa-magnifying-glass"></i>
-          </a>
-          <a
-            href="./clinic-settings.html"
-            class="sidebar-nav-btn"
-            data-tip="Settings"
-          >
-            <i class="fa-solid fa-gear"></i>
-          </a>
-        </div>
-        <div class="logout-sidebar">
-          <button
-            class="sidebar-nav-btn sidebar-logout"
-            data-tip="Logout"
-            onclick="clinicLogout()"
-          >
-            <i class="fa-solid fa-right-from-bracket"></i>
-          </button>
-        </div>
-      </aside>
-
-      <main class="main">
-        <div class="content" style="max-width: 1000px">
-          <!-- Header with basic info -->
-          <div class="patient-header" id="patientHeader">
-            <div
-              class="patient-main-info"
-              style="display: flex; align-items: center; gap: 20px"
-            >
-              <div id="patientAvatar"></div>
-              <div class="patient-info">
-                <h2 id="patientName" style="margin-bottom: 0">Loading...</h2>
-                <div id="patientIdBadge" style="margin-bottom: 8px"></div>
-                <div class="patient-meta">
-                  <span id="patientAge"
-                    ><i class="fa-solid fa-calendar-day"></i> —</span
-                  >
-                  <span id="patientGender"
-                    ><i class="fa-solid fa-venus-mars"></i> —</span
-                  >
-                  <span id="patientPhone"
-                    ><i class="fa-solid fa-phone"></i> —</span
-                  >
-                </div>
-              </div>
-            </div>
-            <div class="patient-actions">
-              <button
-                class="btn-action btn-secondary"
-                onclick="window.history.back()"
-              >
-                <i class="fa-solid fa-arrow-left"></i> Back
-              </button>
-              <button
-                class="btn-action btn-primary"
-                onclick="requestConsultation()"
-              >
-                <i class="fa-solid fa-plus"></i> New Consultation
-              </button>
-            </div>
-          </div>
-
-          <div class="grid-details">
-            <!-- Left: Personal Details -->
-            <div class="card">
-              <div class="card-header">
-                <h3>Patient Information</h3>
-              </div>
-              <div class="card-body">
-                <div class="info-list">
-                  <div class="info-item">
-                    <div class="info-label">Full Name</div>
-                    <div class="info-value" id="infoFullName">—</div>
-                  </div>
-                  <div class="info-item">
-                    <div class="info-label">Email Address</div>
-                    <div class="info-value" id="infoEmail">—</div>
-                  </div>
-                  <div class="info-item">
-                    <div class="info-label">Phone Number</div>
-                    <div class="info-value" id="infoPhone">—</div>
-                  </div>
-                  <div class="info-item">
-                    <div class="info-label">Gender</div>
-                    <div class="info-value" id="infoGender">—</div>
-                  </div>
-                  <div class="info-item">
-                    <div class="info-label">Address</div>
-                    <div class="info-value" id="infoAddress">—</div>
-                  </div>
-                  <div class="info-item">
-                    <div class="info-label">Location</div>
-                    <div class="info-value" id="infoLocation">—</div>
-                  </div>
-                  <div class="info-item">
-                    <div class="info-label">Emergency Contact</div>
-                    <div class="info-value" id="infoEmergency">—</div>
-                  </div>
-                  <div class="info-item">
-                    <div class="info-label">Existing Conditions</div>
-                    <div class="info-value" id="infoConditions">—</div>
-                  </div>
-                  <div class="info-item">
-                    <div class="info-label">Allergies</div>
-                    <div class="info-value" id="infoAllergies">—</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Right: Visit History -->
-            <div class="card">
-              <div class="card-header">
-                <h3>Visit History</h3>
-              </div>
-              <div class="card-body">
-                <div class="history-list" id="historyList">
-                  <div
-                    style="
-                      text-align: center;
-                      padding: 40px;
-                      color: var(--text-light);
-                      font-size: 13px;
-                    "
-                  >
-                    <i
-                      class="fa-solid fa-clock-rotate-left"
-                      style="
-                        font-size: 24px;
-                        margin-bottom: 12px;
-                        display: block;
-                        opacity: 0.5;
-                      "
-                    ></i>
-                    Loading history...
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </main>
     </div>
 
-    <script src="./db.js"></script>
-    <script src="./clinic-shared.js"></script>
-    <script>
-      const params = new URLSearchParams(window.location.search);
-      const patientId = params.get("id");
+    <div class="top-side">
+      <div class="topbar-actions">
+        <a href="./clinic-search.html" class="topbar-btn active" title="Search patients">
+          <i class="fa-solid fa-magnifying-glass"></i>
+        </a>
+        <a href="./clinic-notifications.html" class="topbar-btn" title="Notifications">
+          <i class="fa-solid fa-bell"></i>
+          <span class="notification-badge" id="topbarNotificationBadge"></span>
+        </a>
+        <!-- Staff chip — shows name + dropdown -->
+        <div class="staff-chip" id="staffChip" onclick="toggleStaffMenu(event)">
+          <div class="staff-avatar-sm" id="topbarAvatar">?</div>
+          <span class="staff-name-sm staff-name">Staff</span>
+          <i class="fa-solid fa-angle-down" style="font-size:10px;color:rgba(255,255,255,0.5);"></i>
+          <div class="staff-dropdown" id="staffDropdown">
+            <div class="staff-dropdown-item" onclick="window.location.href='./clinic-settings.html'">
+              <i class="fa-solid fa-gear"></i> Settings
+            </div>
+            <div class="staff-dropdown-item danger" onclick="clinicLogout()">
+              <i class="fa-solid fa-right-from-bracket"></i> Logout
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
 
-      if (!patientId) {
-        window.location.href = "./clinic-search.html";
+  <div class="all-content">
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-icon">
+        <a href="./clinic-queue.html" class="sidebar-nav-btn" data-tip="Today's Queue">
+          <i class="fa-solid fa-list-check"></i>
+        </a>
+        <a href="./clinic-search.html" class="sidebar-nav-btn active" data-tip="Search Patients">
+          <i class="fa-solid fa-magnifying-glass"></i>
+        </a>
+        <a href="./clinic-settings.html" class="sidebar-nav-btn" data-tip="Settings">
+          <i class="fa-solid fa-gear"></i>
+        </a>
+      </div>
+      <div class="logout-sidebar">
+        <button class="sidebar-nav-btn sidebar-logout" data-tip="Logout" onclick="clinicLogout()">
+          <i class="fa-solid fa-right-from-bracket"></i>
+        </button>
+      </div>
+    </aside>
+
+    <main class="main">
+      <div class="content" style="max-width: 1000px;">
+        <!-- Header with basic info -->
+        <div class="patient-header" id="patientHeader">
+          <div class="patient-main-info" style="display: flex; align-items: center; gap: 20px;">
+            <div id="patientAvatar"></div>
+            <div class="patient-info">
+          <h2 id="patientName" style="margin-bottom: 0;">Loading...</h2>
+          <div id="patientIdBadge" style="margin-bottom: 8px;"></div>
+          <div class="patient-meta">
+                <span id="patientAge"><i class="fa-solid fa-calendar-day"></i> —</span>
+                <span id="patientGender"><i class="fa-solid fa-venus-mars"></i> —</span>
+                <span id="patientPhone"><i class="fa-solid fa-phone"></i> —</span>
+              </div>
+            </div>
+          </div>
+          <div class="patient-actions">
+            <button class="btn-action btn-secondary" onclick="window.history.back()">
+              <i class="fa-solid fa-arrow-left"></i> Back
+            </button>
+            <button class="btn-action btn-primary" onclick="requestConsultation()">
+              <i class="fa-solid fa-plus"></i> New Consultation
+            </button>
+          </div>
+        </div>
+
+        <div class="grid-details">
+          <!-- Left: Personal Details -->
+          <div class="card">
+            <div class="card-header">
+              <h3>Patient Information</h3>
+            </div>
+            <div class="card-body">
+              <div class="info-list">
+                <div class="info-item">
+                  <div class="info-label">Full Name</div>
+                  <div class="info-value" id="infoFullName">—</div>
+                </div>
+                <div class="info-item">
+                  <div class="info-label">Email Address</div>
+                  <div class="info-value" id="infoEmail">—</div>
+                </div>
+                <div class="info-item">
+                  <div class="info-label">Phone Number</div>
+                  <div class="info-value" id="infoPhone">—</div>
+                </div>
+                <div class="info-item">
+                  <div class="info-label">Gender</div>
+                  <div class="info-value" id="infoGender">—</div>
+                </div>
+                <div class="info-item">
+                  <div class="info-label">Address</div>
+                  <div class="info-value" id="infoAddress">—</div>
+                </div>
+                <div class="info-item">
+                  <div class="info-label">Location</div>
+                  <div class="info-value" id="infoLocation">—</div>
+                </div>
+                <div class="info-item">
+                  <div class="info-label">Emergency Contact</div>
+                  <div class="info-value" id="infoEmergency">—</div>
+                </div>
+                <div class="info-item">
+                  <div class="info-label">Existing Conditions</div>
+                  <div class="info-value" id="infoConditions">—</div>
+                </div>
+                <div class="info-item">
+                  <div class="info-label">Allergies</div>
+                  <div class="info-value" id="infoAllergies">—</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right: Visit History -->
+          <div class="card">
+            <div class="card-header">
+              <h3>Visit History</h3>
+            </div>
+            <div class="card-body">
+              <div class="history-list" id="historyList">
+                <div style="text-align:center; padding: 40px; color: var(--text-light); font-size: 13px;">
+                  <i class="fa-solid fa-clock-rotate-left" style="font-size: 24px; margin-bottom: 12px; display: block; opacity: 0.5;"></i>
+                  Loading history...
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="./db.js"></script>
+  <script src="./clinic-shared.js"></script>
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const patientId = params.get('id');
+
+    if (!patientId) {
+      window.location.href = './clinic-search.html';
+    }
+
+    async function loadPatient() {
+      try {
+        // 1. Fetch patient basic info
+        // Note: You might need a specific endpoint for this, e.g., /api/clinic/patients/:id
+        // For now, let's try to get it from the search results context or a generic patient endpoint
+        const res = await clinicFetch(`${CLINIC_API}/patients/${patientId}`);
+        const data = await res.json();
+
+        if (data.success && data.patient) {
+          renderPatient(data.patient);
+          saveToRecentPatients(data.patient);
+        } else {
+          showError("Patient not found.");
+        }
+
+        // 2. Fetch visit history for this patient in this clinic
+        loadHistory();
+
+      } catch (err) {
+        console.error(err);
+        showError("Failed to load patient data.");
+      }
+    }
+
+    function renderPatient(p) {
+      document.getElementById('patientName').textContent = p.fullName;
+      if (p.novaBukId) {
+        document.getElementById('patientIdBadge').innerHTML = `<span class="id-badge-sm">${p.novaBukId}</span>`;
+      }
+      
+      // If data is restricted, show a notice
+      if (p.privacySettings?.shareDataWithProviders === false) {
+        const meta = document.querySelector('.patient-meta');
+        if (meta) {
+           const badge = document.createElement('span');
+           badge.style.color = '#e53e3e';
+           badge.style.fontSize = '11px';
+           badge.style.fontWeight = 'bold';
+           badge.innerHTML = '<i class="fa-solid fa-lock"></i> Privacy Restricted';
+           meta.appendChild(badge);
+        }
+      }
+      document.getElementById('infoFullName').textContent = p.fullName;
+      document.getElementById('infoEmail').textContent = p.email || "—";
+      document.getElementById('infoPhone').textContent = p.phone || "—";
+      document.getElementById('patientPhone').innerHTML = `<i class="fa-solid fa-phone"></i> ${p.phone || '—'}`;
+      
+      document.getElementById('patientAvatar').innerHTML = avatarInitials(p.fullName, 64, p.avatarUrl);
+
+      document.getElementById('infoAddress').textContent = p.address || "—";
+      document.getElementById('infoLocation').textContent = (p.city && p.state) ? `${p.city}, ${p.state}` : (p.city || p.state || "—");
+      
+      if (p.emergencyContact && p.emergencyContact.name) {
+        document.getElementById('infoEmergency').textContent = `${p.emergencyContact.name} (${p.emergencyContact.phone || 'no phone'})`;
       }
 
-      async function loadPatient() {
-        try {
-          // 1. Fetch patient basic info
-          // Note: You might need a specific endpoint for this, e.g., /api/clinic/patients/:id
-          // For now, let's try to get it from the search results context or a generic patient endpoint
-          const res = await clinicFetch(`${CLINIC_API}/patients/${patientId}`);
-          const data = await res.json();
+      // Bio data from healthProfile
+      const hp = p.healthProfile || {};
+      document.getElementById('infoGender').textContent = hp.gender || "—";
+      document.getElementById('infoConditions').textContent = (hp.existingConditions && hp.existingConditions.length) ? hp.existingConditions.join(", ") : "None reported";
+      document.getElementById('infoAllergies').textContent = (hp.allergies && hp.allergies.length) ? hp.allergies.join(", ") : "None reported";
 
-          if (data.success && data.patient) {
-            renderPatient(data.patient);
-            saveToRecentPatients(data.patient);
-          } else {
-            showError("Patient not found.");
-          }
-
-          // 2. Fetch visit history for this patient in this clinic
-          loadHistory();
-        } catch (err) {
-          console.error(err);
-          showError("Failed to load patient data.");
-        }
+      if (p.dateOfBirth) {
+        const age = Math.floor((Date.now() - new Date(p.dateOfBirth)) / 31557600000);
+        document.getElementById('patientAge').innerHTML = `<i class="fa-solid fa-calendar-day"></i> ${age} yrs`;
+      } else if (hp.ageRange) {
+        document.getElementById('patientAge').innerHTML = `<i class="fa-solid fa-calendar-day"></i> ${hp.ageRange}`;
       }
 
-      function renderPatient(p) {
-        document.getElementById("patientName").textContent = p.fullName;
-        if (p.novaBukId) {
-          document.getElementById("patientIdBadge").innerHTML =
-            `<span class="id-badge-sm">${p.novaBukId}</span>`;
-        }
-
-        // If data is restricted, show a notice
-        if (p.privacySettings?.shareDataWithProviders === false) {
-          const meta = document.querySelector(".patient-meta");
-          if (meta) {
-            const badge = document.createElement("span");
-            badge.style.color = "#e53e3e";
-            badge.style.fontSize = "11px";
-            badge.style.fontWeight = "bold";
-            badge.innerHTML =
-              '<i class="fa-solid fa-lock"></i> Privacy Restricted';
-            meta.appendChild(badge);
-          }
-        }
-        document.getElementById("infoFullName").textContent = p.fullName;
-        document.getElementById("infoEmail").textContent = p.email || "—";
-        document.getElementById("infoPhone").textContent = p.phone || "—";
-        document.getElementById("patientPhone").innerHTML =
-          `<i class="fa-solid fa-phone"></i> ${p.phone || "—"}`;
-
-        document.getElementById("patientAvatar").innerHTML = avatarInitials(
-          p.fullName,
-          64,
-          p.avatarUrl,
-        );
-
-        document.getElementById("infoAddress").textContent = p.address || "—";
-        document.getElementById("infoLocation").textContent =
-          p.city && p.state
-            ? `${p.city}, ${p.state}`
-            : p.city || p.state || "—";
-
-        if (p.emergencyContact && p.emergencyContact.name) {
-          document.getElementById("infoEmergency").textContent =
-            `${p.emergencyContact.name} (${p.emergencyContact.phone || "no phone"})`;
-        }
-
-        // Bio data from healthProfile
-        const hp = p.healthProfile || {};
-        document.getElementById("infoGender").textContent = hp.gender || "—";
-        document.getElementById("infoConditions").textContent =
-          hp.existingConditions && hp.existingConditions.length
-            ? hp.existingConditions.join(", ")
-            : "None reported";
-        document.getElementById("infoAllergies").textContent =
-          hp.allergies && hp.allergies.length
-            ? hp.allergies.join(", ")
-            : "None reported";
-
-        if (p.dateOfBirth) {
-          const age = Math.floor(
-            (Date.now() - new Date(p.dateOfBirth)) / 31557600000,
-          );
-          document.getElementById("patientAge").innerHTML =
-            `<i class="fa-solid fa-calendar-day"></i> ${age} yrs`;
-        } else if (hp.ageRange) {
-          document.getElementById("patientAge").innerHTML =
-            `<i class="fa-solid fa-calendar-day"></i> ${hp.ageRange}`;
-        }
-
-        if (hp.gender) {
-          document.getElementById("patientGender").innerHTML =
-            `<i class="fa-solid fa-venus-mars"></i> ${hp.gender}`;
-        }
+      if (hp.gender) {
+        document.getElementById('patientGender').innerHTML = `<i class="fa-solid fa-venus-mars"></i> ${hp.gender}`;
       }
+    }
 
-      async function loadHistory() {
-        try {
-          const clinicId = getClinicId();
-          // Fetch visits for this patient at this clinic
-          const res = await clinicFetch(
-            `${CLINIC_API}/patients/${patientId}/history?clinicId=${clinicId}`,
-          );
-          const data = await res.json();
+    async function loadHistory() {
+      try {
+        const clinicId = getClinicId();
+        // Fetch visits for this patient at this clinic
+        const res = await clinicFetch(`${CLINIC_API}/patients/${patientId}/history?clinicId=${clinicId}`);
+        const data = await res.json();
 
-          const list = document.getElementById("historyList");
-          if (!data.success || !data.visits || data.visits.length === 0) {
-            list.innerHTML = `<div style="text-align:center; padding: 20px; color: var(--text-light); font-size: 13px;">No previous visits found.</div>`;
-            return;
-          }
+        const list = document.getElementById('historyList');
+        if (!data.success || !data.visits || data.visits.length === 0) {
+          list.innerHTML = `<div style="text-align:center; padding: 20px; color: var(--text-light); font-size: 13px;">No previous visits found.</div>`;
+          return;
+        }
 
-          list.innerHTML = data.visits
-            .map(
-              (v) => `
+        list.innerHTML = data.visits.map(v => `
           <div class="history-item" onclick="window.location.href='./clinic-consultation.html?visit=${v._id}'">
             <div class="history-left">
               <div class="history-date">${formatDate(v.createdAt)}</div>
-              <div class="history-reason">${v.reason || "General Consultation"}</div>
+              <div class="history-reason">${v.reason || 'General Consultation'}</div>
             </div>
             ${statusBadge(v.status)}
           </div>
-        `,
-            )
-            .join("");
-        } catch (err) {
-          document.getElementById("historyList").innerHTML =
-            `<div style="color:red; font-size:12px;">Failed to load history.</div>`;
+        `).join("");
+
+      } catch (err) {
+        document.getElementById('historyList').innerHTML = `<div style="color:red; font-size:12px;">Failed to load history.</div>`;
+      }
+    }
+
+    async function requestConsultation() {
+      if (!confirm("Are you sure you want to add this patient to today's queue?")) return;
+
+      try {
+        const clinicId = getClinicId();
+        const res = await clinicFetch(`${CLINIC_API}/walk-in`, {
+          method: "POST",
+          body: JSON.stringify({
+            userId: patientId,
+            clinicId: clinicId,
+            notes: "Manually added by doctor from search"
+          })
+        });
+        const data = await res.json();
+        if (data.success) {
+          alert("Patient successfully added to the queue!");
+          window.location.href = './clinic-queue.html';
+        } else {
+          alert("Failed to add patient: " + data.message);
         }
+      } catch (err) {
+        console.error(err);
+        alert("An error occurred while adding the patient.");
       }
+    }
 
-      async function requestConsultation() {
-        if (
-          !confirm(
-            "Are you sure you want to add this patient to today's queue?",
-          )
-        )
-          return;
+    function showError(msg) {
+      document.getElementById('patientHeader').innerHTML = `<div style="color:red; padding:20px;">${msg}</div>`;
+    }
 
-        try {
-          const clinicId = getClinicId();
-          const res = await clinicFetch(`${CLINIC_API}/walk-in`, {
-            method: "POST",
-            body: JSON.stringify({
-              userId: patientId,
-              clinicId: clinicId,
-              notes: "Manually added by doctor from search",
-            }),
-          });
-          const data = await res.json();
-          if (data.success) {
-            alert("Patient successfully added to the queue!");
-            window.location.href = "./clinic-queue.html";
-          } else {
-            alert("Failed to add patient: " + data.message);
-          }
-        } catch (err) {
-          console.error(err);
-          alert("An error occurred while adding the patient.");
-        }
-      }
+    function saveToRecentPatients(p) {
+      try {
+        const cid = getClinicId();
+        const key = cid ? `novabuk_recent_patients_${cid}` : 'novabuk_recent_patients';
 
-      function showError(msg) {
-        document.getElementById("patientHeader").innerHTML =
-          `<div style="color:red; padding:20px;">${msg}</div>`;
-      }
+        let list = JSON.parse(localStorage.getItem(key) || '[]');
+        // Remove if already exists to move to front
+        list = list.filter(item => item._id !== p._id);
+        // Add to front
+        list.unshift({
+          _id: p._id,
+          fullName: p.fullName,
+          avatarUrl: p.avatarUrl,
+          lastViewed: new Date().toISOString()
+        });
+        // Limit to 10
+        if (list.length > 10) list = list.slice(0, 10);
+        localStorage.setItem(key, JSON.stringify(list));
+      } catch (e) { console.error("Recent patients save error:", e); }
+    }
 
-      function saveToRecentPatients(p) {
-        try {
-          const cid = getClinicId();
-          const key = cid
-            ? `novabuk_recent_patients_${cid}`
-            : "novabuk_recent_patients";
-
-          let list = JSON.parse(localStorage.getItem(key) || "[]");
-          // Remove if already exists to move to front
-          list = list.filter((item) => item._id !== p._id);
-          // Add to front
-          list.unshift({
-            _id: p._id,
-            fullName: p.fullName,
-            avatarUrl: p.avatarUrl,
-            lastViewed: new Date().toISOString(),
-          });
-          // Limit to 10
-          if (list.length > 10) list = list.slice(0, 10);
-          localStorage.setItem(key, JSON.stringify(list));
-        } catch (e) {
-          console.error("Recent patients save error:", e);
-        }
-      }
-
-      // Init
-      loadPatient();
-    </script>
-  </body>
+    // Init
+    loadPatient();
+  </script>
+</body>
 </html>

@@ -3,8 +3,8 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="robots" content="noindex, nofollow" />
-    <link rel="icon" sizes="180x180" href="./images/logo.png" />
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="icon" sizes="180x180" href="./images/image 19.png">
     <title>Visit History | NovaBuk</title>
     <link rel="stylesheet" href="./styles-app.css" />
     <link
@@ -50,14 +50,12 @@
         -webkit-overflow-scrolling: touch;
         scrollbar-width: none;
       }
-      .tabs::-webkit-scrollbar {
-        display: none;
-      }
+      .tabs::-webkit-scrollbar { display: none; }
       .tab-btn {
         padding: 10px 20px;
         border: none;
         background: none;
-        font-family: "Poppins", sans-serif;
+        font-family: 'Poppins', sans-serif;
         font-size: 14px;
         font-weight: 500;
         color: #718096;
@@ -68,45 +66,18 @@
         white-space: nowrap;
         flex-shrink: 0;
       }
-      .tab-btn.active {
-        color: #35bac9;
-        border-bottom-color: #35bac9;
-        font-weight: 600;
-      }
-      .tab-btn:hover {
-        color: #35bac9;
-      }
+      .tab-btn.active { color: #35bac9; border-bottom-color: #35bac9; font-weight: 600; }
+      .tab-btn:hover  { color: #35bac9; }
 
       @media (max-width: 600px) {
-        .history-wrap {
-          padding: 0 12px 40px;
-          margin: 16px auto;
-        }
-        .tab-btn {
-          padding: 8px 14px;
-          font-size: 13px;
-        }
-        .visit-card {
-          padding: 16px;
-        }
-        .visit-top {
-          flex-direction: column;
-          gap: 8px;
-        }
-        .status-pill {
-          align-self: flex-start;
-        }
-        .visit-meta {
-          gap: 10px;
-          flex-direction: column;
-        }
-        .visit-actions {
-          justify-content: flex-start;
-        }
-        .btn-cancel-visit {
-          width: 100%;
-          text-align: center;
-        }
+        .history-wrap { padding: 0 12px 40px; margin: 16px auto; }
+        .tab-btn { padding: 8px 14px; font-size: 13px; }
+        .visit-card { padding: 16px; }
+        .visit-top { flex-direction: column; gap: 8px; }
+        .status-pill { align-self: flex-start; }
+        .visit-meta { gap: 10px; flex-direction: column; }
+        .visit-actions { justify-content: flex-start; }
+        .btn-cancel-visit { width: 100%; text-align: center; }
       }
 
       /* ── VISIT CARD ── */
@@ -118,9 +89,7 @@
         margin-bottom: 16px;
         transition: box-shadow 0.2s;
       }
-      .visit-card:hover {
-        box-shadow: 0 4px 20px rgba(53, 186, 201, 0.1);
-      }
+      .visit-card:hover { box-shadow: 0 4px 20px rgba(53,186,201,0.1); }
 
       .visit-top {
         display: flex;
@@ -154,22 +123,10 @@
         white-space: nowrap;
         flex-shrink: 0;
       }
-      .status-Pending {
-        background: #fef3c7;
-        color: #92400e;
-      }
-      .status-Confirmed {
-        background: #d1fae5;
-        color: #065f46;
-      }
-      .status-Completed {
-        background: #dbeafe;
-        color: #1e40af;
-      }
-      .status-Cancelled {
-        background: #fee2e2;
-        color: #991b1b;
-      }
+      .status-Pending   { background: #fef3c7; color: #92400e; }
+      .status-Confirmed { background: #d1fae5; color: #065f46; }
+      .status-Completed { background: #dbeafe; color: #1e40af; }
+      .status-Cancelled { background: #fee2e2; color: #991b1b; }
 
       .visit-meta {
         display: flex;
@@ -179,11 +136,7 @@
         color: #718096;
         margin-bottom: 12px;
       }
-      .visit-meta span {
-        display: flex;
-        align-items: center;
-        gap: 5px;
-      }
+      .visit-meta span { display: flex; align-items: center; gap: 5px; }
 
       .visit-notes {
         font-size: 13px;
@@ -204,9 +157,7 @@
         margin-bottom: 12px;
         border-left: 3px solid #f6ad55;
       }
-      .clinic-notes strong {
-        color: #92400e;
-      }
+      .clinic-notes strong { color: #92400e; }
 
       .visit-symptoms {
         display: flex;
@@ -223,11 +174,7 @@
         font-weight: 500;
       }
 
-      .visit-actions {
-        display: flex;
-        gap: 10px;
-        justify-content: flex-end;
-      }
+      .visit-actions { display: flex; gap: 10px; justify-content: flex-end; }
 
       .btn-cancel-visit {
         font-size: 12px;
@@ -237,13 +184,11 @@
         color: #e53e3e;
         border-radius: 8px;
         cursor: pointer;
-        font-family: "Poppins", sans-serif;
+        font-family: 'Poppins', sans-serif;
         font-weight: 500;
         transition: all 0.2s;
       }
-      .btn-cancel-visit:hover {
-        background: #fff5f5;
-      }
+      .btn-cancel-visit:hover { background: #fff5f5; }
 
       /* ── EMPTY STATE ── */
       .empty-state {
@@ -255,16 +200,8 @@
         flex-direction: column;
         align-items: center;
       }
-      .empty-state img {
-        width: 120px;
-        margin-bottom: 20px;
-        opacity: 0.7;
-      }
-      .empty-state p {
-        color: #718096;
-        font-size: 15px;
-        margin-bottom: 20px;
-      }
+      .empty-state img { width: 120px; margin-bottom: 20px; opacity: 0.7; }
+      .empty-state p { color: #718096; font-size: 15px; margin-bottom: 20px; }
       .btn-find-clinic {
         display: inline-block;
         padding: 12px 28px;
@@ -274,85 +211,57 @@
         text-decoration: none;
         font-size: 14px;
         font-weight: 600;
-        font-family: "Poppins", sans-serif;
+        font-family: 'Poppins', sans-serif;
       }
 
       /* ── SPINNER ── */
       .spinner {
-        width: 36px;
-        height: 36px;
+        width: 36px; height: 36px;
         border: 3px solid #e8f8fb;
         border-top-color: #35bac9;
         border-radius: 50%;
         animation: spin 0.8s linear infinite;
         margin: 60px auto;
       }
-      @keyframes spin {
-        to {
-          transform: rotate(360deg);
-        }
-      }
+      @keyframes spin { to { transform: rotate(360deg); } }
 
       /* ── CANCEL MODAL ── */
       .modal-overlay {
         display: none;
-        position: fixed;
-        inset: 0;
-        background: rgba(0, 0, 0, 0.45);
+        position: fixed; inset: 0;
+        background: rgba(0,0,0,0.45);
         z-index: 999;
         justify-content: center;
         align-items: center;
       }
-      .modal-overlay.show {
-        display: flex;
-      }
+      .modal-overlay.show { display: flex; }
       .modal-box {
         background: white;
         border-radius: 12px;
         padding: 28px 24px;
-        width: 90%;
-        max-width: 340px;
+        width: 90%; max-width: 340px;
         text-align: center;
-        font-family: "Poppins", sans-serif;
+        font-family: 'Poppins', sans-serif;
       }
-      .modal-box p {
-        font-size: 14px;
-        color: #444;
-        margin-bottom: 20px;
-      }
-      .modal-btns {
-        display: flex;
-        gap: 10px;
-      }
+      .modal-box p { font-size: 14px; color: #444; margin-bottom: 20px; }
+      .modal-btns { display: flex; gap: 10px; }
       .modal-btns button {
-        flex: 1;
-        padding: 11px;
-        border-radius: 8px;
-        border: none;
-        font-family: "Poppins", sans-serif;
-        font-size: 14px;
-        font-weight: 600;
+        flex: 1; padding: 11px;
+        border-radius: 8px; border: none;
+        font-family: 'Poppins', sans-serif;
+        font-size: 14px; font-weight: 600;
         cursor: pointer;
       }
-      .btn-confirm-cancel {
-        background: #e53e3e;
-        color: white;
-      }
-      .btn-keep {
-        background: #eee;
-        color: #333;
-      }
+      .btn-confirm-cancel { background: #e53e3e; color: white; }
+      .btn-keep           { background: #eee; color: #333; }
     </style>
   </head>
   <body class="app-page">
     <div class="header">
       <div class="navbar navbar-home">
-        <div class="btn-log" style="display: flex">
-          <button
-            id="navToggle"
-            class="nav-toggle"
-            aria-label="Toggle navigation"
-          >
+        
+        <div class="btn-log" style="display:flex">
+          <button id="navToggle" class="nav-toggle" aria-label="Toggle navigation">
             <i class="fas fa-bars"></i>
           </button>
           <div class="logo"><img src="./images/logo.png" alt="" /></div>
@@ -364,27 +273,15 @@
 
         <div class="nav-menu navMenu" id="navMenu">
           <ul>
-            <li><a href="./app-home.html">Home</a></li>
-            <li><a href="./complaints.html">Symptoms Logging</a></li>
+            <li><a href="./app-home.html" >Home</a></li>
+            <li><a href="./complaints.html" >Symptoms Logging</a></li>
             <li><a href="./app-clinics.html">Clinic Directory</a></li>
             <li><a href="./app-history.html" class="active">History</a></li>
           </ul>
           <div class="profile-opt" id="optNav">
             <ul>
-              <li>
-                <a href="./app-setting.html?tab=privacy"
-                  ><i class="fa-solid fa-gear"></i> <span>Settings</span></a
-                >
-              </li>
-              <li>
-                <a href="#" onclick="handleMenuSelect('logout')"
-                  ><i
-                    class="fa-solid fa-right-from-bracket"
-                    style="color: #ff7675 !important"
-                  ></i>
-                  <span style="color: #ff7675">Logout</span></a
-                >
-              </li>
+              <li><a href="./app-setting.html?tab=privacy"><i class="fa-solid fa-gear"></i> <span>Settings</span></a></li>
+              <li><a href="#" onclick="handleMenuSelect('logout')"><i class="fa-solid fa-right-from-bracket" style="color: #ff7675 !important;"></i> <span style="color: #ff7675;">Logout</span></a></li>
             </ul>
           </div>
         </div>
@@ -402,21 +299,8 @@
             </li>
             <li>
               <div class="user-profile" id="userProfileBtn">
-                <div class="profile-check">
-                  <span
-                    ><div
-                      class="nav-avatar"
-                      style="
-                        font-size: 1.5em;
-                        font-family: &quot;poppins&quot;, san-serif;
-                      "
-                      id="navAvatar"
-                    ></div
-                  ></span>
-                  <span class="dropdown-arrow"
-                    ><i class="fa-solid fa-angle-down"></i
-                  ></span>
-                </div>
+                <div class="profile-check"><span><div class="nav-avatar" style="font-size: 1.5em; font-family:'poppins',san-serif;" id="navAvatar"></div></span>
+                <span class="dropdown-arrow"><i class="fa-solid fa-angle-down"></i></span></div>
                 <div class="dropdown-menu" id="settingsDropdown">
                   <!-- User identity block -->
                   <div class="dd-user-block">
@@ -428,60 +312,36 @@
                   </div>
                   <div class="dd-divider"></div>
                   <!-- Quick actions -->
-                  <div
-                    class="dropdown-item"
-                    onclick="handleMenuSelect('dashboard')"
-                  >
+                  <div class="dropdown-item" onclick="handleMenuSelect('dashboard')">
                     <span><i class="fa-solid fa-house"></i></span> Dashboard
                   </div>
-                  <div
-                    class="dropdown-item"
-                    onclick="handleMenuSelect('visits')"
-                  >
+                  <div class="dropdown-item" onclick="handleMenuSelect('visits')">
                     <span><i class="fa-solid fa-calendar-check"></i></span>
                     My Visits
-                    <span
-                      class="dd-visits-badge"
-                      id="ddVisitsBadge"
-                      style="display: none"
-                    ></span>
+                    <span class="dd-visits-badge" id="ddVisitsBadge" style="display:none"></span>
                   </div>
-                  <div
-                    class="dropdown-item"
-                    onclick="handleMenuSelect('profile')"
-                  >
-                    <span><i class="fa-solid fa-heart-pulse"></i></span> My
-                    Health Profile
+                  <div class="dropdown-item" onclick="handleMenuSelect('profile')">
+                    <span><i class="fa-solid fa-heart-pulse"></i></span> My Health Profile
                   </div>
-                  <div
-                    class="dd-symptom-hint"
-                    id="ddSymptomHint"
-                    style="display: none"
-                  >
+                  <div class="dd-symptom-hint" id="ddSymptomHint" style="display:none">
                     <i class="fa-regular fa-clock"></i>
                     <span id="ddSymptomText">Last symptom logged: —</span>
                     <a href="./complaints.html" class="dd-log-now">Log now →</a>
                   </div>
                   <div class="dd-divider"></div>
-                  <div
-                    class="dropdown-item"
-                    onclick="handleMenuSelect('settings')"
-                  >
+                  <div class="dropdown-item" onclick="handleMenuSelect('settings')">
                     <span><i class="fa-solid fa-gear"></i></span> Settings
                   </div>
                   <div class="dd-divider"></div>
-                  <div
-                    class="dropdown-item dd-logout"
-                    onclick="handleMenuSelect('logout')"
-                  >
-                    <span><i class="fa-solid fa-right-from-bracket"></i></span>
-                    Logout
+                  <div class="dropdown-item dd-logout" onclick="handleMenuSelect('logout')">
+                    <span><i class="fa-solid fa-right-from-bracket"></i></span> Logout
                   </div>
                 </div>
               </div>
             </li>
           </ul>
         </div>
+        
       </div>
     </div>
 
@@ -495,21 +355,11 @@
       <div class="history-wrap">
         <!-- Tabs -->
         <div class="tabs">
-          <button class="tab-btn active" onclick="switchTab('all', this)">
-            All
-          </button>
-          <button class="tab-btn" onclick="switchTab('Pending', this)">
-            Pending
-          </button>
-          <button class="tab-btn" onclick="switchTab('Confirmed', this)">
-            Confirmed
-          </button>
-          <button class="tab-btn" onclick="switchTab('Completed', this)">
-            Completed
-          </button>
-          <button class="tab-btn" onclick="switchTab('Cancelled', this)">
-            Cancelled
-          </button>
+          <button class="tab-btn active" onclick="switchTab('all', this)">All</button>
+          <button class="tab-btn" onclick="switchTab('Pending', this)">Pending</button>
+          <button class="tab-btn" onclick="switchTab('Confirmed', this)">Confirmed</button>
+          <button class="tab-btn" onclick="switchTab('Completed', this)">Completed</button>
+          <button class="tab-btn" onclick="switchTab('Cancelled', this)">Cancelled</button>
         </div>
 
         <!-- Visit list -->
@@ -522,9 +372,7 @@
       <div class="modal-box">
         <p>Are you sure you want to cancel this visit request?</p>
         <div class="modal-btns">
-          <button class="btn-confirm-cancel" id="confirmCancelBtn">
-            Yes, Cancel
-          </button>
+          <button class="btn-confirm-cancel" id="confirmCancelBtn">Yes, Cancel</button>
           <button class="btn-keep" onclick="closeCancelModal()">Keep it</button>
         </div>
       </div>
@@ -533,17 +381,15 @@
     <script src="./db.js"></script>
     <script src="./script.js"></script>
     <script>
-      var API_URL =
-        window.location.hostname === "localhost" ||
-        window.location.hostname === "127.0.0.1"
-          ? "http://localhost:5000/api"
-          : "https://novabuk-backend.onrender.com/api";
+      var API_URL = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1"
+        ? "http://localhost:5000/api"
+        : "https://novabuk-backend.onrender.com/api";
 
       const token = localStorage.getItem("novabuk_token");
       if (!token) window.location.href = "./sign-in.html";
 
-      let allVisits = [];
-      let activeTab = "all";
+      let allVisits    = [];
+      let activeTab    = "all";
       let cancellingId = null;
 
       // avatar + handleMenuSelect handled by script.js initAppNav()
@@ -551,21 +397,18 @@
       // ── TABS ────────────────────────────────────────────
       function switchTab(tab, btn) {
         activeTab = tab;
-        document
-          .querySelectorAll(".tab-btn")
-          .forEach((b) => b.classList.remove("active"));
+        document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
         btn.classList.add("active");
         renderVisits();
       }
 
       // ── LOAD VISITS ─────────────────────────────────────
       async function loadVisits() {
-        document.getElementById("visitsList").innerHTML =
-          '<div class="spinner"></div>';
+        document.getElementById("visitsList").innerHTML = '<div class="spinner"></div>';
         try {
-          const res = await smartFetch(`${API_URL}/visits/my`, {
+          const res  = await smartFetch(`${API_URL}/visits/my`, {
             headers: { Authorization: `Bearer ${token}` },
-            credentials: "include",
+            credentials: 'include'
           });
           const data = await res.json();
           if (data.success) {
@@ -584,50 +427,34 @@
       // ── RENDER ───────────────────────────────────────────
       function renderVisits() {
         const list = document.getElementById("visitsList");
-        const filtered =
-          activeTab === "all"
-            ? allVisits
-            : allVisits.filter((v) => v.status === activeTab);
+        const filtered = activeTab === "all"
+          ? allVisits
+          : allVisits.filter(v => v.status === activeTab);
 
         if (filtered.length === 0) {
           list.innerHTML = `
             <div class="empty-state">
               <img src="images/history.png" alt="No visits" />
-              <p>${
-                activeTab === "all"
-                  ? "You have not made any clinic visit yet"
-                  : `No ${activeTab.toLowerCase()} visits`
-              }
+              <p>${activeTab === "all"
+                ? "You have not made any clinic visit yet"
+                : `No ${activeTab.toLowerCase()} visits`}
               </p>
-              ${
-                activeTab === "all"
-                  ? `<a href="./app-clinics.html" class="btn-find-clinic">Find a Clinic</a>`
-                  : ""
-              }
+              ${activeTab === "all"
+                ? `<a href="./app-clinics.html" class="btn-find-clinic">Find a Clinic</a>`
+                : ""}
             </div>`;
           return;
         }
 
-        list.innerHTML = filtered
-          .map((visit) => {
-            const clinic = visit.clinic || {};
-            const date = visit.preferredDate
-              ? new Date(visit.preferredDate).toLocaleDateString("en-NG", {
-                  weekday: "short",
-                  day: "numeric",
-                  month: "short",
-                  year: "numeric",
-                  hour: "2-digit",
-                  minute: "2-digit",
-                })
-              : "No preferred date";
-            const created = new Date(visit.createdAt).toLocaleDateString(
-              "en-NG",
-              { day: "numeric", month: "short", year: "numeric" },
-            );
-            const symptoms = visit.symptomLog?.tags || [];
+        list.innerHTML = filtered.map(visit => {
+          const clinic     = visit.clinic || {};
+          const date       = visit.preferredDate
+            ? new Date(visit.preferredDate).toLocaleDateString("en-NG", { weekday:"short", day:"numeric", month:"short", year:"numeric", hour:"2-digit", minute:"2-digit" })
+            : "No preferred date";
+          const created    = new Date(visit.createdAt).toLocaleDateString("en-NG", { day:"numeric", month:"short", year:"numeric" });
+          const symptoms   = visit.symptomLog?.tags || [];
 
-            return `
+          return `
             <div class="visit-card">
               <div class="visit-top">
                 <div>
@@ -645,46 +472,29 @@
                 <span><i class="fa-regular fa-clock"></i> Requested: ${created}</span>
               </div>
 
-              ${
-                symptoms.length
-                  ? `
+              ${symptoms.length ? `
                 <div class="visit-symptoms">
-                  ${symptoms.map((s) => `<span class="symptom-chip">${s}</span>`).join("")}
-                </div>`
-                  : ""
-              }
+                  ${symptoms.map(s => `<span class="symptom-chip">${s}</span>`).join("")}
+                </div>` : ""}
 
-              ${
-                visit.notes
-                  ? `
+              ${visit.notes ? `
                 <div class="visit-notes">
                   <strong>Your notes:</strong> ${visit.notes}
-                </div>`
-                  : ""
-              }
+                </div>` : ""}
 
-              ${
-                visit.clinicNotes
-                  ? `
+              ${visit.clinicNotes ? `
                 <div class="clinic-notes">
                   <strong>Clinic response:</strong> ${visit.clinicNotes}
-                </div>`
-                  : ""
-              }
+                </div>` : ""}
 
-              ${
-                visit.status === "Pending"
-                  ? `
+              ${visit.status === "Pending" ? `
                 <div class="visit-actions">
                   <button class="btn-cancel-visit" onclick="openCancelModal('${visit._id}')">
                     <i class="fa-solid fa-xmark"></i> Cancel Request
                   </button>
-                </div>`
-                  : ""
-              }
+                </div>` : ""}
             </div>`;
-          })
-          .join("");
+        }).join("");
       }
 
       // ── CANCEL VISIT ─────────────────────────────────────
@@ -701,23 +511,19 @@
 
       async function confirmCancel() {
         if (!cancellingId) return;
-        document.getElementById("confirmCancelBtn").textContent =
-          "Cancelling...";
+        document.getElementById("confirmCancelBtn").textContent = "Cancelling...";
         document.getElementById("confirmCancelBtn").disabled = true;
 
         try {
-          const res = await smartFetch(
-            `${API_URL}/visits/${cancellingId}/cancel`,
-            {
-              method: "PATCH",
-              headers: { Authorization: `Bearer ${token}` },
-            },
-          );
+          const res  = await smartFetch(`${API_URL}/visits/${cancellingId}/cancel`, {
+            method: "PATCH",
+            headers: { Authorization: `Bearer ${token}` }
+          });
           const data = await res.json();
           closeCancelModal();
           if (data.success) {
             // Update status locally without reloading
-            const visit = allVisits.find((v) => v._id === cancellingId);
+            const visit = allVisits.find(v => v._id === cancellingId);
             if (visit) visit.status = "Cancelled";
             renderVisits();
           } else {
