@@ -679,6 +679,7 @@ window.refreshNavAvatar = function () {
         toast.className = `network-toast show ${isOnline ? 'online' : 'offline'}`;
         isToastForced = forceVisible;
 
+<<<<<<< HEAD
         // Decide auto-hide timeout:
         // - not forced: short (3.5s)
         // - forced but offline: still auto-hide after 10s (avoid persistent offline pill)
@@ -697,6 +698,14 @@ window.refreshNavAvatar = function () {
                 toast.classList.remove('show');
                 isToastForced = false;
             }, timeoutMs);
+=======
+        // If not forced to stay visible, hide after 3.5 seconds
+        if (!forceVisible) {
+            toastTimeout = setTimeout(() => {
+                toast.classList.remove('show');
+                isToastForced = false;
+            }, 3500);
+>>>>>>> c1f93590dcf96710a7e7f3757141a65e7cc26281
         }
     }
     window.showNetworkToast = showToast;
@@ -1184,6 +1193,7 @@ if ('serviceWorker' in navigator) {
       .catch((err) => console.log('[Service Worker] Registration failed:', err));
   });
 }
+<<<<<<< HEAD
 
 // ================================================================
 // NOVABUK — HERO SLIDER & DYNAMIC PARAGRAPH
@@ -1305,3 +1315,5 @@ if ('serviceWorker' in navigator) {
     }, 150);
   });
 })();
+=======
+>>>>>>> c1f93590dcf96710a7e7f3757141a65e7cc26281

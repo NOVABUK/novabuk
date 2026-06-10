@@ -11,6 +11,11 @@ html {
 body {
   overflow-x: hidden;
   min-height: 100vh;
+<<<<<<< HEAD
+=======
+  display: flex;
+  flex-direction: column;
+>>>>>>> c1f93590dcf96710a7e7f3757141a65e7cc26281
 }
 
 /* Ensure containers stretch to fill available space */
@@ -22,7 +27,12 @@ body {
   flex: 1;
 }
 
+<<<<<<< HEAD
  
+=======
+/* Make main content areas grow to push footers down */
+.main, 
+>>>>>>> c1f93590dcf96710a7e7f3757141a65e7cc26281
 .app-main, 
 .middle {
   flex: 1;

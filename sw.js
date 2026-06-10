@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 const CACHE_NAME = "novabuk-10"; // Updated version
+=======
+const CACHE_NAME = "novabuk-v8"; // Updated version
+>>>>>>> c1f93590dcf96710a7e7f3757141a65e7cc26281
 const OFFLINE_PAGE = "./offline.html";
 const CLINIC_OFFLINE_PAGE = "./clinic-offline.html";
 const CLINIC_QUEUE_PAGE = "./clinic-queue.html";
@@ -29,7 +33,11 @@ const ASSETS_TO_CACHE = [
   "./verify-otp.html",
   "./profile-health.html",
   "./images/logo.png",
+<<<<<<< HEAD
   "./images/logo.png",
+=======
+  "./images/image 19.png",
+>>>>>>> c1f93590dcf96710a7e7f3757141a65e7cc26281
   "./images/clinic.png",
   "./images/complain (1).png",
   "./images/history.png",
@@ -106,13 +114,23 @@ self.addEventListener("fetch", (event) => {
   if (event.request.mode === "navigate") {
     event.respondWith(
       (async () => {
+<<<<<<< HEAD
+=======
+        const cachedResponse = await caches.match(event.request);
+        if (cachedResponse) return cachedResponse;
+
+>>>>>>> c1f93590dcf96710a7e7f3757141a65e7cc26281
         const reqUrl = new URL(event.request.url);
         const isClinicPage = reqUrl.pathname.includes("clinic-");
 
         try {
+<<<<<<< HEAD
           const networkResponse = await fetch(event.request, {
             cache: "no-store",
           });
+=======
+          const networkResponse = await fetch(event.request);
+>>>>>>> c1f93590dcf96710a7e7f3757141a65e7cc26281
           if (networkResponse && networkResponse.ok) {
             const cache = await caches.open(CACHE_NAME);
             cache.put(event.request, networkResponse.clone());
@@ -125,10 +143,13 @@ self.addEventListener("fetch", (event) => {
             event.request.url,
             fetchError,
           );
+<<<<<<< HEAD
 
           const cachedResponse = await caches.match(event.request);
           if (cachedResponse) return cachedResponse;
 
+=======
+>>>>>>> c1f93590dcf96710a7e7f3757141a65e7cc26281
           if (isClinicPage) {
             const clinicQueue = await caches.match(CLINIC_QUEUE_PAGE);
             if (clinicQueue) return clinicQueue;
@@ -151,6 +172,7 @@ self.addEventListener("fetch", (event) => {
     return;
   }
 
+<<<<<<< HEAD
   const requestUrl = new URL(event.request.url);
   const networkFirst =
     event.request.destination === "script" ||
@@ -194,6 +216,9 @@ self.addEventListener("fetch", (event) => {
   }
 
   // Non-navigation, non-core assets: try cache first, then network.
+=======
+  // Non-navigation requests: try cache first, then network, and cache same-origin assets when online.
+>>>>>>> c1f93590dcf96710a7e7f3757141a65e7cc26281
   event.respondWith(
     (async () => {
       const cachedResponse = await caches.match(event.request);
@@ -204,6 +229,10 @@ self.addEventListener("fetch", (event) => {
       try {
         const networkResponse = await fetch(event.request);
         if (networkResponse && networkResponse.ok) {
+<<<<<<< HEAD
+=======
+          const requestUrl = new URL(event.request.url);
+>>>>>>> c1f93590dcf96710a7e7f3757141a65e7cc26281
           if (requestUrl.origin === self.location.origin) {
             const cache = await caches.open(CACHE_NAME);
             cache.put(event.request, networkResponse.clone());

@@ -1,5 +1,6 @@
 <!doctype html>
 <html lang="en">
+<<<<<<< HEAD
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -11,6 +12,19 @@
     <link rel="stylesheet" href="./styles-app.css" />
     <!-- <link rel="stylesheet" href="./styles.css"> -->
     <link
+=======
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="icon" sizes="180x180" href="./images/image 19.png">
+  <link rel="manifest" href="./manifest.json">
+  <meta name="theme-color" content="#35bac9">
+  <title>Clinic Directory | NovaBuk</title>
+  <link rel="stylesheet" href="./styles-app.css">
+  <!-- <link rel="stylesheet" href="./styles.css"> -->
+  <link
+>>>>>>> c1f93590dcf96710a7e7f3757141a65e7cc26281
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
       integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw=="
@@ -603,6 +617,7 @@
           </ul>
           <div class="profile-opt" id="optNav">
             <ul>
+<<<<<<< HEAD
               <li>
                 <a href="./app-setting.html?tab=privacy"
                   ><i class="fa-solid fa-gear"></i> <span>Settings</span></a
@@ -617,6 +632,10 @@
                   <span style="color: #ff7675">Logout</span></a
                 >
               </li>
+=======
+              <li><a href="./app-setting.html?tab=privacy"><i class="fa-solid fa-gear"></i> <span>Settings</span></a></li>
+              <li><a href="#" onclick="handleMenuSelect('logout')"><i class="fa-solid fa-right-from-bracket" style="color: #ff7675 !important;"></i> <span style="color: #ff7675;">Logout</span></a></li>
+>>>>>>> c1f93590dcf96710a7e7f3757141a65e7cc26281
             </ul>
           </div>
         </div>
@@ -736,6 +755,7 @@
       </div>
     </div>
 
+<<<<<<< HEAD
     <!-- FILTERS -->
     <div class="filters-section">
       <span class="filter-label">Filter:</span>
@@ -844,6 +864,46 @@
           }
         } catch (err) {
           showError("Network error. Please check your connection.");
+=======
+  <script src="./db.js"></script>
+
+  <script src="./script.js"></script>
+  <script>
+    var API_URL = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1"
+      ? "http://localhost:5000/api"
+      : "https://novabuk-backend.onrender.com/api";
+ 
+    let allClinics = [];
+    let activeFilter = "all";
+    let searchQuery = "";
+ 
+    // ── AUTH GUARD ────────────────────────────────────────
+    const token = localStorage.getItem("novabuk_token");
+    const user  = JSON.parse(localStorage.getItem("novabuk_user") || "{}");
+ 
+    if (!token) window.location.href = "./sign-in.html";
+ 
+    // avatar + handleMenuSelect handled by script.js initAppNav()
+ 
+    // ── FETCH CLINICS ─────────────────────────────────────
+    async function loadClinics(params = {}) {
+      showLoading();
+ 
+      try {
+        const query = new URLSearchParams();
+        if (params.search)  query.set("search",  params.search);
+        if (params.service) query.set("service", params.service);
+        if (params.isOpen)  query.set("isOpen",  params.isOpen);
+ 
+        const res  = await smartFetch(`${API_URL}/clinics?${query.toString()}`);
+        const data = await res.json();
+ 
+        if (data.success) {
+          allClinics = data.data;
+          applyFilters();
+        } else {
+          showError("Could not load clinics.");
+>>>>>>> c1f93590dcf96710a7e7f3757141a65e7cc26281
         }
       }
 
@@ -914,9 +974,23 @@
           .join("");
       }
 
+<<<<<<< HEAD
       // ── BOOK A CLINIC ─────────────────────────────────────
       function bookClinic(clinicId, clinicName, clinicImage) {
         if (!clinicId) return;
+=======
+      // Check if all required profile fields are complete
+      smartFetch(`${API_URL}/users/me`, {
+        headers: { Authorization: `Bearer ${token}` },
+        credentials: 'include'
+      })
+      .then(r => r.json())
+      .then(data => {
+        const u  = data.success ? data.user : {};
+        const ec = u.emergencyContact || {};
+        const name = u.fullName || "";
+        const [firstName, ...rest] = name.split(" ");
+>>>>>>> c1f93590dcf96710a7e7f3757141a65e7cc26281
 
         // Check if all required profile fields are complete
         smartFetch(`${API_URL}/users/me`, {
