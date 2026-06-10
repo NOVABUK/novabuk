@@ -2344,7 +2344,7 @@ button {
   font-family: "poppins", sans-serif;
 }
 .mission-intro h2 {
-  font-size: 32px;
+  font-size: clamp(1.5rem, 2.4vw, 2rem);
   font-weight: 800;
   color: var(--navy);
   margin-bottom: 4px;

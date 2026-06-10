@@ -29,7 +29,7 @@ const ASSETS_TO_CACHE = [
   "./verify-otp.html",
   "./profile-health.html",
   "./images/logo.png",
-  "./images/image 19.png",
+  "./images/logo.png",
   "./images/clinic.png",
   "./images/complain (1).png",
   "./images/history.png",
@@ -106,14 +106,13 @@ self.addEventListener("fetch", (event) => {
   if (event.request.mode === "navigate") {
     event.respondWith(
       (async () => {
-        const cachedResponse = await caches.match(event.request);
-        if (cachedResponse) return cachedResponse;
-
         const reqUrl = new URL(event.request.url);
         const isClinicPage = reqUrl.pathname.includes("clinic-");
 
         try {
-          const networkResponse = await fetch(event.request);
+          const networkResponse = await fetch(event.request, {
+            cache: "no-store",
+          });
           if (networkResponse && networkResponse.ok) {
             const cache = await caches.open(CACHE_NAME);
             cache.put(event.request, networkResponse.clone());
@@ -126,6 +125,10 @@ self.addEventListener("fetch", (event) => {
             event.request.url,
             fetchError,
           );
+
+          const cachedResponse = await caches.match(event.request);
+          if (cachedResponse) return cachedResponse;
+
           if (isClinicPage) {
             const clinicQueue = await caches.match(CLINIC_QUEUE_PAGE);
             if (clinicQueue) return clinicQueue;
@@ -148,7 +151,49 @@ self.addEventListener("fetch", (event) => {
     return;
   }
 
-  // Non-navigation requests: try cache first, then network, and cache same-origin assets when online.
+  const requestUrl = new URL(event.request.url);
+  const networkFirst =
+    event.request.destination === "script" ||
+    event.request.destination === "style" ||
+    event.request.destination === "document" ||
+    requestUrl.pathname.endsWith(".html") ||
+    requestUrl.pathname.endsWith(".js") ||
+    requestUrl.pathname.endsWith(".css");
+
+  if (networkFirst) {
+    event.respondWith(
+      (async () => {
+        try {
+          const networkResponse = await fetch(event.request, {
+            cache: "no-store",
+          });
+          if (networkResponse && networkResponse.ok) {
+            if (requestUrl.origin === self.location.origin) {
+              const cache = await caches.open(CACHE_NAME);
+              cache.put(event.request, networkResponse.clone());
+            }
+            return networkResponse;
+          }
+          throw new Error("Network response not OK");
+        } catch (err) {
+          const cachedResponse = await caches.match(event.request);
+          if (cachedResponse) return cachedResponse;
+          console.log(
+            "[Service Worker] Network-first asset failed:",
+            event.request.url,
+            err,
+          );
+          return new Response("Offline", {
+            status: 503,
+            statusText: "Service Unavailable",
+          });
+        }
+      })(),
+    );
+    return;
+  }
+
+  // Non-navigation, non-core assets: try cache first, then network.
   event.respondWith(
     (async () => {
       const cachedResponse = await caches.match(event.request);
@@ -159,7 +204,6 @@ self.addEventListener("fetch", (event) => {
       try {
         const networkResponse = await fetch(event.request);
         if (networkResponse && networkResponse.ok) {
-          const requestUrl = new URL(event.request.url);
           if (requestUrl.origin === self.location.origin) {
             const cache = await caches.open(CACHE_NAME);
             cache.put(event.request, networkResponse.clone());

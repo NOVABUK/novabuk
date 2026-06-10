@@ -495,11 +495,24 @@ setInterval(updateNotificationBadge, 30000);
     toast.className = `clinic-network-toast show ${cls}`;
     isToastForced = forceVisible;
 
+    // Decide auto-hide timeout:
+    // - not forced: short (3.5s)
+    // - forced but offline: still auto-hide after 10s (avoid persistent offline pill)
+    // - forced and online (e.g. syncing): remain visible until cleared
+    let timeoutMs;
     if (!forceVisible) {
+      timeoutMs = 3500;
+    } else if (isOnline === false) {
+      timeoutMs = 10000;
+    } else {
+      timeoutMs = null; // keep visible (e.g. syncing) until programmatically cleared
+    }
+
+    if (timeoutMs !== null) {
       toastTimeout = setTimeout(() => {
         toast.classList.remove('show');
         isToastForced = false;
-      }, 3500);
+      }, timeoutMs);
     }
   }
 

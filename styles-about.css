@@ -1106,24 +1106,37 @@ main {
 /* headline */
 .svc-hero-inner h1 {
   font-family: "Unbounded", sans-serif;
-  font-size: clamp(11.9rem, 14.5vw, 3.2rem);
+  font-size: clamp(2.9rem, 4.5vw, 3.2rem);
   font-weight: 800;
   color: #07194a;
   line-height: 1.15;
   letter-spacing: -.02em;
   margin-bottom: 18px;
 }
+
+.svc-hero-inner .svc-h1 {
+  font-family: "Unbounded", sans-serif;
+  font-size: clamp(11.9rem, 14.5vw, 3.2rem);
+  font-weight: 800;
+  color: #07194a;
+  line-height: 1.15;
+  letter-spacing: -.02em;
+  margin-bottom: 38px;
+}
 .svc-h1-accent {
   color: #35bac9;
   position: relative;
   display: inline-block;
+  
 }
 /* clean underline stroke */
 .svc-h1-accent::after {
   content: '';
   position: absolute;
-  bottom: -5px; left: 0; right: 0;
+  bottom: -10px; left: 0; right: 0;
   height: 3px; border-radius: 2px;
+  margin-bottom: 20px;
+  width: 50%;
   background: linear-gradient(90deg, #35bac9, #0a7a94);
 }
 
@@ -1196,7 +1209,8 @@ main {
 /* ── MOBILE ── */
 @media (max-width: 600px) {
   .svc-hero { min-height: auto; padding: 88px 24px 48px; }
-  .svc-hero-inner h1 { font-size: clamp(5.6rem, 7vw, 2.2rem); }
+  /* .svc-hero-inner h1 { font-size: clamp(5.6rem, 7vw, 2.2rem); } */
+  .svc-h1-accent { font-size: clamp(2.6rem, 7vw, 2.2rem); }
   .svc-actions { flex-direction: column; width: 100%; }
   .svc-btn-primary, .svc-btn-ghost { width: 100%; justify-content: center; }
   .svc-stat-divider { display: none; }
