@@ -456,70 +456,57 @@
       </div>
     </main>
 
-    <footer>
-      <div class="navbar">
-        <div class="logo"><img src="./images/logo.png" alt="" /></div>
-        <div class="foot-menu">
-          <ul>
-            <li><a href="./index.html">Home</a></li>
-            <li><a href="./about.html">About Us</a></li>
-            <li><a href="./services.html">Features</a></li>
-            <li><a href="./contact.html">Contact</a></li>
-          </ul>
+    <footer class="site-footer">
+      <div class="footer-brand">
+        <div class="brand"><img src="./images/logo.png" alt="" /></div>
+        <p>AI-powered healthcare records platform built for Africa.</p>
+      </div>
+      <div class="footer-links">
+        <!-- <div>
+          <h4>Product</h4>
+          <a href="#">Features</a>
+          <a href="#">Security</a>
+          <a href="#">Pricing</a>
+          <a href="#">Changelog</a>
+        </div> -->
+        <div>
+          <h4>Solutions</h4>
+          <a href="#">For Clinics</a>
+          <a href="#">For Doctors</a>
+          <a href="#">For Pharmacies</a>
+          <a href="#">For Patients</a>
         </div>
-      </main>
-
-      <footer class="site-footer">
-        <div class="footer-brand">
-          <div class="brand"><img src="./images/logo.png" alt="" /></div>
-          <p>AI-powered healthcare records platform built for Africa.</p>
+        <div>
+          <h4>Resources</h4>
+          <a href="./data-privacy.html">Data Privacy</a>
+          <a href="./terms.html">Terms of Service</a>
+          <a href="#">Community</a>
         </div>
-        <div class="footer-links">
-          <!-- <div>
-            <h4>Product</h4>
-            <a href="#">Features</a>
-            <a href="#">Security</a>
-            <a href="#">Pricing</a>
-            <a href="#">Changelog</a>
-          </div> -->
-          <div>
-            <h4>Solutions</h4>
-            <a href="#">For Clinics</a>
-            <a href="#">For Doctors</a>
-            <a href="#">For Pharmacies</a>
-            <a href="#">For Patients</a>
-          </div>
-          <div>
-            <h4>Resources</h4>
-            <a href="./data-privacy.html">Data Privacy</a>
-            <a href="./terms.html">Terms of Service</a>
-            <a href="#">Community</a>
-          </div>
-          <div>
-            <h4>Company</h4>
-            <a href="#">About Us</a>
-            <a href="#">Careers</a>
-            <a href="#">Partners</a>
-            <a href="#">Contact Us</a>
-          </div>
-        </div>
-        <div class="newsletter">
-          <h4>Newsletter</h4>
-          <p>Get the latest updates and news about NovaBuk.</p>
-          <form class="newsletter-form">
-            <input type="email" placeholder="Enter your email" />
-            <button type="submit">Subscribe</button>
-          </form>
-        </div>
-        <div class="foot-menu">
-          <ul style="display: flex">
-            <li>
-              <a href=""><i class="fa-regular fa-copyright"></i>Copyright 2025
-                NovaBuk.All rights reserved</a>
-            </li>
-          </ul>
+        <div>
+          <h4>Company</h4>
+          <a href="#">About Us</a>
+          <a href="#">Careers</a>
+          <a href="#">Partners</a>
+          <a href="#">Contact Us</a>
         </div>
       </div>
+      <div class="newsletter">
+        <h4>Newsletter</h4>
+        <p>Get the latest updates and news about NovaBuk.</p>
+        <form class="newsletter-form">
+          <input type="email" placeholder="Enter your email" />
+          <button type="submit">Subscribe</button>
+        </form>
+      </div>
+      <div class="foot-menu">
+        <ul style="display: flex">
+          <li>
+            <a href=""><i class="fa-regular fa-copyright"></i>Copyright 2025
+              NovaBuk.All rights reserved</a>
+          </li>
+        </ul>
+      </div>
+    </div>
     </footer>
   </div>
 
@@ -599,14 +586,13 @@
     }
 
       // Ensure image urls are safe and provide a fallback
-      function safeUrl(url) {
-        if (!url) return "./images/image 34.png";
-        try {
-          if (/^https?:\/\//i.test(url)) return url;
-          return encodeURI(url);
-        } catch (err) {
-          return "./images/image 34.png";
-        }
+    function safeUrl(url) {
+      if (!url) return "./images/image 34.png";
+      try {
+        if (/^https?:\/\//i.test(url)) return url;
+        return encodeURI(url);
+      } catch (err) {
+        return "./images/image 34.png";
       }
     }
 

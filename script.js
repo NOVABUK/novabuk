@@ -1202,11 +1202,9 @@ async function populateDropdown() {
 if ("serviceWorker" in navigator) {
   window.addEventListener("load", () => {
     navigator.serviceWorker
-      .register("./sw.js")
+      .register("/sw.js", { scope: "/" })
       .then((reg) => console.log("[Service Worker] Registered!", reg))
-      .catch((err) =>
-        console.log("[Service Worker] Registration failed:", err),
-      );
+      .catch((err) => console.log("[Service Worker] Registration failed:", err));
   });
 }
 

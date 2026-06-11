@@ -1,887 +1,1007 @@
 <!doctype html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow" />
+    <link rel="icon" sizes="180x180" href="./images/logo.png" />
+    <title>Today's Patients — NovaBuk Clinic</title>
+    <link rel="stylesheet" href="./clinic.css" />
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="robots" content="noindex, nofollow">
-  <link rel="icon" sizes="180x180" href="./images/image 19.png">
-  <title>Today's Patients — NovaBuk Clinic</title>
-  <link rel="stylesheet" href="./clinic.css">
+    <!-- Font Awesome for icons -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
+      crossorigin="anonymous"
+    />
+    <!-- Google Fonts — Poppins -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
 
-  <!-- Font Awesome for icons -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
-    crossorigin="anonymous" />
-  <!-- Google Fonts — Poppins -->
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
-    rel="stylesheet" />
-
-  <style>
-    
-
-    /* ============================================================
+    <style>
+      /* ============================================================
        PATIENT CARDS
        Each card is a horizontal flex row with three zones:
          LEFT:   avatar (fixed width)
          MIDDLE: name + reason (flex: 1 — takes all remaining space)
          RIGHT:  time, badge, action (fixed, right-aligned)
     ============================================================ */
-    .card-list {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
+      .card-list {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
 
-    .patient-card {
-      background: var(--white);
-      border: 1.5px solid var(--border);
-      border-radius: 12px;
-      padding: 14px 18px;
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      cursor: pointer;
-      transition: border-color 0.15s, box-shadow 0.15s, transform 0.12s;
-    }
+      .patient-card {
+        background: var(--white);
+        border: 1.5px solid var(--border);
+        border-radius: 12px;
+        padding: 14px 18px;
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        cursor: pointer;
+        transition:
+          border-color 0.15s,
+          box-shadow 0.15s,
+          transform 0.12s;
+      }
 
-    /* Hover lifts the card slightly and highlights border */
-    .patient-card:hover {
-      border-color: var(--teal);
-      box-shadow: 0 4px 14px rgba(53, 186, 201, 0.12);
-      transform: translateY(-1px);
-    }
+      /* Hover lifts the card slightly and highlights border */
+      .patient-card:hover {
+        border-color: var(--teal);
+        box-shadow: 0 4px 14px rgba(53, 186, 201, 0.12);
+        transform: translateY(-1px);
+      }
 
-    /* Avatar — coloured circle with patient initials */
-    .card-avatar {
-      width: 42px;
-      height: 42px;
-      border-radius: 50%;
-      background: var(--teal-pale);
-      color: var(--dark-navy);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 15px;
-      font-weight: 700;
-      flex-shrink: 0;
-      /* never compress the avatar */
-      letter-spacing: -0.5px;
-      overflow: hidden;
-      /* hide image overflow */
-    }
+      /* Avatar — coloured circle with patient initials */
+      .card-avatar {
+        width: 42px;
+        height: 42px;
+        border-radius: 50%;
+        background: var(--teal-pale);
+        color: var(--dark-navy);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 15px;
+        font-weight: 700;
+        flex-shrink: 0;
+        /* never compress the avatar */
+        letter-spacing: -0.5px;
+        overflow: hidden;
+        /* hide image overflow */
+      }
 
-    .card-avatar img,
-    .recent-avatar img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
+      .card-avatar img,
+      .recent-avatar img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
 
-    /* Middle section grows to fill space */
-    .card-body {
-      flex: 1;
-      min-width: 0;
-    }
+      /* Middle section grows to fill space */
+      .card-body {
+        flex: 1;
+        min-width: 0;
+      }
 
-    .card-name {
-      font-size: 14px;
-      font-weight: 600;
-      color: var(--text-dark);
-      margin-bottom: 3px;
-    }
+      .card-name {
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--text-dark);
+        margin-bottom: 3px;
+      }
 
-    /* Reason text — truncated to one line with ellipsis */
-    .card-reason {
-      font-size: 12px;
-      color: var(--text-light);
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      max-width: 360px;
-    }
+      /* Reason text — truncated to one line with ellipsis */
+      .card-reason {
+        font-size: 12px;
+        color: var(--text-light);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 360px;
+      }
 
-    /* Right section — stacks its items */
-    .card-right {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-end;
-      gap: 6px;
-      flex-shrink: 0;
-    }
+      /* Right section — stacks its items */
+      .card-right {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 6px;
+        flex-shrink: 0;
+      }
 
-    .card-time {
-      font-size: 11px;
-      color: var(--text-light);
-      font-weight: 500;
-    }
+      .card-time {
+        font-size: 11px;
+        color: var(--text-light);
+        font-weight: 500;
+      }
 
-    /* ============================================================
+      /* ============================================================
        STATUS BADGES
        Each status has its own colour pair (background + text).
        These are small inline chips — border-radius: 20px makes
        them pill-shaped.
     ============================================================ */
-    .badge {
-      display: inline-flex;
-      align-items: center;
-      padding: 3px 10px;
-      border-radius: 20px;
-      font-size: 10px;
-      font-weight: 700;
-      letter-spacing: 0.2px;
-      white-space: nowrap;
-    }
+      .badge {
+        display: inline-flex;
+        align-items: center;
+        padding: 3px 10px;
+        border-radius: 20px;
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 0.2px;
+        white-space: nowrap;
+      }
 
-    .badge-Pending {
-      background: var(--badge-pending-bg);
-      color: var(--badge-pending-txt);
-    }
+      .badge-Pending {
+        background: var(--badge-pending-bg);
+        color: var(--badge-pending-txt);
+      }
 
-    .badge-Confirmed {
-      background: var(--badge-confirmed-bg);
-      color: var(--badge-confirmed-txt);
-    }
+      .badge-Confirmed {
+        background: var(--badge-confirmed-bg);
+        color: var(--badge-confirmed-txt);
+      }
 
-    .badge-InProgress {
-      background: var(--badge-progress-bg);
-      color: var(--badge-progress-txt);
-    }
+      .badge-InProgress {
+        background: var(--badge-progress-bg);
+        color: var(--badge-progress-txt);
+      }
 
-    .badge-Completed {
-      background: var(--badge-done-bg);
-      color: var(--badge-done-txt);
-    }
+      .badge-Completed {
+        background: var(--badge-done-bg);
+        color: var(--badge-done-txt);
+      }
 
-    .badge-Cancelled {
-      background: var(--badge-cancel-bg);
-      color: var(--badge-cancel-txt);
-    }
+      .badge-Cancelled {
+        background: var(--badge-cancel-bg);
+        color: var(--badge-cancel-txt);
+      }
 
-    /* Action buttons on each card */
-    .btn-start {
-      background: var(--teal);
-      color: var(--white);
-      border: none;
-      border-radius: 7px;
-      padding: 5px 13px;
-      font-family: 'Poppins', sans-serif;
-      font-size: 11px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: background 0.15s;
-    }
+      /* Action buttons on each card */
+      .btn-start {
+        background: var(--teal);
+        color: var(--white);
+        border: none;
+        border-radius: 7px;
+        padding: 5px 13px;
+        font-family: "Poppins", sans-serif;
+        font-size: 11px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background 0.15s;
+      }
 
-    .btn-start:hover {
-      background: var(--teal-dark);
-    }
+      .btn-start:hover {
+        background: var(--teal-dark);
+      }
 
-    .btn-view {
-      background: var(--white);
-      color: var(--teal);
-      border: 1.5px solid var(--teal);
-      border-radius: 7px;
-      padding: 4px 13px;
-      font-family: 'Poppins', sans-serif;
-      font-size: 11px;
-      font-weight: 600;
-      cursor: pointer;
-    }
+      .btn-view {
+        background: var(--white);
+        color: var(--teal);
+        border: 1.5px solid var(--teal);
+        border-radius: 7px;
+        padding: 4px 13px;
+        font-family: "Poppins", sans-serif;
+        font-size: 11px;
+        font-weight: 600;
+        cursor: pointer;
+      }
 
-    /* ============================================================
+      /* ============================================================
        EMPTY STATE
        Shown when a tab has zero patients. Centered with a light
        icon and a helpful message — never show a blank screen.
     ============================================================ */
-    .empty-state {
-      text-align: center;
-      padding: 60px 20px;
-      color: var(--text-light);
-    }
+      .empty-state {
+        text-align: center;
+        padding: 60px 20px;
+        color: var(--text-light);
+      }
 
-    .empty-state i {
-      font-size: 38px;
-      color: #dce3ea;
-      display: block;
-      margin-bottom: 14px;
-    }
+      .empty-state i {
+        font-size: 38px;
+        color: #dce3ea;
+        display: block;
+        margin-bottom: 14px;
+      }
 
-    .empty-state p {
-      font-size: 14px;
-    }
+      .empty-state p {
+        font-size: 14px;
+      }
 
-    /* ============================================================
+      /* ============================================================
        LOADING SKELETON
        Instead of a blank screen while data loads, we show
        "skeleton" placeholder cards that shimmer. This is better
        UX than a spinner because users understand something is
        coming.
     ============================================================ */
-    .skeleton-card {
-      background: var(--white);
-      border: 1.5px solid var(--border);
-      border-radius: 12px;
-      padding: 14px 18px;
-      display: flex;
-      align-items: center;
-      gap: 14px;
-    }
-
-    @keyframes shimmer {
-      0% {
-        background-position: -400px 0;
+      .skeleton-card {
+        background: var(--white);
+        border: 1.5px solid var(--border);
+        border-radius: 12px;
+        padding: 14px 18px;
+        display: flex;
+        align-items: center;
+        gap: 14px;
       }
 
-      100% {
-        background-position: 400px 0;
+      @keyframes shimmer {
+        0% {
+          background-position: -400px 0;
+        }
+
+        100% {
+          background-position: 400px 0;
+        }
       }
-    }
 
-    .skel {
-      background: linear-gradient(90deg, #f0f0f0 25%, #e8e8e8 50%, #f0f0f0 75%);
-      background-size: 400px 100%;
-      animation: shimmer 1.4s infinite;
-      border-radius: 6px;
-    }
+      .skel {
+        background: linear-gradient(
+          90deg,
+          #f0f0f0 25%,
+          #e8e8e8 50%,
+          #f0f0f0 75%
+        );
+        background-size: 400px 100%;
+        animation: shimmer 1.4s infinite;
+        border-radius: 6px;
+      }
 
-    .skel-avatar {
-      width: 42px;
-      height: 42px;
-      border-radius: 50%;
-    }
+      .skel-avatar {
+        width: 42px;
+        height: 42px;
+        border-radius: 50%;
+      }
 
-    .skel-text-lg {
-      height: 13px;
-      width: 160px;
-      margin-bottom: 7px;
-    }
+      .skel-text-lg {
+        height: 13px;
+        width: 160px;
+        margin-bottom: 7px;
+      }
 
-    .skel-text-sm {
-      height: 11px;
-      width: 240px;
-    }
+      .skel-text-sm {
+        height: 11px;
+        width: 240px;
+      }
 
-    /* ============================================================
+      /* ============================================================
        WALK-IN MODAL
        Modals need an overlay (dark background) + the dialog box.
        The overlay is position: fixed and covers the entire screen.
        display: flex + align/justify center puts the box in the middle.
     ============================================================ */
-    .modal-overlay {
-      display: none;
-      position: fixed;
-      inset: 0;
-      /* shorthand for top/right/bottom/left: 0 */
-      background: rgba(0, 0, 0, 0.45);
-      z-index: 500;
-      width: 100%;
-      align-items: center;
-      justify-content: center;
-    }
+      .modal-overlay {
+        display: none;
+        position: fixed;
+        inset: 0;
+        /* shorthand for top/right/bottom/left: 0 */
+        background: rgba(0, 0, 0, 0.45);
+        z-index: 500;
+        width: 100%;
+        align-items: center;
+        justify-content: center;
+      }
 
-    .modal-overlay.open {
-      display: flex;
-    }
+      .modal-overlay.open {
+        display: flex;
+      }
 
-    .modal {
-      background: var(--white);
-      border-radius: 14px;
-      padding: 40px;
-      width: 100%;
-      max-width: 400px;
-      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
-    }
+      .modal {
+        background: var(--white);
+        border-radius: 14px;
+        padding: 40px;
+        width: 100%;
+        max-width: 400px;
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
+      }
 
-    .modal-title {
-      font-size: 16px;
-      width: 100%;
-      border-bottom: 1px solid #32600c;
-      font-weight: 700;
-      margin-bottom: 22px;
-      color: var(--text-dark);
-    }
+      .modal-title {
+        font-size: 16px;
+        width: 100%;
+        border-bottom: 1px solid #32600c;
+        font-weight: 700;
+        margin-bottom: 22px;
+        color: var(--text-dark);
+      }
 
-    .modal label {
-      display: block;
-      font-size: 18px;
-      font-weight: 600;
-      color: var(--text-mid);
-      margin-bottom: 10px;
-    }
+      .modal label {
+        display: block;
+        font-size: 18px;
+        font-weight: 600;
+        color: var(--text-mid);
+        margin-bottom: 10px;
+      }
 
-    .modal input,
-    .modal textarea {
-      width: 100%;
-      padding: 18px 12px;
-      border: 1.5px solid var(--border);
-      border-radius: 8px;
-      font-family: 'Poppins', sans-serif;
-      font-size: 13px;
-      color: var(--text-dark);
-      background: #fafafa;
-      outline: none;
-      margin-bottom: 14px;
-    }
+      .modal input,
+      .modal textarea {
+        width: 100%;
+        padding: 18px 12px;
+        border: 1.5px solid var(--border);
+        border-radius: 8px;
+        font-family: "Poppins", sans-serif;
+        font-size: 13px;
+        color: var(--text-dark);
+        background: #fafafa;
+        outline: none;
+        margin-bottom: 14px;
+      }
 
-    .modal input:focus,
-    .modal textarea:focus {
-      border-color: var(--teal);
-      background: var(--white);
-      box-shadow: 0 0 0 3px rgba(53, 186, 201, 0.1);
-    }
+      .modal input:focus,
+      .modal textarea:focus {
+        border-color: var(--teal);
+        background: var(--white);
+        box-shadow: 0 0 0 3px rgba(53, 186, 201, 0.1);
+      }
 
-    .modal textarea {
-      resize: vertical;
-      min-height: 72px;
-    }
+      .modal textarea {
+        resize: vertical;
+        min-height: 72px;
+      }
 
-    .modal-search-results {
-      margin-bottom: 14px;
-      max-height: 160px;
-      overflow-y: auto;
-    }
+      .modal-search-results {
+        margin-bottom: 14px;
+        max-height: 160px;
+        overflow-y: auto;
+      }
 
-    .modal-result-row {
-      padding: 9px 12px;
-      border: 1.5px solid var(--border);
-      border-radius: 8px;
-      cursor: pointer;
-      font-size: 13px;
-      margin-bottom: 7px;
-      transition: border-color 0.15s;
-    }
+      .modal-result-row {
+        padding: 9px 12px;
+        border: 1.5px solid var(--border);
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 13px;
+        margin-bottom: 7px;
+        transition: border-color 0.15s;
+      }
 
-    .modal-result-row:hover {
-      border-color: var(--teal);
-    }
+      .modal-result-row:hover {
+        border-color: var(--teal);
+      }
 
-    .modal-result-row.selected {
-      border-color: var(--teal);
-      background: var(--teal-pale);
-    }
+      .modal-result-row.selected {
+        border-color: var(--teal);
+        background: var(--teal-pale);
+      }
 
-    .modal-result-row span {
-      font-size: 11px;
-      color: var(--text-light);
-      display: block;
-    }
+      .modal-result-row span {
+        font-size: 11px;
+        color: var(--text-light);
+        display: block;
+      }
 
-    .modal-error {
-      font-size: 12px;
-      color: #e53e3e;
-      margin-bottom: 10px;
-      display: none;
-    }
+      .modal-error {
+        font-size: 12px;
+        color: #e53e3e;
+        margin-bottom: 10px;
+        display: none;
+      }
 
-    .modal-error.show {
-      display: block;
-    }
+      .modal-error.show {
+        display: block;
+      }
 
-    .modal-btns {
-      display: flex;
-      gap: 10px;
-      margin-top: 6px;
-    }
+      .modal-btns {
+        display: flex;
+        gap: 10px;
+        margin-top: 6px;
+      }
 
-    .modal-btns button {
-      flex: 1;
-      padding: 11px;
-      border-radius: 8px;
-      font-family: 'Poppins', sans-serif;
-      font-size: 13px;
-      font-weight: 600;
-      cursor: pointer;
-      border: none;
-    }
+      .modal-btns button {
+        flex: 1;
+        padding: 11px;
+        border-radius: 8px;
+        font-family: "Poppins", sans-serif;
+        font-size: 13px;
+        font-weight: 600;
+        cursor: pointer;
+        border: none;
+      }
 
-    .btn-modal-cancel {
-      background: transparent;
-      color: var(--text-mid);
-      border: 1px solid #1e9aaa !important;
-    }
+      .btn-modal-cancel {
+        background: transparent;
+        color: var(--text-mid);
+        border: 1px solid #1e9aaa !important;
+      }
 
-    .btn-modal-confirm {
-      background: var(--teal);
-      color: var(--white);
-    }
+      .btn-modal-confirm {
+        background: var(--teal);
+        color: var(--white);
+      }
 
-    .btn-modal-confirm:disabled {
-      opacity: 0.55;
-      cursor: not-allowed;
-    }
+      .btn-modal-confirm:disabled {
+        opacity: 0.55;
+        cursor: not-allowed;
+      }
 
-
-    /* ============================================================
+      /* ============================================================
        RESPONSIVE — TABLET & MOBILE
     ============================================================ */
-  </style>
-</head>
+    </style>
+  </head>
 
-<body>
-  <header>
-    <div class="logo">
-      <!-- Logo — links back to queue (home for clinic staff) -->
-      <a href="./clinic-queue.html">
-        <img src="./images/logo-notext.png" class="sidebar-logo" alt="NovaBuk" />
-      </a>
-      <div class="logo-detail">
-        <div class="topbar-left">
-          <!-- clinic-name and staff-name classes are filled by clinic-shared.js -->
-          <div class="topbar-clinic clinic-name" id="topbarClinicName">
-            <script>
-              (function () {
-                try {
-                  var u = JSON.parse(localStorage.getItem('novabuk_user') || '{}');
-                  document.write(u.clinicName || 'Your Clinic');
-                } catch (e) { document.write('Your Clinic'); }
-              })();
-            </script>
-          </div>
-          <div class="topbar-date" id="topbarDate"></div>
-        </div>
-      </div>
-    </div>
-
-    <div class="top-side">
-
-      <div class="topbar-actions">
-
-        <!-- Search shortcut -->
-        <a href="./clinic-search.html" class="topbar-btn" title="Search patients">
-          <i class="fa-solid fa-magnifying-glass"></i>
+  <body>
+    <header>
+      <div class="logo">
+        <!-- Logo — links back to queue (home for clinic staff) -->
+        <a href="./clinic-queue.html">
+          <img
+            src="./images/logo.png"
+            class="sidebar-logo"
+            alt="NovaBuk"
+          />
         </a>
-
-        <!-- Notification bell -->
-        <a href="./clinic-notifications.html" class="topbar-btn" title="Notifications">
-          <i class="fa-solid fa-bell"></i>
-          <span class="notification-badge" id="topbarNotificationBadge"></span>
-        </a>
-
-
-        <!-- Staff chip — shows name + dropdown -->
-        <div class="staff-chip" id="staffChip">
-          <div class="staff-avatar-sm" id="topbarAvatar">?</div>
-          <span class="staff-name-sm staff-name">Staff</span>
-          <i class="fa-solid fa-angle-down"id="staffIcon"></i>
-
-          <div class="staff-dropdown" id="staffDropdown">
-            <div class="staff-dropdown-item" onclick="window.location.href='./clinic-settings.html'">
-              <i class="fa-solid fa-gear"></i> Settings
+        <div class="logo-detail">
+          <div class="topbar-left">
+            <!-- clinic-name and staff-name classes are filled by clinic-shared.js -->
+            <div class="topbar-clinic clinic-name" id="topbarClinicName">
+              <script>
+                (function () {
+                  try {
+                    var u = JSON.parse(
+                      localStorage.getItem("novabuk_user") || "{}",
+                    );
+                    document.write(u.clinicName || "Your Clinic");
+                  } catch (e) {
+                    document.write("Your Clinic");
+                  }
+                })();
+              </script>
             </div>
-            <div class="staff-dropdown-item danger" onclick="clinicLogout()">
-              <i class="fa-solid fa-right-from-bracket"></i> Logout
-            </div>
+            <div class="topbar-date" id="topbarDate"></div>
           </div>
         </div>
+      </div>
 
+      <div class="top-side">
+        <div class="topbar-actions">
+          <!-- Search shortcut -->
+          <a
+            href="./clinic-search.html"
+            class="topbar-btn"
+            title="Search patients"
+          >
+            <i class="fa-solid fa-magnifying-glass"></i>
+          </a>
+
+          <!-- Notification bell -->
+          <a
+            href="./clinic-notifications.html"
+            class="topbar-btn"
+            title="Notifications"
+          >
+            <i class="fa-solid fa-bell"></i>
+            <span
+              class="notification-badge"
+              id="topbarNotificationBadge"
+            ></span>
+          </a>
+
+          <!-- Staff chip — shows name + dropdown -->
+          <div class="staff-chip" id="staffChip">
+            <div class="staff-avatar-sm" id="topbarAvatar">?</div>
+            <span class="staff-name-sm staff-name">Staff</span>
+            <i class="fa-solid fa-angle-down" id="staffIcon"></i>
+
+            <div class="staff-dropdown" id="staffDropdown">
+              <div
+                class="staff-dropdown-item"
+                onclick="window.location.href = './clinic-settings.html'"
+              >
+                <i class="fa-solid fa-gear"></i> Settings
+              </div>
+              <div class="staff-dropdown-item danger" onclick="clinicLogout()">
+                <i class="fa-solid fa-right-from-bracket"></i> Logout
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+    <div class="logo-detail mobile-detail">
+      <div class="topbar-left">
+        <!-- clinic-name and staff-name classes are filled by clinic-shared.js -->
+        <div class="topbar-clinic clinic-name" id="topbarClinicName">
+          <script>
+            (function () {
+              try {
+                var u = JSON.parse(
+                  localStorage.getItem("novabuk_user") || "{}",
+                );
+                document.write(u.clinicName || "Your Clinic");
+              } catch (e) {
+                document.write("Your Clinic");
+              }
+            })();
+          </script>
+        </div>
+        <div class="topbar-date" id="topbarDate"></div>
       </div>
     </div>
 
-  </header>
-  <div class="logo-detail mobile-detail">
-    <div class="topbar-left">
-      <!-- clinic-name and staff-name classes are filled by clinic-shared.js -->
-      <div class="topbar-clinic clinic-name" id="topbarClinicName">
-        <script>
-          (function () {
-            try {
-              var u = JSON.parse(localStorage.getItem('novabuk_user') || '{}');
-              document.write(u.clinicName || 'Your Clinic');
-            } catch (e) { document.write('Your Clinic'); }
-          })();
-        </script>
-      </div>
-      <div class="topbar-date" id="topbarDate"></div>
-    </div>
-  </div>
+    <div class="all-content">
+      <aside class="sidebar" id="sidebar">
+        <div class="sidebar-icon">
+          <!-- Queue — this page (active) -->
+          <a
+            href="./clinic-queue.html"
+            class="sidebar-nav-btn active"
+            data-tip="Today's Queue"
+          >
+            <i class="fa-solid fa-list-check"></i>
+          </a>
 
-  <div class="all-content">
-    <aside class="sidebar" id="sidebar">
+          <!-- Search -->
+          <a
+            href="./clinic-search.html"
+            class="sidebar-nav-btn"
+            data-tip="Search Patients"
+          >
+            <i class="fa-solid fa-magnifying-glass"></i>
+          </a>
 
+          <!-- Settings pushed to bottom via margin-top: auto on logout -->
+          <a
+            href="./clinic-settings.html"
+            class="sidebar-nav-btn"
+            data-tip="Settings"
+          >
+            <i class="fa-solid fa-gear"></i>
+          </a>
+        </div>
 
+        <!-- Logout — at the bottom -->
+        <div class="logout-sidebar">
+          <button
+            class="sidebar-nav-btn sidebar-logout"
+            data-tip="Logout"
+            onclick="clinicLogout()"
+          >
+            <i class="fa-solid fa-right-from-bracket"></i>
+          </button>
+        </div>
+      </aside>
 
-      <div class="sidebar-icon">
-        <!-- Queue — this page (active) -->
-        <a href="./clinic-queue.html" class="sidebar-nav-btn active" data-tip="Today's Queue">
-          <i class="fa-solid fa-list-check"></i>
-        </a>
-
-        <!-- Search -->
-        <a href="./clinic-search.html" class="sidebar-nav-btn" data-tip="Search Patients">
-          <i class="fa-solid fa-magnifying-glass"></i>
-        </a>
-
-        <!-- Settings pushed to bottom via margin-top: auto on logout -->
-        <a href="./clinic-settings.html" class="sidebar-nav-btn" data-tip="Settings">
-          <i class="fa-solid fa-gear"></i>
-        </a>
-      </div>
-
-      <!-- Logout — at the bottom -->
-      <div class="logout-sidebar">
-        <button class="sidebar-nav-btn sidebar-logout" data-tip="Logout" onclick="clinicLogout()">
-          <i class="fa-solid fa-right-from-bracket"></i>
-        </button>
-      </div>
-
-    </aside>
-
-    <div class="main">
-
-      <!-- CONTENT -->
-      <div class="content">
-
-        <!-- CONTROLS ROW: tabs on the left, walk-in button on the right -->
-        <div class="queue-controls">
-
-          <!-- TABS
+      <div class="main">
+        <!-- CONTENT -->
+        <div class="content">
+          <!-- CONTROLS ROW: tabs on the left, walk-in button on the right -->
+          <div class="queue-controls">
+            <!-- TABS
              data-status tells the click handler which status to filter by.
              The JS reads this attribute — no need for separate functions
              per tab.
         -->
-          <div class="tab-list">
-            <button class="tab-btn active" data-status="Pending" onclick="switchTab(this)">
-              Pending
-              <span class="tab-count" id="count-Pending">0</span>
-            </button>
+            <div class="tab-list">
+              <button
+                class="tab-btn active"
+                data-status="Pending"
+                onclick="switchTab(this)"
+              >
+                Pending
+                <span class="tab-count" id="count-Pending">0</span>
+              </button>
 
-            <button class="tab-btn" data-status="Confirmed" onclick="switchTab(this)">
-              Confirmed
-              <span class="tab-count" id="count-Confirmed">0</span>
-            </button>
+              <button
+                class="tab-btn"
+                data-status="Confirmed"
+                onclick="switchTab(this)"
+              >
+                Confirmed
+                <span class="tab-count" id="count-Confirmed">0</span>
+              </button>
 
-            <button class="tab-btn" data-status="InProgress" onclick="switchTab(this)">
-              In Progress
-              <span class="tab-count" id="count-InProgress">0</span>
-            </button>
+              <button
+                class="tab-btn"
+                data-status="InProgress"
+                onclick="switchTab(this)"
+              >
+                In Progress
+                <span class="tab-count" id="count-InProgress">0</span>
+              </button>
 
-            <button class="tab-btn" data-status="Completed" onclick="switchTab(this)">
-              Done
-              <span class="tab-count" id="count-Completed">0</span>
-            </button>
+              <button
+                class="tab-btn"
+                data-status="Completed"
+                onclick="switchTab(this)"
+              >
+                Done
+                <span class="tab-count" id="count-Completed">0</span>
+              </button>
 
-            <button class="tab-btn" data-status="All" onclick="switchTab(this)">
-              All Activity
-              <span class="tab-count" id="count-All">0</span>
-            </button>
+              <button
+                class="tab-btn"
+                data-status="All"
+                onclick="switchTab(this)"
+              >
+                All Activity
+                <span class="tab-count" id="count-All">0</span>
+              </button>
+            </div>
+
+            <!-- Walk-in button -->
+            <div class="walk-in">
+              <button class="btn-walkin" onclick="openWalkInModal()">
+                <i class="fa-solid fa-plus"></i> Add Walk-in
+              </button>
+            </div>
           </div>
 
-          <!-- Walk-in button -->
-          <div class="walk-in">
-            <button class="btn-walkin" onclick="openWalkInModal()">
-              <i class="fa-solid fa-plus"></i> Add Walk-in
-            </button>
+          <!-- CARD LIST — populated by JavaScript -->
+          <div class="card-list" id="cardList">
+            <!-- Skeleton placeholders while loading -->
+            <div class="skeleton-card">
+              <div class="skel skel-avatar"></div>
+              <div style="flex: 1">
+                <div class="skel skel-text-lg"></div>
+                <div class="skel skel-text-sm"></div>
+              </div>
+            </div>
+            <div class="skeleton-card">
+              <div class="skel skel-avatar"></div>
+              <div style="flex: 1">
+                <div class="skel skel-text-lg"></div>
+                <div class="skel skel-text-sm"></div>
+              </div>
+            </div>
+            <div class="skeleton-card">
+              <div class="skel skel-avatar"></div>
+              <div style="flex: 1">
+                <div class="skel skel-text-lg"></div>
+                <div class="skel skel-text-sm"></div>
+              </div>
+            </div>
           </div>
-
         </div>
+        <!-- /content -->
+      </div>
+      <!-- /main -->
+    </div>
 
-
-        <!-- CARD LIST — populated by JavaScript -->
-        <div class="card-list" id="cardList">
-          <!-- Skeleton placeholders while loading -->
-          <div class="skeleton-card">
-            <div class="skel skel-avatar"></div>
-            <div style="flex:1">
-              <div class="skel skel-text-lg"></div>
-              <div class="skel skel-text-sm"></div>
-            </div>
-          </div>
-          <div class="skeleton-card">
-            <div class="skel skel-avatar"></div>
-            <div style="flex:1">
-              <div class="skel skel-text-lg"></div>
-              <div class="skel skel-text-sm"></div>
-            </div>
-          </div>
-          <div class="skeleton-card">
-            <div class="skel skel-avatar"></div>
-            <div style="flex:1">
-              <div class="skel skel-text-lg"></div>
-              <div class="skel skel-text-sm"></div>
-            </div>
-          </div>
-        </div>
-
-      </div><!-- /content -->
-    </div><!-- /main -->
-  </div>
-
-
-  <!-- ============================================================
+    <!-- ============================================================
        WALK-IN MODAL
        Placed outside .main so it can overlay the entire screen.
        Close by clicking the overlay background (not just Cancel).
   ============================================================ -->
-  <div class="modal-overlay" id="walkInModal" onclick="handleOverlayClick(event)">
-    <div class="modal" onclick="event.stopPropagation()">
-      <!-- stopPropagation prevents clicks inside the modal from
+    <div
+      class="modal-overlay"
+      id="walkInModal"
+      onclick="handleOverlayClick(event)"
+    >
+      <div class="modal" onclick="event.stopPropagation()">
+        <!-- stopPropagation prevents clicks inside the modal from
            bubbling up to the overlay and closing it accidentally -->
 
-      <div class="modal-title">Add Walk-in Patient</div>
+        <div class="modal-title">Add Walk-in Patient</div>
 
-      <!-- New Patient Toggle -->
-      <div style="margin-bottom: 15px; display: flex; align-items: center; gap: 8px; cursor: pointer;" onclick="toggleNewPatientFields()">
-        <input type="checkbox" id="isNewPatient" style="width: auto; margin-bottom: 0;" />
-        <span style="font-size: 14px; font-weight: 500; color: var(--teal);">New patient? Register them here</span>
-      </div>
-
-      <!-- Search Section (Shown for existing patients) -->
-      <div id="walkInSearchSection">
-        <label>Search patient by name or email</label>
-        <input type="text" id="walkInSearchInput" placeholder="e.g. Amarachi Okonkwo" oninput="handleWalkInSearch()" />
-        <div class="modal-search-results" id="walkInResults"></div>
-      </div>
-
-      <!-- Registration Section (Hidden by default) -->
-      <div id="walkInRegSection" style="display: none;">
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-          <div>
-            <label style="font-size: 13px;">Full Name *</label>
-            <input type="text" id="regFullName" placeholder="Patient's name" />
-          </div>
-          <div>
-            <label style="font-size: 13px;">Phone</label>
-            <input type="text" id="regPhone" placeholder="Optional" />
-          </div>
+        <!-- New Patient Toggle -->
+        <div
+          style="
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+          "
+          onclick="toggleNewPatientFields()"
+        >
+          <input
+            type="checkbox"
+            id="isNewPatient"
+            style="width: auto; margin-bottom: 0"
+          />
+          <span style="font-size: 14px; font-weight: 500; color: var(--teal)"
+            >New patient? Register them here</span
+          >
         </div>
-        <div style="display: grid; grid-template-columns: 1fr 1.5fr; gap: 10px;">
-          <div>
-            <label style="font-size: 13px;">Email</label>
-            <input type="email" id="regEmail" placeholder="Optional" />
+
+        <!-- Search Section (Shown for existing patients) -->
+        <div id="walkInSearchSection">
+          <label>Search patient by name or email</label>
+          <input
+            type="text"
+            id="walkInSearchInput"
+            placeholder="e.g. Amarachi Okonkwo"
+            oninput="handleWalkInSearch()"
+          />
+          <div class="modal-search-results" id="walkInResults"></div>
+        </div>
+
+        <!-- Registration Section (Hidden by default) -->
+        <div id="walkInRegSection" style="display: none">
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px">
+            <div>
+              <label style="font-size: 13px">Full Name *</label>
+              <input
+                type="text"
+                id="regFullName"
+                placeholder="Patient's name"
+              />
+            </div>
+            <div>
+              <label style="font-size: 13px">Phone</label>
+              <input type="text" id="regPhone" placeholder="Optional" />
+            </div>
           </div>
-          <div style="display: grid; grid-template-columns: 1fr 0.8fr; gap: 10px;">
+          <div
+            style="display: grid; grid-template-columns: 1fr 1.5fr; gap: 10px"
+          >
+            <div>
+              <label style="font-size: 13px">Email</label>
+              <input type="email" id="regEmail" placeholder="Optional" />
+            </div>
+            <div
+              style="display: grid; grid-template-columns: 1fr 0.8fr; gap: 10px"
+            >
               <div>
-                  <label style="font-size: 13px;">Gender</label>
-                  <select id="regGender" style="width: 100%; padding: 12px; border: 1.5px solid var(--border); border-radius: 8px; font-family: 'Poppins', sans-serif; font-size: 13px; color: var(--text-dark); background: #fafafa; outline: none; margin-bottom: 14px;">
-                    <option value="Male">Male</option>
-                    <option value="Female">Female</option>
-                    <option value="Other">Other</option>
-                  </select>
+                <label style="font-size: 13px">Gender</label>
+                <select
+                  id="regGender"
+                  style="
+                    width: 100%;
+                    padding: 12px;
+                    border: 1.5px solid var(--border);
+                    border-radius: 8px;
+                    font-family: &quot;Poppins&quot;, sans-serif;
+                    font-size: 13px;
+                    color: var(--text-dark);
+                    background: #fafafa;
+                    outline: none;
+                    margin-bottom: 14px;
+                  "
+                >
+                  <option value="Male">Male</option>
+                  <option value="Female">Female</option>
+                  <option value="Other">Other</option>
+                </select>
               </div>
               <div>
-                  <label style="font-size: 13px;">Age</label>
-                  <input type="number" id="regAge" placeholder="Yrs" />
+                <label style="font-size: 13px">Age</label>
+                <input type="number" id="regAge" placeholder="Yrs" />
               </div>
+            </div>
           </div>
         </div>
-      </div>
 
-      <label>Reason for visit</label>
-      <textarea id="walkInNotes" placeholder="e.g. Fever, headache, routine check-up…"></textarea>
+        <label>Reason for visit</label>
+        <textarea
+          id="walkInNotes"
+          placeholder="e.g. Fever, headache, routine check-up…"
+        ></textarea>
 
-      <div class="modal-error" id="walkInError"></div>
+        <div class="modal-error" id="walkInError"></div>
 
-      <div class="modal-btns">
-        <button class="btn-modal-cancel" onclick="closeWalkInModal()">
-          Cancel
-        </button>
-        <button class="btn-modal-confirm" id="walkInConfirmBtn" onclick="confirmWalkIn()">
-          Add Patient
-        </button>
+        <div class="modal-btns">
+          <button class="btn-modal-cancel" onclick="closeWalkInModal()">
+            Cancel
+          </button>
+          <button
+            class="btn-modal-confirm"
+            id="walkInConfirmBtn"
+            onclick="confirmWalkIn()"
+          >
+            Add Patient
+          </button>
+        </div>
       </div>
     </div>
-  </div>
 
-
-  <!-- ============================================================
+    <!-- ============================================================
        SCRIPTS
        clinic-shared.js must load FIRST — it defines clinicFetch(),
        clinicLogout(), and the auth guard that redirects to login
        if no token is found.
   ============================================================ -->
 
-  <script src="./db.js"></script>
-  <script src="./clinic-shared.js"></script>
-  <script>
-    // ============================================================
-    // STATE
-    // These variables live in memory while the page is open.
-    // allVisits  — the raw array from the API, never modified
-    // activeTab  — which tab is currently selected
-    // selectedWalkInUserId — the patient chosen in the walk-in modal
-    // ============================================================
-    let allVisits = [];
-    let activeTab = "Pending";
-    let selectedWalkInUserId = null;
-    let walkInSearchTimer = null;  // debounce timer (explained below)
+    <script src="./db.js"></script>
+    <script src="./clinic-shared.js"></script>
+    <script>
+      // ============================================================
+      // STATE
+      // These variables live in memory while the page is open.
+      // allVisits  — the raw array from the API, never modified
+      // activeTab  — which tab is currently selected
+      // selectedWalkInUserId — the patient chosen in the walk-in modal
+      // ============================================================
+      let allVisits = [];
+      let activeTab = "Pending";
+      let selectedWalkInUserId = null;
+      let walkInSearchTimer = null; // debounce timer (explained below)
 
-    // ============================================================
-    // INIT — runs as soon as the page loads
-    // ============================================================
+      // ============================================================
+      // INIT — runs as soon as the page loads
+      // ============================================================
 
-    // Set today's date in the topbar
-    document.getElementById("topbarDate").textContent =
-      new Date().toLocaleDateString("en-NG", {
-        weekday: "long",
-        day: "numeric",
-        month: "long",
-        year: "numeric",
-      });
+      // Set today's date in the topbar
+      document.getElementById("topbarDate").textContent =
+        new Date().toLocaleDateString("en-NG", {
+          weekday: "long",
+          day: "numeric",
+          month: "long",
+          year: "numeric",
+        });
 
-    // Set staff avatar initial from localStorage
-    // (clinic-shared.js already checked auth and redirected if no token)
-    const storedUser = JSON.parse(localStorage.getItem("novabuk_user") || "{}");
-    if (storedUser.fullName) {
-      document.getElementById("topbarAvatar").textContent =
-        storedUser.fullName.trim().charAt(0).toUpperCase();
-    }
-    // Show clinic name in topbar if available
-    const clinicNameEl = document.querySelector(".clinic-name");
-    if (clinicNameEl && storedUser.clinicName) {
-      clinicNameEl.textContent = storedUser.clinicName;
-    }
+      // Set staff avatar initial from localStorage
+      // (clinic-shared.js already checked auth and redirected if no token)
+      const storedUser = JSON.parse(
+        localStorage.getItem("novabuk_user") || "{}",
+      );
+      if (storedUser.fullName) {
+        document.getElementById("topbarAvatar").textContent =
+          storedUser.fullName.trim().charAt(0).toUpperCase();
+      }
+      // Show clinic name in topbar if available
+      const clinicNameEl = document.querySelector(".clinic-name");
+      if (clinicNameEl && storedUser.clinicName) {
+        clinicNameEl.textContent = storedUser.clinicName;
+      }
 
-    // Load the queue immediately on page open
-    loadQueue();
+      // Load the queue immediately on page open
+      loadQueue();
 
-    // Auto-refresh every 30 seconds
-    // Why: no WebSockets yet. 30s polling means if another staff
-    // member adds a walk-in, this screen sees it within 30 seconds.
-    setInterval(loadQueue, 30_000);
+      // Auto-refresh every 30 seconds
+      // Why: no WebSockets yet. 30s polling means if another staff
+      // member adds a walk-in, this screen sees it within 30 seconds.
+      setInterval(loadQueue, 30_000);
 
-    // ============================================================
-    // LOAD QUEUE — fetches today's visits from the backend
-    // ============================================================
-    async function loadQueue() {
-      try {
-        // clinicId comes from the doctor's user profile in localStorage
-        const clinicId = getClinicId();
-        if (!clinicId) {
-          document.getElementById("cardList").innerHTML = `
+      // ============================================================
+      // LOAD QUEUE — fetches today's visits from the backend
+      // ============================================================
+      async function loadQueue() {
+        try {
+          // clinicId comes from the doctor's user profile in localStorage
+          const clinicId = getClinicId();
+          if (!clinicId) {
+            document.getElementById("cardList").innerHTML = `
             <div class="empty-state">
               <i class="fa-solid fa-hospital"></i>
               <p>No clinic linked to your account yet.<br>
               Contact your admin to link you to a clinic.</p>
             </div>`;
-          return;
-        }
-        const res = await clinicFetch(`${CLINIC_API}/queue?clinicId=${clinicId}`);
-        const data = await res.json();
+            return;
+          }
+          const res = await clinicFetch(
+            `${CLINIC_API}/queue?clinicId=${clinicId}`,
+          );
+          const data = await res.json();
 
-        if (!data.success) throw new Error(data.message || "Failed to load queue");
+          if (!data.success)
+            throw new Error(data.message || "Failed to load queue");
 
-        // Store the full list — filtering happens client-side
-        allVisits = data.data || [];
+          // Store the full list — filtering happens client-side
+          allVisits = data.data || [];
 
-        // Update the count bubble on each tab
-        const counts = data.statusCounts || {};
-        let total = 0;
-        ["Pending", "Confirmed", "InProgress", "Completed"].forEach(status => {
-          const val = counts[status] || 0;
-          total += val;
-          const el = document.getElementById(`count-${status}`);
-          if (el) el.textContent = val;
-        });
-        // Update "All" count
-        const allEl = document.getElementById("count-All");
-        if (allEl) allEl.textContent = total;
+          // Update the count bubble on each tab
+          const counts = data.statusCounts || {};
+          let total = 0;
+          ["Pending", "Confirmed", "InProgress", "Completed"].forEach(
+            (status) => {
+              const val = counts[status] || 0;
+              total += val;
+              const el = document.getElementById(`count-${status}`);
+              if (el) el.textContent = val;
+            },
+          );
+          // Update "All" count
+          const allEl = document.getElementById("count-All");
+          if (allEl) allEl.textContent = total;
 
-        // Re-render
-        renderCards();
-
-      } catch (err) {
-        // Show error state — never leave the user with a blank screen
-        document.getElementById("cardList").innerHTML = `
+          // Re-render
+          renderCards();
+        } catch (err) {
+          // Show error state — never leave the user with a blank screen
+          document.getElementById("cardList").innerHTML = `
           <div class="empty-state">
             <i class="fa-solid fa-triangle-exclamation"></i>
             <p>Could not load patients. Retrying in 30s…</p>
           </div>`;
-      }
-    }
-
-    // ============================================================
-    // RENDER CARDS — turns the allVisits array into HTML
-    //
-    // This is called:
-    //   - after loadQueue() fetches fresh data
-    //   - when a tab is clicked (switchTab)
-    //
-    // We filter client-side rather than making a new API call per
-    // tab. This is faster and cheaper — we already have the data.
-    // ============================================================
-    function renderCards() {
-      // Filter the full list to only visits matching the active tab
-      let filtered = [];
-      if (activeTab === "All") {
-        filtered = [...allVisits].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-      } else {
-        filtered = allVisits.filter(v => v.status === activeTab);
+        }
       }
 
-      const list = document.getElementById("cardList");
+      // ============================================================
+      // RENDER CARDS — turns the allVisits array into HTML
+      //
+      // This is called:
+      //   - after loadQueue() fetches fresh data
+      //   - when a tab is clicked (switchTab)
+      //
+      // We filter client-side rather than making a new API call per
+      // tab. This is faster and cheaper — we already have the data.
+      // ============================================================
+      function renderCards() {
+        // Filter the full list to only visits matching the active tab
+        let filtered = [];
+        if (activeTab === "All") {
+          filtered = [...allVisits].sort(
+            (a, b) => new Date(b.createdAt) - new Date(a.createdAt),
+          );
+        } else {
+          filtered = allVisits.filter((v) => v.status === activeTab);
+        }
 
-      // Empty state — inform the user nothing is here
-      if (filtered.length === 0) {
-        const labels = {
-          Pending: "No pending patients",
-          Confirmed: "No confirmed patients",
-          InProgress: "No consultations in progress",
-          Completed: "No completed visits today",
-        };
-        list.innerHTML = `
+        const list = document.getElementById("cardList");
+
+        // Empty state — inform the user nothing is here
+        if (filtered.length === 0) {
+          const labels = {
+            Pending: "No pending patients",
+            Confirmed: "No confirmed patients",
+            InProgress: "No consultations in progress",
+            Completed: "No completed visits today",
+          };
+          list.innerHTML = `
           <div class="empty-state">
             <i class="fa-regular fa-calendar-xmark"></i>
             <p>${labels[activeTab] || "Nothing here"}</p>
           </div>`;
-        return;
+          return;
+        }
+
+        // Build the HTML for each card
+        list.innerHTML = filtered.map((visit) => buildCardHTML(visit)).join("");
       }
 
-      // Build the HTML for each card
-      list.innerHTML = filtered.map(visit => buildCardHTML(visit)).join("");
-    }
+      // ============================================================
+      // BUILD CARD HTML — creates one patient card string
+      //
+      // Why a separate function? So we can call it for each visit
+      // without repeating code. It takes one visit object and
+      // returns an HTML string.
+      // ============================================================
+      function buildCardHTML(visit) {
+        const user = visit.user || {};
+        const name = user.fullName || "Unknown Patient";
 
+        // Get initials — first letter of first and last name
+        // "Amarachi Okonkwo" → "AO"
+        const nameParts = name.trim().split(" ");
+        const initials =
+          nameParts.length >= 2
+            ? nameParts[0][0] + nameParts[nameParts.length - 1][0]
+            : nameParts[0][0];
 
-    // ============================================================
-    // BUILD CARD HTML — creates one patient card string
-    //
-    // Why a separate function? So we can call it for each visit
-    // without repeating code. It takes one visit object and
-    // returns an HTML string.
-    // ============================================================
-    function buildCardHTML(visit) {
-      const user = visit.user || {};
-      const name = user.fullName || "Unknown Patient";
+        // Format the date and time from preferredDate or createdAt
+        const dateSource = visit.preferredDate || visit.createdAt;
+        const dateObj = new Date(dateSource);
 
-      // Get initials — first letter of first and last name
-      // "Amarachi Okonkwo" → "AO"
-      const nameParts = name.trim().split(" ");
-      const initials = nameParts.length >= 2
-        ? nameParts[0][0] + nameParts[nameParts.length - 1][0]
-        : nameParts[0][0];
+        const time = dateSource
+          ? dateObj.toLocaleTimeString("en-NG", {
+              hour: "2-digit",
+              minute: "2-digit",
+            })
+          : "—";
 
-      // Format the date and time from preferredDate or createdAt
-      const dateSource = visit.preferredDate || visit.createdAt;
-      const dateObj = new Date(dateSource);
+        // Check if it's today
+        const today = new Date();
+        const isToday = dateObj.toDateString() === today.toDateString();
+        const dateStr = isToday
+          ? "Today"
+          : dateObj.toLocaleDateString("en-NG", {
+              weekday: "short",
+              day: "numeric",
+              month: "short",
+            });
 
-      const time = dateSource
-        ? dateObj.toLocaleTimeString("en-NG", {
-          hour: "2-digit",
-          minute: "2-digit",
-        })
-        : "—";
+        // Reason — prefer patient notes, fall back to symptom tags,
+        // fall back to generic string
+        const reason =
+          visit.notes ||
+          visit.symptomLog?.tags?.join(", ") ||
+          visit.symptomLog?.description ||
+          "General visit";
 
-      // Check if it's today
-      const today = new Date();
-      const isToday = dateObj.toDateString() === today.toDateString();
-      const dateStr = isToday ? "Today" : dateObj.toLocaleDateString("en-NG", {
-        weekday: "short",
-        day: "numeric",
-        month: "short"
-      });
+        // The action button changes depending on the visit's status:
+        //   Pending / Confirmed → "Start" (begin consultation)
+        //   InProgress          → "Continue" (resume)
+        //   Completed           → "View" (read-only)
+        const actionBtn = buildActionBtn(visit);
 
-      // Reason — prefer patient notes, fall back to symptom tags,
-      // fall back to generic string
-      const reason = visit.notes
-        || (visit.symptomLog?.tags?.join(", "))
-        || visit.symptomLog?.description
-        || "General visit";
-
-      // The action button changes depending on the visit's status:
-      //   Pending / Confirmed → "Start" (begin consultation)
-      //   InProgress          → "Continue" (resume)
-      //   Completed           → "View" (read-only)
-      const actionBtn = buildActionBtn(visit);
-
-      return `
+        return `
         <div class="patient-card" onclick="openVisit('${visit._id}')">
 
           <div class="card-avatar" style="background:none; border:none; padding:0;">
@@ -892,7 +1012,7 @@
             <div class="card-name">
               ${name}
               <span style="font-size: 10px; color: var(--teal); background: var(--teal-pale); padding: 1px 5px; border-radius: 4px; margin-left: 6px; font-weight: 700;">
-                ${user.novaBukId || 'NB-TEMP'}
+                ${user.novaBukId || "NB-TEMP"}
               </span>
             </div>
             <div class="card-reason">${reason}</div>
@@ -910,17 +1030,17 @@
           </div>
 
         </div>`;
-    }
+      }
 
-    // ============================================================
-    // BUILD ACTION BUTTON
-    // Each card gets one button. What it does depends on status.
-    // stopPropagation() prevents the card's own onclick (openVisit)
-    // from firing when the button is clicked.
-    // ============================================================
-    function buildActionBtn(visit) {
-      if (visit.status === "Pending") {
-        return `
+      // ============================================================
+      // BUILD ACTION BUTTON
+      // Each card gets one button. What it does depends on status.
+      // stopPropagation() prevents the card's own onclick (openVisit)
+      // from firing when the button is clicked.
+      // ============================================================
+      function buildActionBtn(visit) {
+        if (visit.status === "Pending") {
+          return `
           <button class="btn-start" onclick="acceptVisit('${visit._id}', event)" style="background:#2b6cb0; margin-right:4px;">
             Accept
           </button>
@@ -928,376 +1048,401 @@
             Start
           </button>
         `;
-      }
-      if (visit.status === "Confirmed") {
-        return `<button class="btn-start"
+        }
+        if (visit.status === "Confirmed") {
+          return `<button class="btn-start"
                         onclick="startVisit('${visit._id}', event)">
                   Start
                 </button>`;
-      }
-      if (visit.status === "InProgress") {
-        return `<button class="btn-start"
+        }
+        if (visit.status === "InProgress") {
+          return `<button class="btn-start"
                         onclick="openVisit('${visit._id}', event)"
                         style="background:#38a169;">
                   Continue
                 </button>`;
-      }
-      return `<button class="btn-view"
+        }
+        return `<button class="btn-view"
                       onclick="openVisit('${visit._id}', event)">
                 View
               </button>`;
-    }
-
-    // ============================================================
-    // FORMAT STATUS — converts API status string to display string
-    // "InProgress" → "In Progress"
-    // ============================================================
-    function formatStatus(status) {
-      const map = {
-        Pending: "Pending",
-        Confirmed: "Confirmed",
-        InProgress: "In Progress",
-        Completed: "Completed",
-        Cancelled: "Cancelled",
-      };
-      return map[status] || status;
-    }
-
-    // ============================================================
-    // SWITCH TAB — called when a tab button is clicked
-    // 1. Remove .active from all tabs
-    // 2. Add .active to the clicked tab
-    // 3. Update activeTab variable
-    // 4. Re-render cards with new filter
-    // ============================================================
-    function switchTab(clickedBtn) {
-      // Remove active from all tab buttons
-      document.querySelectorAll(".tab-btn").forEach(btn => {
-        btn.classList.remove("active");
-      });
-
-      // Mark this tab as active
-      clickedBtn.classList.add("active");
-
-      // Read the status from data-status attribute
-      activeTab = clickedBtn.dataset.status;
-
-      // Re-render — this filters allVisits by activeTab
-      renderCards();
-    }
-
-    // Helper to switch tab by status string (e.g. from "See All" link)
-    function switchTabByStatus(status) {
-      const btn = document.querySelector(`.tab-btn[data-status="${status}"]`);
-      if (btn) switchTab(btn);
-    }
-
-    // ============================================================
-    // START VISIT — changes status to InProgress then navigates
-    // to consultation page
-    // event.stopPropagation() — prevents the card's click from
-    // also firing (which would just navigate without starting)
-    // ============================================================
-    async function startVisit(visitId, event) {
-      if (event) event.stopPropagation();
-
-      try {
-        await clinicFetch(`${CLINIC_API}/visits/${visitId}/start`, {
-          method: "PATCH",
-        });
-      } catch (e) {
-        // Even if start fails (e.g. network blip), still go to
-        // consultation — the backend will handle the state
       }
 
-      window.location.href = `./clinic-consultation.html?visit=${visitId}`;
-    }
+      // ============================================================
+      // FORMAT STATUS — converts API status string to display string
+      // "InProgress" → "In Progress"
+      // ============================================================
+      function formatStatus(status) {
+        const map = {
+          Pending: "Pending",
+          Confirmed: "Confirmed",
+          InProgress: "In Progress",
+          Completed: "Completed",
+          Cancelled: "Cancelled",
+        };
+        return map[status] || status;
+      }
 
-    // ============================================================
-    // ACCEPT VISIT — changes status to Confirmed
-    // ============================================================
-    async function acceptVisit(visitId, event) {
-      if (event) event.stopPropagation();
-
-      // Find the button inside the clicked card to show a loading state
-      const btn = event.currentTarget;
-      const originalText = btn.textContent;
-      btn.textContent = "Accepting...";
-      btn.disabled = true;
-
-      try {
-        const res = await clinicFetch(`${CLINIC_API}/visits/${visitId}/confirm`, {
-          method: "PATCH",
+      // ============================================================
+      // SWITCH TAB — called when a tab button is clicked
+      // 1. Remove .active from all tabs
+      // 2. Add .active to the clicked tab
+      // 3. Update activeTab variable
+      // 4. Re-render cards with new filter
+      // ============================================================
+      function switchTab(clickedBtn) {
+        // Remove active from all tab buttons
+        document.querySelectorAll(".tab-btn").forEach((btn) => {
+          btn.classList.remove("active");
         });
 
-        const data = await res.json();
+        // Mark this tab as active
+        clickedBtn.classList.add("active");
 
-        if (data.success) {
-          if (data.offline) {
-             // Optimistically update the status in local memory
-             const visitIndex = allVisits.findIndex(v => v._id === visitId);
-             if (visitIndex > -1) {
+        // Read the status from data-status attribute
+        activeTab = clickedBtn.dataset.status;
+
+        // Re-render — this filters allVisits by activeTab
+        renderCards();
+      }
+
+      // Helper to switch tab by status string (e.g. from "See All" link)
+      function switchTabByStatus(status) {
+        const btn = document.querySelector(`.tab-btn[data-status="${status}"]`);
+        if (btn) switchTab(btn);
+      }
+
+      // ============================================================
+      // START VISIT — changes status to InProgress then navigates
+      // to consultation page
+      // event.stopPropagation() — prevents the card's click from
+      // also firing (which would just navigate without starting)
+      // ============================================================
+      async function startVisit(visitId, event) {
+        if (event) event.stopPropagation();
+
+        try {
+          await clinicFetch(`${CLINIC_API}/visits/${visitId}/start`, {
+            method: "PATCH",
+          });
+        } catch (e) {
+          // Even if start fails (e.g. network blip), still go to
+          // consultation — the backend will handle the state
+        }
+
+        window.location.href = `./clinic-consultation.html?visit=${visitId}`;
+      }
+
+      // ============================================================
+      // ACCEPT VISIT — changes status to Confirmed
+      // ============================================================
+      async function acceptVisit(visitId, event) {
+        if (event) event.stopPropagation();
+
+        // Find the button inside the clicked card to show a loading state
+        const btn = event.currentTarget;
+        const originalText = btn.textContent;
+        btn.textContent = "Accepting...";
+        btn.disabled = true;
+
+        try {
+          const res = await clinicFetch(
+            `${CLINIC_API}/visits/${visitId}/confirm`,
+            {
+              method: "PATCH",
+            },
+          );
+
+          const data = await res.json();
+
+          if (data.success) {
+            if (data.offline) {
+              // Optimistically update the status in local memory
+              const visitIndex = allVisits.findIndex((v) => v._id === visitId);
+              if (visitIndex > -1) {
                 allVisits[visitIndex].status = "Confirmed";
-             }
-             renderCards(); // Re-render the UI with the updated array
+              }
+              renderCards(); // Re-render the UI with the updated array
+            } else {
+              // Fetch fresh queue from server
+              loadQueue();
+            }
           } else {
-             // Fetch fresh queue from server
-             loadQueue();
+            // Handle errors
+            btn.textContent = originalText;
+            btn.disabled = false;
+            alert("Failed to confirm the visit. Please try again.");
           }
-        } else {
-          // Handle errors
+        } catch (e) {
           btn.textContent = originalText;
           btn.disabled = false;
-          alert("Failed to confirm the visit. Please try again.");
+          console.error("Accept visit failed", e);
         }
-      } catch (e) {
-        btn.textContent = originalText;
-        btn.disabled = false;
-        console.error("Accept visit failed", e);
       }
-    }
 
-    // ============================================================
-    // OPEN VISIT — navigate to consultation page
-    // ============================================================
-    function openVisit(visitId, event) {
-      if (event) event.stopPropagation();
-      window.location.href = `./clinic-consultation.html?visit=${visitId}`;
-    }
+      // ============================================================
+      // OPEN VISIT — navigate to consultation page
+      // ============================================================
+      function openVisit(visitId, event) {
+        if (event) event.stopPropagation();
+        window.location.href = `./clinic-consultation.html?visit=${visitId}`;
+      }
 
-    // ============================================================
-    // STAFF DROPDOWN
-    // ============================================================
-    // function toggleStaffMenu(event) {
-    //   event.stopPropagation();
-    //   document.getElementById("staffDropdown").classList.toggle("open");
-    // }
+      // ============================================================
+      // STAFF DROPDOWN
+      // ============================================================
+      // function toggleStaffMenu(event) {
+      //   event.stopPropagation();
+      //   document.getElementById("staffDropdown").classList.toggle("open");
+      // }
 
-    // // Close dropdown when clicking anywhere else on the page
-    // document.addEventListener("click", () => {
-    //   document.getElementById("staffDropdown").classList.remove("open");
-    // });
+      // // Close dropdown when clicking anywhere else on the page
+      // document.addEventListener("click", () => {
+      //   document.getElementById("staffDropdown").classList.remove("open");
+      // });
 
-    // ============================================================
-    // WALK-IN MODAL
-    // ============================================================
-    function openWalkInModal() {
-      if (!navigator.onLine) {
-        if (typeof window.showNetworkToast === 'function') {
-          window.showNetworkToast("Walk-ins cannot be added while offline. A server connection is required to generate a secure medical ID.", false, true);
-        } else {
-          alert("Walk-ins cannot be added while offline. A server connection is required to generate a secure medical ID.");
+      // ============================================================
+      // WALK-IN MODAL
+      // ============================================================
+      function openWalkInModal() {
+        if (!navigator.onLine) {
+          if (typeof window.showNetworkToast === "function") {
+            window.showNetworkToast(
+              "Walk-ins cannot be added while offline. A server connection is required to generate a secure medical ID.",
+              false,
+              true,
+            );
+          } else {
+            alert(
+              "Walk-ins cannot be added while offline. A server connection is required to generate a secure medical ID.",
+            );
+          }
+          return;
         }
-        return;
+        document.getElementById("walkInModal").classList.add("open");
       }
-      document.getElementById("walkInModal").classList.add("open");
-    }
 
-    function closeWalkInModal() {
-      document.getElementById("walkInModal").classList.remove("open");
-      // Reset modal state
-      document.getElementById("isNewPatient").checked = false;
-      document.getElementById("walkInSearchSection").style.display = "block";
-      document.getElementById("walkInRegSection").style.display = "none";
+      function closeWalkInModal() {
+        document.getElementById("walkInModal").classList.remove("open");
+        // Reset modal state
+        document.getElementById("isNewPatient").checked = false;
+        document.getElementById("walkInSearchSection").style.display = "block";
+        document.getElementById("walkInRegSection").style.display = "none";
 
-      document.getElementById("walkInSearchInput").value = "";
-      document.getElementById("walkInResults").innerHTML = "";
-      document.getElementById("walkInNotes").value = "";
-
-      // Reset reg fields
-      document.getElementById("regFullName").value = "";
-      document.getElementById("regEmail").value = "";
-      document.getElementById("regPhone").value = "";
-      document.getElementById("regAge").value = "";
-
-      document.getElementById("walkInError").classList.remove("show");
-      selectedWalkInUserId = null;
-    }
-
-    function toggleNewPatientFields() {
-      const isNew = document.getElementById("isNewPatient").checked;
-      document.getElementById("walkInSearchSection").style.display = isNew ? "none" : "block";
-      document.getElementById("walkInRegSection").style.display = isNew ? "block" : "none";
-
-      // Reset selection when switching
-      selectedWalkInUserId = null;
-      if (isNew) {
         document.getElementById("walkInSearchInput").value = "";
         document.getElementById("walkInResults").innerHTML = "";
-      }
-    }
+        document.getElementById("walkInNotes").value = "";
 
-    // Close modal when clicking the dark overlay
-    function handleOverlayClick(event) {
-      // Only close if the click was on the overlay itself,
-      // not on the modal box inside it
-      if (event.target === document.getElementById("walkInModal")) {
-        closeWalkInModal();
-      }
-    }
+        // Reset reg fields
+        document.getElementById("regFullName").value = "";
+        document.getElementById("regEmail").value = "";
+        document.getElementById("regPhone").value = "";
+        document.getElementById("regAge").value = "";
 
-    // ============================================================
-    // WALK-IN SEARCH — debounced
-    //
-    // DEBOUNCING: If we searched on every keystroke, we'd fire an
-    // API call for every letter typed. That's wasteful.
-    // Instead, we wait 350ms after the user stops typing before
-    // making the call. If they type another letter within 350ms,
-    // we cancel the previous timer and start a new one.
-    //
-    // "Amarachi" would trigger 8 calls without debounce.
-    // With debounce: only 1 call, after they pause.
-    // ============================================================
-    function handleWalkInSearch() {
-      // Cancel any pending search
-      clearTimeout(walkInSearchTimer);
-
-      const query = document.getElementById("walkInSearchInput").value.trim();
-
-      if (query.length < 2) {
-        document.getElementById("walkInResults").innerHTML = "";
-        return;
+        document.getElementById("walkInError").classList.remove("show");
+        selectedWalkInUserId = null;
       }
 
-      // Wait 350ms before searching
-      walkInSearchTimer = setTimeout(() => doWalkInSearch(query), 350);
-    }
+      function toggleNewPatientFields() {
+        const isNew = document.getElementById("isNewPatient").checked;
+        document.getElementById("walkInSearchSection").style.display = isNew
+          ? "none"
+          : "block";
+        document.getElementById("walkInRegSection").style.display = isNew
+          ? "block"
+          : "none";
 
-    async function doWalkInSearch(query) {
-      try {
-        const clinicId = getClinicId();
-        const res = await clinicFetch(
-          `${CLINIC_API}/patients/search?q=${encodeURIComponent(query)}&clinicId=${clinicId || ""}`
-        );
-        const data = await res.json();
+        // Reset selection when switching
+        selectedWalkInUserId = null;
+        if (isNew) {
+          document.getElementById("walkInSearchInput").value = "";
+          document.getElementById("walkInResults").innerHTML = "";
+        }
+      }
 
-        const resultsEl = document.getElementById("walkInResults");
+      // Close modal when clicking the dark overlay
+      function handleOverlayClick(event) {
+        // Only close if the click was on the overlay itself,
+        // not on the modal box inside it
+        if (event.target === document.getElementById("walkInModal")) {
+          closeWalkInModal();
+        }
+      }
 
-        if (!data.data?.length) {
-          resultsEl.innerHTML = `
-            <p style="font-size:12px;color:var(--text-light);padding:8px 0;">
-              No patients found
-            </p>`;
+      // ============================================================
+      // WALK-IN SEARCH — debounced
+      //
+      // DEBOUNCING: If we searched on every keystroke, we'd fire an
+      // API call for every letter typed. That's wasteful.
+      // Instead, we wait 350ms after the user stops typing before
+      // making the call. If they type another letter within 350ms,
+      // we cancel the previous timer and start a new one.
+      //
+      // "Amarachi" would trigger 8 calls without debounce.
+      // With debounce: only 1 call, after they pause.
+      // ============================================================
+      function handleWalkInSearch() {
+        // Cancel any pending search
+        clearTimeout(walkInSearchTimer);
+
+        const query = document.getElementById("walkInSearchInput").value.trim();
+
+        if (query.length < 2) {
+          document.getElementById("walkInResults").innerHTML = "";
           return;
         }
 
-        resultsEl.innerHTML = data.data.map(p => `
+        // Wait 350ms before searching
+        walkInSearchTimer = setTimeout(() => doWalkInSearch(query), 350);
+      }
+
+      async function doWalkInSearch(query) {
+        try {
+          const clinicId = getClinicId();
+          const res = await clinicFetch(
+            `${CLINIC_API}/patients/search?q=${encodeURIComponent(query)}&clinicId=${clinicId || ""}`,
+          );
+          const data = await res.json();
+
+          const resultsEl = document.getElementById("walkInResults");
+
+          if (!data.data?.length) {
+            resultsEl.innerHTML = `
+            <p style="font-size:12px;color:var(--text-light);padding:8px 0;">
+              No patients found
+            </p>`;
+            return;
+          }
+
+          resultsEl.innerHTML = data.data
+            .map(
+              (p) => `
           <div class="modal-result-row"
                id="result-${p._id}"
                onclick="selectWalkInPatient('${p._id}', '${p.fullName}')">
             <div style="display: flex; justify-content: space-between; align-items: center;">
               <strong>${p.fullName}</strong>
               <span style="font-size: 10px; background: var(--teal-pale); padding: 2px 6px; border-radius: 4px; color: var(--teal); font-weight: 600;">
-                ${p.novaBukId || 'No ID'}
+                ${p.novaBukId || "No ID"}
               </span>
             </div>
             <span style="margin-top: 2px;">${p.email || p.phone || ""}</span>
           </div>
-        `).join("");
-
-      } catch (err) {
-        // Silent fail on search — user can try again
-      }
-    }
-
-    function selectWalkInPatient(userId, name) {
-      selectedWalkInUserId = userId;
-
-      // Update the search input to show who was selected
-      document.getElementById("walkInSearchInput").value = name;
-
-      // Visually mark the selected row
-      document.querySelectorAll(".modal-result-row").forEach(row => {
-        row.classList.remove("selected");
-      });
-      const selectedRow = document.getElementById(`result-${userId}`);
-      if (selectedRow) selectedRow.classList.add("selected");
-    }
-
-    async function confirmWalkIn() {
-      const errEl = document.getElementById("walkInError");
-      errEl.classList.remove("show");
-
-      const isNew = document.getElementById("isNewPatient").checked;
-      const notes = document.getElementById("walkInNotes").value.trim();
-      const btn = document.getElementById("walkInConfirmBtn");
-      const clinicId = getClinicId();
-
-      if (isNew) {
-        // Handle New Patient Registration + Visit
-        const fullName = document.getElementById("regFullName").value.trim();
-        const email = document.getElementById("regEmail").value.trim();
-        const phone = document.getElementById("regPhone").value.trim();
-        const gender = document.getElementById("regGender").value;
-        const age = document.getElementById("regAge").value;
-
-        if (!fullName) {
-          errEl.textContent = "Patient's full name is required.";
-          errEl.classList.add("show");
-          return;
-        }
-
-        btn.disabled = true;
-        btn.textContent = "Registering…";
-
-        try {
-          const res = await clinicFetch(`${CLINIC_API}/walk-in-new`, {
-            method: "POST",
-            body: JSON.stringify({ fullName, email, phone, gender, age, clinicId, notes }),
-          });
-          const data = await res.json();
-
-          if (data.success) {
-            closeWalkInModal();
-            loadQueue();
-          } else {
-            errEl.textContent = data.message || "Registration failed.";
-            errEl.classList.add("show");
-          }
+        `,
+            )
+            .join("");
         } catch (err) {
-          errEl.textContent = "Network error. Please try again.";
-          errEl.classList.add("show");
-        } finally {
-          btn.disabled = false;
-          btn.textContent = "Add Patient";
-        }
-
-      } else {
-        // Original logic for existing patient
-        if (!selectedWalkInUserId) {
-          errEl.textContent = "Please select a patient first.";
-          errEl.classList.add("show");
-          return;
-        }
-
-        btn.disabled = true;
-        btn.textContent = "Adding…";
-
-        try {
-          const res = await clinicFetch(`${CLINIC_API}/walk-in`, {
-            method: "POST",
-            body: JSON.stringify({ userId: selectedWalkInUserId, clinicId, notes }),
-          });
-          const data = await res.json();
-
-          if (data.success) {
-            closeWalkInModal();
-            loadQueue();
-          } else {
-            errEl.textContent = data.message || "Failed to add walk-in.";
-            errEl.classList.add("show");
-          }
-        } catch (err) {
-          errEl.textContent = "Network error. Please try again.";
-          errEl.classList.add("show");
-        } finally {
-          btn.disabled = false;
-          btn.textContent = "Add Patient";
+          // Silent fail on search — user can try again
         }
       }
-    }
 
-  </script>
-</body>
+      function selectWalkInPatient(userId, name) {
+        selectedWalkInUserId = userId;
 
+        // Update the search input to show who was selected
+        document.getElementById("walkInSearchInput").value = name;
+
+        // Visually mark the selected row
+        document.querySelectorAll(".modal-result-row").forEach((row) => {
+          row.classList.remove("selected");
+        });
+        const selectedRow = document.getElementById(`result-${userId}`);
+        if (selectedRow) selectedRow.classList.add("selected");
+      }
+
+      async function confirmWalkIn() {
+        const errEl = document.getElementById("walkInError");
+        errEl.classList.remove("show");
+
+        const isNew = document.getElementById("isNewPatient").checked;
+        const notes = document.getElementById("walkInNotes").value.trim();
+        const btn = document.getElementById("walkInConfirmBtn");
+        const clinicId = getClinicId();
+
+        if (isNew) {
+          // Handle New Patient Registration + Visit
+          const fullName = document.getElementById("regFullName").value.trim();
+          const email = document.getElementById("regEmail").value.trim();
+          const phone = document.getElementById("regPhone").value.trim();
+          const gender = document.getElementById("regGender").value;
+          const age = document.getElementById("regAge").value;
+
+          if (!fullName) {
+            errEl.textContent = "Patient's full name is required.";
+            errEl.classList.add("show");
+            return;
+          }
+
+          btn.disabled = true;
+          btn.textContent = "Registering…";
+
+          try {
+            const res = await clinicFetch(`${CLINIC_API}/walk-in-new`, {
+              method: "POST",
+              body: JSON.stringify({
+                fullName,
+                email,
+                phone,
+                gender,
+                age,
+                clinicId,
+                notes,
+              }),
+            });
+            const data = await res.json();
+
+            if (data.success) {
+              closeWalkInModal();
+              loadQueue();
+            } else {
+              errEl.textContent = data.message || "Registration failed.";
+              errEl.classList.add("show");
+            }
+          } catch (err) {
+            errEl.textContent = "Network error. Please try again.";
+            errEl.classList.add("show");
+          } finally {
+            btn.disabled = false;
+            btn.textContent = "Add Patient";
+          }
+        } else {
+          // Original logic for existing patient
+          if (!selectedWalkInUserId) {
+            errEl.textContent = "Please select a patient first.";
+            errEl.classList.add("show");
+            return;
+          }
+
+          btn.disabled = true;
+          btn.textContent = "Adding…";
+
+          try {
+            const res = await clinicFetch(`${CLINIC_API}/walk-in`, {
+              method: "POST",
+              body: JSON.stringify({
+                userId: selectedWalkInUserId,
+                clinicId,
+                notes,
+              }),
+            });
+            const data = await res.json();
+
+            if (data.success) {
+              closeWalkInModal();
+              loadQueue();
+            } else {
+              errEl.textContent = data.message || "Failed to add walk-in.";
+              errEl.classList.add("show");
+            }
+          } catch (err) {
+            errEl.textContent = "Network error. Please try again.";
+            errEl.classList.add("show");
+          } finally {
+            btn.disabled = false;
+            btn.textContent = "Add Patient";
+          }
+        }
+      }
+    </script>
+  </body>
 </html>

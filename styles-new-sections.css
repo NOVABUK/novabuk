@@ -2844,6 +2844,9 @@ button {
   color: var(--blue);
   letter-spacing: -0.02em;
 }
+.team-avatar img{
+  width: 100%;
+}
 .team-info {
   padding: 16px;
 }

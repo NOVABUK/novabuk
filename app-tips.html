@@ -3,10 +3,10 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="icon" sizes="180x180" href="./images/image 19.png">
+    <link rel="icon" sizes="180x180" href="./images/logo.png" />
     <title>Health Tips & Wellness | NovaBuk</title>
     <link rel="stylesheet" href="./styles-app.css" />
-    <link rel="stylesheet" href="./styles.css">
+    <link rel="stylesheet" href="./styles.css" />
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
@@ -29,7 +29,7 @@
         background: white;
         border-radius: 16px;
         overflow: hidden;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
         transition: transform 0.3s ease;
         cursor: pointer;
         display: flex;
@@ -118,9 +118,12 @@
   <body>
     <div class="header">
       <div class="navbar navbar-home">
-        
-        <div class="btn-log" style="display:flex">
-          <button id="navToggle" class="nav-toggle" aria-label="Toggle navigation">
+        <div class="btn-log" style="display: flex">
+          <button
+            id="navToggle"
+            class="nav-toggle"
+            aria-label="Toggle navigation"
+          >
             <i class="fas fa-bars"></i>
           </button>
           <div class="logo"><img src="./images/logo.png" alt="" /></div>
@@ -139,8 +142,20 @@
           </ul>
           <div class="profile-opt" id="optNav">
             <ul>
-              <li><a href="./app-setting.html?tab=privacy"><i class="fa-solid fa-gear"></i> <span>Settings</span></a></li>
-              <li><a href="#" onclick="handleMenuSelect('logout')"><i class="fa-solid fa-right-from-bracket" style="color: #ff7675 !important;"></i> <span style="color: #ff7675;">Logout</span></a></li>
+              <li>
+                <a href="./app-setting.html?tab=privacy"
+                  ><i class="fa-solid fa-gear"></i> <span>Settings</span></a
+                >
+              </li>
+              <li>
+                <a href="#" onclick="handleMenuSelect('logout')"
+                  ><i
+                    class="fa-solid fa-right-from-bracket"
+                    style="color: #ff7675 !important"
+                  ></i>
+                  <span style="color: #ff7675">Logout</span></a
+                >
+              </li>
             </ul>
           </div>
         </div>
@@ -158,8 +173,21 @@
             </li>
             <li>
               <div class="user-profile" id="userProfileBtn">
-                <div class="profile-check"><span><div class="nav-avatar" style="font-size: 1.5em; font-family:'poppins',san-serif;" id="navAvatar"></div></span>
-                <span class="dropdown-arrow"><i class="fa-solid fa-angle-down"></i></span></div>
+                <div class="profile-check">
+                  <span
+                    ><div
+                      class="nav-avatar"
+                      style="
+                        font-size: 1.5em;
+                        font-family: &quot;poppins&quot;, san-serif;
+                      "
+                      id="navAvatar"
+                    ></div
+                  ></span>
+                  <span class="dropdown-arrow"
+                    ><i class="fa-solid fa-angle-down"></i
+                  ></span>
+                </div>
                 <div class="dropdown-menu" id="settingsDropdown">
                   <!-- User identity block -->
                   <div class="dd-user-block">
@@ -171,77 +199,141 @@
                   </div>
                   <div class="dd-divider"></div>
                   <!-- Quick actions -->
-                  <div class="dropdown-item" onclick="handleMenuSelect('dashboard')">
+                  <div
+                    class="dropdown-item"
+                    onclick="handleMenuSelect('dashboard')"
+                  >
                     <span><i class="fa-solid fa-house"></i></span> Dashboard
                   </div>
-                  <div class="dropdown-item" onclick="handleMenuSelect('visits')">
+                  <div
+                    class="dropdown-item"
+                    onclick="handleMenuSelect('visits')"
+                  >
                     <span><i class="fa-solid fa-calendar-check"></i></span>
                     My Visits
-                    <span class="dd-visits-badge" id="ddVisitsBadge" style="display:none"></span>
+                    <span
+                      class="dd-visits-badge"
+                      id="ddVisitsBadge"
+                      style="display: none"
+                    ></span>
                   </div>
-                  <div class="dropdown-item" onclick="handleMenuSelect('profile')">
-                    <span><i class="fa-solid fa-heart-pulse"></i></span> My Health Profile
+                  <div
+                    class="dropdown-item"
+                    onclick="handleMenuSelect('profile')"
+                  >
+                    <span><i class="fa-solid fa-heart-pulse"></i></span> My
+                    Health Profile
                   </div>
-                  <div class="dd-symptom-hint" id="ddSymptomHint" style="display:none">
+                  <div
+                    class="dd-symptom-hint"
+                    id="ddSymptomHint"
+                    style="display: none"
+                  >
                     <i class="fa-regular fa-clock"></i>
                     <span id="ddSymptomText">Last symptom logged: —</span>
                     <a href="./complaints.html" class="dd-log-now">Log now →</a>
                   </div>
                   <div class="dd-divider"></div>
-                  <div class="dropdown-item" onclick="handleMenuSelect('settings')">
+                  <div
+                    class="dropdown-item"
+                    onclick="handleMenuSelect('settings')"
+                  >
                     <span><i class="fa-solid fa-gear"></i></span> Settings
                   </div>
                   <div class="dd-divider"></div>
-                  <div class="dropdown-item dd-logout" onclick="handleMenuSelect('logout')">
-                    <span><i class="fa-solid fa-right-from-bracket"></i></span> Logout
+                  <div
+                    class="dropdown-item dd-logout"
+                    onclick="handleMenuSelect('logout')"
+                  >
+                    <span><i class="fa-solid fa-right-from-bracket"></i></span>
+                    Logout
                   </div>
                 </div>
               </div>
             </li>
           </ul>
         </div>
-        
       </div>
     </div>
 
-    <main class="main" style="min-height: 100vh; background: #7ecad7; padding-top: 80px;">
-      <div class="main-body" style="background: #f8fdfe; border-radius: 30px 30px 0 0; min-height: calc(100vh - 80px); padding: 30px 20px;text-align: center;">
-        
-        <h1 style="font-family:poppins,sans-serif; color:#0f2027; font-size:1.8rem; font-weight:800; margin-bottom:10px;">Health & Wellness</h1>
-        <p style="color:#666; margin-bottom:25px;">Expert tips and insights for a healthier you.</p>
+    <main
+      class="main"
+      style="min-height: 100vh; background: #7ecad7; padding-top: 80px"
+    >
+      <div
+        class="main-body"
+        style="
+          background: #f8fdfe;
+          border-radius: 30px 30px 0 0;
+          min-height: calc(100vh - 80px);
+          padding: 30px 20px;
+          text-align: center;
+        "
+      >
+        <h1
+          style="
+            font-family: poppins, sans-serif;
+            color: #0f2027;
+            font-size: 1.8rem;
+            font-weight: 800;
+            margin-bottom: 10px;
+          "
+        >
+          Health & Wellness
+        </h1>
+        <p style="color: #666; margin-bottom: 25px">
+          Expert tips and insights for a healthier you.
+        </p>
 
-        <div class="filter-bar" id="categoryFilters" style="display: flex;justify-content: center;">
-          <button class="filter-btn active" onclick="filterByCategory('')">All</button>
-          <button class="filter-btn" onclick="filterByCategory('General')">General</button>
-          <button class="filter-btn" onclick="filterByCategory('Nutrition')">Nutrition</button>
-          <button class="filter-btn" onclick="filterByCategory('Exercise')">Exercise</button>
-          <button class="filter-btn" onclick="filterByCategory('Hygiene')">Hygiene</button>
+        <div
+          class="filter-bar"
+          id="categoryFilters"
+          style="display: flex; justify-content: center"
+        >
+          <button class="filter-btn active" onclick="filterByCategory('')">
+            All
+          </button>
+          <button class="filter-btn" onclick="filterByCategory('General')">
+            General
+          </button>
+          <button class="filter-btn" onclick="filterByCategory('Nutrition')">
+            Nutrition
+          </button>
+          <button class="filter-btn" onclick="filterByCategory('Exercise')">
+            Exercise
+          </button>
+          <button class="filter-btn" onclick="filterByCategory('Hygiene')">
+            Hygiene
+          </button>
         </div>
 
         <div id="tipsGrid" class="tips-grid">
           <!-- Tips will be injected here -->
-          <div style="grid-column: 1/-1; text-align:center; padding:50px;">
+          <div style="grid-column: 1/-1; text-align: center; padding: 50px">
             <div class="spinner"></div>
-            <p style="margin-top:15px; color:#35bac9;">Fetching latest tips...</p>
+            <p style="margin-top: 15px; color: #35bac9">
+              Fetching latest tips...
+            </p>
           </div>
         </div>
       </div>
     </main>
 
-
     <script src="./script.js"></script>
     <script>
-      var API_URL = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1"
-        ? "http://localhost:5000/api"
-        : "https://novabuk-backend.onrender.com/api";
+      var API_URL =
+        window.location.hostname === "localhost" ||
+        window.location.hostname === "127.0.0.1"
+          ? "http://localhost:5000/api"
+          : "https://novabuk-backend.onrender.com/api";
 
-      async function loadTips(category = '') {
+      async function loadTips(category = "") {
         const grid = document.getElementById("tipsGrid");
         try {
           let url = `${API_URL}/tips`;
           const res = await fetch(url);
           const data = await res.json();
-          
+
           if (!data.success || !data.data.length) {
             grid.innerHTML = `
               <div style="grid-column: 1/-1; text-align:center; padding:60px 20px;">
@@ -256,15 +348,19 @@
           let filtered = data.data;
           if (category) {
             const targetCat = category.toLowerCase();
-            filtered = data.data.filter(t => t.category.toLowerCase() === targetCat);
+            filtered = data.data.filter(
+              (t) => t.category.toLowerCase() === targetCat,
+            );
           }
 
           if (!filtered.length) {
-             grid.innerHTML = `<div style="grid-column: 1/-1; text-align:center; padding:40px; color:#888;">No tips in this category yet.</div>`;
-             return;
+            grid.innerHTML = `<div style="grid-column: 1/-1; text-align:center; padding:40px; color:#888;">No tips in this category yet.</div>`;
+            return;
           }
 
-          grid.innerHTML = filtered.map(tip => `
+          grid.innerHTML = filtered
+            .map(
+              (tip) => `
             <div class="tip-card" style="padding:0; border:1px solid #e0f4f7;">
               <div style="padding:20px; position:relative;">
                 <div style="position:absolute; top:0; left:0; width:4px; height:100%; background:#35bac9;"></div>
@@ -280,8 +376,9 @@
                 </div>
               </div>
             </div>
-          `).join("");
-
+          `,
+            )
+            .join("");
         } catch (err) {
           grid.innerHTML = `<p style="grid-column: 1/-1; text-align:center; padding:40px; color:red;">Failed to load tips. Please try again later.</p>`;
         }
@@ -289,10 +386,13 @@
 
       function filterByCategory(cat) {
         // Update UI highlighting
-        document.querySelectorAll('.filter-btn').forEach(btn => {
-          btn.classList.remove('active');
-          if ((!cat && btn.textContent === 'All') || (cat && btn.textContent === cat)) {
-            btn.classList.add('active');
+        document.querySelectorAll(".filter-btn").forEach((btn) => {
+          btn.classList.remove("active");
+          if (
+            (!cat && btn.textContent === "All") ||
+            (cat && btn.textContent === cat)
+          ) {
+            btn.classList.add("active");
           }
         });
         loadTips(cat);

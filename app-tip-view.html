@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="icon" sizes="180x180" href="./images/image 19.png">
+    <link rel="icon" sizes="180x180" href="./images/logo.png" />
     <title>Health Insight | NovaBuk</title>
     <link rel="stylesheet" href="./styles-app.css" />
     <link
@@ -76,7 +76,8 @@
       .article-content p {
         margin-bottom: 20px;
       }
-      .article-content h2, .article-content h3 {
+      .article-content h2,
+      .article-content h3 {
         margin: 35px 0 15px;
         color: #0f2027;
       }
@@ -86,7 +87,7 @@
         left: 20px;
         width: 40px;
         height: 40px;
-        background: rgba(255,255,255,0.9);
+        background: rgba(255, 255, 255, 0.9);
         border-radius: 50%;
         display: flex;
         align-items: center;
@@ -94,7 +95,7 @@
         color: #0f2027;
         text-decoration: none;
         z-index: 100;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
       }
       .share-fab {
         position: fixed;
@@ -109,32 +110,54 @@
         align-items: center;
         justify-content: center;
         font-size: 1.2rem;
-        box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
         cursor: pointer;
         z-index: 1000;
       }
     </style>
   </head>
 
-  <body style="background:#f8fdfe;">
-    <div id="loader" style="position:fixed; inset:0; background:white; z-index:10000; display:flex; flex-direction:column; align-items:center; justify-content:center;">
-        <div class="spinner"></div>
-        <p style="margin-top:15px; color:#35bac9; font-family:poppins;">Loading article...</p>
+  <body style="background: #f8fdfe">
+    <div
+      id="loader"
+      style="
+        position: fixed;
+        inset: 0;
+        background: white;
+        z-index: 10000;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+      "
+    >
+      <div class="spinner"></div>
+      <p style="margin-top: 15px; color: #35bac9; font-family: poppins">
+        Loading article...
+      </p>
     </div>
 
-    <a href="javascript:history.back()" class="back-btn"><i class="fas fa-arrow-left"></i></a>
+    <a href="javascript:history.back()" class="back-btn"
+      ><i class="fas fa-arrow-left"></i
+    ></a>
 
     <div id="articleHero" class="article-hero">
-      <img id="heroImg" src="" alt="">
+      <img id="heroImg" src="" alt="" />
     </div>
 
     <article class="article-body">
       <div id="category" class="category-tag">General</div>
       <h1 id="title" class="article-title">---</h1>
-      
+
       <div class="meta-info">
-        <span><i class="fa-regular fa-calendar"></i> <span id="date">---</span></span>
-        <span><i class="fa-regular fa-clock"></i> <span id="readTime">---</span> min read</span>
+        <span
+          ><i class="fa-regular fa-calendar"></i>
+          <span id="date">---</span></span
+        >
+        <span
+          ><i class="fa-regular fa-clock"></i>
+          <span id="readTime">---</span> min read</span
+        >
       </div>
 
       <div id="content" class="article-content">
@@ -146,19 +169,20 @@
       <i class="fa-solid fa-share-nodes"></i>
     </div>
 
-
     <script src="./script.js"></script>
     <script>
-      var API_URL = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1"
-        ? "http://localhost:5000/api"
-        : "https://novabuk-backend.onrender.com/api";
+      var API_URL =
+        window.location.hostname === "localhost" ||
+        window.location.hostname === "127.0.0.1"
+          ? "http://localhost:5000/api"
+          : "https://novabuk-backend.onrender.com/api";
 
       async function loadArticle() {
         const urlParams = new URLSearchParams(window.location.search);
-        const slug = urlParams.get('slug');
+        const slug = urlParams.get("slug");
 
         if (!slug) {
-          window.location.href = './app-tips.html';
+          window.location.href = "./app-tips.html";
           return;
         }
 
@@ -168,7 +192,7 @@
 
           if (!data.success) {
             alert("Article not found");
-            window.location.href = './app-tips.html';
+            window.location.href = "./app-tips.html";
             return;
           }
 
@@ -176,30 +200,39 @@
           document.title = `${tip.title} - NovaBuk Health Tips`;
           document.getElementById("title").textContent = tip.title;
           document.getElementById("category").textContent = tip.category;
-          document.getElementById("heroImg").src = tip.image || './images/image 34.png';
+          document.getElementById("heroImg").src =
+            tip.image || "./images/image 34.png";
           document.getElementById("readTime").textContent = tip.readTime;
-          
+
           const date = new Date(tip.publishedAt || tip.createdAt);
-          document.getElementById("date").textContent = date.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+          document.getElementById("date").textContent = date.toLocaleDateString(
+            "en-US",
+            { month: "long", day: "numeric", year: "numeric" },
+          );
 
           // Handle content with line breaks or basic HTML
           const contentEl = document.getElementById("content");
-          contentEl.innerHTML = tip.content.split('\n').map(p => p.trim() ? `<p>${p}</p>` : '').join('');
+          contentEl.innerHTML = tip.content
+            .split("\n")
+            .map((p) => (p.trim() ? `<p>${p}</p>` : ""))
+            .join("");
 
           document.getElementById("loader").style.display = "none";
         } catch (err) {
           console.error(err);
           alert("Error loading article");
-          window.location.href = './app-tips.html';
+          window.location.href = "./app-tips.html";
         }
       }
 
       function shareArticle() {
         if (navigator.share) {
-          navigator.share({
-            title: document.getElementById("title").textContent,
-            url: window.location.href
-          }).catch(console.error);
+          navigator
+            .share({
+              title: document.getElementById("title").textContent,
+              url: window.location.href,
+            })
+            .catch(console.error);
         } else {
           alert("Link copied to clipboard!");
           navigator.clipboard.writeText(window.location.href);

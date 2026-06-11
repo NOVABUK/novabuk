@@ -705,7 +705,7 @@ async function changePassword() {
 // Register the Service Worker for Offline Support
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
-    navigator.serviceWorker.register('./sw.js')
+    navigator.serviceWorker.register('/sw.js', { scope: '/' })
       .then((reg) => console.log('[Service Worker] Registered!', reg))
       .catch((err) => console.log('[Service Worker] Registration failed:', err));
   });

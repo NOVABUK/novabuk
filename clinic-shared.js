@@ -5,37 +5,39 @@
 // no separate clinic login needed.
 // ================================================================
 
-const API_BASE = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1"
-  ? "http://localhost:5000/api"
-  : "https://novabuk-backend.onrender.com/api";
+const API_BASE =
+  window.location.hostname === "localhost" ||
+  window.location.hostname === "127.0.0.1"
+    ? "http://localhost:5000/api"
+    : "https://novabuk-backend.onrender.com/api";
 
 const CLINIC_API = `${API_BASE}/clinic`;
-const API_URL    = API_BASE;
+const API_URL = API_BASE;
 
 // Attach to window for global access across all pages
-window.API_BASE   = API_BASE;
-window.API_URL    = API_URL;
+window.API_BASE = API_BASE;
+window.API_URL = API_URL;
 window.CLINIC_API = CLINIC_API;
 
 // ── STAFF DROPDOWN ─────────────────────────────────────────────
-document.addEventListener('DOMContentLoaded', () => {
-  const icon = document.getElementById('staffChip');
-  const staffDropdown = document.getElementById('staffDropdown');
-  const toggleIcon = document.getElementById('staffIcon');
+document.addEventListener("DOMContentLoaded", () => {
+  const icon = document.getElementById("staffChip");
+  const staffDropdown = document.getElementById("staffDropdown");
+  const toggleIcon = document.getElementById("staffIcon");
 
   if (icon && staffDropdown) {
-    icon.addEventListener('click', (event) => {
+    icon.addEventListener("click", (event) => {
       event.preventDefault();
       event.stopPropagation();
-      staffDropdown.classList.toggle('open');
+      staffDropdown.classList.toggle("open");
 
       if (toggleIcon) {
-        if (staffDropdown.classList.contains('open')) {
-          toggleIcon.classList.remove('fa-angle-down');
-          toggleIcon.classList.add('fa-angle-up');
+        if (staffDropdown.classList.contains("open")) {
+          toggleIcon.classList.remove("fa-angle-down");
+          toggleIcon.classList.add("fa-angle-up");
         } else {
-          toggleIcon.classList.remove('fa-angle-up');
-          toggleIcon.classList.add('fa-angle-down');
+          toggleIcon.classList.remove("fa-angle-up");
+          toggleIcon.classList.add("fa-angle-down");
         }
       }
     });
@@ -44,21 +46,25 @@ document.addEventListener('DOMContentLoaded', () => {
     document.addEventListener("click", () => {
       staffDropdown.classList.remove("open");
       if (toggleIcon) {
-        toggleIcon.classList.remove('fa-angle-up');
-        toggleIcon.classList.add('fa-angle-down');
+        toggleIcon.classList.remove("fa-angle-up");
+        toggleIcon.classList.add("fa-angle-down");
       }
     });
   }
 });
 
-
-
 // ── AUTH GUARD ────────────────────────────────────────────────
 // Runs immediately on every clinic page load.
 // Checks: 1) logged in at all  2) role is Doctors
 (function clinicAuthGuard() {
-  const token = localStorage.getItem("novabuk_token") || localStorage.getItem("novabuk_clinic_token");
-  const user  = JSON.parse(localStorage.getItem("novabuk_user") || localStorage.getItem("novabuk_clinic_staff") || "null");
+  const token =
+    localStorage.getItem("novabuk_token") ||
+    localStorage.getItem("novabuk_clinic_token");
+  const user = JSON.parse(
+    localStorage.getItem("novabuk_user") ||
+      localStorage.getItem("novabuk_clinic_staff") ||
+      "null",
+  );
 
   if (!token || !user) {
     window.location.replace("./sign-in.html");
@@ -80,7 +86,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // Fill clinic name — use clinicName from localStorage.
   // If missing (older account), fetch from API and update localStorage.
   function applyClinicName(name) {
-    document.querySelectorAll(".clinic-name").forEach(el => {
+    document.querySelectorAll(".clinic-name").forEach((el) => {
       el.textContent = name || "Your Clinic";
     });
   }
@@ -89,12 +95,12 @@ document.addEventListener('DOMContentLoaded', () => {
     applyClinicName(user.clinicName);
   } else if (user.clinicId) {
     // clinicName not in localStorage yet — fetch it silently
-    fetch(
-      (window.API_BASE || API_BASE) + "/clinics/my",
-      { headers: { Authorization: "Bearer " + token }, credentials: "include" }
-    )
-      .then(r => r.json())
-      .then(data => {
+    fetch((window.API_BASE || API_BASE) + "/clinics/my", {
+      headers: { Authorization: "Bearer " + token },
+      credentials: "include",
+    })
+      .then((r) => r.json())
+      .then((data) => {
         if (data.success && data.clinic) {
           const name = data.clinic.name;
           applyClinicName(name);
@@ -110,42 +116,55 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // Fill .staff-name — the DOCTOR's name (used in the avatar chip, not topbar title)
-  document.querySelectorAll(".staff-name").forEach(el => {
+  document.querySelectorAll(".staff-name").forEach((el) => {
     el.textContent = user.fullName || "";
   });
 
   // Fill .staff-initial — first letter of doctor's name for avatar circles
-  document.querySelectorAll(".staff-initial").forEach(el => {
+  document.querySelectorAll(".staff-initial").forEach((el) => {
     el.textContent = (user.fullName || "D").trim().charAt(0).toUpperCase();
   });
 
   // ── UPDATE TOPBAR DATE ──────────────────────────────────────
   function updateTopbarDate() {
     const now = new Date();
-    const options = { weekday: 'short', day: 'numeric', month: 'short' };
-    const text = now.toLocaleDateString('en-NG', options);
+    const options = { weekday: "short", day: "numeric", month: "short" };
+    const text = now.toLocaleDateString("en-NG", options);
     // Use querySelectorAll so BOTH the desktop and mobile-detail copies get filled
-    document.querySelectorAll("#topbarDate, .topbar-date").forEach(el => {
+    document.querySelectorAll("#topbarDate, .topbar-date").forEach((el) => {
       el.textContent = text;
     });
   }
-  
+
   // ── UPDATE STAFF AVATAR ─────────────────────────────────────
   function updateStaffAvatar() {
     // Read fresh from localStorage to handle cross-tab sync
-    const freshUser = JSON.parse(localStorage.getItem("novabuk_user") || localStorage.getItem("novabuk_clinic_staff") || "{}");
-    const el = document.getElementById("topbarAvatar") || document.getElementById("globalTopbarAvatar");
+    const freshUser = JSON.parse(
+      localStorage.getItem("novabuk_user") ||
+        localStorage.getItem("novabuk_clinic_staff") ||
+        "{}",
+    );
+    const el =
+      document.getElementById("topbarAvatar") ||
+      document.getElementById("globalTopbarAvatar");
     if (!el) return;
-    
-    if (freshUser.avatarUrl && freshUser.avatarUrl !== "null" && freshUser.avatarUrl !== "undefined") {
+
+    if (
+      freshUser.avatarUrl &&
+      freshUser.avatarUrl !== "null" &&
+      freshUser.avatarUrl !== "undefined"
+    ) {
       el.innerHTML = `<img src="${freshUser.avatarUrl}" alt="Staff" style="width:100%; height:100%; border-radius:50%; object-fit:cover;" onerror="this.style.display='none'; this.parentElement.textContent='${(freshUser.fullName || "D").trim().charAt(0).toUpperCase()}'">`;
     } else {
-      el.textContent = (freshUser.fullName || "D").trim().charAt(0).toUpperCase();
+      el.textContent = (freshUser.fullName || "D")
+        .trim()
+        .charAt(0)
+        .toUpperCase();
     }
   }
 
   // Inject Notification Badge CSS
-  const style = document.createElement('style');
+  const style = document.createElement("style");
   style.textContent = `
     .notification-badge {
       position: absolute;
@@ -175,13 +194,15 @@ document.addEventListener('DOMContentLoaded', () => {
       if (updatedUser) {
         // Update local user reference for this IIFE
         // We need to re-read it from localStorage because 'user' was const
-        const newUser = JSON.parse(localStorage.getItem("novabuk_user") || "null");
+        const newUser = JSON.parse(
+          localStorage.getItem("novabuk_user") || "null",
+        );
         if (newUser) {
-           // We can't re-assign 'user' if it's const, but we can call updateStaffAvatar
-           // and let it re-read from localStorage.
-           // Wait, updateStaffAvatar uses 'user' from the outer scope.
-           // I should make 'user' a 'let' or have updateStaffAvatar read it fresh.
-           updateStaffAvatar();
+          // We can't re-assign 'user' if it's const, but we can call updateStaffAvatar
+          // and let it re-read from localStorage.
+          // Wait, updateStaffAvatar uses 'user' from the outer scope.
+          // I should make 'user' a 'let' or have updateStaffAvatar read it fresh.
+          updateStaffAvatar();
         }
       }
     }
@@ -194,18 +215,21 @@ function toggleStaffMenu(event) {
   const dropdown = document.getElementById("staffDropdown");
   if (!dropdown) return;
   const isShow = dropdown.classList.contains("show");
-  
+
   // Close all other dropdowns first if any
-  document.querySelectorAll(".staff-dropdown").forEach(d => d.classList.remove("show"));
-  
+  document
+    .querySelectorAll(".staff-dropdown")
+    .forEach((d) => d.classList.remove("show"));
+
   if (!isShow) dropdown.classList.add("show");
 }
 
 // Close dropdowns on outside click
 window.addEventListener("click", () => {
-  document.querySelectorAll(".staff-dropdown").forEach(d => d.classList.remove("show"));
+  document
+    .querySelectorAll(".staff-dropdown")
+    .forEach((d) => d.classList.remove("show"));
 });
-
 
 // ── GET CLINIC ID ─────────────────────────────────────────────
 // Returns the clinicId the doctor is associated with.
@@ -215,7 +239,6 @@ function getClinicId() {
   const user = JSON.parse(localStorage.getItem("novabuk_user") || "{}");
   return user.clinicId || null;
 }
-
 
 // ── CLINIC LOGOUT ─────────────────────────────────────────────
 // Shows confirmation modal instead of immediate logout.
@@ -237,11 +260,10 @@ function closeLogoutModal() {
 function confirmClinicLogout() {
   localStorage.removeItem("novabuk_token");
   localStorage.removeItem("novabuk_user");
-  // The novabuk_recent_patients keys are scoped by clinicId, 
+  // The novabuk_recent_patients keys are scoped by clinicId,
   // so they don't need to be manually cleared here unless you want a full wipe.
   window.location.replace("./sign-in.html");
 }
-
 
 // ── AUTHENTICATED FETCH ───────────────────────────────────────
 // Use this for all clinic API calls.
@@ -272,27 +294,32 @@ async function clinicFetch(url, options = {}) {
   return res;
 }
 
-
 // ── TIME HELPERS ──────────────────────────────────────────────
 function formatTime(date) {
   if (!date) return "—";
-  return new Date(date).toLocaleTimeString("en-NG", { hour: "2-digit", minute: "2-digit" });
+  return new Date(date).toLocaleTimeString("en-NG", {
+    hour: "2-digit",
+    minute: "2-digit",
+  });
 }
 
 function formatDate(date) {
   if (!date) return "—";
-  return new Date(date).toLocaleDateString("en-NG", { day: "numeric", month: "short", year: "numeric" });
+  return new Date(date).toLocaleDateString("en-NG", {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+  });
 }
 
 function timeAgo(date) {
   if (!date) return "—";
   const diff = Math.floor((Date.now() - new Date(date)) / 1000);
-  if (diff < 60)    return "just now";
-  if (diff < 3600)  return `${Math.floor(diff / 60)}m ago`;
+  if (diff < 60) return "just now";
+  if (diff < 3600) return `${Math.floor(diff / 60)}m ago`;
   if (diff < 86400) return `${Math.floor(diff / 3600)}h ago`;
   return `${Math.floor(diff / 86400)}d ago`;
 }
-
 
 // ── AVATAR INITIALS ───────────────────────────────────────────
 function avatarInitials(name, size = 40, url = null) {
@@ -306,34 +333,31 @@ function avatarInitials(name, size = 40, url = null) {
     </div>`;
   }
 
-  const parts    = (name || "?").trim().split(" ");
-  const initials = parts.length >= 2
-    ? parts[0][0] + parts[parts.length - 1][0]
-    : parts[0][0];
+  const parts = (name || "?").trim().split(" ");
+  const initials =
+    parts.length >= 2 ? parts[0][0] + parts[parts.length - 1][0] : parts[0][0];
   return `<div style="
     width:${size}px;height:${size}px;background:#d0eff4;color:#0f2027;
     border-radius:50%;display:flex;align-items:center;justify-content:center;
-    font-weight:700;font-size:${Math.round(size*0.38)}px;
+    font-weight:700;font-size:${Math.round(size * 0.38)}px;
     font-family:'Poppins',sans-serif;flex-shrink:0;letter-spacing:-0.5px;
   ">${initials.toUpperCase()}</div>`;
 }
 
-
 // ── STATUS BADGE ──────────────────────────────────────────────
 function statusBadge(status) {
   const map = {
-    Pending:    "background:#fff3cd;color:#856404",
-    Confirmed:  "background:#d1ecf1;color:#0c5460",
+    Pending: "background:#fff3cd;color:#856404",
+    Confirmed: "background:#d1ecf1;color:#0c5460",
     InProgress: "background:#d4edda;color:#155724",
-    Completed:  "background:#e2d9f3;color:#6f42c1",
-    Cancelled:  "background:#f8d7da;color:#721c24",
+    Completed: "background:#e2d9f3;color:#6f42c1",
+    Cancelled: "background:#f8d7da;color:#721c24",
   };
   const label = status === "InProgress" ? "In Progress" : status;
   return `<span style="display:inline-block;padding:3px 10px;border-radius:20px;
-    font-size:10px;font-weight:700;white-space:nowrap;${map[status]||"background:#eee;color:#333"}
+    font-size:10px;font-weight:700;white-space:nowrap;${map[status] || "background:#eee;color:#333"}
   ">${label}</span>`;
 }
-
 
 // ── NOTIFICATIONS ──────────────────────────────────────────────
 // Fetches unread count and updates the topbar bell badge.
@@ -383,8 +407,8 @@ function initClinicUI() {
   const user = JSON.parse(localStorage.getItem("novabuk_user") || "{}");
   if (dropdown && user.fullName) {
     const initials = user.fullName.trim().charAt(0).toUpperCase();
-    const avatarHtml = user.avatarUrl 
-      ? `<img src="${user.avatarUrl}" style="width:100%; height:100%; object-fit:cover;">` 
+    const avatarHtml = user.avatarUrl
+      ? `<img src="${user.avatarUrl}" style="width:100%; height:100%; object-fit:cover;">`
       : initials;
 
     dropdown.innerHTML = `
@@ -392,7 +416,7 @@ function initClinicUI() {
         <div class="dd-avatar-sm">${avatarHtml}</div>
         <div class="dd-user-info">
           <div class="dd-name">${user.fullName}</div>
-          <div class="dd-email">${user.email || 'Clinic Staff'}</div>
+          <div class="dd-email">${user.email || "Clinic Staff"}</div>
         </div>
       </div>
       <div class="dd-divider"></div>
@@ -431,9 +455,9 @@ setInterval(updateNotificationBadge, 30000);
 // ──────────────────────────────────────────────────────────────
 (function initClinicNetworkUI() {
   // 1. Inject the CSS (clinic pages use clinic.css, not styles-app.css)
-  if (!document.getElementById('clinicToastStyle')) {
-    const style = document.createElement('style');
-    style.id = 'clinicToastStyle';
+  if (!document.getElementById("clinicToastStyle")) {
+    const style = document.createElement("style");
+    style.id = "clinicToastStyle";
     style.textContent = `
       .clinic-network-toast {
         position: fixed;
@@ -467,10 +491,10 @@ setInterval(updateNotificationBadge, 30000);
 
   // 2. Create the toast element (wait for body)
   function createToast() {
-    if (document.getElementById('clinicNetworkToast')) return;
-    const toast = document.createElement('div');
-    toast.id = 'clinicNetworkToast';
-    toast.className = 'clinic-network-toast';
+    if (document.getElementById("clinicNetworkToast")) return;
+    const toast = document.createElement("div");
+    toast.id = "clinicNetworkToast";
+    toast.className = "clinic-network-toast";
     document.body.appendChild(toast);
     return toast;
   }
@@ -479,18 +503,22 @@ setInterval(updateNotificationBadge, 30000);
   let isToastForced = false;
 
   function showClinicToast(message, isOnline, forceVisible = false) {
-    const toast = document.getElementById('clinicNetworkToast') || createToast();
+    const toast =
+      document.getElementById("clinicNetworkToast") || createToast();
     if (!toast) return;
 
     clearTimeout(toastTimeout);
 
     let icon, cls;
     if (isOnline === true) {
-      icon = 'fa-wifi'; cls = 'online';
-    } else if (isOnline === 'warning') {
-      icon = 'fa-triangle-exclamation'; cls = 'warning';
+      icon = "fa-wifi";
+      cls = "online";
+    } else if (isOnline === "warning") {
+      icon = "fa-triangle-exclamation";
+      cls = "warning";
     } else {
-      icon = 'fa-cloud-showers-water'; cls = 'offline';
+      icon = "fa-cloud-showers-water";
+      cls = "offline";
     }
 
     toast.innerHTML = `<i class="fa-solid ${icon}"></i> <span>${message}</span>`;
@@ -499,7 +527,7 @@ setInterval(updateNotificationBadge, 30000);
 
     if (!forceVisible) {
       toastTimeout = setTimeout(() => {
-        toast.classList.remove('show');
+        toast.classList.remove("show");
         isToastForced = false;
       }, 3500);
     }
@@ -510,55 +538,66 @@ setInterval(updateNotificationBadge, 30000);
 
   // 3. Smart status check (mirrors patient side)
   async function checkClinicStatus() {
-    if (typeof window.getOutboxCount !== 'function') return;
+    if (typeof window.getOutboxCount !== "function") return;
     const count = await window.getOutboxCount();
     const isOnline = navigator.onLine;
 
     if (count > 0) {
       if (isOnline) {
         showClinicToast(`Syncing ${count} pending item(s)…`, true, true);
-        if (typeof window.syncOutbox === 'function') window.syncOutbox();
+        if (typeof window.syncOutbox === "function") window.syncOutbox();
       } else {
-        showClinicToast(`Offline — ${count} item(s) queued for sync.`, false, true);
+        showClinicToast(
+          `Offline — ${count} item(s) queued for sync.`,
+          false,
+          true,
+        );
       }
     } else {
       if (!isOnline) {
-        if (!isToastForced) showClinicToast('You are offline.', false, true);
+        if (!isToastForced) showClinicToast("You are offline.", false, true);
       } else if (isToastForced) {
-        showClinicToast('All data synced successfully!', true, false);
+        showClinicToast("All data synced successfully!", true, false);
       }
     }
   }
 
   // 4. Event listeners
-  window.addEventListener('offline', () => {
-    showClinicToast('You are offline.', false, true);
+  window.addEventListener("offline", () => {
+    showClinicToast("You are offline.", false, true);
     checkClinicStatus();
   });
 
-  window.addEventListener('online', () => {
-    showClinicToast('Connection restored. Checking sync status…', true, false);
+  window.addEventListener("online", () => {
+    showClinicToast("Connection restored. Checking sync status…", true, false);
     checkClinicStatus();
   });
 
-  window.addEventListener('focus', () => checkClinicStatus());
+  window.addEventListener("focus", () => checkClinicStatus());
 
   // 5. Poll every 3 seconds (same as patient side)
   setInterval(checkClinicStatus, 3000);
 
   // 6. Run once DOM is ready
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => { createToast(); checkClinicStatus(); });
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", () => {
+      createToast();
+      checkClinicStatus();
+    });
   } else {
     // Small delay so body exists
-    setTimeout(() => { createToast(); checkClinicStatus(); }, 50);
+    setTimeout(() => {
+      createToast();
+      checkClinicStatus();
+    }, 50);
   }
 })();
 // ── REGISTER SERVICE WORKER FOR CLINIC PAGES ──────────────────
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('./sw.js')
-      .then((reg) => console.log('[Service Worker] Registered on clinic page!', reg))
-      .catch((err) => console.log('[Service Worker] Clinic registration failed:', err));
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker
+      .register("/sw.js", { scope: "/" })
+      .then((reg) => console.log("[Service Worker] Registered on clinic page!", reg))
+      .catch((err) => console.log("[Service Worker] Clinic registration failed:", err));
   });
 }

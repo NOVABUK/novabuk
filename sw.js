@@ -1,118 +1,115 @@
-const CACHE_NAME = "novabuk-10"; // Updated version
-const OFFLINE_PAGE = "./offline.html";
-const CLINIC_OFFLINE_PAGE = "./clinic-offline.html";
-const CLINIC_QUEUE_PAGE = "./clinic-queue.html";
+const CACHE_NAME = "/novabuk-static-v1";
+const OFFLINE_PAGE = "/offline.html";
+const CLINIC_OFFLINE_PAGE = "/clinic-offline.html";
+const CLINIC_QUEUE_PAGE = "/clinic-queue.html";
 const ASSETS_TO_CACHE = [
-  "./",
-  "./index.html",
-  "./sign-in.html",
-  "./app-home.html",
-  "./app-clinics.html",
-  "./complaints.html",
-  "./app-visit-request.html",
-  "./app-setting.html",
-  "./styles.css",
-  "./styles-app.css",
-  "./styles-about.css",
-  "./styles-blog.css",
-  "./app-setting.css",
-  "./db.js",
-  "./app.js",
-  "./script.js",
-  "./app-history.html",
-  "./app-tip-view.html",
-  "./blog-dynamic.html",
-  "./blog-single.html",
-  "./send-email.html",
-  "./forgot-password.html",
-  "./reset-password.html",
-  "./verify-otp.html",
-  "./profile-health.html",
-  "./images/logo.png",
-  "./images/logo.png",
-  "./images/image 19.png",
-  "./images/clinic.png",
-  "./images/complain (1).png",
-  "./images/history.png",
-  "./images/banner1.png",
-  "./images/banner2.png",
-  "./images/banner3.png",
-  "./images/mainframe1.png",
-  "./images/mainframe2.png",
-  "./images/mainframe3.png",
-  "./images/image 40.png",
-  "./images/Group 1000013935.png",
-  "./images/image 38 (1).png",
-  "./images/Group 1000013936.png",
-  "./images/image 30.png",
-  "./images/image 36.png",
-  "./manifest.json",
-  "./clinic-queue.html",
-  "./clinic-login.html",
-  "./clinic-search.html",
-  "./clinic-patient.html",
-  "./clinic-settings.html",
-  "./clinic-notifications.html",
-  "./clinic-consultation.html",
-  "./clinic-register.html",
-  "./clinic-forgot-password.html",
-  "./clinic-reset-password.html",
-  CLINIC_OFFLINE_PAGE,
+  "/",
+  "/index.html",
+  "/sign-in.html",
+  "/app-home.html",
+  "/app-clinics.html",
+  "/complaints.html",
+  "/app-visit-request.html",
+  "/app-setting.html",
+  "/styles.css",
+  "/styles-app.css",
+  "/styles-about.css",
+  "/styles-blog.css",
+  "/app-setting.css",
+  "/db.js",
+  "/app.js",
+  "/script.js",
+  "/app-history.html",
+  "/app-tip-view.html",
+  "/blog-dynamic.html",
+  "/blog-single.html",
+  "/send-email.html",
+  "/forgot-password.html",
+  "/reset-password.html",
+  "/verify-otp.html",
+  "/profile-health.html",
+  "/images/logo.png",
+  "/images/logo.png",
+  "/images/clinic.png",
+  "/images/complain (1).png",
+  "/images/history.png",
+  "/images/banner1.png",
+  "/images/banner2.png",
+  "/images/banner3.png",
+  "/images/mainframe1.png",
+  "/images/mainframe2.png",
+  "/images/mainframe3.png",
+  "/images/image 40.png",
+  "/images/Group 1000013935.png",
+  "/images/image 38 (1).png",
+  "/images/Group 1000013936.png",
+  "/images/image 30.png",
+  "/images/image 36.png",
+  "/manifest.json",
+  "/clinic-queue.html",
+  "/clinic-login.html",
+  "/clinic-search.html",
+  "/clinic-patient.html",
+  "/clinic-settings.html",
+  "/clinic-notifications.html",
+  "/clinic-consultation.html",
+  "/clinic-register.html",
+  "/clinic-forgot-password.html",
+  "/clinic-reset-password.html",
+  "/about.html",
+  "/services.html",
+  "/contact.html",
+  "/data-privacy.html",
+  "/terms.html",
+  "/clinic.css",
+  "/clinic-shared.js",
   OFFLINE_PAGE,
-  "./about.html",
-  "./services.html",
-  "./contact.html",
-  "./data-privacy.html",
-  "./terms.html",
-  "./clinic.css",
-  "./clinic-shared.js",
+  CLINIC_OFFLINE_PAGE,
 ];
 
-// 1. Install Event: Save files to cache
 self.addEventListener("install", (event) => {
-  self.skipWaiting(); // Force this worker to become active immediately
+  self.skipWaiting();
   event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => {
+    caches.open(CACHE_NAME).then(async (cache) => {
       console.log("[Service Worker] Caching core assets");
-      return cache.addAll(ASSETS_TO_CACHE);
+      await Promise.all(
+        ASSETS_TO_CACHE.map((asset) =>
+          cache.add(asset).catch((err) => {
+            console.warn("[Service Worker] Failed to cache", asset, err);
+          }),
+        ),
+      );
     }),
   );
 });
 
-// 2. Activate Event: Cleanup old caches
 self.addEventListener("activate", (event) => {
   event.waitUntil(
-    caches.keys().then((keyList) => {
-      return Promise.all(
+    caches.keys().then((keyList) =>
+      Promise.all(
         keyList.map((key) => {
           if (key !== CACHE_NAME) {
             console.log("[Service Worker] Removing old cache", key);
             return caches.delete(key);
           }
+          return null;
         }),
-      );
-    }),
+      ),
+    ),
   );
-  return self.clients.claim(); // Take control of all open tabs immediately
+  self.clients.claim();
 });
 
-// 3. Fetch Event: Serve from cache if offline
 self.addEventListener("fetch", (event) => {
-  // 1. Skip non-GET requests
   if (event.request.method !== "GET") return;
-
-  // 2. Skip API requests (db.js handles these with IndexedDB)
   if (event.request.url.includes("/api/")) return;
+
+  const requestUrl = new URL(event.request.url);
+  const isSameOrigin = requestUrl.origin === self.location.origin;
 
   if (event.request.mode === "navigate") {
     event.respondWith(
       (async () => {
-        const cachedResponse = await caches.match(event.request);
-        if (cachedResponse) return cachedResponse;
-
-        const reqUrl = new URL(event.request.url);
-        const isClinicPage = reqUrl.pathname.includes("clinic-");
-
         try {
           const networkResponse = await fetch(event.request, {
             cache: "no-store",
@@ -123,16 +120,16 @@ self.addEventListener("fetch", (event) => {
             return networkResponse;
           }
           throw new Error("Navigation fetch returned non-ok response");
-        } catch (fetchError) {
+        } catch (error) {
           console.warn(
-            "[Service Worker] Navigation fetch failed:",
+            "[Service Worker] Navigation failed:",
             event.request.url,
-            fetchError,
+            error,
           );
-
           const cachedResponse = await caches.match(event.request);
           if (cachedResponse) return cachedResponse;
 
+          const isClinicPage = requestUrl.pathname.includes("clinic-");
           if (isClinicPage) {
             const clinicQueue = await caches.match(CLINIC_QUEUE_PAGE);
             if (clinicQueue) return clinicQueue;
@@ -142,21 +139,22 @@ self.addEventListener("fetch", (event) => {
 
           const offlineFallback = await caches.match(OFFLINE_PAGE);
           if (offlineFallback) return offlineFallback;
-          return (
-            (await caches.match("./index.html")) ||
-            new Response("Offline", {
-              status: 503,
-              statusText: "Service Unavailable",
-            })
-          );
+
+          const indexFallback = await caches.match("/");
+          if (indexFallback) return indexFallback;
+
+          return new Response("Offline", {
+            status: 503,
+            statusText: "Service Unavailable",
+            headers: { "Content-Type": "text/plain" },
+          });
         }
       })(),
     );
     return;
   }
 
-  const requestUrl = new URL(event.request.url);
-  const networkFirst =
+  const isStaticAsset =
     event.request.destination === "script" ||
     event.request.destination === "style" ||
     event.request.destination === "document" ||
@@ -164,7 +162,7 @@ self.addEventListener("fetch", (event) => {
     requestUrl.pathname.endsWith(".js") ||
     requestUrl.pathname.endsWith(".css");
 
-  if (networkFirst) {
+  if (isStaticAsset) {
     event.respondWith(
       (async () => {
         try {
@@ -172,24 +170,25 @@ self.addEventListener("fetch", (event) => {
             cache: "no-store",
           });
           if (networkResponse && networkResponse.ok) {
-            if (requestUrl.origin === self.location.origin) {
+            if (isSameOrigin) {
               const cache = await caches.open(CACHE_NAME);
               cache.put(event.request, networkResponse.clone());
             }
             return networkResponse;
           }
           throw new Error("Network response not OK");
-        } catch (err) {
+        } catch (error) {
           const cachedResponse = await caches.match(event.request);
           if (cachedResponse) return cachedResponse;
-          console.log(
-            "[Service Worker] Network-first asset failed:",
+          console.warn(
+            "[Service Worker] Static asset fetch failed:",
             event.request.url,
-            err,
+            error,
           );
           return new Response("Offline", {
             status: 503,
             statusText: "Service Unavailable",
+            headers: { "Content-Type": "text/plain" },
           });
         }
       })(),
@@ -197,33 +196,28 @@ self.addEventListener("fetch", (event) => {
     return;
   }
 
-  // Non-navigation, non-core assets: try cache first, then network.
-  // Non-navigation requests: try cache first, then network, and cache same-origin assets when online.
   event.respondWith(
     (async () => {
       const cachedResponse = await caches.match(event.request);
-      if (cachedResponse) {
-        return cachedResponse;
-      }
+      if (cachedResponse) return cachedResponse;
 
       try {
         const networkResponse = await fetch(event.request);
-        if (networkResponse && networkResponse.ok) {
-          const requestUrl = new URL(event.request.url);
-          if (requestUrl.origin === self.location.origin) {
-            const cache = await caches.open(CACHE_NAME);
-            cache.put(event.request, networkResponse.clone());
-          }
+        if (networkResponse && networkResponse.ok && isSameOrigin) {
+          const cache = await caches.open(CACHE_NAME);
+          cache.put(event.request, networkResponse.clone());
         }
         return networkResponse;
-      } catch (err) {
-        console.log(
-          "[Service Worker] Asset not in cache & Network failed:",
+      } catch (error) {
+        console.warn(
+          "[Service Worker] Asset offline and not cached:",
           event.request.url,
+          error,
         );
         return new Response("Offline", {
           status: 503,
           statusText: "Service Unavailable",
+          headers: { "Content-Type": "text/plain" },
         });
       }
     })(),

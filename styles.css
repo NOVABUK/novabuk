@@ -504,7 +504,7 @@ footer .navfoot .nav-menu ul {
   /*  Navbar Layout  */
   .header .logo img , .brand img{
     width: auto;
-    /* height: ; */
+    height: 35px;
   }
 
   .header .nav {

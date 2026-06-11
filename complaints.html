@@ -3,8 +3,8 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="robots" content="noindex, nofollow">
-    <link rel="icon" sizes="180x180" href="./images/image 19.png">
+    <meta name="robots" content="noindex, nofollow" />
+    <link rel="icon" sizes="180x180" href="./images/logo.png" />
     <title>Symptom Logging | NovaBuk</title>
     <link rel="stylesheet" href="./styles-app.css" />
     <link
@@ -30,22 +30,33 @@
         margin-bottom: 12px;
         display: none;
       }
-      .feedback.show  { display: block; }
-      .feedback.error { color: #e53e3e; background: #fff5f5; border: 1px solid #fed7d7; }
+      .feedback.show {
+        display: block;
+      }
+      .feedback.error {
+        color: #e53e3e;
+        background: #fff5f5;
+        border: 1px solid #fed7d7;
+      }
 
-      .btn-primary:disabled { opacity: 0.6; cursor: not-allowed; }
+      .btn-primary:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+      }
 
       /* ── SUCCESS MODAL ─────────────────────────────────── */
       .modal-overlay {
         display: none;
         position: fixed;
         inset: 0;
-        background: rgba(0,0,0,0.45);
+        background: rgba(0, 0, 0, 0.45);
         z-index: 999;
         justify-content: center;
         align-items: center;
       }
-      .modal-overlay.show { display: flex; }
+      .modal-overlay.show {
+        display: flex;
+      }
 
       .modal-box {
         background: white;
@@ -55,15 +66,18 @@
         max-width: 340px;
         text-align: center;
         position: relative;
-        box-shadow: 0 8px 32px rgba(0,0,0,0.15);
-        font-family: 'Poppins', sans-serif;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+        font-family: "Poppins", sans-serif;
       }
 
       .modal-close {
         position: absolute;
-        top: 12px; right: 16px;
-        background: none; border: none;
-        font-size: 18px; cursor: pointer;
+        top: 12px;
+        right: 16px;
+        background: none;
+        border: none;
+        font-size: 18px;
+        cursor: pointer;
         color: #666;
       }
 
@@ -80,31 +94,47 @@
         padding: 12px;
         border-radius: 8px;
         border: none;
-        font-family: 'Poppins', sans-serif;
+        font-family: "Poppins", sans-serif;
         font-size: 14px;
         font-weight: 600;
         cursor: pointer;
         text-decoration: none;
         margin-bottom: 10px;
       }
-      .modal-btn-primary  { background: #35bac9; color: white; }
-      .modal-btn-secondary { background: white; color: #35bac9; border: 1px solid #35bac9 !important; }
-      .modal-btn:last-child { margin-bottom: 0; }
-
-      @media (max-width: 600px) {
-        .modal-box { padding: 24px 18px; }
-        .modal-btn { font-size: 13px; padding: 10px; }
+      .modal-btn-primary {
+        background: #35bac9;
+        color: white;
+      }
+      .modal-btn-secondary {
+        background: white;
+        color: #35bac9;
+        border: 1px solid #35bac9 !important;
+      }
+      .modal-btn:last-child {
+        margin-bottom: 0;
       }
 
+      @media (max-width: 600px) {
+        .modal-box {
+          padding: 24px 18px;
+        }
+        .modal-btn {
+          font-size: 13px;
+          padding: 10px;
+        }
+      }
     </style>
   </head>
 
   <body class="app-page">
     <div class="header">
       <div class="navbar navbar-home">
-        
-        <div class="btn-log" style="display:flex">
-          <button id="navToggle" class="nav-toggle" aria-label="Toggle navigation">
+        <div class="btn-log" style="display: flex">
+          <button
+            id="navToggle"
+            class="nav-toggle"
+            aria-label="Toggle navigation"
+          >
             <i class="fas fa-bars"></i>
           </button>
           <div class="logo"><img src="./images/logo.png" alt="" /></div>
@@ -116,15 +146,29 @@
 
         <div class="nav-menu navMenu" id="navMenu">
           <ul>
-            <li><a href="./app-home.html" >Home</a></li>
-            <li><a href="./complaints.html" class="active">Symptoms Logging</a></li>
+            <li><a href="./app-home.html">Home</a></li>
+            <li>
+              <a href="./complaints.html" class="active">Symptoms Logging</a>
+            </li>
             <li><a href="./app-clinics.html">Clinic Directory</a></li>
             <li><a href="./app-history.html">History</a></li>
           </ul>
           <div class="profile-opt" id="optNav">
             <ul>
-              <li><a href="./app-setting.html?tab=privacy"><i class="fa-solid fa-gear"></i> <span>Settings</span></a></li>
-              <li><a href="#" onclick="handleMenuSelect('logout')"><i class="fa-solid fa-right-from-bracket" style="color: #ff7675 !important;"></i> <span style="color: #ff7675;">Logout</span></a></li>
+              <li>
+                <a href="./app-setting.html?tab=privacy"
+                  ><i class="fa-solid fa-gear"></i> <span>Settings</span></a
+                >
+              </li>
+              <li>
+                <a href="#" onclick="handleMenuSelect('logout')"
+                  ><i
+                    class="fa-solid fa-right-from-bracket"
+                    style="color: #ff7675 !important"
+                  ></i>
+                  <span style="color: #ff7675">Logout</span></a
+                >
+              </li>
             </ul>
           </div>
         </div>
@@ -142,8 +186,21 @@
             </li>
             <li>
               <div class="user-profile" id="userProfileBtn">
-                <div class="profile-check"><span><div class="nav-avatar" style="font-size: 1.5em; font-family:'poppins',san-serif;" id="navAvatar"></div></span>
-                <span class="dropdown-arrow"><i class="fa-solid fa-angle-down"></i></span></div>
+                <div class="profile-check">
+                  <span
+                    ><div
+                      class="nav-avatar"
+                      style="
+                        font-size: 1.5em;
+                        font-family: &quot;poppins&quot;, san-serif;
+                      "
+                      id="navAvatar"
+                    ></div
+                  ></span>
+                  <span class="dropdown-arrow"
+                    ><i class="fa-solid fa-angle-down"></i
+                  ></span>
+                </div>
                 <div class="dropdown-menu" id="settingsDropdown">
                   <!-- User identity block -->
                   <div class="dd-user-block">
@@ -155,36 +212,60 @@
                   </div>
                   <div class="dd-divider"></div>
                   <!-- Quick actions -->
-                  <div class="dropdown-item" onclick="handleMenuSelect('dashboard')">
+                  <div
+                    class="dropdown-item"
+                    onclick="handleMenuSelect('dashboard')"
+                  >
                     <span><i class="fa-solid fa-house"></i></span> Dashboard
                   </div>
-                  <div class="dropdown-item" onclick="handleMenuSelect('visits')">
+                  <div
+                    class="dropdown-item"
+                    onclick="handleMenuSelect('visits')"
+                  >
                     <span><i class="fa-solid fa-calendar-check"></i></span>
                     My Visits
-                    <span class="dd-visits-badge" id="ddVisitsBadge" style="display:none"></span>
+                    <span
+                      class="dd-visits-badge"
+                      id="ddVisitsBadge"
+                      style="display: none"
+                    ></span>
                   </div>
-                  <div class="dropdown-item" onclick="handleMenuSelect('profile')">
-                    <span><i class="fa-solid fa-heart-pulse"></i></span> My Health Profile
+                  <div
+                    class="dropdown-item"
+                    onclick="handleMenuSelect('profile')"
+                  >
+                    <span><i class="fa-solid fa-heart-pulse"></i></span> My
+                    Health Profile
                   </div>
-                  <div class="dd-symptom-hint" id="ddSymptomHint" style="display:none">
+                  <div
+                    class="dd-symptom-hint"
+                    id="ddSymptomHint"
+                    style="display: none"
+                  >
                     <i class="fa-regular fa-clock"></i>
                     <span id="ddSymptomText">Last symptom logged: —</span>
                     <a href="./complaints.html" class="dd-log-now">Log now →</a>
                   </div>
                   <div class="dd-divider"></div>
-                  <div class="dropdown-item" onclick="handleMenuSelect('settings')">
+                  <div
+                    class="dropdown-item"
+                    onclick="handleMenuSelect('settings')"
+                  >
                     <span><i class="fa-solid fa-gear"></i></span> Settings
                   </div>
                   <div class="dd-divider"></div>
-                  <div class="dropdown-item dd-logout" onclick="handleMenuSelect('logout')">
-                    <span><i class="fa-solid fa-right-from-bracket"></i></span> Logout
+                  <div
+                    class="dropdown-item dd-logout"
+                    onclick="handleMenuSelect('logout')"
+                  >
+                    <span><i class="fa-solid fa-right-from-bracket"></i></span>
+                    Logout
                   </div>
                 </div>
               </div>
             </li>
           </ul>
         </div>
-        
       </div>
     </div>
 
@@ -211,27 +292,57 @@
           <p>Select all that apply</p>
           <div class="symptoms-options">
             <label>
-              <input type="checkbox" name="symptom" value="Headache" class="round-checkbox" />
+              <input
+                type="checkbox"
+                name="symptom"
+                value="Headache"
+                class="round-checkbox"
+              />
               Headache
             </label>
             <label>
-              <input type="checkbox" name="symptom" value="Fever" class="round-checkbox" />
+              <input
+                type="checkbox"
+                name="symptom"
+                value="Fever"
+                class="round-checkbox"
+              />
               Fever
             </label>
             <label>
-              <input type="checkbox" name="symptom" value="Cough" class="round-checkbox" />
+              <input
+                type="checkbox"
+                name="symptom"
+                value="Cough"
+                class="round-checkbox"
+              />
               Cough
             </label>
             <label>
-              <input type="checkbox" name="symptom" value="Body Pain" class="round-checkbox" />
+              <input
+                type="checkbox"
+                name="symptom"
+                value="Body Pain"
+                class="round-checkbox"
+              />
               Body pain
             </label>
             <label>
-              <input type="checkbox" name="symptom" value="Fatigue" class="round-checkbox" />
+              <input
+                type="checkbox"
+                name="symptom"
+                value="Fatigue"
+                class="round-checkbox"
+              />
               Fatigue
             </label>
             <label>
-              <input type="checkbox" name="symptom" value="Other" class="round-checkbox" />
+              <input
+                type="checkbox"
+                name="symptom"
+                value="Other"
+                class="round-checkbox"
+              />
               Other
             </label>
           </div>
@@ -243,11 +354,8 @@
 
         <div class="hero-detail">
           <div class="hero-box warning" id="hero-box">
-            
             <span><i class="fa-solid fa-exclamation"></i></span>
-            <h4>
-              NovaBuk does not replace professional advice
-            </h4>
+            <h4>NovaBuk does not replace professional advice</h4>
           </div>
         </div>
       </div>
@@ -255,24 +363,70 @@
 
     <!-- Success Modal -->
     <div class="modal-overlay" id="successModal">
-      <div class="modal-box" style="text-align:center;">
+      <div class="modal-box" style="text-align: center">
         <button class="modal-close" onclick="closeModal()">✕</button>
-        <div class="icon-check" style="width:60px;height:60px;border-radius:50%;background:#35bac9;color:white;display:flex;align-items:center;justify-content:center;font-size:24px;margin:0 auto 15px;">
+        <div
+          class="icon-check"
+          style="
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: #35bac9;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            margin: 0 auto 15px;
+          "
+        >
           <i class="fa-solid fa-check"></i>
         </div>
-        <h2 style="font-family:'Poppins', sans-serif; font-size:20px; color:#0f2027; margin-bottom:10px;">Log Submitted!</h2>
-        <p style="font-size:13px; color:#555; line-height:1.5; margin-bottom:20px;">Your symptoms have been logged in. It would be used to help us serve you better.</p>
-        <button class="modal-btn modal-btn-primary" onclick="logAnother()" style="width:100%; margin-bottom:10px;">Log another symptom</button>
-        <a href="./app-clinics.html" class="modal-btn modal-btn-secondary" style="display:block; width:100%; text-align:center;">Visit Clinic</a>
+        <h2
+          style="
+            font-family: &quot;Poppins&quot;, sans-serif;
+            font-size: 20px;
+            color: #0f2027;
+            margin-bottom: 10px;
+          "
+        >
+          Log Submitted!
+        </h2>
+        <p
+          style="
+            font-size: 13px;
+            color: #555;
+            line-height: 1.5;
+            margin-bottom: 20px;
+          "
+        >
+          Your symptoms have been logged in. It would be used to help us serve
+          you better.
+        </p>
+        <button
+          class="modal-btn modal-btn-primary"
+          onclick="logAnother()"
+          style="width: 100%; margin-bottom: 10px"
+        >
+          Log another symptom
+        </button>
+        <a
+          href="./app-clinics.html"
+          class="modal-btn modal-btn-secondary"
+          style="display: block; width: 100%; text-align: center"
+          >Visit Clinic</a
+        >
       </div>
     </div>
 
     <script src="./db.js"></script>
     <script src="./script.js"></script>
     <script>
-      var API_URL = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1"
-        ? "http://localhost:5000/api"
-        : "https://novabuk-backend.onrender.com/api";
+      var API_URL =
+        window.location.hostname === "localhost" ||
+        window.location.hostname === "127.0.0.1"
+          ? "http://localhost:5000/api"
+          : "https://novabuk-backend.onrender.com/api";
 
       // Auth guard — script.js initAppNav() handles avatar + handleMenuSelect
 
@@ -293,30 +447,31 @@
 
         const description = document.getElementById("symptoms").value.trim();
         const tags = Array.from(
-          document.querySelectorAll('input[name="symptom"]:checked')
-        ).map(cb => cb.value);
+          document.querySelectorAll('input[name="symptom"]:checked'),
+        ).map((cb) => cb.value);
 
-        const feedback  = document.getElementById("feedback");
+        const feedback = document.getElementById("feedback");
         const submitBtn = document.getElementById("submitBtn");
 
         feedback.classList.remove("show");
 
         if (tags.length === 0 && !description) {
-          feedback.textContent = "Please select at least one symptom or describe how you feel.";
+          feedback.textContent =
+            "Please select at least one symptom or describe how you feel.";
           feedback.className = "feedback show error";
           return;
         }
 
-        submitBtn.disabled    = true;
+        submitBtn.disabled = true;
         submitBtn.textContent = "Submitting...";
 
         try {
           const _token = localStorage.getItem("novabuk_token");
-          const res  = await smartFetch(`${API_URL}/symptoms`, {
-            method:  "POST",
+          const res = await smartFetch(`${API_URL}/symptoms`, {
+            method: "POST",
             headers: {
               "Content-Type": "application/json",
-              ..._token ? { Authorization: `Bearer ${_token}` } : {},
+              ...(_token ? { Authorization: `Bearer ${_token}` } : {}),
             },
             credentials: "include",
             body: JSON.stringify({ tags, description }),
@@ -327,29 +482,34 @@
           if (data.success) {
             const modal = document.getElementById("successModal");
             if (data.offline) {
-                modal.querySelector('h2').textContent = 'Saved Offline';
-                modal.querySelector('p').innerHTML = 'Your symptoms have been saved locally.<br>They will automatically sync when you reconnect.';
-                modal.querySelector('.icon-check').innerHTML = '<i class="fa-solid fa-clock"></i>';
-                modal.querySelector('.icon-check').style.background = '#ff9800';
+              modal.querySelector("h2").textContent = "Saved Offline";
+              modal.querySelector("p").innerHTML =
+                "Your symptoms have been saved locally.<br>They will automatically sync when you reconnect.";
+              modal.querySelector(".icon-check").innerHTML =
+                '<i class="fa-solid fa-clock"></i>';
+              modal.querySelector(".icon-check").style.background = "#ff9800";
             } else {
-                modal.querySelector('h2').textContent = 'Log Submitted!';
-                modal.querySelector('p').innerHTML = 'Your symptom log has been successfully submitted to NovaBuk.<br>You can review it in your history anytime.';
-                modal.querySelector('.icon-check').innerHTML = '<i class="fa-solid fa-check"></i>';
-                modal.querySelector('.icon-check').style.background = '#35bac9';
+              modal.querySelector("h2").textContent = "Log Submitted!";
+              modal.querySelector("p").innerHTML =
+                "Your symptom log has been successfully submitted to NovaBuk.<br>You can review it in your history anytime.";
+              modal.querySelector(".icon-check").innerHTML =
+                '<i class="fa-solid fa-check"></i>';
+              modal.querySelector(".icon-check").style.background = "#35bac9";
             }
             modal.classList.add("show");
-            submitBtn.disabled    = false;
+            submitBtn.disabled = false;
             submitBtn.textContent = "Submit Symptoms";
           } else {
-            feedback.textContent = data.message || "Could not save. Please try again.";
+            feedback.textContent =
+              data.message || "Could not save. Please try again.";
             feedback.className = "feedback show error";
-            submitBtn.disabled    = false;
+            submitBtn.disabled = false;
             submitBtn.textContent = "Submit Symptoms";
           }
         } catch (err) {
           feedback.textContent = "Network error. Please try again.";
           feedback.className = "feedback show error";
-          submitBtn.disabled    = false;
+          submitBtn.disabled = false;
           submitBtn.textContent = "Submit Symptoms";
         }
       }
