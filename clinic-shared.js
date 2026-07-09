@@ -597,7 +597,11 @@ if ("serviceWorker" in navigator) {
   window.addEventListener("load", () => {
     navigator.serviceWorker
       .register("/sw.js", { scope: "/" })
-      .then((reg) => console.log("[Service Worker] Registered on clinic page!", reg))
-      .catch((err) => console.log("[Service Worker] Clinic registration failed:", err));
+      .then((reg) =>
+        console.log("[Service Worker] Registered on clinic page!", reg),
+      )
+      .catch((err) =>
+        console.log("[Service Worker] Clinic registration failed:", err),
+      );
   });
 }

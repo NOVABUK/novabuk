@@ -47,7 +47,7 @@ a {
 }
 
 .page-shell {
-  max-width: 1380px;
+  /* max-width: 1380px; */
   margin: 0 auto;
   font-family: "Poppins", sans-serif;
 }
@@ -597,7 +597,7 @@ h1 {
   margin-bottom: 20px;
 }
 .role-image img {
-  /* object-fit: cover; */
+  object-fit: cover;
   height: 200px;
   width: 100%;
 }

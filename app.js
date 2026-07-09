@@ -1,7 +1,9 @@
 //var API_URL = "https://novabuk-backend.onrender.com/api";
-var API_URL = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1"
-  ? "http://localhost:5000/api"
-  : "https://novabuk-backend.onrender.com/api";
+var API_URL =
+  window.location.hostname === "localhost" ||
+  window.location.hostname === "127.0.0.1"
+    ? "http://localhost:5000/api"
+    : "https://novabuk-backend.onrender.com/api";
 
 const token = localStorage.getItem("novabuk_token");
 if (!token) window.location.href = "./sign-in.html";
@@ -61,7 +63,7 @@ function showPage(pageKey) {
   `;
 
   // 3. Update sidebar active state
-  document.querySelectorAll(".sidebar li").forEach(li => {
+  document.querySelectorAll(".sidebar li").forEach((li) => {
     li.classList.remove("active");
     // Normalize text for comparison (handle spaces like "Change Password")
     const normalizedLi = li.textContent.toLowerCase().replace(/\s+/g, "");
@@ -89,7 +91,9 @@ function goBackToMenu() {
   contentArea.innerHTML = "";
 
   // 3. Reset sidebar active states so nothing looks "selected" in the menu
-  document.querySelectorAll(".sidebar li").forEach(li => li.classList.remove("active"));
+  document
+    .querySelectorAll(".sidebar li")
+    .forEach((li) => li.classList.remove("active"));
 }
 
 // ── LOAD ON DOM READY ─────────────────────────────────────
@@ -99,7 +103,7 @@ window.addEventListener("DOMContentLoaded", () => {
   showPage(targetTab);
 
   // Sidebar click
-  document.querySelectorAll(".sidebar li").forEach(item => {
+  document.querySelectorAll(".sidebar li").forEach((item) => {
     item.addEventListener("click", function () {
       const key = this.textContent.toLowerCase().replace(/\s+/g, "");
       if (key === "logout") {
@@ -124,8 +128,11 @@ function showFeedback(id, msg, type) {
   el.style.fontFamily = "Poppins, sans-serif";
   el.style.background = type === "success" ? "#f0fff4" : "#fff5f5";
   el.style.color = type === "success" ? "#276749" : "#e53e3e";
-  el.style.border = type === "success" ? "1px solid #9ae6b4" : "1px solid #fed7d7";
-  setTimeout(() => { if (el) el.style.display = "none"; }, 4000);
+  el.style.border =
+    type === "success" ? "1px solid #9ae6b4" : "1px solid #fed7d7";
+  setTimeout(() => {
+    if (el) el.style.display = "none";
+  }, 4000);
 }
 
 // ── PROFILE PAGE ──────────────────────────────────────────
@@ -141,9 +148,11 @@ function _renderTags(arr, listId, inputId, editing) {
   arr.forEach((tag, i) => {
     const chip = document.createElement("span");
     chip.className = "p-tag-chip";
-    chip.innerHTML = tag + (editing
-      ? ` <button type="button" class="p-tag-remove" onclick="_removeTag('${listId}','${inputId}',${i})">×</button>`
-      : "");
+    chip.innerHTML =
+      tag +
+      (editing
+        ? ` <button type="button" class="p-tag-remove" onclick="_removeTag('${listId}','${inputId}',${i})">×</button>`
+        : "");
     list.appendChild(chip);
   });
   if (input) list.appendChild(input);
@@ -151,7 +160,8 @@ function _renderTags(arr, listId, inputId, editing) {
 }
 
 function _removeTag(listId, inputId, i) {
-  const arr = listId === "pConditionsList" ? _profileConditions : _profileAllergies;
+  const arr =
+    listId === "pConditionsList" ? _profileConditions : _profileAllergies;
   arr.splice(i, 1);
   _renderTags(arr, listId, inputId, true);
 }
@@ -161,8 +171,12 @@ function _addTag(listId, inputId) {
   if (!input) return;
   const val = input.value.trim();
   if (!val) return;
-  const arr = listId === "pConditionsList" ? _profileConditions : _profileAllergies;
-  if (!arr.includes(val)) { arr.push(val); _renderTags(arr, listId, inputId, true); }
+  const arr =
+    listId === "pConditionsList" ? _profileConditions : _profileAllergies;
+  if (!arr.includes(val)) {
+    arr.push(val);
+    _renderTags(arr, listId, inputId, true);
+  }
   input.value = "";
 }
 
@@ -175,7 +189,8 @@ async function uploadSettingsAvatar(input) {
   showFeedback("profileFeedback", "Uploading photo…", "success");
   try {
     const signRes = await smartFetch(`${API_URL}/uploads/cloudinary/sign`, {
-      method: "POST", headers: { Authorization: `Bearer ${token}` }
+      method: "POST",
+      headers: { Authorization: `Bearer ${token}` },
     });
     const signData = await signRes.json();
     const formData = new FormData();
@@ -185,7 +200,7 @@ async function uploadSettingsAvatar(input) {
     formData.append("signature", signData.signature);
     const uploadRes = await smartFetch(
       `https://api.cloudinary.com/v1_1/${signData.cloud_name}/image/upload`,
-      { method: "POST", body: formData }
+      { method: "POST", body: formData },
     );
     const uploadData = await uploadRes.json();
     if (uploadData.secure_url) {
@@ -197,14 +212,18 @@ async function uploadSettingsAvatar(input) {
       // Save to backend
       await smartFetch(`${API_URL}/users/update`, {
         method: "PUT",
-        headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
         body: JSON.stringify({ avatarUrl: uploadData.secure_url }),
       });
       // Update localStorage + navbar
       const stored = JSON.parse(localStorage.getItem("novabuk_user") || "{}");
       stored.avatarUrl = uploadData.secure_url;
       localStorage.setItem("novabuk_user", JSON.stringify(stored));
-      if (typeof window.refreshNavAvatar === "function") window.refreshNavAvatar();
+      if (typeof window.refreshNavAvatar === "function")
+        window.refreshNavAvatar();
       showFeedback("profileFeedback", "Photo updated!", "success");
     }
   } catch (err) {
@@ -224,7 +243,10 @@ async function removeSettingsAvatar() {
     showFeedback("profileFeedback", "Removing photo…", "success");
     await smartFetch(`${API_URL}/users/update`, {
       method: "PUT",
-      headers: { "Content-Type": "application/json", Authorization: `Bearer ${userToken}` },
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${userToken}`,
+      },
       body: JSON.stringify({ avatarUrl: "" }),
     });
 
@@ -234,11 +256,13 @@ async function removeSettingsAvatar() {
 
     // Refresh UI
     const name = storedUser.fullName || "User";
-    if (circle) circle.innerHTML = `<span style="font-size:2rem;font-weight:700;color:#35bac9;">${name.trim().charAt(0).toUpperCase()}</span>`;
+    if (circle)
+      circle.innerHTML = `<span style="font-size:2rem;font-weight:700;color:#35bac9;">${name.trim().charAt(0).toUpperCase()}</span>`;
     const removeBtn = document.getElementById("pAvatarRemoveBtn");
     if (removeBtn) removeBtn.style.display = "none";
 
-    if (typeof window.refreshNavAvatar === "function") window.refreshNavAvatar();
+    if (typeof window.refreshNavAvatar === "function")
+      window.refreshNavAvatar();
     showFeedback("profileFeedback", "Photo removed.", "success");
   } catch (err) {
     showFeedback("profileFeedback", "Failed to remove photo.", "error");
@@ -247,7 +271,9 @@ async function removeSettingsAvatar() {
 
 async function loadProfilePage(area) {
   try {
-    const res = await smartFetch(`${API_URL}/users/settings`, { headers: { Authorization: `Bearer ${token}` } });
+    const res = await smartFetch(`${API_URL}/users/settings`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
     const data = await res.json();
     const u = data.success ? data.data.profile : {};
     const hp = u.healthProfile || {};
@@ -292,7 +318,7 @@ async function loadProfilePage(area) {
       <!-- NovaBuk ID Badge -->
       <div style="margin-top:-10px; margin-bottom:24px;">
         <span style="font-size:11px; background:var(--teal-pale); color:var(--teal); padding:4px 10px; border-radius:6px; font-weight:700; font-family:poppins,sans-serif; text-transform:uppercase; letter-spacing:0.5px;">
-          NovaBuk ID: ${u.novaBukId || 'NB-PENDING'}
+          NovaBuk ID: ${u.novaBukId || "NB-PENDING"}
         </span>
       </div>
 
@@ -332,9 +358,12 @@ border: 1px solid #fed7d7;
         <div class="input-group"><label>Gender</label>
           <select id="pGender" disabled>
             <option value="">Select</option>
-            ${["Male", "Female"].map(g =>
-      `<option value="${g}" ${hp.gender === g ? "selected" : ""}>${g}</option>`
-    ).join("")}
+            ${["Male", "Female"]
+              .map(
+                (g) =>
+                  `<option value="${g}" ${hp.gender === g ? "selected" : ""}>${g}</option>`,
+              )
+              .join("")}
           </select>
         </div>
         <div class="input-group full-width"><label>Address</label><input type="text" id="pAddress" value="${u.address || ""}" disabled placeholder="123 Health Street" /></div>
@@ -349,9 +378,12 @@ border: 1px solid #fed7d7;
           <label>Age Range</label>
           <select id="pAgeRange" disabled>
             <option value="">Select age range</option>
-            ${["Under 18", "18–24", "25–34", "35–44", "45–54", "55–64", "65+"].map(a =>
-      `<option value="${a}" ${hp.ageRange === a ? "selected" : ""}>${a}</option>`
-    ).join("")}
+            ${["Under 18", "18–24", "25–34", "35–44", "45–54", "55–64", "65+"]
+              .map(
+                (a) =>
+                  `<option value="${a}" ${hp.ageRange === a ? "selected" : ""}>${a}</option>`,
+              )
+              .join("")}
           </select>
         </div>
         <div class="input-group" style="grid-column:span 1"><!-- spacer --></div>
@@ -384,19 +416,31 @@ border: 1px solid #fed7d7;
       </div>`;
 
     // Render tags in view mode
-    _renderTags(_profileConditions, "pConditionsList", "pConditionsInput", false);
+    _renderTags(
+      _profileConditions,
+      "pConditionsList",
+      "pConditionsInput",
+      false,
+    );
     _renderTags(_profileAllergies, "pAllergiesList", "pAllergiesInput", false);
 
     // Wire up tag inputs
     const cInput = document.getElementById("pConditionsInput");
     const aInput = document.getElementById("pAllergiesInput");
-    if (cInput) cInput.addEventListener("keydown", e => {
-      if (e.key === "Enter" || e.key === ",") { e.preventDefault(); _addTag("pConditionsList", "pConditionsInput"); }
-    });
-    if (aInput) aInput.addEventListener("keydown", e => {
-      if (e.key === "Enter" || e.key === ",") { e.preventDefault(); _addTag("pAllergiesList", "pAllergiesInput"); }
-    });
-
+    if (cInput)
+      cInput.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" || e.key === ",") {
+          e.preventDefault();
+          _addTag("pConditionsList", "pConditionsInput");
+        }
+      });
+    if (aInput)
+      aInput.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" || e.key === ",") {
+          e.preventDefault();
+          _addTag("pAllergiesList", "pAllergiesInput");
+        }
+      });
   } catch (err) {
     area.innerHTML = `<p style="color:#e53e3e;padding:20px">Failed to load profile.</p>`;
   }
@@ -432,11 +476,24 @@ function calculateSettingsAge() {
 }
 
 function toggleProfileEdit() {
-  const personalFields = ["pFirstName", "pLastName", "pEmail", "pPhone", "pDob", "pGender", "pAddress", "pCity", "pState", "pAgeRange", "pEcName", "pEcPhone"];
+  const personalFields = [
+    "pFirstName",
+    "pLastName",
+    "pEmail",
+    "pPhone",
+    "pDob",
+    "pGender",
+    "pAddress",
+    "pCity",
+    "pState",
+    "pAgeRange",
+    "pEcName",
+    "pEcPhone",
+  ];
   const isDisabled = document.getElementById("pFirstName").disabled;
   const editing = isDisabled; // we're toggling TO editing if currently disabled
 
-  personalFields.forEach(id => {
+  personalFields.forEach((id) => {
     const el = document.getElementById(id);
     if (el) el.disabled = !editing;
   });
@@ -446,22 +503,41 @@ function toggleProfileEdit() {
   const aInput = document.getElementById("pAllergiesInput");
   if (cInput) cInput.style.display = editing ? "inline" : "none";
   if (aInput) aInput.style.display = editing ? "inline" : "none";
-  document.getElementById("pConditionsHint") && (document.getElementById("pConditionsHint").style.display = editing ? "block" : "none");
-  document.getElementById("pAllergiesHint") && (document.getElementById("pAllergiesHint").style.display = editing ? "block" : "none");
+  document.getElementById("pConditionsHint") &&
+    (document.getElementById("pConditionsHint").style.display = editing
+      ? "block"
+      : "none");
+  document.getElementById("pAllergiesHint") &&
+    (document.getElementById("pAllergiesHint").style.display = editing
+      ? "block"
+      : "none");
 
   // Re-render tags with/without remove buttons
-  _renderTags(_profileConditions, "pConditionsList", "pConditionsInput", editing);
+  _renderTags(
+    _profileConditions,
+    "pConditionsList",
+    "pConditionsInput",
+    editing,
+  );
   _renderTags(_profileAllergies, "pAllergiesList", "pAllergiesInput", editing);
 
   // Re-wire tag inputs after re-render
   const cI = document.getElementById("pConditionsInput");
   const aI = document.getElementById("pAllergiesInput");
-  if (cI) cI.addEventListener("keydown", e => {
-    if (e.key === "Enter" || e.key === ",") { e.preventDefault(); _addTag("pConditionsList", "pConditionsInput"); }
-  });
-  if (aI) aI.addEventListener("keydown", e => {
-    if (e.key === "Enter" || e.key === ",") { e.preventDefault(); _addTag("pAllergiesList", "pAllergiesInput"); }
-  });
+  if (cI)
+    cI.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === ",") {
+        e.preventDefault();
+        _addTag("pConditionsList", "pConditionsInput");
+      }
+    });
+  if (aI)
+    aI.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === ",") {
+        e.preventDefault();
+        _addTag("pAllergiesList", "pAllergiesInput");
+      }
+    });
 
   // Show/hide avatar edit button + hint
   const avatarBtn = document.getElementById("pAvatarEditBtn");
@@ -473,10 +549,15 @@ function toggleProfileEdit() {
   const circle = document.getElementById("pAvatarCircle");
   const hasPhoto = circle && circle.querySelector("img");
   const removeBtn = document.getElementById("pAvatarRemoveBtn");
-  if (removeBtn) removeBtn.style.display = (editing && hasPhoto) ? "block" : "none";
+  if (removeBtn)
+    removeBtn.style.display = editing && hasPhoto ? "block" : "none";
 
-  document.getElementById("saveProfileRow").style.display = editing ? "block" : "none";
-  document.getElementById("editProfileBtn").textContent = editing ? "✕ Cancel" : "✏️ Edit profile";
+  document.getElementById("saveProfileRow").style.display = editing
+    ? "block"
+    : "none";
+  document.getElementById("editProfileBtn").textContent = editing
+    ? "✕ Cancel"
+    : "✏️ Edit profile";
 }
 
 async function saveProfile() {
@@ -504,25 +585,41 @@ async function saveProfile() {
     { val: lastName, label: "Last Name" },
     { val: email, label: "Email Address" },
   ];
-  const missing = required.filter(f => !f.val).map(f => f.label);
+  const missing = required.filter((f) => !f.val).map((f) => f.label);
   if (missing.length > 0) {
-    showFeedback("profileFeedback", `Please fill in: ${missing.join(", ")}`, "error");
+    showFeedback(
+      "profileFeedback",
+      `Please fill in: ${missing.join(", ")}`,
+      "error",
+    );
     return;
   }
 
   const btn = document.getElementById("saveProfileBtn");
-  if (btn) { btn.disabled = true; btn.textContent = "Saving…"; }
+  if (btn) {
+    btn.disabled = true;
+    btn.textContent = "Saving…";
+  }
 
   try {
     // Single API call — unified profile route
     const res = await smartFetch(`${API_URL}/users/profile`, {
       method: "PUT",
-      headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
       body: JSON.stringify({
-        fullName, email, phone, dateOfBirth,
+        fullName,
+        email,
+        phone,
+        dateOfBirth,
         age: parseInt(age) || null,
-        address, city, state,
-        gender, ageRange,
+        address,
+        city,
+        state,
+        gender,
+        ageRange,
         existingConditions: _profileConditions,
         allergies: _profileAllergies,
         emergencyContact: { name: ecName, phone: ecPhone },
@@ -535,42 +632,82 @@ async function saveProfile() {
       stored.fullName = data.user.fullName;
       if (data.user.avatarUrl) stored.avatarUrl = data.user.avatarUrl;
       localStorage.setItem("novabuk_user", JSON.stringify(stored));
-      if (typeof window.refreshNavAvatar === "function") window.refreshNavAvatar();
+      if (typeof window.refreshNavAvatar === "function")
+        window.refreshNavAvatar();
       showFeedback("profileFeedback", "Profile saved successfully!", "success");
-      setTimeout(() => loadProfilePage(document.getElementById("main-content-wrapper")), 1200);
+      setTimeout(
+        () => loadProfilePage(document.getElementById("main-content-wrapper")),
+        1200,
+      );
     } else {
-      showFeedback("profileFeedback", data.message || "Could not save.", "error");
-      if (btn) { btn.disabled = false; btn.textContent = "Save Changes"; }
+      showFeedback(
+        "profileFeedback",
+        data.message || "Could not save.",
+        "error",
+      );
+      if (btn) {
+        btn.disabled = false;
+        btn.textContent = "Save Changes";
+      }
     }
   } catch (err) {
-    showFeedback("profileFeedback", "Network error. Please try again.", "error");
-    if (btn) { btn.disabled = false; btn.textContent = "Save Changes"; }
+    showFeedback(
+      "profileFeedback",
+      "Network error. Please try again.",
+      "error",
+    );
+    if (btn) {
+      btn.disabled = false;
+      btn.textContent = "Save Changes";
+    }
   }
 }
 
 // ── PRIVACY PAGE ──────────────────────────────────────────
 async function loadPrivacyPage(area) {
   try {
-    const res = await smartFetch(`${API_URL}/users/settings`, { headers: { Authorization: `Bearer ${token}` } });
+    const res = await smartFetch(`${API_URL}/users/settings`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
     const data = await res.json();
-    const ps = data.success ? (data.data.privacySettings || {}) : {};
+    const ps = data.success ? data.data.privacySettings || {} : {};
 
     area.innerHTML = `
       <div id="privacyFeedback" style="display:none"></div>
       <h1>Privacy Settings</h1>
       ${[
-        { key: "shareDataWithProviders", label: "Share Data with Healthcare Providers", desc: "Allow doctors to access your health data" },
-        { key: "marketingCommunications", label: "Marketing Communications", desc: "Receiving marketing emails and promotional content" },
-        { key: "dataAnalytics", label: "Data Analytics", desc: "Allow anonymous usage data to improve services" },
-        { key: "thirdPartyDataSharing", label: "Third-party Data Sharing", desc: "Allowing sharing of aggregated data with research partners" },
-      ].map(item => `
+        {
+          key: "shareDataWithProviders",
+          label: "Share Data with Healthcare Providers",
+          desc: "Allow doctors to access your health data",
+        },
+        {
+          key: "marketingCommunications",
+          label: "Marketing Communications",
+          desc: "Receiving marketing emails and promotional content",
+        },
+        {
+          key: "dataAnalytics",
+          label: "Data Analytics",
+          desc: "Allow anonymous usage data to improve services",
+        },
+        {
+          key: "thirdPartyDataSharing",
+          label: "Third-party Data Sharing",
+          desc: "Allowing sharing of aggregated data with research partners",
+        },
+      ]
+        .map(
+          (item) => `
         <div class="setting-item">
           <div class="text"><h3>${item.label}</h3><p>${item.desc}</p></div>
           <label class="switch">
             <input type="checkbox" id="ps_${item.key}" ${ps[item.key] ? "checked" : ""} onchange="savePrivacy('${item.key}', this.checked)">
             <span class="slider"></span>
           </label>
-        </div>`).join("")}
+        </div>`,
+        )
+        .join("")}
       <div class="visibility-section" style="margin-top:20px">
         <h3>Profile Visibility</h3>
         <select class="dropdown" id="ps_profileVisibility" onchange="savePrivacy('profileVisibility', this.value)">
@@ -588,7 +725,10 @@ async function savePrivacy(key, value) {
   try {
     await smartFetch(`${API_URL}/users/privacy-settings`, {
       method: "PUT",
-      headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
       body: JSON.stringify({ [key]: value }),
     });
     showFeedback("privacyFeedback", "Privacy settings updated.", "success");
@@ -600,27 +740,53 @@ async function savePrivacy(key, value) {
 // ── NOTIFICATION PAGE ─────────────────────────────────────
 async function loadNotificationPage(area) {
   try {
-    const res = await smartFetch(`${API_URL}/users/settings`, { headers: { Authorization: `Bearer ${token}` } });
+    const res = await smartFetch(`${API_URL}/users/settings`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
     const data = await res.json();
-    const ns = data.success ? (data.data.notificationSettings || {}) : {};
+    const ns = data.success ? data.data.notificationSettings || {} : {};
 
     area.innerHTML = `
       <div id="notifFeedback" style="display:none"></div>
       <h1>Notification Settings</h1>
       ${[
-        { key: "emailNotifications", label: "Email Notifications", desc: "Receive notifications via email" },
-        { key: "smsNotifications", label: "SMS Notifications", desc: "Receive important alerts via text message" },
-        { key: "appointmentReminders", label: "Appointment Reminders", desc: "Get reminded about upcoming appointments" },
-        { key: "healthTips", label: "Health Tips", desc: "Receive weekly health and wellness advice" },
-        { key: "clinicUpdates", label: "System Updates", desc: "Get notified about system maintenance and updates" },
-      ].map(item => `
+        {
+          key: "emailNotifications",
+          label: "Email Notifications",
+          desc: "Receive notifications via email",
+        },
+        {
+          key: "smsNotifications",
+          label: "SMS Notifications",
+          desc: "Receive important alerts via text message",
+        },
+        {
+          key: "appointmentReminders",
+          label: "Appointment Reminders",
+          desc: "Get reminded about upcoming appointments",
+        },
+        {
+          key: "healthTips",
+          label: "Health Tips",
+          desc: "Receive weekly health and wellness advice",
+        },
+        {
+          key: "clinicUpdates",
+          label: "System Updates",
+          desc: "Get notified about system maintenance and updates",
+        },
+      ]
+        .map(
+          (item) => `
         <div class="setting-item">
           <div class="text"><h3>${item.label}</h3><p>${item.desc}</p></div>
           <label class="switch">
             <input type="checkbox" id="ns_${item.key}" ${ns[item.key] ? "checked" : ""} onchange="saveNotification('${item.key}', this.checked)">
             <span class="slider"></span>
           </label>
-        </div>`).join("")}`;
+        </div>`,
+        )
+        .join("")}`;
   } catch (err) {
     area.innerHTML = `<p style="color:#e53e3e;padding:20px">Failed to load notification settings.</p>`;
   }
@@ -630,7 +796,10 @@ async function saveNotification(key, value) {
   try {
     await smartFetch(`${API_URL}/users/notification-settings`, {
       method: "PUT",
-      headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
       body: JSON.stringify({ [key]: value }),
     });
     showFeedback("notifFeedback", "Notification settings updated.", "success");
@@ -668,13 +837,20 @@ async function changePassword() {
   const btn = document.getElementById("changePwBtn");
 
   if (!currentPassword || !newPassword) {
-    showFeedback("pwFeedback", "All fields are required.", "error"); return;
+    showFeedback("pwFeedback", "All fields are required.", "error");
+    return;
   }
   if (newPassword.length < 6) {
-    showFeedback("pwFeedback", "New password must be at least 6 characters.", "error"); return;
+    showFeedback(
+      "pwFeedback",
+      "New password must be at least 6 characters.",
+      "error",
+    );
+    return;
   }
   if (newPassword !== confirmPassword) {
-    showFeedback("pwFeedback", "Passwords do not match.", "error"); return;
+    showFeedback("pwFeedback", "Passwords do not match.", "error");
+    return;
   }
 
   btn.disabled = true;
@@ -683,15 +859,24 @@ async function changePassword() {
   try {
     const res = await smartFetch(`${API_URL}/users/change-password`, {
       method: "PUT",
-      headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
       body: JSON.stringify({ currentPassword, newPassword }),
     });
     const data = await res.json();
     if (data.success) {
       showFeedback("pwFeedback", "Password changed successfully!", "success");
-      ["currentPw", "newPw", "confirmPw"].forEach(id => document.getElementById(id).value = "");
+      ["currentPw", "newPw", "confirmPw"].forEach(
+        (id) => (document.getElementById(id).value = ""),
+      );
     } else {
-      showFeedback("pwFeedback", data.message || "Could not update password.", "error");
+      showFeedback(
+        "pwFeedback",
+        data.message || "Could not update password.",
+        "error",
+      );
     }
   } catch (err) {
     showFeedback("pwFeedback", "Network error. Please try again.", "error");
@@ -701,12 +886,14 @@ async function changePassword() {
   }
 }
 
-
 // Register the Service Worker for Offline Support
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/sw.js', { scope: '/' })
-      .then((reg) => console.log('[Service Worker] Registered!', reg))
-      .catch((err) => console.log('[Service Worker] Registration failed:', err));
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker
+      .register("/sw.js", { scope: "/" })
+      .then((reg) => console.log("[Service Worker] Registered!", reg))
+      .catch((err) =>
+        console.log("[Service Worker] Registration failed:", err),
+      );
   });
 }
