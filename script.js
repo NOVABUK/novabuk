@@ -9,6 +9,23 @@ var API_URL =
     ? "http://localhost:5000/api"
     : "https://novabuk-backend.onrender.com/api";
 
+// ── SERVICE WORKER AUTO-UPDATE ───────────────────────────────
+// skipWaiting()+clients.claim() in sw.js activate the new worker
+// almost immediately, but the tab that TRIGGERED the update check
+// is still controlled by the OLD worker until the very next
+// navigation. That produces the "shows old version, needs one
+// more refresh" symptom. This listener catches the moment control
+// actually hands over to the new worker and reloads automatically,
+// so the user never has to hard-refresh themselves.
+if ("serviceWorker" in navigator) {
+  let swRefreshing = false;
+  navigator.serviceWorker.addEventListener("controllerchange", () => {
+    if (swRefreshing) return;
+    swRefreshing = true;
+    window.location.reload();
+  });
+}
+
 function isClinicOpenNow(clinic) {
   if (!clinic) return false;
 

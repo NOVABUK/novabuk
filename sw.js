@@ -1,11 +1,11 @@
-const CACHE_NAME = "/novabuk-static-v9";
+const CACHE_NAME = "/novabuk-static-v10";
 const OFFLINE_PAGE = "/offline.html";
 const CLINIC_OFFLINE_PAGE = "/clinic-offline.html";
 const CLINIC_QUEUE_PAGE = "/clinic-queue.html";
 const ASSETS_TO_CACHE = [
   "/",
   "/index.html",
-  // "/sign-in.html",
+  "/sign-in.html",
   "/app-home.html",
   "/app-clinics.html",
   "/complaints.html",
@@ -169,7 +169,15 @@ self.addEventListener("fetch", (event) => {
           const networkResponse = await fetch(event.request, {
             cache: "no-store",
           });
-          if (networkResponse && networkResponse.ok) {
+          // Cross-origin requests (Google Fonts, cdnjs, etc.) made in
+          // no-cors mode come back as "opaque" responses: status 0,
+          // ok === false, EVEN WHEN THE REQUEST SUCCEEDED. Treat opaque
+          // responses as success too, or every cross-origin asset gets
+          // wrongly treated as a network failure below.
+          if (
+            networkResponse &&
+            (networkResponse.ok || networkResponse.type === "opaque")
+          ) {
             if (isSameOrigin) {
               const cache = await caches.open(CACHE_NAME);
               cache.put(event.request, networkResponse.clone());
