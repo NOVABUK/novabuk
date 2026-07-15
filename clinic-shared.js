@@ -55,7 +55,25 @@ document.addEventListener("DOMContentLoaded", () => {
 
 // ── AUTH GUARD ────────────────────────────────────────────────
 // Runs immediately on every clinic page load.
-// Checks: 1) logged in at all  2) role is Doctors
+// Handles TWO different account shapes stored under "novabuk_user":
+//   1. The clinic OWNER — a User document (role: "Doctors"), has an
+//      isVerified field (email OTP applies), stores clinicId as a flat
+//      string field.
+//   2. ClinicStaff — doctors/nurses/receptionists/pharmacists/lab techs
+//      added via /clinic-auth/my-staff. NEVER has an isVerified field
+//      at all (no OTP flow exists for these accounts — they're
+//      activated immediately by whoever added them). Stores clinic as
+//      a nested object: { id, name }, not flat clinicId/clinicName.
+//
+// BUG THIS FIXES: previously this guard checked `!user.isVerified` for
+// EVERY account type. Since ClinicStaff objects never have that field,
+// `!undefined` is always true — so every single ClinicStaff login was
+// being force-redirected to verify-otp.html, which has no way to
+// verify a ClinicStaff account in the first place (verify-otp.html
+// only knows how to verify User/patient accounts). Right after that,
+// the old `user.role !== "Doctors"` check would ALSO have bounced any
+// ClinicStaff member (role is lowercase "doctor"/"nurse"/etc, never
+// the string "Doctors") to app-home.html — a second, separate bug.
 (function clinicAuthGuard() {
   const token =
     localStorage.getItem("novabuk_token") ||
@@ -71,30 +89,43 @@ document.addEventListener("DOMContentLoaded", () => {
     return;
   }
 
-  // If not verified, force them to the OTP page
-  if (!user.isVerified) {
-    localStorage.setItem("novabuk_verify_email", user.email);
-    window.location.replace("./verify-otp.html");
-    return;
-  }
+  const clinicStaffRoles = ["doctor", "nurse", "receptionist", "pharmacist", "lab_tech", "admin"];
+  const isOwnerAccount = user.role === "Doctors";
+  const isClinicStaffAccount = clinicStaffRoles.includes(user.role);
 
-  if (user.role !== "Doctors") {
+  if (isOwnerAccount) {
+    // Only the owner's User account goes through email OTP verification.
+    if (!user.isVerified) {
+      localStorage.setItem("novabuk_verify_email", user.email);
+      window.location.replace("./verify-otp.html");
+      return;
+    }
+  } else if (!isClinicStaffAccount) {
+    // Not a recognized clinic actor at all (e.g. a plain Patient
+    // account landed here somehow) — send them to the patient app.
     window.location.replace("./app-home.html");
     return;
   }
+  // isClinicStaffAccount === true: no OTP check, proceed straight through.
 
-  // Fill clinic name — use clinicName from localStorage.
-  // If missing (older account), fetch from API and update localStorage.
+  // Fill clinic name — supports BOTH account shapes:
+  //   owner:        user.clinicName (flat) / user.clinicId (flat)
+  //   ClinicStaff:  user.clinic.name / user.clinic.id (nested)
   function applyClinicName(name) {
     document.querySelectorAll(".clinic-name").forEach((el) => {
       el.textContent = name || "Your Clinic";
     });
   }
 
-  if (user.clinicName) {
-    applyClinicName(user.clinicName);
-  } else if (user.clinicId) {
-    // clinicName not in localStorage yet — fetch it silently
+  const normalizedClinicId = user.clinicId || user.clinic?.id || user.clinic?._id;
+  const normalizedClinicName = user.clinicName || user.clinic?.name;
+
+  if (normalizedClinicName) {
+    applyClinicName(normalizedClinicName);
+  } else if (normalizedClinicId) {
+    // clinicName not available yet — fetch it silently.
+    // Uses credentials:"include" so ClinicStaff's cookie auth works
+    // here too, not just the owner's Bearer token.
     fetch((window.API_BASE || API_BASE) + "/clinics/my", {
       headers: { Authorization: "Bearer " + token },
       credentials: "include",
@@ -232,12 +263,18 @@ window.addEventListener("click", () => {
 });
 
 // ── GET CLINIC ID ─────────────────────────────────────────────
-// Returns the clinicId the doctor is associated with.
-// Stored in localStorage when the doctor sets up their profile.
-// Falls back to null if not set.
+// Returns the clinicId for whoever is logged in — supports BOTH
+// account shapes: the owner (User, flat user.clinicId) and
+// ClinicStaff (nested user.clinic.id). Previously this only checked
+// the flat field, so every ClinicStaff account (nurse, receptionist,
+// added doctors) got `null` here — which meant every queue/patient
+// fetch silently ran with a missing clinicId and just returned
+// nothing, instead of an actual error. That's why the queue showed
+// all-zero counts for the nurse account: not "no patients", but
+// "no clinicId was ever sent."
 function getClinicId() {
   const user = JSON.parse(localStorage.getItem("novabuk_user") || "{}");
-  return user.clinicId || null;
+  return user.clinicId || user.clinic?.id || user.clinic?._id || null;
 }
 
 // ── CLINIC LOGOUT ─────────────────────────────────────────────
@@ -286,9 +323,31 @@ async function clinicFetch(url, options = {}) {
     credentials: "include",
   });
 
-  if (res.status === 401 || res.status === 403) {
+  // 401 = actual session problem (expired/invalid token) — this really
+  // does mean "please log in again," so the logout modal is correct.
+  if (res.status === 401) {
     clinicLogout();
-    throw new Error("Session expired or access denied");
+    throw new Error("Session expired or invalid");
+  }
+
+  // 403 = a VALID session that just lacks permission for this specific
+  // action (e.g. a receptionist hitting a doctor-only route via
+  // requireRole()). This is NOT a session problem — showing the "Log
+  // out?" modal here is confusing and wrong. Show a plain toast instead
+  // and let the caller decide what to do next.
+  if (res.status === 403) {
+    let message = "You don't have permission to do that.";
+    try {
+      const cloned = res.clone();
+      const data = await cloned.json();
+      if (data?.message) message = data.message;
+    } catch (e) {
+      // response wasn't JSON — fall back to the generic message above
+    }
+    if (typeof window.showNetworkToast === "function") {
+      window.showNetworkToast(message, false, true);
+    }
+    throw new Error(message);
   }
 
   return res;

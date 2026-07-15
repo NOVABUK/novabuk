@@ -136,6 +136,14 @@
         background: #fef3c7;
         color: #b45309;
       }
+      .role-pharmacist {
+        background: #fce7f3;
+        color: #a21caf;
+      }
+      .role-lab_tech {
+        background: #e0e7ff;
+        color: #4338ca;
+      }
       .role-admin {
         background: #f5f3ff;
         color: #6d28d9;
@@ -1082,9 +1090,7 @@
               outline: none;
             "
           >
-            <option value="doctor">Doctor</option>
-            <option value="nurse" selected>Nurse</option>
-            <option value="receptionist">Receptionist</option>
+            <!-- options populated dynamically by updateStaffRoleOptions() based on plan -->
           </select>
         </div>
         <div class="field">
@@ -1557,21 +1563,21 @@
       // ═══════════════════════════════════════════════════════════
       // PLAN STATUS & DYNAMIC RENDERING
       // ═══════════════════════════════════════════════════════════
-      let currentClinicPlan = "Free";
+      let currentClinicPlan = "Growth";
 
       function updatePlanUI(clinic) {
-        const plan = clinic.subscriptionPlan || "Free";
+        const plan = clinic.subscriptionPlan || "Growth";
         currentClinicPlan = plan;
         const isPro = plan === "Pro";
 
         // 1. Update Plan Pill
         const pill = document.getElementById("planPill");
         if (isPro) {
-          pill.innerHTML = '<i class="fa-solid fa-gem"></i> Premium Pro';
+          pill.innerHTML = '<i class="fa-solid fa-gem"></i> Clinic Pro';
           pill.style.background = "#d1fae5";
           pill.style.color = "#065f46";
         } else {
-          pill.innerHTML = '<i class="fa-solid fa-star"></i> Free MVP';
+          pill.innerHTML = '<i class="fa-solid fa-seedling"></i> Clinic Growth';
           pill.style.background = "#fefcbf";
           pill.style.color = "#b7791f";
         }
@@ -1614,32 +1620,47 @@
           upgradeBtn.style.display = "none";
           activeNotice.style.display = "block";
           document.getElementById("upgradeCardTitle").textContent =
-            "NovaBuk Premium Pro";
+            "NovaBuk Clinic Pro";
           document.getElementById("upgradeCardDesc").textContent =
             "All premium features are unlocked for your clinic.";
         } else {
           upgradeBtn.style.display = "";
           activeNotice.style.display = "none";
           document.getElementById("upgradeCardTitle").textContent =
-            "Unlock Full NovaBuk";
+            "Unlock Full Hospital Features";
           document.getElementById("upgradeCardDesc").textContent =
-            "Complete patient history, analytics, and multi-staff accounts.";
+            "Growth includes 2 doctor + 1 receptionist seat. Upgrade to Pro for unlimited staff, pharmacists, and lab techs.";
         }
 
-        // 5. Staff Management card state
+        // 5. Staff Management card — UNLOCKED for both plans now.
+        // Growth gets capped seats (enforced server-side by checkSeatLimit),
+        // Pro gets unlimited. No more hard lock behind Pro.
         const lockedState = document.getElementById("staffLockedState");
         const unlockedState = document.getElementById("staffUnlockedState");
         const addStaffBtn = document.getElementById("addStaffBtn");
-        if (isPro) {
-          lockedState.style.display = "none";
-          unlockedState.style.display = "block";
-          addStaffBtn.style.display = "";
-          loadStaffList();
-        } else {
-          lockedState.style.display = "";
-          unlockedState.style.display = "none";
-          addStaffBtn.style.display = "none";
-        }
+        lockedState.style.display = "none";
+        unlockedState.style.display = "block";
+        addStaffBtn.style.display = "";
+        updateStaffRoleOptions();
+        loadStaffList();
+      }
+
+      // Role options available in the "Add Staff" dropdown depend on plan.
+      // Growth: doctor + receptionist only (2 + 1 seat cap, enforced
+      // server-side — this just avoids showing options that will fail).
+      // Pro: full roster.
+      function updateStaffRoleOptions() {
+        const select = document.getElementById("staffRole");
+        const isPro = currentClinicPlan === "Pro";
+
+        select.innerHTML = isPro
+          ? `<option value="doctor">Doctor</option>
+             <option value="nurse" selected>Nurse</option>
+             <option value="receptionist">Receptionist</option>
+             <option value="pharmacist">Pharmacist</option>
+             <option value="lab_tech">Lab Technician</option>`
+          : `<option value="doctor">Doctor (2 seats)</option>
+             <option value="receptionist" selected>Receptionist (1 seat)</option>`;
       }
 
       // ═══════════════════════════════════════════════════════════
@@ -1786,7 +1807,7 @@
         document.getElementById("staffFullName").value = "";
         document.getElementById("staffEmail").value = "";
         document.getElementById("staffPassword").value = "";
-        document.getElementById("staffRole").value = "nurse";
+        updateStaffRoleOptions(); // resets to the correct default option for the current plan
       }
 
       // Close staff modal on overlay click

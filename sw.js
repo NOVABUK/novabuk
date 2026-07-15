@@ -1,4 +1,4 @@
-const CACHE_NAME = "/novabuk-static-v10";
+const CACHE_NAME = "/novabuk-static-v11";
 const OFFLINE_PAGE = "/offline.html";
 const CLINIC_OFFLINE_PAGE = "/clinic-offline.html";
 const CLINIC_QUEUE_PAGE = "/clinic-queue.html";
@@ -16,6 +16,7 @@ const ASSETS_TO_CACHE = [
   "/styles-about.css",
   "/styles-blog.css",
   "/app-setting.css",
+  "/styles-new-sections.css",
   "/db.js",
   "/app.js",
   "/script.js",

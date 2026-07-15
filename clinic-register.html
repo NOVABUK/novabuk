@@ -366,6 +366,143 @@
           padding: 20px;
         }
       }
+
+      /* ── PLAN SELECTION STEP ── */
+      .plan-cards {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 14px;
+        margin-bottom: 22px;
+      }
+      .plan-card {
+        border: 2px solid var(--border);
+        border-radius: 14px;
+        padding: 20px 18px;
+        cursor: pointer;
+        transition:
+          border-color 0.15s,
+          box-shadow 0.15s,
+          transform 0.15s;
+        position: relative;
+      }
+      .plan-card:hover {
+        border-color: var(--teal);
+        transform: translateY(-2px);
+      }
+      .plan-card.selected {
+        border-color: var(--teal);
+        background: var(--teal-pale);
+        box-shadow: 0 0 0 3px rgba(53, 186, 201, 0.12);
+      }
+      .plan-badge {
+        position: absolute;
+        top: -10px;
+        right: 14px;
+        background: var(--teal);
+        color: white;
+        font-size: 10px;
+        font-weight: 700;
+        padding: 3px 10px;
+        border-radius: 20px;
+        text-transform: uppercase;
+        letter-spacing: 0.4px;
+      }
+      .plan-name {
+        font-size: 15px;
+        font-weight: 700;
+        color: var(--text);
+        margin-bottom: 4px;
+      }
+      .plan-price {
+        font-size: 22px;
+        font-weight: 700;
+        color: var(--navy);
+        margin-bottom: 2px;
+      }
+      .plan-price span {
+        font-size: 12px;
+        font-weight: 500;
+        color: var(--light);
+      }
+      .plan-trial-note {
+        font-size: 11px;
+        color: var(--teal-dark);
+        font-weight: 600;
+        margin-bottom: 14px;
+      }
+      .plan-features {
+        list-style: none;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+      .plan-features li {
+        font-size: 12px;
+        color: var(--muted);
+        display: flex;
+        align-items: flex-start;
+        gap: 7px;
+        line-height: 1.4;
+      }
+      .plan-features li i {
+        color: var(--teal);
+        font-size: 11px;
+        margin-top: 2px;
+        flex-shrink: 0;
+      }
+      .plan-radio-indicator {
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        border: 2px solid var(--border);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: absolute;
+        top: 16px;
+        right: 16px;
+      }
+      .plan-card.selected .plan-radio-indicator {
+        border-color: var(--teal);
+        background: var(--teal);
+      }
+      .plan-card.selected .plan-radio-indicator::after {
+        content: "";
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: white;
+      }
+      .plan-footnote {
+        font-size: 12px;
+        color: var(--light);
+        text-align: center;
+        margin-bottom: 20px;
+        line-height: 1.5;
+      }
+      .btn-back-step {
+        width: 100%;
+        padding: 12px;
+        background: white;
+        border: 1.5px solid var(--border);
+        border-radius: 10px;
+        font-family: "Poppins", sans-serif;
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--muted);
+        cursor: pointer;
+        margin-top: 10px;
+      }
+      .btn-back-step:hover {
+        border-color: var(--teal);
+        color: var(--teal-dark);
+      }
+
+      @media (max-width: 500px) {
+        .plan-cards {
+          grid-template-columns: 1fr;
+        }
+      }
     </style>
   </head>
   <body>
@@ -380,25 +517,32 @@
       </div>
 
       <!-- Progress steps -->
-      <div class="steps">
+      <div class="steps" id="stepsBar">
         <div class="step done">
           <div class="step-circle"><i class="fa-solid fa-check"></i></div>
           <span class="step-label">Account Created</span>
         </div>
         <div class="step-line done"></div>
-        <div class="step active">
+        <div class="step active" id="stepIndicatorDetails">
           <div class="step-circle">2</div>
           <span class="step-label">Clinic Details</span>
         </div>
-        <div class="step-line"></div>
-        <div class="step todo">
+        <div class="step-line" id="stepLineToPlan"></div>
+        <div class="step todo" id="stepIndicatorPlan">
           <div class="step-circle">3</div>
+          <span class="step-label">Choose Plan</span>
+        </div>
+        <div class="step-line" id="stepLineToQueue"></div>
+        <div class="step todo" id="stepIndicatorQueue">
+          <div class="step-circle">4</div>
           <span class="step-label">Your Queue</span>
         </div>
       </div>
 
       <!-- Form card -->
       <div class="card">
+        <!-- STEP: Clinic Details -->
+        <div id="detailsStepView">
         <div class="card-title">Tell us about your clinic</div>
         <div class="card-subtitle">
           This information helps patients find and book visits at your clinic.
@@ -410,7 +554,7 @@
           <span id="alertErrorText"></span>
         </div>
 
-        <form id="clinicForm" onsubmit="handleSubmit(event)">
+        <form id="clinicForm" onsubmit="handleDetailsContinue(event)">
           <div class="form-grid">
             <!-- Clinic Name -->
             <div class="field full">
@@ -517,21 +661,97 @@
           </div>
           <!-- /form-grid -->
 
-          <div class="alert error" id="alertBottom">
-            <i class="fa-solid fa-circle-exclamation"></i>
-            <span id="alertBottomText"></span>
-          </div>
-
           <button type="submit" class="btn-submit" id="submitBtn">
             <i class="fa-solid fa-arrow-right"></i>
-            Register Clinic & Go to Queue
+            Continue to Choose Plan
           </button>
         </form>
-        <!-- /form -->
 
         <p class="skip-link">
           Already set up? <a href="./clinic-queue.html">Go to your queue →</a>
         </p>
+        </div>
+        <!-- /detailsStepView -->
+
+        <!-- STEP: Choose Plan -->
+        <div id="planStepView" style="display: none">
+          <div class="card-title">Choose your clinic's plan</div>
+          <div class="card-subtitle">
+            Both plans include a <strong>60-day free trial</strong> — no
+            payment required today. You can upgrade anytime from Settings.
+          </div>
+
+          <div class="alert error" id="alertErrorPlan">
+            <i class="fa-solid fa-circle-exclamation"></i>
+            <span id="alertErrorPlanText"></span>
+          </div>
+
+          <div class="plan-cards">
+            <!-- Growth Plan -->
+            <div
+              class="plan-card selected"
+              id="planCardGrowth"
+              onclick="selectPlan('Growth')"
+            >
+              <div class="plan-radio-indicator"></div>
+              <div class="plan-name">Clinic Growth</div>
+              <div class="plan-price">
+                ₦25,000<span>/mo</span>
+              </div>
+              <div class="plan-trial-note">Free for your first 60 days</div>
+              <ul class="plan-features">
+                <li><i class="fa-solid fa-check"></i> 2 doctor seats</li>
+                <li><i class="fa-solid fa-check"></i> 1 receptionist seat</li>
+                <li><i class="fa-solid fa-check"></i> Unlimited digital records</li>
+                <li><i class="fa-solid fa-check"></i> Core EHR dashboard</li>
+              </ul>
+            </div>
+
+            <!-- Pro Plan -->
+            <div
+              class="plan-card"
+              id="planCardPro"
+              onclick="selectPlan('Pro')"
+            >
+              <span class="plan-badge">Full Hospital</span>
+              <div class="plan-radio-indicator"></div>
+              <div class="plan-name">Clinic Pro</div>
+              <div class="plan-price">
+                ₦60,000<span>/mo</span>
+              </div>
+              <div class="plan-trial-note">Free for your first 60 days</div>
+              <ul class="plan-features">
+                <li><i class="fa-solid fa-check"></i> Unlimited doctors &amp; staff</li>
+                <li><i class="fa-solid fa-check"></i> Pharmacist &amp; lab tech accounts</li>
+                <li><i class="fa-solid fa-check"></i> AI prescription safety check</li>
+                <li><i class="fa-solid fa-check"></i> Premium support 24/7</li>
+              </ul>
+            </div>
+          </div>
+
+          <p class="plan-footnote">
+            No card required now. Billing starts automatically after your
+            60-day trial ends — we'll email you before it does.
+          </p>
+
+          <button
+            type="button"
+            class="btn-submit"
+            id="planSubmitBtn"
+            onclick="handleFinalSubmit()"
+          >
+            <i class="fa-solid fa-arrow-right"></i>
+            Register Clinic & Go to Queue
+          </button>
+          <button
+            type="button"
+            class="btn-back-step"
+            onclick="goBackToDetails()"
+          >
+            <i class="fa-solid fa-arrow-left"></i> Back to Clinic Details
+          </button>
+        </div>
+        <!-- /planStepView -->
       </div>
       <!-- /card -->
     </div>
@@ -609,8 +829,22 @@
         });
       }
 
-      // ── FORM SUBMIT ──────────────────────────────────────────
-      async function handleSubmit(e) {
+      // ── STEP STATE ────────────────────────────────────────────
+      let collectedFields = null; // holds validated clinic details between steps
+      let selectedPlan = "Growth"; // default selection
+
+      function selectPlan(planKey) {
+        selectedPlan = planKey;
+        document
+          .getElementById("planCardGrowth")
+          .classList.toggle("selected", planKey === "Growth");
+        document
+          .getElementById("planCardPro")
+          .classList.toggle("selected", planKey === "Pro");
+      }
+
+      // ── STEP 1 → STEP 2: validate details, move to plan selection ──
+      function handleDetailsContinue(e) {
         e.preventDefault();
 
         const name = document.getElementById("clinicName").value.trim();
@@ -626,10 +860,54 @@
           .value.trim();
         if (partialInput) addService(partialInput);
 
-        const btn = document.getElementById("submitBtn");
         const errTop = document.getElementById("alertError");
-        const errBot = document.getElementById("alertBottom");
-        [errTop, errBot].forEach((el) => el.classList.remove("show"));
+        errTop.classList.remove("show");
+
+        if (!name || !address || !city || !phone) {
+          showError("Please fill in all required fields.");
+          return;
+        }
+
+        // Save for the final submit in step 2
+        collectedFields = { name, address, city, state, phone, email, services: [...services] };
+
+        // Swap step views
+        document.getElementById("detailsStepView").style.display = "none";
+        document.getElementById("planStepView").style.display = "block";
+
+        // Update progress bar: step 2 done, step 3 active
+        document.getElementById("stepIndicatorDetails").className = "step done";
+        document.getElementById("stepIndicatorDetails").querySelector(".step-circle").innerHTML =
+          '<i class="fa-solid fa-check"></i>';
+        document.getElementById("stepLineToPlan").className = "step-line done";
+        document.getElementById("stepIndicatorPlan").className = "step active";
+
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+
+      // ── STEP 2 → back to STEP 1 ──────────────────────────────
+      function goBackToDetails() {
+        document.getElementById("planStepView").style.display = "none";
+        document.getElementById("detailsStepView").style.display = "block";
+
+        document.getElementById("stepIndicatorDetails").className = "step active";
+        document.getElementById("stepIndicatorDetails").querySelector(".step-circle").textContent = "2";
+        document.getElementById("stepLineToPlan").className = "step-line";
+        document.getElementById("stepIndicatorPlan").className = "step todo";
+
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+
+      // ── STEP 2: actual registration submit, now includes plan ──
+      async function handleFinalSubmit() {
+        if (!collectedFields) {
+          goBackToDetails();
+          return;
+        }
+
+        const btn = document.getElementById("planSubmitBtn");
+        const errPlan = document.getElementById("alertErrorPlan");
+        errPlan.classList.remove("show");
 
         btn.disabled = true;
         btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Registering…`;
@@ -643,13 +921,8 @@
             },
             credentials: "include",
             body: JSON.stringify({
-              name,
-              address,
-              city,
-              state,
-              phone,
-              email,
-              services,
+              ...collectedFields,
+              plan: selectedPlan,
             }),
           });
 
@@ -658,8 +931,15 @@
           if (data.success) {
             // Update localStorage with the new clinicId and clinicName
             // so clinic-shared.js can find them immediately on the next page
-            const updatedUser = { ...user, ...data.user };
+            const updatedUser = { ...user, ...data.user, clinicId: data.clinic?.id || data.user?.clinicId };
             localStorage.setItem("novabuk_user", JSON.stringify(updatedUser));
+
+            // Update progress bar to final step
+            document.getElementById("stepIndicatorPlan").className = "step done";
+            document.getElementById("stepIndicatorPlan").querySelector(".step-circle").innerHTML =
+              '<i class="fa-solid fa-check"></i>';
+            document.getElementById("stepLineToQueue").className = "step-line done";
+            document.getElementById("stepIndicatorQueue").className = "step active";
 
             // Brief success flash before navigating
             btn.innerHTML = `<i class="fa-solid fa-circle-check"></i> Clinic Registered!`;
@@ -669,12 +949,12 @@
               window.location.href = "./clinic-queue.html";
             }, 900);
           } else {
-            showError(data.message || "Registration failed. Please try again.");
+            showErrorPlan(data.message || "Registration failed. Please try again.");
             btn.disabled = false;
             btn.innerHTML = `<i class="fa-solid fa-arrow-right"></i> Register Clinic & Go to Queue`;
           }
         } catch (err) {
-          showError("Network error. Check your connection and try again.");
+          showErrorPlan("Network error. Check your connection and try again.");
           btn.disabled = false;
           btn.innerHTML = `<i class="fa-solid fa-arrow-right"></i> Register Clinic & Go to Queue`;
         }
@@ -685,8 +965,15 @@
         const errText = document.getElementById("alertErrorText");
         errText.textContent = msg;
         errTop.classList.add("show");
-        // Scroll to top of card so user sees the error
         errTop.scrollIntoView({ behavior: "smooth", block: "center" });
+      }
+
+      function showErrorPlan(msg) {
+        const errPlan = document.getElementById("alertErrorPlan");
+        const errText = document.getElementById("alertErrorPlanText");
+        errText.textContent = msg;
+        errPlan.classList.add("show");
+        errPlan.scrollIntoView({ behavior: "smooth", block: "center" });
       }
     </script>
   </body>
