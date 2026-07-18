@@ -232,3 +232,50 @@ self.addEventListener("fetch", (event) => {
     })(),
   );
 });
+
+
+// firebase-messaging-sw.js
+// Place this at your site's ROOT — same level as sw.js.
+// This is REQUIRED by Firebase Cloud Messaging to receive push
+// notifications when the app isn't in focus. It's intentionally
+// separate from your main sw.js (which handles offline caching) —
+// don't merge them, Firebase expects its own dedicated file.
+
+importScripts("https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js");
+importScripts("https://www.gstatic.com/firebasejs/10.12.2/firebase-messaging-compat.js");
+
+// TODO: same Firebase config as notification-settings-block.html —
+// keep these two in sync if you ever change Firebase projects.
+firebase.initializeApp({
+  apiKey: "REPLACE_ME",
+  authDomain: "REPLACE_ME.firebaseapp.com",
+  projectId: "REPLACE_ME",
+  storageBucket: "REPLACE_ME.appspot.com",
+  messagingSenderId: "REPLACE_ME",
+  appId: "REPLACE_ME",
+});
+
+const messaging = firebase.messaging();
+
+// Handles a push arriving while the app is closed/backgrounded
+messaging.onBackgroundMessage((payload) => {
+  const { title, body } = payload.notification || {};
+  self.registration.showNotification(title || "NovaBuk", {
+    body: body || "",
+    icon: "/images/logo.png",
+    data: payload.data || {},
+  });
+});
+
+// Clicking the notification opens/focuses the app
+self.addEventListener("notificationclick", (event) => {
+  event.notification.close();
+  event.waitUntil(
+    clients.matchAll({ type: "window" }).then((clientList) => {
+      if (clientList.length > 0) {
+        return clientList[0].focus();
+      }
+      return clients.openWindow("/app-home.html");
+    })
+  );
+});
