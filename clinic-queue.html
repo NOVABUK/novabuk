@@ -545,6 +545,15 @@
             <i class="fa-solid fa-magnifying-glass"></i>
           </a>
 
+          <!-- Checkout & Billing -->
+          <a
+            href="./clinic-checkout.html"
+            class="sidebar-nav-btn"
+            data-tip="Checkout & Billing"
+          >
+            <i class="fa-solid fa-money-bill-wave"></i>
+          </a>
+
           <!-- Settings pushed to bottom via margin-top: auto on logout -->
           <a
             href="./clinic-settings.html"
@@ -589,6 +598,15 @@
 
               <button
                 class="tab-btn"
+                data-status="All"
+                onclick="switchTab(this)"
+              >
+                All Activity
+                <span class="tab-count" id="count-All">0</span>
+              </button>
+
+              <button
+                class="tab-btn"
                 data-status="Confirmed"
                 onclick="switchTab(this)"
               >
@@ -614,14 +632,7 @@
                 <span class="tab-count" id="count-Completed">0</span>
               </button>
 
-              <button
-                class="tab-btn"
-                data-status="All"
-                onclick="switchTab(this)"
-              >
-                All Activity
-                <span class="tab-count" id="count-All">0</span>
-              </button>
+              
             </div>
 
             <!-- Walk-in button -->
@@ -1026,10 +1037,35 @@
             <span class="badge badge-${visit.status}">
               ${formatStatus(visit.status)}
             </span>
+            ${buildPaymentBadge(visit)}
             ${actionBtn}
           </div>
 
         </div>`;
+      }
+
+      // ============================================================
+      // PAYMENT BADGE — only shown for Completed visits with a bill.
+      // Surfaces unpaid/part-paid bills right in the queue so nobody
+      // at the front desk misses a patient leaving without paying —
+      // previously this was only visible on the separate Checkout page.
+      // ============================================================
+      function buildPaymentBadge(visit) {
+        if (visit.status !== "Completed" || !visit.paymentInfo) return "";
+
+        const { paymentStatus, balanceDue } = visit.paymentInfo;
+        if (paymentStatus === "PAID" || paymentStatus === "WAIVED") {
+          return `<span style="font-size:10px; font-weight:700; color:#065f46; background:#d1fae5; padding:2px 8px; border-radius:10px; margin-left:6px;">
+            <i class="fa-solid fa-circle-check"></i> Paid
+          </span>`;
+        }
+        return `<span
+          onclick="event.stopPropagation(); window.location.href='./clinic-checkout.html'"
+          style="font-size:10px; font-weight:700; color:#b45309; background:#fef3c7; padding:2px 8px; border-radius:10px; margin-left:6px; cursor:pointer;"
+          title="Click to go to Checkout"
+        >
+          <i class="fa-solid fa-triangle-exclamation"></i> Unpaid \u20a6${balanceDue.toLocaleString()}
+        </span>`;
       }
 
       // ============================================================

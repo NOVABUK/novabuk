@@ -46,6 +46,7 @@
             <li><a href="./app-home.html">Home</a></li>
             <li><a href="./complaints.html">Symptoms Logging</a></li>
             <li><a href="./app-clinics.html">Clinic Directory</a></li>
+            <li><a href="./app-bill.html">Billing</a></li>
             <li><a href="./app-history.html">History</a></li>
           </ul>
           <div class="profile-opt" id="optNav">
@@ -193,14 +194,9 @@
 
     <!--
   ══════════════════════════════════════════════════════════════
-  NOTIFICATION & CALENDAR SETTINGS — Feature 2 frontend piece
+  NOTIFICATION & CALENDAR SETTINGS 
   ══════════════════════════════════════════════════════════════
-  WHERE THIS GOES: inside app-setting.html's "Notification" tab
-  content — wherever main-content-wrapper gets filled in when
-  ?tab=notification is active. I don't have full visibility into
-  that exact render function in your script.js, so this is built as
-  a self-contained drop-in rather than a guessed patch to code I
-  can't fully verify.
+  
 
   BEFORE THIS WORKS, YOU NEED:
   1. Firebase Console → Project Settings → General → "Your apps" →
@@ -218,31 +214,7 @@
      OAuth client (e.g. https://novabuk-backend.onrender.com/api/users/google-calendar/callback)
 -->
 
-<div class="settings-card" style="margin-top: 20px;">
-  <h3>Notifications</h3>
 
-  <div class="setting-item">
-    <div>
-      <h3 style="font-size: 1rem;">Push Notifications</h3>
-      <p>Get reminded about upcoming appointments and medications directly on this device.</p>
-    </div>
-    <button id="enablePushBtn" onclick="enablePushNotifications()" class="edit-btn">
-      <i class="fa-solid fa-bell"></i> <span id="pushBtnLabel">Enable</span>
-    </button>
-  </div>
-
-  <div class="setting-item">
-    <div>
-      <h3 style="font-size: 1rem;">Google Calendar</h3>
-      <p>Automatically add your appointments to your Google Calendar.</p>
-    </div>
-    <button id="calendarBtn" onclick="connectGoogleCalendar()" class="edit-btn">
-      <i class="fa-brands fa-google"></i> <span id="calendarBtnLabel">Connect</span>
-    </button>
-  </div>
-
-  <div id="notifSettingsStatus" style="margin-top: 12px; font-size: 13px;"></div>
-</div>
 
 <!-- Firebase SDKs (v10 modular, loaded via CDN as ES modules) -->
 <script type="module">

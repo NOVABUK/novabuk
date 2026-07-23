@@ -790,6 +790,33 @@ async function loadNotificationPage(area) {
   } catch (err) {
     area.innerHTML = `<p style="color:#e53e3e;padding:20px">Failed to load notification settings.</p>`;
   }
+
+  area.innerHTML += `
+    <div class="settings-card" style="">
+
+  <div class="setting-item">
+    <div>
+      <h3 style=;">Push Notifications</h3>
+      <p>Get reminded about upcoming appointments and medications directly on this device.</p>
+    </div>
+    <button id="enablePushBtn" onclick="enablePushNotifications()" class="edit-btn">
+      <i class="fa-solid fa-bell"></i> <span id="pushBtnLabel">Enable</span>
+    </button>
+  </div>
+
+  <div class="setting-item">
+    <div>
+      <h3 style="font-size: ;">Google Calendar</h3>
+      <p>Automatically add your appointments to your Google Calendar.</p>
+    </div>
+    <button id="calendarBtn" onclick="connectGoogleCalendar()" class="edit-btn">
+      <i class="fa-brands fa-google"></i> <span id="calendarBtnLabel">Connect</span>
+    </button>
+  </div>
+
+  <div id="notifSettingsStatus" style="margin-top: 12px; font-size: 13px;"></div>
+</div>
+  `
 }
 
 async function saveNotification(key, value) {
@@ -806,6 +833,7 @@ async function saveNotification(key, value) {
   } catch (err) {
     showFeedback("notifFeedback", "Could not save. Try again.", "error");
   }
+  
 }
 
 // ── CHANGE PASSWORD PAGE ──────────────────────────────────

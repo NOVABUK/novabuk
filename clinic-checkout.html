@@ -1,0 +1,416 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Checkout & Billing — NovaBuk Clinic</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="./clinic.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      .topbar-title { font-size: 15px; font-weight: 600; color: white; }
+      .content { padding: 0; }
+
+      .summary-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 12px;
+        margin-bottom: 24px;
+      }
+      .summary-box {
+        background: white;
+        border: 1.5px solid var(--border);
+        border-radius: 12px;
+        padding: 14px 16px;
+      }
+      .summary-box .label { font-size: 11px; color: var(--light); text-transform: uppercase; letter-spacing: 0.4px; }
+      .summary-box .value { font-size: 20px; font-weight: 700; color: var(--text); margin-top: 4px; }
+
+      .bill-card {
+        background: white;
+        border: 1.5px solid var(--border);
+        border-radius: 12px;
+        padding: 14px 18px;
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        cursor: pointer;
+        margin-bottom: 10px;
+        transition: all 0.15s;
+      }
+      .bill-card:hover { border-color: var(--teal); box-shadow: 0 4px 12px rgba(53, 186, 201, 0.1); }
+      .bill-info { flex: 1; min-width: 0; }
+      .bill-name { font-size: 14px; font-weight: 600; color: var(--text); }
+      .bill-sub { font-size: 12px; color: var(--light); margin-top: 3px; }
+      .bill-amount { font-size: 15px; font-weight: 700; color: var(--teal); }
+      .status-pill {
+        font-size: 10px;
+        font-weight: 700;
+        padding: 3px 10px;
+        border-radius: 12px;
+        text-transform: uppercase;
+      }
+      .status-UNPAID { background: #fef3c7; color: #b45309; }
+      .status-PART_PAID { background: #dbeafe; color: #1e40af; }
+
+      /* Modal */
+      .modal-overlay {
+        position: fixed; inset: 0; background: rgba(0,0,0,0.5);
+        display: none; align-items: center; justify-content: center; z-index: 1000; padding: 20px;
+      }
+      .modal-overlay.show { display: flex; }
+      .modal-box {
+        background: white; border-radius: 16px; padding: 24px;
+        width: 100%; max-width: 420px; max-height: 85vh; overflow-y: auto;
+      }
+      .line-item-row { display: flex; justify-content: space-between; font-size: 13px; padding: 6px 0; border-bottom: 1px solid #f0f0f0; }
+      .field-label { font-size: 12px; font-weight: 600; color: var(--text); margin: 14px 0 6px; display: block; }
+      .field-input {
+        width: 100%; padding: 10px 12px; border: 1.5px solid var(--border);
+        border-radius: 8px; font-family: inherit; font-size: 13px;
+      }
+      .btn-primary {
+        width: 100%; padding: 12px; background: var(--teal); color: white;
+        border: none; border-radius: 10px; font-weight: 600; font-size: 14px; cursor: pointer; margin-top: 16px;
+      }
+      .btn-secondary {
+        width: 100%; padding: 10px; background: white; color: var(--text-light);
+        border: 1.5px solid var(--border); border-radius: 10px; font-weight: 600; font-size: 13px; cursor: pointer; margin-top: 8px;
+      }
+      .btn-row { display: flex; gap: 8px; margin-top: 12px; }
+      .btn-row button { flex: 1; padding: 10px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; border: 1.5px solid var(--border); background: white; }
+      .btn-row button.active { border-color: var(--teal); color: var(--teal); background: #f0fbfc; }
+    </style>
+  </head>
+
+  <body>
+    <header>
+      <div class="notif-left">
+        <div class="bck-icon">
+          <a href="./clinic-queue.html" class="btn-back" style="font-size: 24px; color: var(--text); text-decoration: none">
+            <i class="fa-solid fa-arrow-left"></i>
+          </a>
+        </div>
+        <div class="notify">
+          <h3 class="topbar-title" style="font-size: 28px; font-weight: 700">Checkout & Billing</h3>
+        </div>
+      </div>
+
+      <div class="top-side">
+        <div class="topbar-actions">
+          <a href="./clinic-search.html" class="topbar-btn" title="Search patients">
+            <i class="fa-solid fa-magnifying-glass"></i>
+          </a>
+          <a href="./clinic-notifications.html" class="topbar-btn" title="Notifications">
+            <i class="fa-solid fa-bell"></i>
+            <span class="notification-badge" id="topbarNotificationBadge"></span>
+          </a>
+          <div class="staff-chip" id="staffChip">
+            <div class="staff-avatar-sm" id="topbarAvatar">?</div>
+            <span class="staff-name-sm staff-name">Staff</span>
+            <i class="fa-solid fa-angle-down" id="staffIcon"></i>
+            <div class="staff-dropdown" id="staffDropdown">
+              <div class="staff-dropdown-item" onclick="window.location.href = './clinic-settings.html'">
+                <i class="fa-solid fa-gear"></i> Settings
+              </div>
+              <div class="staff-dropdown-item danger" onclick="clinicLogout()">
+                <i class="fa-solid fa-right-from-bracket"></i> Logout
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <div class="all-content">
+      <aside class="sidebar" id="sidebar">
+        <div class="sidebar-icon">
+          <a href="./clinic-queue.html" class="sidebar-nav-btn" data-tip="Today's Queue">
+            <i class="fa-solid fa-list-check"></i>
+          </a>
+          <a href="./clinic-search.html" class="sidebar-nav-btn" data-tip="Search Patients">
+            <i class="fa-solid fa-magnifying-glass"></i>
+          </a>
+          <a href="./clinic-checkout.html" class="sidebar-nav-btn active" data-tip="Checkout & Billing">
+            <i class="fa-solid fa-money-bill-wave"></i>
+          </a>
+          <a href="./clinic-settings.html" class="sidebar-nav-btn" data-tip="Settings">
+            <i class="fa-solid fa-gear"></i>
+          </a>
+        </div>
+        <div class="logout-sidebar">
+          <button class="sidebar-nav-btn sidebar-logout" data-tip="Logout" onclick="clinicLogout()">
+            <i class="fa-solid fa-right-from-bracket"></i>
+          </button>
+        </div>
+      </aside>
+    </div>
+
+    <div class="main" style="padding: 18px 0px">
+      <div class="content">
+        <!-- Daily summary -->
+        <div class="summary-grid" id="summaryGrid">
+          <div class="summary-box"><div class="label">Patients Seen</div><div class="value">—</div></div>
+          <div class="summary-box"><div class="label">Revenue Today</div><div class="value">—</div></div>
+          <div class="summary-box"><div class="label">Outstanding</div><div class="value">—</div></div>
+        </div>
+
+        <h3 style="font-size: 15px; margin-bottom: 12px;">Pending Bills</h3>
+        <div id="pendingBillsList">
+          <div style="text-align:center; padding:40px;"><i class="fa-solid fa-spinner fa-spin" style="color:var(--teal); font-size:22px;"></i></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bill detail / payment modal -->
+    <div class="modal-overlay" id="billModal">
+      <div class="modal-box">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+          <h3 style="font-size:16px; margin:0;">Bill Details</h3>
+          <i class="fa-solid fa-xmark" style="cursor:pointer; color:var(--light);" onclick="closeBillModal()"></i>
+        </div>
+
+        <div id="billDetailPatient" style="font-size:13px; color:var(--text-light); margin-bottom:12px;"></div>
+        <div id="billDetailLineItems"></div>
+
+        <div style="display:flex; justify-content:space-between; font-weight:700; font-size:15px; margin-top:12px; padding-top:10px; border-top:1.5px solid var(--border);">
+          <span>Total</span>
+          <span id="billDetailTotal">—</span>
+        </div>
+        <div style="display:flex; justify-content:space-between; font-size:13px; color:var(--text-light); margin-top:4px;">
+          <span>Balance Due</span>
+          <span id="billDetailBalance">—</span>
+        </div>
+
+        <!-- Payment form (shown for unpaid/part-paid bills) -->
+        <div id="paymentFormSection">
+          <label class="field-label">Payment Method</label>
+          <div class="btn-row" id="paymentMethodButtons">
+            <button onclick="selectPaymentMethod('CASH')" data-method="CASH">Cash</button>
+            <button onclick="selectPaymentMethod('TRANSFER')" data-method="TRANSFER">Transfer</button>
+            <button onclick="selectPaymentMethod('POS')" data-method="POS">POS</button>
+          </div>
+
+          <label class="field-label">Amount Received (&#8358;)</label>
+          <input type="number" min="0" class="field-input" id="amountReceivedInput" />
+
+          <button class="btn-primary" onclick="submitPayment()" id="submitPaymentBtn">Record Payment</button>
+          <button class="btn-secondary" onclick="promptWaiveBill()">Waive This Bill</button>
+        </div>
+
+        <!-- Post-payment actions (shown once paid) -->
+        <div id="paidActionsSection" style="display:none;">
+          <div style="text-align:center; padding:10px 0; color:#38a169; font-weight:600;">
+            <i class="fa-solid fa-circle-check"></i> <span id="paidStatusText">Paid</span>
+          </div>
+          <button class="btn-primary" onclick="viewReceipt()">
+            <i class="fa-solid fa-file-pdf"></i> View / Print Receipt
+          </button>
+          <button class="btn-secondary" onclick="shareViaWhatsApp()" id="shareWhatsAppBtn">
+            <i class="fa-brands fa-whatsapp"></i> Send via WhatsApp
+          </button>
+          <button class="btn-secondary" onclick="openPatientDisplay()">
+            <i class="fa-solid fa-tv"></i> Show on Patient Display
+          </button>
+        </div>
+
+        <div id="billModalStatus" style="margin-top:10px; font-size:12px;"></div>
+      </div>
+    </div>
+
+    <script src="./db.js"></script>
+    <script src="./clinic-shared.js"></script>
+    <script>
+      let currentBill = null;
+      let selectedMethod = null;
+
+      async function loadDailySummary() {
+        try {
+          const res = await clinicFetch(`${CLINIC_API}/bills/daily-summary`);
+          const data = await res.json();
+          if (!data.success) return;
+
+          const s = data.data;
+          const boxes = document.querySelectorAll("#summaryGrid .summary-box .value");
+          boxes[0].textContent = s.patientsSeen;
+          boxes[1].textContent = `\u20a6${s.totalRevenue.toLocaleString()}`;
+          boxes[2].textContent = `\u20a6${s.outstandingBalance.toLocaleString()}`;
+        } catch (e) {
+          console.error("Load daily summary error:", e);
+        }
+      }
+
+      async function loadPendingBills() {
+        const container = document.getElementById("pendingBillsList");
+        try {
+          const res = await clinicFetch(`${CLINIC_API}/bills/pending`);
+          const data = await res.json();
+
+          if (!data.success || !data.data.length) {
+            container.innerHTML = `<p style="text-align:center; color:var(--light); padding:30px; font-size:13px;">No pending bills. Checkout is all clear.</p>`;
+            return;
+          }
+
+          container.innerHTML = data.data
+            .map((bill) => {
+              const balance = bill.totalAmount - bill.amountPaid;
+              return `
+              <div class="bill-card" onclick="openBillModal('${bill._id}')">
+                <div class="bill-info">
+                  <div class="bill-name">${bill.patient?.fullName || "Unknown patient"}</div>
+                  <div class="bill-sub">${bill.visit?.visitType || "General"} · ${bill.patient?.novaBukId || ""}</div>
+                </div>
+                <span class="status-pill status-${bill.paymentStatus}">${bill.paymentStatus.replace("_", " ")}</span>
+                <div class="bill-amount">\u20a6${balance.toLocaleString()}</div>
+              </div>`;
+            })
+            .join("");
+        } catch (e) {
+          console.error("Load pending bills error:", e);
+          container.innerHTML = `<p style="text-align:center; color:#e53e3e; padding:30px;">Failed to load bills.</p>`;
+        }
+      }
+
+      async function openBillModal(billId) {
+        try {
+          const res = await clinicFetch(`${CLINIC_API}/bills/${billId}`);
+          const data = await res.json();
+          if (!data.success) return;
+
+          currentBill = data.data;
+          selectedMethod = null;
+          document.getElementById("billModalStatus").textContent = "";
+          document.getElementById("amountReceivedInput").value = "";
+          document.querySelectorAll("#paymentMethodButtons button").forEach((b) => b.classList.remove("active"));
+
+          document.getElementById("billDetailPatient").textContent =
+            `${currentBill.patient.fullName} · ${currentBill.visit?.visitType || "General"}`;
+
+          document.getElementById("billDetailLineItems").innerHTML = currentBill.lineItems
+            .map((item) => `<div class="line-item-row"><span>${item.description}</span><span>\u20a6${item.lineTotal.toLocaleString()}</span></div>`)
+            .join("");
+
+          document.getElementById("billDetailTotal").textContent = `\u20a6${currentBill.totalAmount.toLocaleString()}`;
+          const balance = currentBill.totalAmount - currentBill.amountPaid;
+          document.getElementById("billDetailBalance").textContent = `\u20a6${balance.toLocaleString()}`;
+
+          const isPaid = ["PAID", "WAIVED"].includes(currentBill.paymentStatus);
+          document.getElementById("paymentFormSection").style.display = isPaid ? "none" : "block";
+          document.getElementById("paidActionsSection").style.display = isPaid ? "block" : "none";
+          if (isPaid) {
+            document.getElementById("paidStatusText").textContent =
+              currentBill.paymentStatus === "WAIVED" ? "Waived" : "Paid in Full";
+            document.getElementById("shareWhatsAppBtn").style.display = currentBill.patient.phone ? "block" : "none";
+          }
+
+          document.getElementById("billModal").classList.add("show");
+        } catch (e) {
+          console.error("Open bill modal error:", e);
+        }
+      }
+
+      function closeBillModal() {
+        document.getElementById("billModal").classList.remove("show");
+        currentBill = null;
+      }
+
+      function selectPaymentMethod(method) {
+        selectedMethod = method;
+        document.querySelectorAll("#paymentMethodButtons button").forEach((b) => {
+          b.classList.toggle("active", b.dataset.method === method);
+        });
+      }
+
+      async function submitPayment() {
+        const statusEl = document.getElementById("billModalStatus");
+        if (!selectedMethod) {
+          statusEl.innerHTML = '<span style="color:#e53e3e;">Please select a payment method.</span>';
+          return;
+        }
+        const amount = Number(document.getElementById("amountReceivedInput").value);
+        if (!amount || amount <= 0) {
+          statusEl.innerHTML = '<span style="color:#e53e3e;">Please enter a valid amount.</span>';
+          return;
+        }
+
+        const balance = currentBill.totalAmount - currentBill.amountPaid;
+        const paymentStatus = amount >= balance ? "PAID" : "PART_PAID";
+
+        try {
+          const res = await clinicFetch(`${CLINIC_API}/bills/${currentBill._id}/pay`, {
+            method: "PATCH",
+            body: JSON.stringify({ paymentStatus, paymentMethod: selectedMethod, amountPaid: amount }),
+          });
+          const data = await res.json();
+
+          if (data.success) {
+            statusEl.innerHTML = '<span style="color:#38a169;">Payment recorded.</span>';
+            openBillModal(currentBill._id);
+            loadPendingBills();
+            loadDailySummary();
+          } else {
+            statusEl.innerHTML = `<span style="color:#e53e3e;">${data.message}</span>`;
+          }
+        } catch (e) {
+          statusEl.innerHTML = '<span style="color:#e53e3e;">Network error. Please try again.</span>';
+        }
+      }
+
+      async function promptWaiveBill() {
+        const reason = prompt("Reason for waiving this bill (required):");
+        if (!reason || !reason.trim()) return;
+
+        const statusEl = document.getElementById("billModalStatus");
+        try {
+          const res = await clinicFetch(`${CLINIC_API}/bills/${currentBill._id}/pay`, {
+            method: "PATCH",
+            body: JSON.stringify({ paymentStatus: "WAIVED", waivedReason: reason.trim() }),
+          });
+          const data = await res.json();
+
+          if (data.success) {
+            openBillModal(currentBill._id);
+            loadPendingBills();
+            loadDailySummary();
+          } else {
+            statusEl.innerHTML = `<span style="color:#e53e3e;">${data.message}</span>`;
+          }
+        } catch (e) {
+          statusEl.innerHTML = '<span style="color:#e53e3e;">Network error. Please try again.</span>';
+        }
+      }
+
+      function viewReceipt() {
+        window.open(`${CLINIC_API}/bills/${currentBill._id}/receipt`, "_blank");
+      }
+
+      async function shareViaWhatsApp() {
+        const statusEl = document.getElementById("billModalStatus");
+        statusEl.textContent = "Sending...";
+        try {
+          const res = await clinicFetch(`${CLINIC_API}/bills/${currentBill._id}/share-whatsapp`, { method: "POST" });
+          const data = await res.json();
+          statusEl.innerHTML = data.success
+            ? '<span style="color:#38a169;">Sent via WhatsApp.</span>'
+            : `<span style="color:#e53e3e;">${data.message}</span>`;
+        } catch (e) {
+          statusEl.innerHTML = '<span style="color:#e53e3e;">Network error. Please try again.</span>';
+        }
+      }
+
+      function openPatientDisplay() {
+        window.open(`./clinic-bill-display.html?billId=${currentBill._id}`, "_blank", "width=900,height=700");
+      }
+
+      loadDailySummary();
+      loadPendingBills();
+    </script>
+  </body>
+</html>

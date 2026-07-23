@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" sizes="180x180" href="./images/logo.png" />
+    <title>My Bills & Receipts | NovaBuk</title>
+    <link rel="stylesheet" href="./styles-app.css" />
+    <link rel="stylesheet" href="./styles.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      .bills-list { padding: 20px 0; display: flex; flex-direction: column; gap: 12px; }
+      .bill-row {
+        background: white;
+        border-radius: 16px;
+        padding: 18px 20px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.04);
+        display: flex;
+        align-items: center;
+        gap: 14px;
+      }
+      .bill-row-info { flex: 1; min-width: 0; }
+      .bill-row-clinic { font-size: 14px; font-weight: 700; color: #0f2027; }
+      .bill-row-sub { font-size: 12px; color: #888; margin-top: 3px; }
+      .bill-row-amount { font-size: 15px; font-weight: 700; color: #35bac9; }
+      .status-chip { font-size: 10px; font-weight: 700; padding: 3px 10px; border-radius: 12px; text-transform: uppercase; }
+      .status-PAID { background: #d1fae5; color: #065f46; }
+      .status-WAIVED { background: #e0e7ff; color: #4338ca; }
+      .status-PART_PAID { background: #dbeafe; color: #1e40af; }
+      .status-UNPAID { background: #fef3c7; color: #b45309; }
+      .empty-state { text-align: center; padding: 60px 20px; color: #888; }
+    </style>
+  </head>
+  <body class="app-page">
+    <div class="header">
+      <div class="navbar navbar-home">
+        <div class="btn-log" style="display: flex">
+          <button id="navToggle" class="nav-toggle" aria-label="Toggle navigation">
+            <i class="fas fa-bars"></i>
+          </button>
+          <div class="logo"><img src="./images/logo.png" alt="" /></div>
+        </div>
+        <div class="nav-menu navMenu" id="navMenu">
+          <ul>
+            <li><a href="./app-home.html">Home</a></li>
+            <li><a href="./complaints.html">Symptoms Logging</a></li>
+            <li><a href="./app-clinics.html">Clinic Directory</a></li>
+            <li><a href="./app-bill.html" class="active">Billing</a></li>
+            <li><a href="./app-history.html">History</a></li>
+          </ul>
+          <div class="profile-opt" id="optNav">
+            <ul>
+              <li>
+                <a href="./app-setting.html?tab=privacy"
+                  ><i class="fa-solid fa-gear"></i> <span>Settings</span></a
+                >
+              </li>
+              <li>
+                <a href="#" onclick="handleMenuSelect('logout')"
+                  ><i class="fa-solid fa-right-from-bracket" style="color: #ff7675 !important"></i>
+                  <span style="color: #ff7675">Logout</span></a
+                >
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="nav-buttons navbtns">
+          <ul>
+            <li><a href="app-tip-view.html" data-tip="health tips"><i class="fa-solid fa-briefcase-medical"></i></a></li>
+            <li><a href="./app-history.html"><i class="fa-regular fa-bell"></i></a></li>
+            <li>
+              <div class="user-profile" id="userProfileBtn">
+                <div class="profile-check">
+                  <span><div class="nav-avatar" style="font-size: 1.5em; font-family: &quot;poppins&quot;, san-serif;" id="navAvatar"></div></span>
+                  <span class="dropdown-arrow"><i class="fa-solid fa-angle-down"></i></span>
+                </div>
+                <div class="dropdown-menu" id="settingsDropdown">
+                  <div class="dd-user-block">
+                    <div class="dd-avatar-sm" id="ddAvatar"></div>
+                    <div class="dd-user-info">
+                      <p class="dd-name" id="ddName">—</p>
+                      <p class="dd-email" id="ddEmail">—</p>
+                    </div>
+                  </div>
+                  <div class="dd-divider"></div>
+                  <div class="dropdown-item" onclick="handleMenuSelect('dashboard')"><span><i class="fa-solid fa-house"></i></span> Dashboard</div>
+                  <div class="dropdown-item" onclick="handleMenuSelect('visits')"><span><i class="fa-solid fa-calendar-check"></i></span> My Visits</div>
+                  <div class="dropdown-item" onclick="handleMenuSelect('profile')"><span><i class="fa-solid fa-heart-pulse"></i></span> My Health Profile</div>
+                  <div class="dd-divider"></div>
+                  <div class="dropdown-item" onclick="handleMenuSelect('settings')"><span><i class="fa-solid fa-gear"></i></span> Settings</div>
+                  <div class="dd-divider"></div>
+                  <div class="dropdown-item dd-logout" onclick="handleMenuSelect('logout')"><span><i class="fa-solid fa-right-from-bracket"></i></span> Logout</div>
+                </div>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <main class="main" style="min-height: 100vh; background: #7ecad7; padding-top: 80px">
+      <div class="main-body" style="background: #f8fdfe; border-radius: 30px 30px 0 0; min-height: calc(100vh - 80px); padding: 30px 20px;">
+        <h1 style="font-family: poppins, sans-serif; color: #0f2027; font-size: 1.6rem; font-weight: 800; margin-bottom: 6px;">My Bills & Receipts</h1>
+        <p style="color: #666; margin-bottom: 10px;">All your visit bills across every clinic you've used.</p>
+
+        <div id="billsList" class="bills-list">
+          <div style="text-align: center; padding: 50px;"><div class="spinner"></div></div>
+        </div>
+      </div>
+    </main>
+
+    <script src="./script.js"></script>
+    <script>
+      var API_URL =
+        window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1"
+          ? "http://localhost:5000/api"
+          : "https://novabuk-backend.onrender.com/api";
+
+      async function loadMyBills() {
+        const container = document.getElementById("billsList");
+        const token = localStorage.getItem("novabuk_token");
+
+        try {
+          const res = await fetch(`${API_URL}/visits/bills/my`, {
+            headers: { Authorization: `Bearer ${token}` },
+            credentials: "include",
+          });
+          const data = await res.json();
+
+          if (!data.success || !data.data.length) {
+            container.innerHTML = `
+              <div class="empty-state">
+                <i class="fa-solid fa-receipt" style="font-size: 32px; opacity: 0.3; display: block; margin-bottom: 12px;"></i>
+                <p>No bills yet. Bills appear here after a doctor completes your visit.</p>
+              </div>`;
+            return;
+          }
+
+          container.innerHTML = data.data
+            .map((bill) => {
+              const balance = bill.totalAmount - bill.amountPaid;
+              const isSettled = ["PAID", "WAIVED"].includes(bill.paymentStatus);
+              return `
+              <div class="bill-row">
+                <div class="bill-row-info">
+                  <div class="bill-row-clinic">${bill.clinic?.name || "Clinic"}</div>
+                  <div class="bill-row-sub">${bill.visit?.visitType || "General"} · ${new Date(bill.createdAt).toLocaleDateString("en-NG", { day: "numeric", month: "short", year: "numeric" })}</div>
+                </div>
+                <span class="status-chip status-${bill.paymentStatus}">${bill.paymentStatus.replace("_", " ")}</span>
+                <div style="text-align:right;">
+                  <div class="bill-row-amount">\u20a6${bill.totalAmount.toLocaleString()}</div>
+                  ${!isSettled ? `<div style="font-size:11px; color:#b45309;">Due: \u20a6${balance.toLocaleString()}</div>` : ""}
+                </div>
+                ${
+                  isSettled
+                    ? `<button onclick="downloadReceipt('${bill._id}')" style="background:none; border:1px solid #35bac9; color:#35bac9; border-radius:8px; padding:6px 12px; font-size:12px; cursor:pointer;"><i class="fa-solid fa-download"></i></button>`
+                    : ""
+                }
+              </div>`;
+            })
+            .join("");
+        } catch (err) {
+          console.error("Load bills error:", err);
+          container.innerHTML = `<div class="empty-state"><p style="color:#e53e3e;">Failed to load your bills. Please try again.</p></div>`;
+        }
+      }
+
+      function downloadReceipt(billId) {
+        const token = localStorage.getItem("novabuk_token");
+        fetch(`${API_URL}/visits/bills/${billId}/receipt`, {
+          headers: { Authorization: `Bearer ${token}` },
+          credentials: "include",
+        })
+          .then((res) => res.blob())
+          .then((blob) => {
+            const url = URL.createObjectURL(blob);
+            window.open(url, "_blank");
+          })
+          .catch((err) => {
+            console.error("Download receipt error:", err);
+            alert("Could not load your receipt. Please try again.");
+          });
+      }
+
+      loadMyBills();
+    </script>
+  </body>
+</html>

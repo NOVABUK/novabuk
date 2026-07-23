@@ -369,6 +369,15 @@
             <i class="fa-solid fa-magnifying-glass"></i>
           </a>
 
+          <!-- Checkout & Billing -->
+          <a
+            href="./clinic-checkout.html"
+            class="sidebar-nav-btn"
+            data-tip="Checkout & Billing"
+          >
+            <i class="fa-solid fa-money-bill-wave"></i>
+          </a>
+
           <!-- Settings pushed to bottom via margin-top: auto on logout -->
           <a
             href="./clinic-settings.html"
@@ -834,6 +843,55 @@
               ></i>
               Your <strong>Premium Pro</strong> plan is active. Thank you for
               your support!
+            </div>
+          </div>
+
+          <!-- BILLING — CONSULTATION FEE SCHEDULE -->
+          <div class="card" id="billingCard">
+            <div class="card-head">
+              <h3>
+                <i class="fa-solid fa-money-bill-wave" style="margin-right: 8px; color: var(--teal)"></i>
+                Billing — Consultation Fees
+              </h3>
+            </div>
+            <div class="card-body">
+              <p style="font-size: 13px; color: var(--text-light); margin-bottom: 16px;">
+                Set your clinic's consultation fees. These apply automatically when a doctor completes a visit — no fee configured means no bill gets generated for that visit type.
+              </p>
+              <div id="feeScheduleForm" style="display: flex; flex-direction: column; gap: 14px;">
+                <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px;">
+                  <label style="font-size: 13px; font-weight: 600; flex: 1;">General Consultation</label>
+                  <div style="display:flex; align-items:center; gap:6px;">
+                    <span style="color:var(--text-light);">&#8358;</span>
+                    <input type="number" min="0" id="feeGeneral" style="width: 120px; padding: 8px 10px; border: 1px solid var(--border, #ccc); border-radius: 8px; font-size: 13px;" />
+                  </div>
+                </div>
+                <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px;">
+                  <label style="font-size: 13px; font-weight: 600; flex: 1;">Specialist Consultation</label>
+                  <div style="display:flex; align-items:center; gap:6px;">
+                    <span style="color:var(--text-light);">&#8358;</span>
+                    <input type="number" min="0" id="feeSpecialist" style="width: 120px; padding: 8px 10px; border: 1px solid var(--border, #ccc); border-radius: 8px; font-size: 13px;" />
+                  </div>
+                </div>
+                <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px;">
+                  <label style="font-size: 13px; font-weight: 600; flex: 1;">Follow-up Visit</label>
+                  <div style="display:flex; align-items:center; gap:6px;">
+                    <span style="color:var(--text-light);">&#8358;</span>
+                    <input type="number" min="0" id="feeFollowup" style="width: 120px; padding: 8px 10px; border: 1px solid var(--border, #ccc); border-radius: 8px; font-size: 13px;" />
+                  </div>
+                </div>
+                <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px;">
+                  <label style="font-size: 13px; font-weight: 600; flex: 1;">Emergency Consultation</label>
+                  <div style="display:flex; align-items:center; gap:6px;">
+                    <span style="color:var(--text-light);">&#8358;</span>
+                    <input type="number" min="0" id="feeEmergency" style="width: 120px; padding: 8px 10px; border: 1px solid var(--border, #ccc); border-radius: 8px; font-size: 13px;" />
+                  </div>
+                </div>
+              </div>
+              <button class="btn-upload" onclick="saveFeesSchedule()" style="margin-top: 16px;">
+                <i class="fa-solid fa-floppy-disk"></i> Save Fees
+              </button>
+              <div id="feeScheduleStatus" style="margin-top: 10px; font-size: 13px;"></div>
             </div>
           </div>
 
@@ -1656,6 +1714,57 @@
         addStaffBtn.style.display = "";
         updateStaffRoleOptions();
         loadStaffList();
+        loadFeeSchedule();
+      }
+
+      // ── BILLING FEE SCHEDULE ──────────────────────────────────
+      const FEE_INPUT_IDS = {
+        General: "feeGeneral",
+        Specialist: "feeSpecialist",
+        "Follow-up": "feeFollowup",
+        Emergency: "feeEmergency",
+      };
+
+      async function loadFeeSchedule() {
+        try {
+          const res = await clinicFetch(`${API_URL}/clinic/fee-schedule`);
+          const data = await res.json();
+          if (!data.success) return;
+
+          data.data.forEach((fee) => {
+            const inputId = FEE_INPUT_IDS[fee.visitType];
+            if (inputId) document.getElementById(inputId).value = fee.feeAmount;
+          });
+        } catch (e) {
+          console.error("Load fee schedule error:", e);
+        }
+      }
+
+      async function saveFeesSchedule() {
+        const statusEl = document.getElementById("feeScheduleStatus");
+        statusEl.textContent = "";
+
+        const fees = Object.entries(FEE_INPUT_IDS).map(([visitType, inputId]) => ({
+          visitType,
+          feeAmount: Number(document.getElementById(inputId).value) || 0,
+        }));
+
+        try {
+          const res = await clinicFetch(`${API_URL}/clinic/fee-schedule`, {
+            method: "PUT",
+            body: JSON.stringify({ fees }),
+          });
+          const data = await res.json();
+
+          if (data.success) {
+            statusEl.innerHTML = '<span style="color:#38a169;"><i class="fa-solid fa-circle-check"></i> Fees saved.</span>';
+          } else {
+            statusEl.innerHTML = `<span style="color:#e53e3e;">${data.message || "Failed to save fees."}</span>`;
+          }
+        } catch (e) {
+          console.error("Save fee schedule error:", e);
+          statusEl.innerHTML = '<span style="color:#e53e3e;">Network error. Please try again.</span>';
+        }
       }
 
       // Role options available in the "Add Staff" dropdown depend on plan.
