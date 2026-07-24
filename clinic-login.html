@@ -266,9 +266,23 @@
       ? "http://localhost:5000/api"
       : "https://novabuk-backend.onrender.com/api";
 
-    // Already logged in as clinic staff → skip to queue
-    if (localStorage.getItem("novabuk_clinic_staff")) {
-      window.location.replace("./clinic-queue.html");
+    // ── ROLE-BASED REDIRECT ────────────────────────────────
+    // Pharmacist/lab tech shouldn't land on the general patient
+    // queue at all — they don't manage visits, they have their own
+    // dedicated dashboards. Everyone else still goes to the queue.
+    function getPostLoginRedirect(staff) {
+      if (staff.role === "pharmacist") return "./clinic-pharmacy.html";
+      if (staff.role === "lab_tech") return "./clinic-laboratory.html";
+      return "./clinic-queue.html";
+    }
+
+    // Already logged in as clinic staff → skip straight to their dashboard.
+    // (Previously checked "novabuk_clinic_staff", a key that's never
+    // actually set anywhere — login stores under "novabuk_user" — so
+    // this check never fired at all. Fixed to check the real key.)
+    const existingStaff = JSON.parse(localStorage.getItem("novabuk_user") || "null");
+    if (existingStaff) {
+      window.location.replace(getPostLoginRedirect(existingStaff));
     }
 
     function togglePassword() {
@@ -311,7 +325,7 @@
           // The HttpOnly cookie is set automatically by the browser
           localStorage.setItem("novabuk_token", data.token);
           localStorage.setItem("novabuk_user",  JSON.stringify(data.staff));
-          window.location.href = "./clinic-queue.html";
+          window.location.href = getPostLoginRedirect(data.staff);
         } else {
           errText.textContent = data.message || "Incorrect email or password.";
           banner.classList.add("show");

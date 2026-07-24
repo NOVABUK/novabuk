@@ -653,30 +653,49 @@ window.refreshNavAvatar = function () {
       .catch(() => {}); // silent fail — initials already showing
   }
 
+  // ── ACCOUNT TYPE DETECTION ────────────────────────────
+  // "novabuk_user" holds one of two different shapes depending on who
+  // logged in:
+  //   - the clinic OWNER — a User doc, role: "Doctors"
+  //   - added ClinicStaff (nurse, receptionist, pharmacist, lab_tech,
+  //     doctor, admin) — has a nested `clinic: {id, name}` object
+  //     instead (see clinic-login.html's login response), and `role`
+  //     is their ClinicStaff role, never the literal string "Doctors".
+  // Checking only `role === "Doctors"` (as this used to) recognizes the
+  // owner but not any staff member added later — every nurse,
+  // receptionist, pharmacist, lab tech, or delegated admin account
+  // fell through to the patient-app branch below instead.
+  function isClinicAccount(user) {
+    return user.role === "Doctors" || !!(user.clinic && (user.clinic.id || user.clinic._id));
+  }
+
+  function getClinicDestination(user) {
+    if (user.role === "pharmacist") return "./clinic-pharmacy.html";
+    if (user.role === "lab_tech") return "./clinic-laboratory.html";
+    return "./clinic-queue.html";
+  }
+
+  window.isClinicAccount = isClinicAccount;
+  window.getClinicDestination = getClinicDestination;
+
   window.handleMenuSelect = function (value) {
     if (value === "logout") {
       showLogoutModal();
     } else if (value === "dashboard") {
       const user = JSON.parse(localStorage.getItem("novabuk_user") || "{}");
-      if (user.role === "Doctors") {
-        window.location.href = "./clinic-queue.html";
-      } else {
-        window.location.href = "./app-home.html";
-      }
+      window.location.href = isClinicAccount(user)
+        ? getClinicDestination(user)
+        : "./app-home.html";
     } else if (value === "visits") {
       const user = JSON.parse(localStorage.getItem("novabuk_user") || "{}");
-      if (user.role === "Doctors") {
-        window.location.href = "./clinic-queue.html";
-      } else {
-        window.location.href = "./app-history.html";
-      }
+      window.location.href = isClinicAccount(user)
+        ? "./clinic-queue.html"
+        : "./app-history.html";
     } else if (value === "profile" || value === "settings") {
       const user = JSON.parse(localStorage.getItem("novabuk_user") || "{}");
-      if (user.role === "Doctors") {
-        window.location.href = "./clinic-settings.html";
-      } else {
-        window.location.href = "./app-setting.html?tab=profile";
-      }
+      window.location.href = isClinicAccount(user)
+        ? "./clinic-settings.html"
+        : "./app-setting.html?tab=profile";
     } else if (value === "notification") {
       window.location.href = "./app-setting.html?tab=notification";
     }

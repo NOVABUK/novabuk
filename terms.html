@@ -568,13 +568,20 @@
             window.location.reload();
           }
         } else if (value === "dashboard") {
-          window.location.href = "./app-home.html";
+          var _u = JSON.parse(localStorage.getItem("novabuk_user") || "{}");
+          window.location.href = window.isClinicAccount(_u)
+            ? window.getClinicDestination(_u)
+            : "./app-home.html";
         } else if (value === "visits") {
-          window.location.href = "./app-history.html";
-        } else if (value === "profile") {
-          window.location.href = "./app-setting.html?tab=profile";
-        } else if (value === "settings") {
-          window.location.href = "./app-setting.html?tab=profile";
+          var _u = JSON.parse(localStorage.getItem("novabuk_user") || "{}");
+          window.location.href = window.isClinicAccount(_u)
+            ? "./clinic-queue.html"
+            : "./app-history.html";
+        } else if (value === "profile" || value === "settings") {
+          var _u = JSON.parse(localStorage.getItem("novabuk_user") || "{}");
+          window.location.href = window.isClinicAccount(_u)
+            ? "./clinic-settings.html"
+            : "./app-setting.html?tab=profile";
         } else if (value === "notification") {
           window.location.href = "./app-setting.html?tab=notification";
         }

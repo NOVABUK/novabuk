@@ -232,17 +232,25 @@
       let selectedMethod = null;
 
       async function loadDailySummary() {
+        const boxes = document.querySelectorAll("#summaryGrid .summary-box .value");
         try {
           const res = await clinicFetch(`${CLINIC_API}/bills/daily-summary`);
           const data = await res.json();
-          if (!data.success) return;
+          if (!data.success) {
+            boxes.forEach((b) => (b.textContent = "—"));
+            console.error("Load daily summary error:", data.message);
+            return;
+          }
 
           const s = data.data;
-          const boxes = document.querySelectorAll("#summaryGrid .summary-box .value");
           boxes[0].textContent = s.patientsSeen;
           boxes[1].textContent = `\u20a6${s.totalRevenue.toLocaleString()}`;
           boxes[2].textContent = `\u20a6${s.outstandingBalance.toLocaleString()}`;
         } catch (e) {
+          // clinicFetch already shows a toast for 401/403 — this just
+          // makes sure the boxes themselves don't sit on a placeholder
+          // forever with no visible sign anything went wrong.
+          boxes.forEach((b) => (b.textContent = "—"));
           console.error("Load daily summary error:", e);
         }
       }

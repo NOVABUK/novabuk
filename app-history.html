@@ -544,6 +544,8 @@
       if (!token) window.location.href = "./sign-in.html";
 
       let allVisits = [];
+      let myPrescriptions = [];
+      let myLabRequests = [];
       let activeTab = "all";
       let cancellingId = null;
 
@@ -564,13 +566,19 @@
         document.getElementById("visitsList").innerHTML =
           '<div class="spinner"></div>';
         try {
-          const res = await smartFetch(`${API_URL}/visits/my`, {
+          // Prescriptions/lab requests are separate collections keyed by
+          // visit — fetched alongside so each Completed visit card can
+          // show what was prescribed/tested, without a separate page.
+          // A failure there shouldn't block the visit list itself, so
+          // it's wrapped in its own try/catch below.
+          const visitsRes = await smartFetch(`${API_URL}/visits/my`, {
             headers: { Authorization: `Bearer ${token}` },
             credentials: "include",
           });
-          const data = await res.json();
+          const data = await visitsRes.json();
           if (data.success) {
             allVisits = data.data;
+            await loadPrescriptionsAndLabResults();
             renderVisits();
           } else {
             document.getElementById("visitsList").innerHTML =
@@ -579,6 +587,29 @@
         } catch (err) {
           document.getElementById("visitsList").innerHTML =
             `<p style="text-align:center;color:#e53e3e;padding:40px">Network error. Please try again.</p>`;
+        }
+      }
+
+      async function loadPrescriptionsAndLabResults() {
+        try {
+          const [presRes, labRes] = await Promise.all([
+            smartFetch(`${API_URL}/visits/prescriptions/my`, {
+              headers: { Authorization: `Bearer ${token}` },
+              credentials: "include",
+            }),
+            smartFetch(`${API_URL}/visits/lab-requests/my`, {
+              headers: { Authorization: `Bearer ${token}` },
+              credentials: "include",
+            }),
+          ]);
+          const presData = await presRes.json();
+          const labData = await labRes.json();
+          myPrescriptions = presData.success ? presData.data : [];
+          myLabRequests = labData.success ? labData.data : [];
+        } catch (err) {
+          console.error("Load prescriptions/lab results error:", err);
+          myPrescriptions = [];
+          myLabRequests = [];
         }
       }
 
@@ -628,6 +659,18 @@
             );
             const symptoms = visit.symptomLog?.tags || [];
 
+            // Match this visit's structured Prescription / LabRequest
+            // documents (separate collections, keyed by visit id) —
+            // only ever created when a Pro-plan clinic completes a
+            // consultation with Feature 4 fields filled in, so most
+            // visits will have neither.
+            const visitPrescriptions = myPrescriptions.filter(
+              (p) => (p.visit?._id || p.visit) === visit._id,
+            );
+            const visitLabRequests = myLabRequests.filter(
+              (l) => (l.visit?._id || l.visit) === visit._id,
+            );
+
             return `
             <div class="visit-card">
               <div class="visit-top">
@@ -673,6 +716,9 @@
                   : ""
               }
 
+              ${visitPrescriptions.map((p) => renderPrescriptionBlock(p)).join("")}
+              ${visitLabRequests.map((l) => renderLabResultBlock(l)).join("")}
+
               ${
                 visit.status === "Pending"
                   ? `
@@ -686,6 +732,70 @@
             </div>`;
           })
           .join("");
+      }
+
+      // ── PRESCRIPTION / LAB RESULT BLOCKS ─────────────────
+      function renderPrescriptionBlock(prescription) {
+        const items = prescription.items
+          .map(
+            (item) => `
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid #f0f0f0;font-size:12px;">
+            <div><strong>${item.drugName}</strong> — ${item.dosage} · ${item.route} · ${item.frequency} · ${item.durationDays} day(s)</div>
+            <span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:20px;${item.dispensed ? "background:#d1fae5;color:#065f46" : "background:#fef3c7;color:#b45309"}">${item.dispensed ? "Dispensed" : "Not yet dispensed"}</span>
+          </div>`,
+          )
+          .join("");
+        return `
+          <div style="margin-top:14px;padding:14px;background:#f8fdfe;border:1px solid #d9f0f3;border-radius:12px;">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+              <strong style="font-size:13px;color:#0f2027;"><i class="fa-solid fa-pills" style="color:#35bac9;"></i> Prescription</strong>
+              <button onclick="downloadPrescriptionPdf('${prescription._id}')" style="background:none;border:1px solid #35bac9;color:#35bac9;border-radius:8px;padding:5px 12px;font-size:11px;cursor:pointer;">
+                <i class="fa-solid fa-download"></i> PDF
+              </button>
+            </div>
+            ${items}
+          </div>`;
+      }
+
+      function renderLabResultBlock(labRequest) {
+        const statusLabel = {
+          PENDING: "Pending",
+          SAMPLE_COLLECTED: "Sample collected",
+          RESULT_READY: "Result ready",
+        };
+        const items = labRequest.items
+          .map(
+            (item) => `
+          <div style="padding:8px 0;border-bottom:1px solid #f0f0f0;font-size:12px;">
+            <strong>${item.testName}</strong> <span style="color:#888;">(${item.sampleType})</span>
+            ${item.resultText ? `<div style="margin-top:4px;color:#444;">${item.resultText}</div>` : ""}
+          </div>`,
+          )
+          .join("");
+        return `
+          <div style="margin-top:14px;padding:14px;background:#f8fdfe;border:1px solid #d9f0f3;border-radius:12px;">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+              <strong style="font-size:13px;color:#0f2027;"><i class="fa-solid fa-flask-vial" style="color:#35bac9;"></i> Lab Requests</strong>
+              <span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:20px;${labRequest.status === "RESULT_READY" ? "background:#d1fae5;color:#065f46" : "background:#fef3c7;color:#b45309"}">${statusLabel[labRequest.status] || labRequest.status}</span>
+            </div>
+            ${items}
+          </div>`;
+      }
+
+      function downloadPrescriptionPdf(prescriptionId) {
+        fetch(`${API_URL}/visits/prescriptions/${prescriptionId}/pdf`, {
+          headers: { Authorization: `Bearer ${token}` },
+          credentials: "include",
+        })
+          .then((res) => res.blob())
+          .then((blob) => {
+            const url = URL.createObjectURL(blob);
+            window.open(url, "_blank");
+          })
+          .catch((err) => {
+            console.error("Download prescription error:", err);
+            alert("Could not load your prescription. Please try again.");
+          });
       }
 
       // ── CANCEL VISIT ─────────────────────────────────────

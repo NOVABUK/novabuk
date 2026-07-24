@@ -214,144 +214,163 @@
      OAuth client (e.g. https://novabuk-backend.onrender.com/api/users/google-calendar/callback)
 -->
 
+    <!-- Firebase SDKs (v10 modular, loaded via CDN as ES modules) -->
+    <script type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+      import {
+        getMessaging,
+        getToken,
+      } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-messaging.js";
 
+      // TODO: replace with your actual Firebase web config (public values,
+      // safe to commit — from Firebase Console → Project Settings → Your apps)
+      const FIREBASE_CONFIG_PLACEHOLDER = {
+        apiKey: "REPLACE_ME",
+        authDomain: "REPLACE_ME.firebaseapp.com",
+        projectId: "REPLACE_ME",
+        storageBucket: "REPLACE_ME.appspot.com",
+        messagingSenderId: "REPLACE_ME",
+        appId: "REPLACE_ME",
+      };
 
-<!-- Firebase SDKs (v10 modular, loaded via CDN as ES modules) -->
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-  import { getMessaging, getToken } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-messaging.js";
+      // TODO: replace with your actual VAPID key (Firebase Console →
+      // Project Settings → Cloud Messaging → Web configuration)
+      const VAPID_KEY_PLACEHOLDER = "REPLACE_ME";
 
-  // TODO: replace with your actual Firebase web config (public values,
-  // safe to commit — from Firebase Console → Project Settings → Your apps)
-  const FIREBASE_CONFIG_PLACEHOLDER = {
-    apiKey: "REPLACE_ME",
-    authDomain: "REPLACE_ME.firebaseapp.com",
-    projectId: "REPLACE_ME",
-    storageBucket: "REPLACE_ME.appspot.com",
-    messagingSenderId: "REPLACE_ME",
-    appId: "REPLACE_ME",
-  };
+      const firebaseApp = initializeApp(FIREBASE_CONFIG_PLACEHOLDER);
+      const messaging = getMessaging(firebaseApp);
 
-  // TODO: replace with your actual VAPID key (Firebase Console →
-  // Project Settings → Cloud Messaging → Web configuration)
-  const VAPID_KEY_PLACEHOLDER = "REPLACE_ME";
+      window.__enablePushNotificationsInternal = async function () {
+        const statusEl = document.getElementById("notifSettingsStatus");
+        const btn = document.getElementById("enablePushBtn");
+        const label = document.getElementById("pushBtnLabel");
 
-  const firebaseApp = initializeApp(FIREBASE_CONFIG_PLACEHOLDER);
-  const messaging = getMessaging(firebaseApp);
+        try {
+          const permission = await Notification.requestPermission();
+          if (permission !== "granted") {
+            statusEl.innerHTML =
+              '<span style="color:#e53e3e;">Notification permission was denied. You can change this in your browser settings.</span>';
+            return;
+          }
 
-  window.__enablePushNotificationsInternal = async function () {
-    const statusEl = document.getElementById("notifSettingsStatus");
-    const btn = document.getElementById("enablePushBtn");
-    const label = document.getElementById("pushBtnLabel");
+          // Register the Firebase-specific service worker (separate from
+          // your main sw.js, which stays focused on offline caching)
+          const swRegistration = await navigator.serviceWorker.register(
+            "/firebase-messaging-sw.js",
+          );
 
-    try {
-      const permission = await Notification.requestPermission();
-      if (permission !== "granted") {
-        statusEl.innerHTML = '<span style="color:#e53e3e;">Notification permission was denied. You can change this in your browser settings.</span>';
-        return;
+          const token = await getToken(messaging, {
+            vapidKey: VAPID_KEY_PLACEHOLDER,
+            serviceWorkerRegistration: swRegistration,
+          });
+
+          if (!token) {
+            statusEl.innerHTML =
+              '<span style="color:#e53e3e;">Could not get a notification token. Please try again.</span>';
+            return;
+          }
+
+          // Save the token to the backend
+          const authToken = localStorage.getItem("novabuk_token");
+          const API_URL =
+            window.location.hostname === "localhost" ||
+            window.location.hostname === "127.0.0.1"
+              ? "http://localhost:5000/api"
+              : "https://novabuk-backend.onrender.com/api";
+
+          const res = await fetch(`${API_URL}/users/fcm-token`, {
+            method: "PATCH",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${authToken}`,
+            },
+            body: JSON.stringify({ fcmToken: token }),
+          });
+          const data = await res.json();
+
+          if (data.success) {
+            label.textContent = "Enabled";
+            btn.disabled = true;
+            statusEl.innerHTML =
+              '<span style="color:#38a169;"><i class="fa-solid fa-circle-check"></i> Push notifications enabled.</span>';
+          } else {
+            statusEl.innerHTML = `<span style="color:#e53e3e;">${data.message || "Failed to save notification settings."}</span>`;
+          }
+        } catch (err) {
+          console.error("Enable push notifications error:", err);
+          statusEl.innerHTML =
+            '<span style="color:#e53e3e;">Something went wrong enabling notifications. Please try again.</span>';
+        }
+      };
+    </script>
+
+    <script>
+      // Thin non-module wrapper so the onclick="" attribute above can
+      // call into the module-scoped function.
+      function enablePushNotifications() {
+        if (window.__enablePushNotificationsInternal) {
+          window.__enablePushNotificationsInternal();
+        }
       }
 
-      // Register the Firebase-specific service worker (separate from
-      // your main sw.js, which stays focused on offline caching)
-      const swRegistration = await navigator.serviceWorker.register("/firebase-messaging-sw.js");
+      async function connectGoogleCalendar() {
+        const statusEl = document.getElementById("notifSettingsStatus");
+        const authToken = localStorage.getItem("novabuk_token");
+        const API_URL =
+          window.location.hostname === "localhost" ||
+          window.location.hostname === "127.0.0.1"
+            ? "http://localhost:5000/api"
+            : "https://novabuk-backend.onrender.com/api";
 
-      const token = await getToken(messaging, {
-        vapidKey: VAPID_KEY_PLACEHOLDER,
-        serviceWorkerRegistration: swRegistration,
-      });
+        try {
+          const res = await fetch(`${API_URL}/users/google-calendar/connect`, {
+            headers: { Authorization: `Bearer ${authToken}` },
+          });
+          const data = await res.json();
 
-      if (!token) {
-        statusEl.innerHTML = '<span style="color:#e53e3e;">Could not get a notification token. Please try again.</span>';
-        return;
+          if (data.success && data.url) {
+            // Full navigation to Google's consent screen — not a fetch,
+            // since the patient needs to actually interact with Google's UI
+            window.location.href = data.url;
+          } else {
+            statusEl.innerHTML =
+              '<span style="color:#e53e3e;">Could not start the Google Calendar connection. Please try again.</span>';
+          }
+        } catch (err) {
+          console.error("Connect Google Calendar error:", err);
+          statusEl.innerHTML =
+            '<span style="color:#e53e3e;">Network error. Please try again.</span>';
+        }
       }
 
-      // Save the token to the backend
-      const authToken = localStorage.getItem("novabuk_token");
-      const API_URL = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1"
-        ? "http://localhost:5000/api"
-        : "https://novabuk-backend.onrender.com/api";
+      // Reflect the result after Google redirects back
+      // (app-setting.html?tab=notification&calendar=connected|denied|error)
+      (function checkCalendarConnectionResult() {
+        const params = new URLSearchParams(window.location.search);
+        const calendarResult = params.get("calendar");
+        if (!calendarResult) return;
 
-      const res = await fetch(`${API_URL}/users/fcm-token`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${authToken}`,
-        },
-        body: JSON.stringify({ fcmToken: token }),
-      });
-      const data = await res.json();
+        const statusEl = document.getElementById("notifSettingsStatus");
+        const label = document.getElementById("calendarBtnLabel");
+        const btn = document.getElementById("calendarBtn");
 
-      if (data.success) {
-        label.textContent = "Enabled";
-        btn.disabled = true;
-        statusEl.innerHTML = '<span style="color:#38a169;"><i class="fa-solid fa-circle-check"></i> Push notifications enabled.</span>';
-      } else {
-        statusEl.innerHTML = `<span style="color:#e53e3e;">${data.message || "Failed to save notification settings."}</span>`;
-      }
-    } catch (err) {
-      console.error("Enable push notifications error:", err);
-      statusEl.innerHTML = '<span style="color:#e53e3e;">Something went wrong enabling notifications. Please try again.</span>';
-    }
-  };
-</script>
-
-<script>
-  // Thin non-module wrapper so the onclick="" attribute above can
-  // call into the module-scoped function.
-  function enablePushNotifications() {
-    if (window.__enablePushNotificationsInternal) {
-      window.__enablePushNotificationsInternal();
-    }
-  }
-
-  async function connectGoogleCalendar() {
-    const statusEl = document.getElementById("notifSettingsStatus");
-    const authToken = localStorage.getItem("novabuk_token");
-    const API_URL = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1"
-      ? "http://localhost:5000/api"
-      : "https://novabuk-backend.onrender.com/api";
-
-    try {
-      const res = await fetch(`${API_URL}/users/google-calendar/connect`, {
-        headers: { Authorization: `Bearer ${authToken}` },
-      });
-      const data = await res.json();
-
-      if (data.success && data.url) {
-        // Full navigation to Google's consent screen — not a fetch,
-        // since the patient needs to actually interact with Google's UI
-        window.location.href = data.url;
-      } else {
-        statusEl.innerHTML = '<span style="color:#e53e3e;">Could not start the Google Calendar connection. Please try again.</span>';
-      }
-    } catch (err) {
-      console.error("Connect Google Calendar error:", err);
-      statusEl.innerHTML = '<span style="color:#e53e3e;">Network error. Please try again.</span>';
-    }
-  }
-
-  // Reflect the result after Google redirects back
-  // (app-setting.html?tab=notification&calendar=connected|denied|error)
-  (function checkCalendarConnectionResult() {
-    const params = new URLSearchParams(window.location.search);
-    const calendarResult = params.get("calendar");
-    if (!calendarResult) return;
-
-    const statusEl = document.getElementById("notifSettingsStatus");
-    const label = document.getElementById("calendarBtnLabel");
-    const btn = document.getElementById("calendarBtn");
-
-    if (calendarResult === "connected") {
-      if (label) label.textContent = "Connected";
-      if (btn) btn.disabled = true;
-      if (statusEl) statusEl.innerHTML = '<span style="color:#38a169;"><i class="fa-solid fa-circle-check"></i> Google Calendar connected.</span>';
-    } else if (calendarResult === "denied") {
-      if (statusEl) statusEl.innerHTML = '<span style="color:#a08650;">Calendar connection was cancelled.</span>';
-    } else {
-      if (statusEl) statusEl.innerHTML = '<span style="color:#e53e3e;">Something went wrong connecting your calendar. Please try again.</span>';
-    }
-  })();
-</script>
+        if (calendarResult === "connected") {
+          if (label) label.textContent = "Connected";
+          if (btn) btn.disabled = true;
+          if (statusEl)
+            statusEl.innerHTML =
+              '<span style="color:#38a169;"><i class="fa-solid fa-circle-check"></i> Google Calendar connected.</span>';
+        } else if (calendarResult === "denied") {
+          if (statusEl)
+            statusEl.innerHTML =
+              '<span style="color:#a08650;">Calendar connection was cancelled.</span>';
+        } else {
+          if (statusEl)
+            statusEl.innerHTML =
+              '<span style="color:#e53e3e;">Something went wrong connecting your calendar. Please try again.</span>';
+        }
+      })();
+    </script>
 
     <!-- avatar + handleMenuSelect handled globally by script.js initAppNav() -->
     <script src="db.js"></script>

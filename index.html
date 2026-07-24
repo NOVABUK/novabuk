@@ -986,7 +986,12 @@
     </script> -->
     <script>
       // script.js runIndexNavSync() handles navbar state + bfcache restore
-      // Only define handleMenuSelect here since it needs page-specific reload behaviour
+      // Only define handleMenuSelect here since it needs page-specific reload behaviour.
+      // Routing logic itself reuses window.isClinicAccount/getClinicDestination
+      // from script.js rather than re-checking role === "Doctors" here too —
+      // that check only recognizes the clinic OWNER, not added ClinicStaff
+      // (nurse, receptionist, pharmacist, lab_tech, admin), who would
+      // otherwise fall through to the patient app links below.
       window.handleMenuSelect = function (value) {
         if (value === "logout") {
           if (typeof showLogoutModal === "function") showLogoutModal();
@@ -999,17 +1004,22 @@
         } else if (value === "dashboard") {
           try {
             var _u = JSON.parse(localStorage.getItem("novabuk_user") || "{}");
-            window.location.href =
-              _u.role === "Doctors" ? "./clinic-queue.html" : "./app-home.html";
+            window.location.href = window.isClinicAccount(_u)
+              ? window.getClinicDestination(_u)
+              : "./app-home.html";
           } catch (e) {
             window.location.href = "./app-home.html";
           }
         } else if (value === "visits") {
-          window.location.href = "./app-history.html";
-        } else if (value === "profile") {
-          window.location.href = "./app-setting.html?tab=profile";
-        } else if (value === "settings") {
-          window.location.href = "./app-setting.html?tab=profile";
+          var _u = JSON.parse(localStorage.getItem("novabuk_user") || "{}");
+          window.location.href = window.isClinicAccount(_u)
+            ? "./clinic-queue.html"
+            : "./app-history.html";
+        } else if (value === "profile" || value === "settings") {
+          var _u = JSON.parse(localStorage.getItem("novabuk_user") || "{}");
+          window.location.href = window.isClinicAccount(_u)
+            ? "./clinic-settings.html"
+            : "./app-setting.html?tab=profile";
         } else if (value === "notification") {
           window.location.href = "./app-setting.html?tab=notification";
         }
