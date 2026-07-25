@@ -888,163 +888,6 @@
       addPrescriptionRow();
       addLabRequestRow();
 
-      // ── STRUCTURED ITEM PAYLOADS (feed the dedicated Feature 4 APIs) ──
-      // Separate from syncStructuredFields() above, which only builds the
-      // flattened legacy text preview stored on the Visit itself. These
-      // build the real item arrays sent to POST /visits/:id/prescriptions
-      // and POST /visits/:id/lab-requests when the consultation completes.
-      const ROUTE_MAP = { Oral: "oral", Topical: "topical", IV: "IV", IM: "IM" };
-
-      function getPrescriptionItemsData() {
-        return [...document.querySelectorAll("[data-prescription-row]")]
-          .map((row) => {
-            const value = (key) =>
-              row.querySelector(`[data-prescription="${key}"]`)?.value.trim() ||
-              "";
-            const drugName = value("drug");
-            const dosage = value("dosage");
-            const durationDays = value("duration");
-            // Skip rows the doctor started but didn't finish — same
-            // defensive pattern as getMedicationRowsData() below.
-            if (!drugName || !dosage || !durationDays) return null;
-            return {
-              drugName,
-              dosage,
-              route: ROUTE_MAP[value("route")] || "oral",
-              frequency: value("frequency"),
-              durationDays: Number(durationDays),
-              specialNotes: value("notes"),
-            };
-          })
-          .filter(Boolean);
-      }
-
-      function getLabRequestItemsData() {
-        return [...document.querySelectorAll("[data-lab-row]")]
-          .map((row) => {
-            const value = (key) =>
-              row.querySelector(`[data-lab="${key}"]`)?.value.trim() || "";
-            const testName = value("test");
-            if (!testName) return null;
-            return {
-              testName,
-              sampleType: value("sample") || "Other",
-              urgency: value("urgency") || "Routine",
-              clinicalNotes: value("notes"),
-            };
-          })
-          .filter(Boolean);
-      }
-
-      // ── PLAN GATING — Feature 4 is Pro-plan only ──────────────────
-      // Mirrors the exact upgrade message the backend itself returns
-      // (requireProPlan in clinic-pharmacy.js / clinic-lab.js), so a
-      // Growth-plan doctor sees the same wording whether the block
-      // happens client-side (here) or server-side.
-      let clinicIsPro = false;
-
-      async function loadClinicPlan() {
-        try {
-          const res = await clinicFetch(`${API_URL}/clinics/my`);
-          const data = await res.json();
-          if (data.success && data.clinic) {
-            clinicIsPro = data.clinic.subscriptionPlan === "Pro";
-          }
-        } catch (err) {
-          // Fail closed — hide the Premium sections rather than let a
-          // Growth-plan doctor fill in a form that 403s at completion.
-          clinicIsPro = false;
-        }
-        if (!clinicIsPro) applyPlanLock();
-      }
-
-      function applyPlanLock() {
-        const upgradeNotice = (label, icon) => `
-          <div class="card-label" style="justify-content: space-between">
-            <span><i class="fa-solid ${icon}"></i> ${label}</span>
-            <span style="font-size:10px;background:#f1ecff;color:#6941c6;padding:4px 9px;border-radius:20px;">PREMIUM</span>
-          </div>
-          <div style="display:flex;align-items:center;gap:10px;padding:14px;background:#faf8ff;border:1px dashed #d8c9f7;border-radius:10px;color:#6941c6;font-size:12px;">
-            <i class="fa-solid fa-lock"></i>
-            This feature is available on the Premium plan. Upgrade to unlock lab and pharmacy workflow.
-          </div>`;
-        const pad = document.getElementById("prescriptionPad");
-        const lab = document.getElementById("labRequestForm");
-        if (pad) pad.innerHTML = upgradeNotice("Prescription Pad", "fa-pills");
-        if (lab) lab.innerHTML = upgradeNotice("Laboratory Requests", "fa-flask-vial");
-      }
-
-      // ── FEATURE 4 STATUS (read-only, once the visit is Completed) ──
-      // A visit can only be completed once, so a Prescription/LabRequest
-      // is only ever created at that moment. This shows the doctor what
-      // happened afterward — dispensed status, lab result — without
-      // needing the separate pharmacy/lab dashboards.
-      async function loadFeature4Status() {
-        if (!clinicIsPro) return; // sections already replaced with the upgrade notice
-        try {
-          const [presRes, labRes] = await Promise.all([
-            clinicFetch(`${CLINIC_API}/visits/${visitId}/prescriptions`),
-            clinicFetch(`${CLINIC_API}/visits/${visitId}/lab-requests`),
-          ]);
-          const presData = await presRes.json();
-          const labData = await labRes.json();
-
-          if (presData.success && presData.data.length > 0) {
-            renderPrescriptionStatus(presData.data[0]);
-          }
-          if (labData.success && labData.data.length > 0) {
-            renderLabRequestStatus(labData.data[0]);
-          }
-        } catch (err) {
-          console.error("Load Feature 4 status error:", err);
-        }
-      }
-
-      function renderPrescriptionStatus(prescription) {
-        const pad = document.getElementById("prescriptionPad");
-        if (!pad) return;
-        const rows = prescription.items
-          .map(
-            (item) => `
-          <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 12px;border:1px solid #e2e8f0;border-radius:8px;margin-bottom:6px;font-size:12px;">
-            <div><strong>${item.drugName}</strong> — ${item.dosage} · ${item.route} · ${item.frequency} · ${item.durationDays}d</div>
-            <span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:20px;${item.dispensed ? "background:#e9f8ef;color:#198754" : "background:#f1ecff;color:#6941c6"}">${item.dispensed ? "Dispensed" : "Pending dispense"}</span>
-          </div>`,
-          )
-          .join("");
-        pad.innerHTML = `
-          <div class="card-label" style="justify-content: space-between">
-            <span><i class="fa-solid fa-pills"></i> Prescription Pad</span>
-            <a href="${CLINIC_API}/prescriptions/${prescription._id}/pdf" target="_blank" style="font-size:11px;color:var(--teal-dark);text-decoration:none;"><i class="fa-solid fa-download"></i> PDF</a>
-          </div>
-          ${rows}`;
-      }
-
-      function renderLabRequestStatus(labRequest) {
-        const lab = document.getElementById("labRequestForm");
-        if (!lab) return;
-        const statusLabel = {
-          PENDING: "Pending",
-          SAMPLE_COLLECTED: "Sample collected",
-          RESULT_READY: "Result ready",
-        };
-        const rows = labRequest.items
-          .map(
-            (item) => `
-          <div style="padding:10px 12px;border:1px solid #e2e8f0;border-radius:8px;margin-bottom:6px;font-size:12px;">
-            <div style="display:flex;justify-content:space-between;align-items:center;">
-              <strong>${item.testName}</strong>
-              <span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:20px;${labRequest.status === "RESULT_READY" ? "background:#e9f8ef;color:#198754" : "background:#fff5dc;color:#a86c00"}">${statusLabel[labRequest.status] || labRequest.status}</span>
-            </div>
-            ${item.resultText ? `<div style="margin-top:6px;color:#444;">${item.resultText}</div>` : ""}
-          </div>`,
-          )
-          .join("");
-        lab.innerHTML = `
-          <div class="card-label"><i class="fa-solid fa-flask-vial"></i> Laboratory Requests</div>
-          ${rows}`;
-      }
-
       // ── DOCTOR NOTES (private/shared) ─────────────────────────
       async function loadDoctorNotes() {
         const container = document.getElementById("doctorNotesList");
@@ -1327,7 +1170,6 @@
           if (completeBarEl) {
             completeBarEl.innerHTML = `<div style="color:var(--teal); font-weight:700;"><i class="fa-solid fa-circle-check"></i> This consultation record is complete.</div>`;
           }
-          loadFeature4Status();
         } else {
           checkCompletable();
         }
@@ -1366,14 +1208,6 @@
       function setSaveStatus(state) {
         const dot = document.getElementById("saveDot");
         const text = document.getElementById("saveText");
-        // Both elements lived in the old topbar markup, which is now
-        // commented out (a redesign removed the visible save-status
-        // chip but this function was never updated to match). Bail
-        // out quietly instead of throwing — a null-reference error
-        // here previously aborted whatever called it, including
-        // completeVisit() right after a successful completion, which
-        // made a genuinely-saved visit look like it had failed.
-        if (!dot || !text) return;
         if (state === "saving") {
           dot.className = "save-dot saving";
           dot.style.background = "";
@@ -1483,48 +1317,6 @@
             if (data.medicationReminders && data.medicationReminders.length > 0)
               extraNote += ` ${data.medicationReminders.length} medication reminder(s) set.`;
 
-            // ── FEATURE 4: create the structured Prescription / LabRequest
-            // records now that the visit is closed. Only attempted on a
-            // Pro plan — a Growth clinic never has these fields filled in
-            // since the sections are replaced with an upgrade notice. If
-            // the device is offline, clinicFetch/smartFetch transparently
-            // queues these POSTs in the same outbox as the /complete call
-            // itself, in the same order, so they still sync correctly.
-            if (clinicIsPro) {
-              const prescriptionItems = getPrescriptionItemsData();
-              const labItems = getLabRequestItemsData();
-
-              if (prescriptionItems.length > 0) {
-                try {
-                  await clinicFetch(
-                    `${CLINIC_API}/visits/${visitId}/prescriptions`,
-                    {
-                      method: "POST",
-                      body: JSON.stringify({ items: prescriptionItems }),
-                    },
-                  );
-                  extraNote += ` Prescription issued (${prescriptionItems.length} item(s)).`;
-                } catch (err) {
-                  console.error("Create prescription error:", err);
-                }
-              }
-
-              if (labItems.length > 0) {
-                try {
-                  await clinicFetch(
-                    `${CLINIC_API}/visits/${visitId}/lab-requests`,
-                    {
-                      method: "POST",
-                      body: JSON.stringify({ items: labItems }),
-                    },
-                  );
-                  extraNote += ` Lab request sent (${labItems.length} test(s)).`;
-                } catch (err) {
-                  console.error("Create lab request error:", err);
-                }
-              }
-            }
-
             if (data.offline) {
               document.getElementById("completeBar").innerHTML =
                 `<div style="color:#ff9800; font-weight:700;"><i class="fa-solid fa-clock"></i> Completed Offline. Will sync when connected.</div>`;
@@ -1597,7 +1389,6 @@
       }
 
       // ── INIT ─────────────────────────────────────────────────
-      loadClinicPlan();
       loadVisit();
     </script>
   </body>
