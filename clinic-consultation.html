@@ -1366,6 +1366,14 @@
       function setSaveStatus(state) {
         const dot = document.getElementById("saveDot");
         const text = document.getElementById("saveText");
+        // Both elements lived in the old topbar markup, which is now
+        // commented out (a redesign removed the visible save-status
+        // chip but this function was never updated to match). Bail
+        // out quietly instead of throwing — a null-reference error
+        // here previously aborted whatever called it, including
+        // completeVisit() right after a successful completion, which
+        // made a genuinely-saved visit look like it had failed.
+        if (!dot || !text) return;
         if (state === "saving") {
           dot.className = "save-dot saving";
           dot.style.background = "";
