@@ -1,454 +1,424 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Consultation — NovaBuk Clinic</title>
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
-      crossorigin="anonymous"
-    />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
-      rel="stylesheet"
-    />
-    <link rel="stylesheet" href="./clinic.css" />
-    <style>
-      .btn-back {
-        background: var(--teal-pale) !important;
-        color: var(--teal-dark) !important;
-      }
+<!doctype html>
+<html lang="en">
 
-      .autosave-chip {
-        color: var(--text-light) !important;
-      }
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Consultation — NovaBuk Clinic</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
+    crossorigin="anonymous" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="./clinic.css">
+  <style>
 
-      /* Main Container */
+    .btn-back {
+      background: var(--teal-pale) !important;
+      color: var(--teal-dark) !important;
+    }
+
+    .autosave-chip {
+      color: var(--text-light) !important;
+    }
+
+    /* Main Container */
+    .main {
+      margin-left: var(--sidebar-w);
+      align-items: center;
+      /* Center the column */
+      /* padding-bottom: 100px; */
+    }
+
+    .consultation-container {
+      width: 100%;
+      /* max-width: 1000px; */
+      padding: 32px 40px;
+      display: flex;
+      flex-direction: column;
+      gap: var(--section-gap);
+    }
+
+    /* Patient Summary Header */
+    .patient-summary {
+      background: var(--white);
+      /* border-radius: 16px; */
+      padding: 24px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border: 1px solid var(--border);
+      margin-bottom: 32px;
+    }
+
+    .patient-info-row {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .patient-name-big {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--text-dark);
+    }
+
+    .patient-meta-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 13px;
+      color: var(--text-mid);
+    }
+
+    .meta-divider {
+      width: 4px;
+      height: 4px;
+      background: var(--border);
+      border-radius: 50%;
+    }
+
+    /* Card Styling */
+    .consult-card {
+      background: var(--white);
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      padding: 24px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.02);
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 32px;
+      gap: 16px;
+    }
+
+    .card-label {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-dark);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .card-label i {
+      color: var(--teal);
+      font-size: 14px;
+    }
+
+    /* Specific Section Styles */
+    .reason-display {
+      background: var(--body-bg);
+      border-radius: 12px;
+      padding: 16px;
+      font-size: 14px;
+      line-height: 1.6;
+      color: var(--text-mid);
+      border: 1px solid #edf2f7;
+    }
+
+    .tag-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .symptom-tag {
+      background: var(--body-bg);
+      color: var(--teal-dark);
+      padding: 8px 16px;
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 500;
+      border: 1px solid #d0eef1;
+    }
+
+    .flag-container {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .health-flag {
+      background: var(--body-bg);
+      /* Pink-ish background from Figma */
+      color: #991b1b;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border: 1px solid #fecaca;
+    }
+
+    /* Input Fields */
+    .note-input-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .note-input-wrap textarea {
+      width: 100%;
+      min-height: 100px;
+      padding: 16px;
+      border-radius: 12px;
+      border: 1.5px solid var(--border);
+      font-family: inherit;
+      font-size: 14px;
+      line-height: 1.6;
+      outline: none;
+      transition: all 0.2s;
+      background: var(--body-bg);
+    }
+
+    .note-input-wrap textarea:focus {
+      border-color: var(--teal);
+      background: #fff;
+      box-shadow: 0 0 0 4px rgba(53, 186, 201, 0.08);
+    }
+
+    .stale-warning {
+      display: none;
+      background: #fff5f5;
+      color: #c53030;
+      padding: 10px 16px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 600;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 16px;
+      border: 1px solid #feb2b2;
+    }
+    .stale-warning i { font-size: 14px; }
+    .stale-warning.show { display: flex; }
+
+    /* History Section */
+    .history-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .history-item {
+      padding: 16px;
+      border-bottom: 1px solid #f0f4f8;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .history-item:last-child {
+      border-bottom: none;
+    }
+
+    /* Complete Action Bar */
+    .action-bar {
+      /* position: fixed; */
+      /* bottom: 0; */
+      /* left: var(--sidebar-w); */
+      /* right: 0; */
+      background: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(10px);
+      padding: 16px 40px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: center;
+      /* z-index: 1000; */
+    }
+
+    .btn-complete-fancy {
+      width: 100%;
+      max-width: 400px;
+      padding: 14px;
+      background: var(--teal);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      transition: all 0.2s;
+      box-shadow: 0 4px 15px rgba(53, 186, 201, 0.3);
+    }
+
+    .btn-complete-fancy:hover:not(:disabled) {
+      background: var(--teal-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(53, 186, 201, 0.4);
+    }
+
+    .btn-complete-fancy:disabled {
+      background: #cbd5e0;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+
+    /* Loading Overlay */
+    .full-loader {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 60vh;
+      color: var(--text-mid);
+      gap: 16px;
+    }
+
+    .spinner {
+      width: 40px;
+      height: 40px;
+      border: 4px solid var(--teal-pale);
+      border-top: 4px solid var(--teal);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    /* Responsive */
+    @media (max-width: 1024px) {
       .main {
-        margin-left: var(--sidebar-w);
-        align-items: center;
-        /* Center the column */
-        /* padding-bottom: 100px; */
+        margin-left: 0;
+      }
+
+      .action-bar {
+        left: 0;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .patient-summary {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
       }
 
       .consultation-container {
-        width: 100%;
-        /* max-width: 1000px; */
-        padding: 32px 40px;
-        display: flex;
-        flex-direction: column;
-        gap: var(--section-gap);
+        padding: 16px 12px;
       }
+    }
+  </style>
+</head>
 
-      /* Patient Summary Header */
-      .patient-summary {
-        background: var(--white);
-        /* border-radius: 16px; */
-        padding: 24px;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        border: 1px solid var(--border);
-        margin-bottom: 32px;
-      }
+<body>
+  <header>
+    <div class="logo">
+      <!-- Logo — links back to queue (home for clinic staff) -->
+      <a href="./clinic-queue.html">
+        <img src="./images/logo.png" class="sidebar-logo" alt="NovaBuk" />
+      </a>
+      <div class="logo-detail">
+        <div class="topbar-left">
+          <!-- clinic-name and staff-name classes are filled by clinic-shared.js -->
+          <div class="topbar-clinic clinic-name" id="topbarClinicName">
+            <script>
+              (function () {
+                try {
+                  var u = JSON.parse(localStorage.getItem('novabuk_user') || '{}');
+                  document.write(u.clinicName || 'Your Clinic');
+                } catch (e) { document.write('Your Clinic'); }
+              })();
+            </script>
+          </div>
+          <div class="topbar-date" id="topbarDate"></div>
+        </div>
+      </div>
+    </div>
 
-      .patient-info-row {
-        display: flex;
-        flex-direction: column;
-        gap: 4px;
-      }
+    <div class="top-side">
 
-      .patient-name-big {
-        font-size: 22px;
-        font-weight: 700;
-        color: var(--text-dark);
-      }
+      <div class="topbar-actions">
 
-      .patient-meta-row {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        font-size: 13px;
-        color: var(--text-mid);
-      }
-
-      .meta-divider {
-        width: 4px;
-        height: 4px;
-        background: var(--border);
-        border-radius: 50%;
-      }
-
-      /* Card Styling */
-      .consult-card {
-        background: var(--white);
-        border-radius: 10px;
-        border: 1px solid var(--border);
-        padding: 24px;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.02);
-        display: flex;
-        flex-direction: column;
-        margin-bottom: 32px;
-        gap: 16px;
-      }
-
-      .card-label {
-        font-size: 13px;
-        font-weight: 700;
-        color: var(--text-dark);
-        display: flex;
-        align-items: center;
-        gap: 8px;
-      }
-
-      .card-label i {
-        color: var(--teal);
-        font-size: 14px;
-      }
-
-      /* Specific Section Styles */
-      .reason-display {
-        background: var(--body-bg);
-        border-radius: 12px;
-        padding: 16px;
-        font-size: 14px;
-        line-height: 1.6;
-        color: var(--text-mid);
-        border: 1px solid #edf2f7;
-      }
-
-      .tag-container {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 10px;
-      }
-
-      .symptom-tag {
-        background: var(--body-bg);
-        color: var(--teal-dark);
-        padding: 8px 16px;
-        border-radius: 10px;
-        font-size: 13px;
-        font-weight: 500;
-        border: 1px solid #d0eef1;
-      }
-
-      .flag-container {
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-      }
-
-      .health-flag {
-        background: var(--body-bg);
-        /* Pink-ish background from Figma */
-        color: #991b1b;
-        padding: 6px 14px;
-        border-radius: 20px;
-        font-size: 12px;
-        font-weight: 600;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        border: 1px solid #fecaca;
-      }
-
-      /* Input Fields */
-      .note-input-wrap {
-        display: flex;
-        flex-direction: column;
-        gap: 8px;
-      }
-
-      .note-input-wrap textarea {
-        width: 100%;
-        min-height: 100px;
-        padding: 16px;
-        border-radius: 12px;
-        border: 1.5px solid var(--border);
-        font-family: inherit;
-        font-size: 14px;
-        line-height: 1.6;
-        outline: none;
-        transition: all 0.2s;
-        background: var(--body-bg);
-      }
-
-      .note-input-wrap textarea:focus {
-        border-color: var(--teal);
-        background: #fff;
-        box-shadow: 0 0 0 4px rgba(53, 186, 201, 0.08);
-      }
-
-      .stale-warning {
-        display: none;
-        background: #fff5f5;
-        color: #c53030;
-        padding: 10px 16px;
-        border-radius: 8px;
-        font-size: 12px;
-        font-weight: 600;
-        align-items: center;
-        gap: 8px;
-        margin-bottom: 16px;
-        border: 1px solid #feb2b2;
-      }
-      .stale-warning i {
-        font-size: 14px;
-      }
-      .stale-warning.show {
-        display: flex;
-      }
-
-      /* History Section */
-      .history-list {
-        display: flex;
-        flex-direction: column;
-        gap: 12px;
-      }
-
-      .history-item {
-        padding: 16px;
-        border-bottom: 1px solid #f0f4f8;
-        display: flex;
-        flex-direction: column;
-        gap: 4px;
-      }
-
-      .history-item:last-child {
-        border-bottom: none;
-      }
-
-      /* Complete Action Bar */
-      .action-bar {
-        /* position: fixed; */
-        /* bottom: 0; */
-        /* left: var(--sidebar-w); */
-        /* right: 0; */
-        background: rgba(255, 255, 255, 0.9);
-        backdrop-filter: blur(10px);
-        padding: 16px 40px;
-        border-top: 1px solid var(--border);
-        display: flex;
-        justify-content: center;
-        /* z-index: 1000; */
-      }
-
-      .btn-complete-fancy {
-        width: 100%;
-        max-width: 400px;
-        padding: 14px;
-        background: var(--teal);
-        color: white;
-        border: none;
-        border-radius: 12px;
-        font-size: 15px;
-        font-weight: 700;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 10px;
-        transition: all 0.2s;
-        box-shadow: 0 4px 15px rgba(53, 186, 201, 0.3);
-      }
-
-      .btn-complete-fancy:hover:not(:disabled) {
-        background: var(--teal-dark);
-        transform: translateY(-2px);
-        box-shadow: 0 6px 20px rgba(53, 186, 201, 0.4);
-      }
-
-      .btn-complete-fancy:disabled {
-        background: #cbd5e0;
-        cursor: not-allowed;
-        box-shadow: none;
-      }
-
-      /* Loading Overlay */
-      .full-loader {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        height: 60vh;
-        color: var(--text-mid);
-        gap: 16px;
-      }
-
-      .spinner {
-        width: 40px;
-        height: 40px;
-        border: 4px solid var(--teal-pale);
-        border-top: 4px solid var(--teal);
-        border-radius: 50%;
-        animation: spin 1s linear infinite;
-      }
-
-      @keyframes spin {
-        to {
-          transform: rotate(360deg);
-        }
-      }
-
-      /* Responsive */
-      @media (max-width: 1024px) {
-        .main {
-          margin-left: 0;
-        }
-
-        .action-bar {
-          left: 0;
-        }
-      }
-
-      @media (max-width: 600px) {
-        .patient-summary {
-          flex-direction: column;
-          align-items: flex-start;
-          gap: 12px;
-        }
-
-        .consultation-container {
-          padding: 16px 12px;
-        }
-      }
-    </style>
-  </head>
-
-  <body>
-    <header>
-      <div class="logo">
-        <!-- Logo — links back to queue (home for clinic staff) -->
-        <a href="./clinic-queue.html">
-          <img src="./images/logo.png" class="sidebar-logo" alt="NovaBuk" />
+        <!-- Search shortcut -->
+        <a href="./clinic-search.html" class="topbar-btn" title="Search patients">
+          <i class="fa-solid fa-magnifying-glass"></i>
         </a>
-        <div class="logo-detail">
-          <div class="topbar-left">
-            <!-- clinic-name and staff-name classes are filled by clinic-shared.js -->
-            <div class="topbar-clinic clinic-name" id="topbarClinicName">
-              <script>
-                (function () {
-                  try {
-                    var u = JSON.parse(
-                      localStorage.getItem("novabuk_user") || "{}",
-                    );
-                    document.write(u.clinicName || "Your Clinic");
-                  } catch (e) {
-                    document.write("Your Clinic");
-                  }
-                })();
-              </script>
+
+        <!-- Notification bell -->
+        <a href="./clinic-notifications.html" class="topbar-btn" title="Notifications">
+          <i class="fa-solid fa-bell"></i>
+          <span class="notification-badge" id="topbarNotificationBadge"></span>
+        </a>
+
+
+        <!-- Staff chip — shows name + dropdown -->
+        <div class="staff-chip" id="staffChip">
+          <div class="staff-avatar-sm" id="topbarAvatar">?</div>
+          <span class="staff-name-sm staff-name">Staff</span>
+          <i class="fa-solid fa-angle-down"id="staffIcon"></i>
+
+          <div class="staff-dropdown" id="staffDropdown">
+            <div class="staff-dropdown-item" onclick="window.location.href='./clinic-settings.html'">
+              <i class="fa-solid fa-gear"></i> Settings
             </div>
-            <div class="topbar-date" id="topbarDate"></div>
-          </div>
-        </div>
-      </div>
-
-      <div class="top-side">
-        <div class="topbar-actions">
-          <!-- Search shortcut -->
-          <a
-            href="./clinic-search.html"
-            class="topbar-btn"
-            title="Search patients"
-          >
-            <i class="fa-solid fa-magnifying-glass"></i>
-          </a>
-
-          <!-- Notification bell -->
-          <a
-            href="./clinic-notifications.html"
-            class="topbar-btn"
-            title="Notifications"
-          >
-            <i class="fa-solid fa-bell"></i>
-            <span
-              class="notification-badge"
-              id="topbarNotificationBadge"
-            ></span>
-          </a>
-
-          <!-- Staff chip — shows name + dropdown -->
-          <div class="staff-chip" id="staffChip">
-            <div class="staff-avatar-sm" id="topbarAvatar">?</div>
-            <span class="staff-name-sm staff-name">Staff</span>
-            <i class="fa-solid fa-angle-down" id="staffIcon"></i>
-
-            <div class="staff-dropdown" id="staffDropdown">
-              <div
-                class="staff-dropdown-item"
-                onclick="window.location.href = './clinic-settings.html'"
-              >
-                <i class="fa-solid fa-gear"></i> Settings
-              </div>
-              <div class="staff-dropdown-item danger" onclick="clinicLogout()">
-                <i class="fa-solid fa-right-from-bracket"></i> Logout
-              </div>
+            <div class="staff-dropdown-item danger" onclick="clinicLogout()">
+              <i class="fa-solid fa-right-from-bracket"></i> Logout
             </div>
           </div>
         </div>
-      </div>
-    </header>
 
-    <div class="all-content">
-      <!-- ============================================================
+      </div>
+    </div>
+  </header>
+
+  <div class="all-content">
+    <!-- ============================================================
        SIDEBAR
        We use <a> tags instead of <button> for navigation items
        because they support href — better for semantics and
        middle-click to open in new tab.
   ============================================================ -->
-      <aside class="sidebar" id="sidebar">
-        <div class="sidebar-icon">
-          <!-- Queue — this page (active) -->
-          <a
-            href="./clinic-queue.html"
-            class="sidebar-nav-btn active"
-            data-tip="Today's Queue"
-          >
-            <i class="fa-solid fa-list-check"></i>
-          </a>
+    <aside class="sidebar" id="sidebar">
 
-          <!-- Search -->
-          <a
-            href="./clinic-search.html"
-            class="sidebar-nav-btn"
-            data-tip="Search Patients"
-          >
-            <i class="fa-solid fa-magnifying-glass"></i>
-          </a>
 
-          <!-- Settings pushed to bottom via margin-top: auto on logout -->
-          <a
-            href="./clinic-settings.html"
-            class="sidebar-nav-btn"
-            data-tip="Settings"
-          >
-            <i class="fa-solid fa-gear"></i>
-          </a>
-        </div>
 
-        <!-- Logout — at the bottom -->
-        <div class="logout-sidebar">
-          <button
-            class="sidebar-nav-btn sidebar-logout"
-            data-tip="Logout"
-            onclick="clinicLogout()"
-          >
-            <i class="fa-solid fa-right-from-bracket"></i>
-          </button>
-        </div>
-      </aside>
-    </div>
-    <!-- ============================================================
+      <div class="sidebar-icon">
+        <!-- Queue — this page (active) -->
+        <a href="./clinic-queue.html" class="sidebar-nav-btn active" data-tip="Today's Queue">
+          <i class="fa-solid fa-list-check"></i>
+        </a>
+
+        <!-- Search -->
+        <a href="./clinic-search.html" class="sidebar-nav-btn" data-tip="Search Patients">
+          <i class="fa-solid fa-magnifying-glass"></i>
+        </a>
+
+        <!-- Settings pushed to bottom via margin-top: auto on logout -->
+        <a href="./clinic-settings.html" class="sidebar-nav-btn" data-tip="Settings">
+          <i class="fa-solid fa-gear"></i>
+        </a>
+      </div>
+
+      <!-- Logout — at the bottom -->
+      <div class="logout-sidebar">
+        <button class="sidebar-nav-btn sidebar-logout" data-tip="Logout" onclick="clinicLogout()">
+          <i class="fa-solid fa-right-from-bracket"></i>
+        </button>
+      </div>
+
+    </aside>
+  </div>
+  <!-- ============================================================
        MAIN AREA — everything to the right of the sidebar
   ============================================================ -->
 
-    <main class="main">
-      <!-- TOPBAR -->
-      <!-- <div class="topbar">
+
+  <main class="main">
+    <!-- TOPBAR -->
+    <!-- <div class="topbar">
       <div class="topbar-left" style="display: flex; align-items: center; gap: 16px;">
         <a href="./clinic-queue.html" class="btn-back">
           <i class="fa-solid fa-arrow-left"></i>
@@ -469,605 +439,194 @@
       </div>
     </div> -->
 
-      <!-- Loading state -->
-      <div class="full-loader" id="loader">
-        <div class="spinner"></div>
-        <span>Preparing clinical record…</span>
+    <!-- Loading state -->
+    <div class="full-loader" id="loader">
+      <div class="spinner"></div>
+      <span>Preparing clinical record…</span>
+    </div>
+
+    <!-- NEW SINGLE COLUMN LAYOUT -->
+    <div class="consultation-container" id="consultationWrap" style="display:none;">
+      
+      <!-- Stale Data Warning -->
+      <div id="staleWarning" class="stale-warning">
+        <i class="fa-solid fa-triangle-exclamation"></i>
+        <span>Offline Mode: Showing data from <span id="staleTime">...</span>. Some details may have changed on the server.</span>
       </div>
 
-      <!-- NEW SINGLE COLUMN LAYOUT -->
-      <div
-        class="consultation-container"
-        id="consultationWrap"
-        style="display: none"
-      >
-        <!-- Stale Data Warning -->
-        <div id="staleWarning" class="stale-warning">
-          <i class="fa-solid fa-triangle-exclamation"></i>
-          <span
-            >Offline Mode: Showing data from <span id="staleTime">...</span>.
-            Some details may have changed on the server.</span
-          >
-        </div>
-
-        <!-- Patient Summary Card -->
-        <div class="patient-summary">
-          <div class="patient-info-row">
-            <div class="patient-name-big" id="patientName">Loading…</div>
-            <div class="patient-meta-row" id="patientMetaRow">
-              <!-- Populated by JS: Consultation - Time · Gender · Age · ID -->
-              Loading patient details…
-            </div>
-          </div>
-          <div class="consult-date" id="topbarDate"></div>
-        </div>
-
-        <!-- Reason for Visit -->
-        <div class="consult-card">
-          <div class="card-label">
-            <i class="fa-solid fa-clipboard-question"></i> Reason for Visit
-          </div>
-          <div class="reason-display" id="reasonBox">—</div>
-        </div>
-
-        <!-- Symptoms Section -->
-        <div class="consult-card" id="symptomsBlock">
-          <div class="card-label">
-            <i class="fa-solid fa-thermometer"></i> Reported Symptoms
-          </div>
-          <div class="tag-container" id="symptomTags">
-            <span style="font-size: 13px; color: var(--text-light)"
-              >No symptoms reported.</span
-            >
+      <!-- Patient Summary Card -->
+      <div class="patient-summary">
+        <div class="patient-info-row">
+          <div class="patient-name-big" id="patientName">Loading…</div>
+          <div class="patient-meta-row" id="patientMetaRow">
+            <!-- Populated by JS: Consultation - Time · Gender · Age · ID -->
+            Loading patient details…
           </div>
         </div>
+        <div class="consult-date" id="topbarDate"></div>
+      </div>
 
-        <!-- Health Flags -->
-        <div class="consult-card" id="flagsBlock">
-          <div class="card-label">
-            <i class="fa-solid fa-triangle-exclamation"></i> Health Flags
-          </div>
-          <div class="tag-container" id="flagsList">
-            <span style="font-size: 13px; color: var(--text-light)"
-              >No health flags recorded.</span
-            >
-          </div>
+      <!-- Reason for Visit -->
+      <div class="consult-card">
+        <div class="card-label"><i class="fa-solid fa-clipboard-question"></i> Reason for Visit</div>
+        <div class="reason-display" id="reasonBox">—</div>
+      </div>
+
+      <!-- Symptoms Section -->
+      <div class="consult-card" id="symptomsBlock">
+        <div class="card-label"><i class="fa-solid fa-thermometer"></i> Reported Symptoms</div>
+        <div class="tag-container" id="symptomTags">
+          <span style="font-size:13px; color:var(--text-light);">No symptoms reported.</span>
         </div>
+      </div>
 
-        <!-- Visit Type — determines which fee applies when the bill auto-generates -->
-        <div class="consult-card">
-          <div class="card-label">
-            <i class="fa-solid fa-tags"></i> Visit Type
-          </div>
-          <select
-            id="fVisitType"
-            style="
-              width: 100%;
-              padding: 10px 12px;
-              border: 1px solid var(--border, #ccc);
-              border-radius: 8px;
-              font-family: inherit;
-              font-size: 13px;
-              background: white;
-            "
-          >
-            <option value="General">General Consultation</option>
-            <option value="Specialist">Specialist Consultation</option>
-            <option value="Follow-up">Follow-up</option>
-            <option value="Emergency">Emergency</option>
-          </select>
+      <!-- Health Flags -->
+      <div class="consult-card" id="flagsBlock">
+        <div class="card-label"><i class="fa-solid fa-triangle-exclamation"></i> Health Flags</div>
+        <div class="tag-container" id="flagsList">
+          <span style="font-size:13px; color:var(--text-light);">No health flags recorded.</span>
         </div>
+      </div>
 
-        <!-- Diagnosis -->
-        <div class="consult-card">
-          <div class="card-label">
-            <i class="fa-solid fa-stethoscope"></i> Clinical Diagnosis
-          </div>
-          <div class="note-input-wrap">
-            <textarea
-              id="fDiagnosis"
-              placeholder="Enter clinical diagnosis and observations…"
-              oninput="scheduleAutosave()"
-            ></textarea>
-          </div>
+      <!-- Visit Type — determines which fee applies when the bill auto-generates -->
+      <div class="consult-card">
+        <div class="card-label"><i class="fa-solid fa-tags"></i> Visit Type</div>
+        <select id="fVisitType" style="width:100%; padding:10px 12px; border:1px solid var(--border, #ccc); border-radius:8px; font-family:inherit; font-size:13px; background:white;">
+          <option value="General">General Consultation</option>
+          <option value="Specialist">Specialist Consultation</option>
+          <option value="Follow-up">Follow-up</option>
+          <option value="Emergency">Emergency</option>
+        </select>
+      </div>
+
+      <!-- Diagnosis -->
+      <div class="consult-card">
+        <div class="card-label"><i class="fa-solid fa-stethoscope"></i> Clinical Diagnosis</div>
+        <div class="note-input-wrap">
+          <textarea id="fDiagnosis" placeholder="Enter clinical diagnosis and observations…"
+            oninput="scheduleAutosave()"></textarea>
         </div>
+      </div>
 
-        <!-- Prescription Pad — structured Premium workflow UI -->
-        <div class="consult-card" id="prescriptionPad">
-          <div class="card-label" style="justify-content: space-between">
-            <span><i class="fa-solid fa-pills"></i> Prescription Pad</span>
-            <span
-              style="
-                font-size: 10px;
-                background: #f1ecff;
-                color: #6941c6;
-                padding: 4px 9px;
-                border-radius: 20px;
-              "
-              >PREMIUM</span
-            >
-          </div>
-          <p style="font-size: 12px; color: var(--text-light)">
-            Add each medication separately so the pharmacy can dispense
-            accurately.
-          </p>
-          <div id="prescriptionRows"></div>
-          <button
-            type="button"
-            onclick="addPrescriptionRow()"
-            style="
-              align-self: flex-start;
-              padding: 8px 13px;
-              border: 1px dashed var(--teal);
-              background: #f5fdfe;
-              border-radius: 8px;
-              font:
-                600 12px Poppins,
-                sans-serif;
-              color: var(--teal-dark);
-              cursor: pointer;
-            "
-          >
-            <i class="fa-solid fa-plus"></i> Add medication
-          </button>
-          <textarea id="fPrescription" hidden></textarea>
+      <!-- Prescription -->
+      <div class="consult-card">
+        <div class="card-label"><i class="fa-solid fa-pills"></i> Prescription</div>
+        <div class="note-input-wrap">
+          <textarea id="fPrescription" placeholder="List medications, dosage, and frequency…"
+            oninput="scheduleAutosave()"></textarea>
         </div>
+      </div>
 
-        <!-- Medication Reminders (structured, feeds the reminder system) -->
-        <div class="consult-card">
-          <div class="card-label">
-            <i class="fa-solid fa-bell"></i> Medication Reminders
-            <span
-              style="
-                font-weight: 400;
-                font-size: 11px;
-                color: var(--text-light);
-              "
-              >(optional — sends the patient dose reminders)</span
-            >
-          </div>
-          <div id="medicationReminderRows"></div>
-          <button
-            type="button"
-            onclick="addMedicationRow()"
-            style="
-              margin-top: 8px;
-              padding: 6px 14px;
-              border: 1px dashed var(--border, #ccc);
-              background: none;
-              border-radius: 8px;
-              font-size: 12px;
-              color: var(--teal, #35bac9);
-              cursor: pointer;
-            "
-          >
-            <i class="fa-solid fa-plus"></i> Add medication reminder
-          </button>
+      <!-- Medication Reminders (structured, feeds the reminder system) -->
+      <div class="consult-card">
+        <div class="card-label"><i class="fa-solid fa-bell"></i> Medication Reminders <span style="font-weight:400; font-size:11px; color:var(--text-light);">(optional — sends the patient dose reminders)</span></div>
+        <div id="medicationReminderRows"></div>
+        <button type="button" onclick="addMedicationRow()" style="margin-top:8px; padding:6px 14px; border:1px dashed var(--border, #ccc); background:none; border-radius:8px; font-size:12px; color:var(--teal, #35bac9); cursor:pointer;">
+          <i class="fa-solid fa-plus"></i> Add medication reminder
+        </button>
+      </div>
+
+      <!-- Next Appointment -->
+      <div class="consult-card">
+        <div class="card-label"><i class="fa-solid fa-calendar-check"></i> Next Appointment <span style="font-weight:400; font-size:11px; color:var(--text-light);">(optional)</span></div>
+        <div class="note-input-wrap">
+          <input type="datetime-local" id="fNextAppointment" style="width:100%; padding:10px 12px; border:1px solid var(--border, #ccc); border-radius:8px; font-family:inherit; font-size:13px;" />
         </div>
+      </div>
 
-        <!-- Next Appointment -->
-        <div class="consult-card">
-          <div class="card-label">
-            <i class="fa-solid fa-calendar-check"></i> Next Appointment
-            <span
-              style="
-                font-weight: 400;
-                font-size: 11px;
-                color: var(--text-light);
-              "
-              >(optional)</span
-            >
-          </div>
-          <div class="note-input-wrap">
-            <input
-              type="datetime-local"
-              id="fNextAppointment"
-              style="
-                width: 100%;
-                padding: 10px 12px;
-                border: 1px solid var(--border, #ccc);
-                border-radius: 8px;
-                font-family: inherit;
-                font-size: 13px;
-              "
-            />
-          </div>
+      <!-- Tests Ordered -->
+      <div class="consult-card">
+        <div class="card-label"><i class="fa-solid fa-vial"></i> Tests & Investigations</div>
+        <div class="note-input-wrap">
+          <textarea id="fTests" placeholder="List required lab tests or imaging investigations…"
+            oninput="scheduleAutosave()"></textarea>
         </div>
+      </div>
 
-        <!-- Lab Request Form — structured Premium workflow UI -->
-        <div class="consult-card" id="labRequestForm">
-          <div class="card-label" style="justify-content: space-between">
-            <span
-              ><i class="fa-solid fa-flask-vial"></i> Laboratory Requests</span
-            >
-            <span
-              style="
-                font-size: 10px;
-                background: #f1ecff;
-                color: #6941c6;
-                padding: 4px 9px;
-                border-radius: 20px;
-              "
-              >PREMIUM</span
-            >
-          </div>
-          <p style="font-size: 12px; color: var(--text-light)">
-            Send structured requests to the laboratory team.
-          </p>
-          <div id="labRequestRows"></div>
-          <button
-            type="button"
-            onclick="addLabRequestRow()"
-            style="
-              align-self: flex-start;
-              padding: 8px 13px;
-              border: 1px dashed var(--teal);
-              background: #f5fdfe;
-              border-radius: 8px;
-              font:
-                600 12px Poppins,
-                sans-serif;
-              color: var(--teal-dark);
-              cursor: pointer;
-            "
-          >
-            <i class="fa-solid fa-plus"></i> Add lab test
-          </button>
-          <textarea id="fTests" hidden></textarea>
+      <!-- Advice / Instructions -->
+      <div class="consult-card">
+        <div class="card-label"><i class="fa-solid fa-comment-medical"></i> Advice to Patient</div>
+        <div class="note-input-wrap">
+          <textarea id="fAdvice" placeholder="Lifestyle advice, follow-up instructions, etc…"
+            oninput="scheduleAutosave()"></textarea>
         </div>
+      </div>
 
-        <!-- Advice / Instructions -->
-        <div class="consult-card">
-          <div class="card-label">
-            <i class="fa-solid fa-comment-medical"></i> Advice to Patient
-          </div>
-          <div class="note-input-wrap">
-            <textarea
-              id="fAdvice"
-              placeholder="Lifestyle advice, follow-up instructions, etc…"
-              oninput="scheduleAutosave()"
-            ></textarea>
-          </div>
-        </div>
-
-        <!-- Doctor Notes — PRIVATE/SHARED, separate from the official visit record above.
+      <!-- Doctor Notes — PRIVATE/SHARED, separate from the official visit record above.
            Patients, receptionists, pharmacists, and lab techs never see this section. -->
-        <div
-          class="consult-card"
-          style="background: #fdfaf3; border: 1.5px dashed #e0c88a"
-        >
-          <div class="card-label" style="color: #8a6d1f">
-            <i class="fa-solid fa-lock"></i> Doctor Notes
-            <span style="font-weight: 400; font-size: 11px; color: #a08650"
-              >— separate from the visit record. Patients and non-doctor staff
-              never see this.</span
-            >
-          </div>
-
-          <div id="doctorNotesList" style="margin-bottom: 12px"></div>
-
-          <div class="note-input-wrap">
-            <textarea
-              id="fDoctorNote"
-              placeholder="Write a note only you (or doctors you choose to share with) can see…"
-              style="min-height: 70px"
-            ></textarea>
-          </div>
-          <div
-            style="
-              display: flex;
-              align-items: center;
-              justify-content: space-between;
-              margin-top: 8px;
-              flex-wrap: wrap;
-              gap: 8px;
-            "
-          >
-            <label
-              style="
-                display: flex;
-                align-items: center;
-                gap: 6px;
-                font-size: 12px;
-                color: #8a6d1f;
-                cursor: pointer;
-              "
-            >
-              <input type="checkbox" id="fDoctorNoteShared" />
-              Visible to all doctors at this clinic (unchecked = only me)
-            </label>
-            <button
-              type="button"
-              onclick="submitDoctorNote()"
-              style="
-                padding: 7px 16px;
-                background: #8a6d1f;
-                color: white;
-                border: none;
-                border-radius: 8px;
-                font-size: 12px;
-                cursor: pointer;
-              "
-            >
-              <i class="fa-solid fa-plus"></i> Add Note
-            </button>
-          </div>
+      <div class="consult-card" style="background:#fdfaf3; border:1.5px dashed #e0c88a;">
+        <div class="card-label" style="color:#8a6d1f;">
+          <i class="fa-solid fa-lock"></i> Doctor Notes
+          <span style="font-weight:400; font-size:11px; color:#a08650;">— separate from the visit record. Patients and non-doctor staff never see this.</span>
         </div>
 
-        <!-- Visit History -->
-        <div class="consult-card" id="pastBlock">
-          <div class="card-label">
-            <i class="fa-solid fa-clock-rotate-left"></i> Visit History
-          </div>
-          <div class="history-list" id="pastVisitsList">
-            <p style="font-size: 13px; color: var(--text-light); padding: 10px">
-              No previous visits recorded.
-            </p>
-          </div>
-        </div>
+        <div id="doctorNotesList" style="margin-bottom:12px;"></div>
 
-        <div class="action-bar" id="completeBar" style="display: none">
-          <button
-            class="btn-complete-fancy"
-            id="completeBtnLg"
-            onclick="completeVisit()"
-            disabled
-          >
-            <i class="fa-solid fa-circle-check"></i> Complete Consultation
+        <div class="note-input-wrap">
+          <textarea id="fDoctorNote" placeholder="Write a note only you (or doctors you choose to share with) can see…" style="min-height:70px;"></textarea>
+        </div>
+        <div style="display:flex; align-items:center; justify-content:space-between; margin-top:8px; flex-wrap:wrap; gap:8px;">
+          <label style="display:flex; align-items:center; gap:6px; font-size:12px; color:#8a6d1f; cursor:pointer;">
+            <input type="checkbox" id="fDoctorNoteShared" />
+            Visible to all doctors at this clinic (unchecked = only me)
+          </label>
+          <button type="button" onclick="submitDoctorNote()" style="padding:7px 16px; background:#8a6d1f; color:white; border:none; border-radius:8px; font-size:12px; cursor:pointer;">
+            <i class="fa-solid fa-plus"></i> Add Note
           </button>
         </div>
       </div>
 
-      <!-- Complete Action Bar -->
-    </main>
+      <!-- Visit History -->
+      <div class="consult-card" id="pastBlock">
+        <div class="card-label"><i class="fa-solid fa-clock-rotate-left"></i> Visit History</div>
+        <div class="history-list" id="pastVisitsList">
+          <p style="font-size:13px; color:var(--text-light); padding: 10px;">No previous visits recorded.</p>
+        </div>
+      </div>
 
-    <script src="./db.js"></script>
-    <script src="./clinic-shared.js"></script>
-    <script>
-      // ── READ VISIT ID FROM URL ───────────────────────────────
-      const visitId = new URLSearchParams(window.location.search).get("visit");
-      if (!visitId) window.location.replace("./clinic-queue.html");
+      <div class="action-bar" id="completeBar" style="display:none;">
+      <button class="btn-complete-fancy" id="completeBtnLg" onclick="completeVisit()" disabled>
+        <i class="fa-solid fa-circle-check"></i> Complete Consultation
+      </button>
+    </div>
+    </div>
 
-      let autoSaveTimer = null;
-      let isDone = false;
-      let currentPatientId = null;
+    <!-- Complete Action Bar -->
+    
+  </main>
 
-      // ── STRUCTURED PREMIUM WORKFLOW UI ────────────────────────
-      function addPrescriptionRow() {
-        const row = document.createElement("div");
-        row.style.cssText =
-          "display:grid;grid-template-columns:1.4fr .8fr .8fr 1fr .6fr 1.2fr auto;gap:8px;align-items:center;padding:12px;background:#f8fbfc;border:1px solid #e2e8f0;border-radius:10px;margin-bottom:8px;";
-        row.innerHTML = `<input data-prescription="drug" placeholder="Drug name" aria-label="Drug name" style="padding:9px;border:1px solid #e2e8f0;border-radius:7px;font:12px Poppins,sans-serif;min-width:0;"><input data-prescription="dosage" placeholder="Dosage" aria-label="Dosage" style="padding:9px;border:1px solid #e2e8f0;border-radius:7px;font:12px Poppins,sans-serif;min-width:0;"><select data-prescription="route" aria-label="Route" style="padding:9px;border:1px solid #e2e8f0;border-radius:7px;font:12px Poppins,sans-serif;min-width:0;"><option>Oral</option><option>Topical</option><option>IV</option><option>IM</option></select><select data-prescription="frequency" aria-label="Frequency" style="padding:9px;border:1px solid #e2e8f0;border-radius:7px;font:12px Poppins,sans-serif;min-width:0;"><option>Once daily</option><option>Twice daily</option><option>3 times daily</option><option>As needed</option><option>Custom</option></select><input data-prescription="duration" type="number" min="1" placeholder="Days" aria-label="Duration in days" style="padding:9px;border:1px solid #e2e8f0;border-radius:7px;font:12px Poppins,sans-serif;min-width:0;"><input data-prescription="notes" placeholder="Special notes" aria-label="Special notes" style="padding:9px;border:1px solid #e2e8f0;border-radius:7px;font:12px Poppins,sans-serif;min-width:0;"><button type="button" aria-label="Remove medication" onclick="this.closest('[data-prescription-row]').remove();syncStructuredFields();" style="border:0;background:#fff0ee;color:#c0392b;border-radius:7px;padding:9px;cursor:pointer;"><i class="fa-solid fa-trash"></i></button>`;
-        row.dataset.prescriptionRow = "true";
-        row
-          .querySelectorAll("input,select")
-          .forEach((input) =>
-            input.addEventListener("input", syncStructuredFields),
-          );
-        document.getElementById("prescriptionRows").appendChild(row);
-      }
+  
+  <script src="./db.js"></script>
+  <script src="./clinic-shared.js"></script>
+  <script>
+    // ── READ VISIT ID FROM URL ───────────────────────────────
+    const visitId = new URLSearchParams(window.location.search).get("visit");
+    if (!visitId) window.location.replace("./clinic-queue.html");
 
-      function addLabRequestRow() {
-        const row = document.createElement("div");
-        row.style.cssText =
-          "display:grid;grid-template-columns:1.3fr .8fr .7fr 1.5fr auto;gap:8px;align-items:center;padding:12px;background:#f8fbfc;border:1px solid #e2e8f0;border-radius:10px;margin-bottom:8px;";
-        row.innerHTML = `<input data-lab="test" placeholder="Test name" aria-label="Test name" style="padding:9px;border:1px solid #e2e8f0;border-radius:7px;font:12px Poppins,sans-serif;min-width:0;"><select data-lab="sample" aria-label="Sample type" style="padding:9px;border:1px solid #e2e8f0;border-radius:7px;font:12px Poppins,sans-serif;min-width:0;"><option>Blood</option><option>Urine</option><option>Stool</option><option>Swab</option><option>Other</option></select><select data-lab="urgency" aria-label="Urgency" style="padding:9px;border:1px solid #e2e8f0;border-radius:7px;font:12px Poppins,sans-serif;min-width:0;"><option>Routine</option><option>Urgent</option></select><input data-lab="notes" placeholder="Clinical notes" aria-label="Clinical notes" style="padding:9px;border:1px solid #e2e8f0;border-radius:7px;font:12px Poppins,sans-serif;min-width:0;"><button type="button" aria-label="Remove lab test" onclick="this.closest('[data-lab-row]').remove();syncStructuredFields();" style="border:0;background:#fff0ee;color:#c0392b;border-radius:7px;padding:9px;cursor:pointer;"><i class="fa-solid fa-trash"></i></button>`;
-        row.dataset.labRow = "true";
-        row
-          .querySelectorAll("input,select")
-          .forEach((input) =>
-            input.addEventListener("input", syncStructuredFields),
-          );
-        document.getElementById("labRequestRows").appendChild(row);
-      }
+    let autoSaveTimer = null;
+    let isDone = false;
+    let currentPatientId = null;
 
-      function syncStructuredFields() {
-        const prescriptions = [
-          ...document.querySelectorAll("[data-prescription-row]"),
-        ]
-          .map((row) => {
-            const value = (key) =>
-              row.querySelector(`[data-prescription="${key}"]`)?.value.trim() ||
-              "";
-            return `${value("drug")} ${value("dosage")} — ${value("route")} — ${value("frequency")} — ${value("duration")} days${value("notes") ? ` (${value("notes")})` : ""}`.trim();
-          })
-          .filter(Boolean);
-        const labs = [...document.querySelectorAll("[data-lab-row]")]
-          .map((row) => {
-            const value = (key) =>
-              row.querySelector(`[data-lab="${key}"]`)?.value.trim() || "";
-            return `${value("test")} — ${value("sample")} — ${value("urgency")}${value("notes") ? ` (${value("notes")})` : ""}`.trim();
-          })
-          .filter(Boolean);
-        document.getElementById("fPrescription").value =
-          prescriptions.join("\n");
-        document.getElementById("fTests").value = labs.join("\n");
-        scheduleAutosave();
-      }
-
-      addPrescriptionRow();
-      addLabRequestRow();
-
-      // ── STRUCTURED ITEM PAYLOADS (feed the dedicated Feature 4 APIs) ──
-      // Separate from syncStructuredFields() above, which only builds the
-      // flattened legacy text preview stored on the Visit itself. These
-      // build the real item arrays sent to POST /visits/:id/prescriptions
-      // and POST /visits/:id/lab-requests when the consultation completes.
-      const ROUTE_MAP = { Oral: "oral", Topical: "topical", IV: "IV", IM: "IM" };
-
-      function getPrescriptionItemsData() {
-        return [...document.querySelectorAll("[data-prescription-row]")]
-          .map((row) => {
-            const value = (key) =>
-              row.querySelector(`[data-prescription="${key}"]`)?.value.trim() ||
-              "";
-            const drugName = value("drug");
-            const dosage = value("dosage");
-            const durationDays = value("duration");
-            // Skip rows the doctor started but didn't finish — same
-            // defensive pattern as getMedicationRowsData() below.
-            if (!drugName || !dosage || !durationDays) return null;
-            return {
-              drugName,
-              dosage,
-              route: ROUTE_MAP[value("route")] || "oral",
-              frequency: value("frequency"),
-              durationDays: Number(durationDays),
-              specialNotes: value("notes"),
-            };
-          })
-          .filter(Boolean);
-      }
-
-      function getLabRequestItemsData() {
-        return [...document.querySelectorAll("[data-lab-row]")]
-          .map((row) => {
-            const value = (key) =>
-              row.querySelector(`[data-lab="${key}"]`)?.value.trim() || "";
-            const testName = value("test");
-            if (!testName) return null;
-            return {
-              testName,
-              sampleType: value("sample") || "Other",
-              urgency: value("urgency") || "Routine",
-              clinicalNotes: value("notes"),
-            };
-          })
-          .filter(Boolean);
-      }
-
-      // ── PLAN GATING — Feature 4 is Pro-plan only ──────────────────
-      // Mirrors the exact upgrade message the backend itself returns
-      // (requireProPlan in clinic-pharmacy.js / clinic-lab.js), so a
-      // Growth-plan doctor sees the same wording whether the block
-      // happens client-side (here) or server-side.
-      let clinicIsPro = false;
-
-      async function loadClinicPlan() {
-        try {
-          const res = await clinicFetch(`${API_URL}/clinics/my`);
-          const data = await res.json();
-          if (data.success && data.clinic) {
-            clinicIsPro = data.clinic.subscriptionPlan === "Pro";
-          }
-        } catch (err) {
-          // Fail closed — hide the Premium sections rather than let a
-          // Growth-plan doctor fill in a form that 403s at completion.
-          clinicIsPro = false;
+    // ── DOCTOR NOTES (private/shared) ─────────────────────────
+    async function loadDoctorNotes() {
+      const container = document.getElementById("doctorNotesList");
+      try {
+        const res = await clinicFetch(`${CLINIC_API}/patients/${currentPatientId}/private-notes`);
+        const data = await res.json();
+        if (!data.success || !data.data || data.data.length === 0) {
+          container.innerHTML = `<p style="font-size:12px; color:#a08650; margin:0 0 8px;">No notes yet.</p>`;
+          return;
         }
-        if (!clinicIsPro) applyPlanLock();
-      }
 
-      function applyPlanLock() {
-        const upgradeNotice = (label, icon) => `
-          <div class="card-label" style="justify-content: space-between">
-            <span><i class="fa-solid ${icon}"></i> ${label}</span>
-            <span style="font-size:10px;background:#f1ecff;color:#6941c6;padding:4px 9px;border-radius:20px;">PREMIUM</span>
-          </div>
-          <div style="display:flex;align-items:center;gap:10px;padding:14px;background:#faf8ff;border:1px dashed #d8c9f7;border-radius:10px;color:#6941c6;font-size:12px;">
-            <i class="fa-solid fa-lock"></i>
-            This feature is available on the Premium plan. Upgrade to unlock lab and pharmacy workflow.
-          </div>`;
-        const pad = document.getElementById("prescriptionPad");
-        const lab = document.getElementById("labRequestForm");
-        if (pad) pad.innerHTML = upgradeNotice("Prescription Pad", "fa-pills");
-        if (lab) lab.innerHTML = upgradeNotice("Laboratory Requests", "fa-flask-vial");
-      }
-
-      // ── FEATURE 4 STATUS (read-only, once the visit is Completed) ──
-      // A visit can only be completed once, so a Prescription/LabRequest
-      // is only ever created at that moment. This shows the doctor what
-      // happened afterward — dispensed status, lab result — without
-      // needing the separate pharmacy/lab dashboards.
-      async function loadFeature4Status() {
-        if (!clinicIsPro) return; // sections already replaced with the upgrade notice
-        try {
-          const [presRes, labRes] = await Promise.all([
-            clinicFetch(`${CLINIC_API}/visits/${visitId}/prescriptions`),
-            clinicFetch(`${CLINIC_API}/visits/${visitId}/lab-requests`),
-          ]);
-          const presData = await presRes.json();
-          const labData = await labRes.json();
-
-          if (presData.success && presData.data.length > 0) {
-            renderPrescriptionStatus(presData.data[0]);
-          }
-          if (labData.success && labData.data.length > 0) {
-            renderLabRequestStatus(labData.data[0]);
-          }
-        } catch (err) {
-          console.error("Load Feature 4 status error:", err);
-        }
-      }
-
-      function renderPrescriptionStatus(prescription) {
-        const pad = document.getElementById("prescriptionPad");
-        if (!pad) return;
-        const rows = prescription.items
-          .map(
-            (item) => `
-          <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 12px;border:1px solid #e2e8f0;border-radius:8px;margin-bottom:6px;font-size:12px;">
-            <div><strong>${item.drugName}</strong> — ${item.dosage} · ${item.route} · ${item.frequency} · ${item.durationDays}d</div>
-            <span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:20px;${item.dispensed ? "background:#e9f8ef;color:#198754" : "background:#f1ecff;color:#6941c6"}">${item.dispensed ? "Dispensed" : "Pending dispense"}</span>
-          </div>`,
-          )
-          .join("");
-        pad.innerHTML = `
-          <div class="card-label" style="justify-content: space-between">
-            <span><i class="fa-solid fa-pills"></i> Prescription Pad</span>
-            <a href="${CLINIC_API}/prescriptions/${prescription._id}/pdf" target="_blank" style="font-size:11px;color:var(--teal-dark);text-decoration:none;"><i class="fa-solid fa-download"></i> PDF</a>
-          </div>
-          ${rows}`;
-      }
-
-      function renderLabRequestStatus(labRequest) {
-        const lab = document.getElementById("labRequestForm");
-        if (!lab) return;
-        const statusLabel = {
-          PENDING: "Pending",
-          SAMPLE_COLLECTED: "Sample collected",
-          RESULT_READY: "Result ready",
-        };
-        const rows = labRequest.items
-          .map(
-            (item) => `
-          <div style="padding:10px 12px;border:1px solid #e2e8f0;border-radius:8px;margin-bottom:6px;font-size:12px;">
-            <div style="display:flex;justify-content:space-between;align-items:center;">
-              <strong>${item.testName}</strong>
-              <span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:20px;${labRequest.status === "RESULT_READY" ? "background:#e9f8ef;color:#198754" : "background:#fff5dc;color:#a86c00"}">${statusLabel[labRequest.status] || labRequest.status}</span>
-            </div>
-            ${item.resultText ? `<div style="margin-top:6px;color:#444;">${item.resultText}</div>` : ""}
-          </div>`,
-          )
-          .join("");
-        lab.innerHTML = `
-          <div class="card-label"><i class="fa-solid fa-flask-vial"></i> Laboratory Requests</div>
-          ${rows}`;
-      }
-
-      // ── DOCTOR NOTES (private/shared) ─────────────────────────
-      async function loadDoctorNotes() {
-        const container = document.getElementById("doctorNotesList");
-        try {
-          const res = await clinicFetch(
-            `${CLINIC_API}/patients/${currentPatientId}/private-notes`,
-          );
-          const data = await res.json();
-          if (!data.success || !data.data || data.data.length === 0) {
-            container.innerHTML = `<p style="font-size:12px; color:#a08650; margin:0 0 8px;">No notes yet.</p>`;
-            return;
-          }
-
-          container.innerHTML = data.data
-            .map((n) => {
-              const badge =
-                n.visibility === "shared"
-                  ? `<span style="font-size:10px; background:#e0f2f7; color:#2a7d8c; padding:2px 8px; border-radius:10px;">Shared with doctors</span>`
-                  : `<span style="font-size:10px; background:#f0e6d2; color:#8a6d1f; padding:2px 8px; border-radius:10px;">Only me</span>`;
-              const actions = n.isOwnNote
-                ? `<button onclick="deleteDoctorNote('${n._id}')" style="background:none; border:none; color:#c0392b; font-size:11px; cursor:pointer; margin-left:8px;"><i class="fa-solid fa-trash"></i></button>`
-                : "";
-              return `
+        container.innerHTML = data.data
+          .map((n) => {
+            const badge = n.visibility === "shared"
+              ? `<span style="font-size:10px; background:#e0f2f7; color:#2a7d8c; padding:2px 8px; border-radius:10px;">Shared with doctors</span>`
+              : `<span style="font-size:10px; background:#f0e6d2; color:#8a6d1f; padding:2px 8px; border-radius:10px;">Only me</span>`;
+            const actions = n.isOwnNote
+              ? `<button onclick="deleteDoctorNote('${n._id}')" style="background:none; border:none; color:#c0392b; font-size:11px; cursor:pointer; margin-left:8px;"><i class="fa-solid fa-trash"></i></button>`
+              : "";
+            return `
               <div style="padding:10px; background:white; border:1px solid #ecdcb8; border-radius:8px; margin-bottom:8px;">
                 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
                   <span style="font-size:11px; font-weight:600; color:#5c4a1a;">${n.authorName}${badge ? " · " + badge : ""}</span>
@@ -1075,530 +634,398 @@
                 </div>
                 <div style="font-size:13px; color:#4a3d15; white-space:pre-wrap;">${n.content}</div>
               </div>`;
-            })
-            .join("");
-        } catch (e) {
-          console.error("Load doctor notes error:", e);
-          container.innerHTML = `<p style="font-size:12px; color:#c0392b;">Failed to load notes.</p>`;
-        }
+          })
+          .join("");
+      } catch (e) {
+        console.error("Load doctor notes error:", e);
+        container.innerHTML = `<p style="font-size:12px; color:#c0392b;">Failed to load notes.</p>`;
       }
+    }
 
-      async function submitDoctorNote() {
-        const textarea = document.getElementById("fDoctorNote");
-        const content = textarea.value.trim();
-        if (!content) return;
+    async function submitDoctorNote() {
+      const textarea = document.getElementById("fDoctorNote");
+      const content = textarea.value.trim();
+      if (!content) return;
 
-        const shared = document.getElementById("fDoctorNoteShared").checked;
+      const shared = document.getElementById("fDoctorNoteShared").checked;
 
-        try {
-          const res = await clinicFetch(
-            `${CLINIC_API}/patients/${currentPatientId}/private-notes`,
-            {
-              method: "POST",
-              body: JSON.stringify({
-                content,
-                visibility: shared ? "shared" : "private",
-                visitId: visitId,
-              }),
-            },
-          );
-          const data = await res.json();
-          if (data.success) {
-            textarea.value = "";
-            document.getElementById("fDoctorNoteShared").checked = false;
-            loadDoctorNotes();
-          } else {
-            alert(data.message || "Failed to save note.");
-          }
-        } catch (e) {
-          console.error("Submit doctor note error:", e);
-          alert("Network error. Please try again.");
-        }
-      }
-
-      async function deleteDoctorNote(id) {
-        if (!confirm("Delete this note? This can't be undone.")) return;
-        try {
-          const res = await clinicFetch(`${CLINIC_API}/private-notes/${id}`, {
-            method: "DELETE",
-          });
-          const data = await res.json();
-          if (data.success) {
-            loadDoctorNotes();
-          } else {
-            alert(data.message || "Failed to delete note.");
-          }
-        } catch (e) {
-          console.error("Delete doctor note error:", e);
-          alert("Network error. Please try again.");
-        }
-      }
-
-      // ── LOAD VISIT DATA ──────────────────────────────────────
-      async function loadVisit() {
-        try {
-          const res = await clinicFetch(`${CLINIC_API}/visits/${visitId}`);
-
-          // Show stale warning if data came from cache
-          if (res.lastUpdated) {
-            const warnEl = document.getElementById("staleWarning");
-            const timeEl = document.getElementById("staleTime");
-            if (warnEl && timeEl) {
-              const timeAgo = Math.floor(
-                (Date.now() - res.lastUpdated) / 60000,
-              );
-              timeEl.textContent =
-                timeAgo === 0 ? "just now" : `${timeAgo}m ago`;
-              warnEl.classList.add("show");
-            }
-          }
-
-          const data = await res.json();
-          if (!data.success) throw new Error(data.message);
-
-          // Handle both data.data and data.visit for robustness
-          const visit = data.data || data.visit || data;
-          renderVisit(visit, data.pastVisits || []);
-        } catch (err) {
-          console.error("Load Visit Error:", err);
-          document.getElementById("loader").innerHTML =
-            `<p style="color:#e53e3e;">Failed to load visit details. <a href="./clinic-queue.html">Go back to queue</a></p>`;
-        }
-      }
-
-      function renderVisit(visit, pastVisits) {
-        if (!visit) return;
-        const user = visit.user || {};
-        const hp = visit.healthProfileSnapshot || user.healthProfile || {};
-
-        currentPatientId = user._id || user.id;
-        if (currentPatientId) loadDoctorNotes();
-
-        document.getElementById("fVisitType").value =
-          visit.visitType || "General";
-
-        // Topbar & Header population (with safety checks)
-        const patientFullName = user.fullName || visit.patientName || "Patient";
-        const topbarPatientEl = document.getElementById("topbarPatient");
-        if (topbarPatientEl) topbarPatientEl.textContent = patientFullName;
-
-        const patientNameEl = document.getElementById("patientName");
-        if (patientNameEl) patientNameEl.textContent = patientFullName;
-
-        // Calculate Age
-        let ageText = "";
-        if (user.age !== undefined && user.age !== null) {
-          ageText = `${user.age}yrs`;
+      try {
+        const res = await clinicFetch(`${CLINIC_API}/patients/${currentPatientId}/private-notes`, {
+          method: "POST",
+          body: JSON.stringify({
+            content,
+            visibility: shared ? "shared" : "private",
+            visitId: visitId,
+          }),
+        });
+        const data = await res.json();
+        if (data.success) {
+          textarea.value = "";
+          document.getElementById("fDoctorNoteShared").checked = false;
+          loadDoctorNotes();
         } else {
-          const birthDate =
-            user.dateOfBirth || hp.dateOfBirth || visit.dateOfBirth;
-          if (birthDate) {
-            const age = Math.floor(
-              (Date.now() - new Date(birthDate)) / 31557600000,
-            );
-            ageText = `${age}yrs`;
-          } else if (hp.ageRange) {
-            ageText = hp.ageRange;
+          alert(data.message || "Failed to save note.");
+        }
+      } catch (e) {
+        console.error("Submit doctor note error:", e);
+        alert("Network error. Please try again.");
+      }
+    }
+
+    async function deleteDoctorNote(id) {
+      if (!confirm("Delete this note? This can't be undone.")) return;
+      try {
+        const res = await clinicFetch(`${CLINIC_API}/private-notes/${id}`, { method: "DELETE" });
+        const data = await res.json();
+        if (data.success) {
+          loadDoctorNotes();
+        } else {
+          alert(data.message || "Failed to delete note.");
+        }
+      } catch (e) {
+        console.error("Delete doctor note error:", e);
+        alert("Network error. Please try again.");
+      }
+    }
+
+    // ── LOAD VISIT DATA ──────────────────────────────────────
+    async function loadVisit() {
+      try {
+        const res = await clinicFetch(`${CLINIC_API}/visits/${visitId}`);
+        
+        // Show stale warning if data came from cache
+        if (res.lastUpdated) {
+          const warnEl = document.getElementById("staleWarning");
+          const timeEl = document.getElementById("staleTime");
+          if (warnEl && timeEl) {
+            const timeAgo = Math.floor((Date.now() - res.lastUpdated) / 60000);
+            timeEl.textContent = timeAgo === 0 ? "just now" : `${timeAgo}m ago`;
+            warnEl.classList.add("show");
           }
         }
 
-        // Format Meta String
-        const dateSource = visit.preferredDate || visit.createdAt;
-        const timeStr = dateSource
-          ? new Date(dateSource).toLocaleTimeString("en-NG", {
-              hour: "2-digit",
-              minute: "2-digit",
-            })
-          : "";
-        const genderText = hp.gender || user.gender || visit.gender || "";
-        const idText = user.novaBukId || "";
+        const data = await res.json();
+        if (!data.success) throw new Error(data.message);
 
-        const metaParts = [
-          timeStr ? `Consultation - ${timeStr}` : "Consultation",
-          genderText,
-          ageText,
-          idText,
-        ].filter(Boolean);
+        // Handle both data.data and data.visit for robustness
+        const visit = data.data || data.visit || data;
+        renderVisit(visit, data.pastVisits || []);
+      } catch (err) {
+        console.error("Load Visit Error:", err);
+        document.getElementById("loader").innerHTML =
+          `<p style="color:#e53e3e;">Failed to load visit details. <a href="./clinic-queue.html">Go back to queue</a></p>`;
+      }
+    }
 
-        const metaRowEl = document.getElementById("patientMetaRow");
-        if (metaRowEl) metaRowEl.textContent = metaParts.join(", ");
+    function renderVisit(visit, pastVisits) {
+      if (!visit) return;
+      const user = visit.user || {};
+      const hp = visit.healthProfileSnapshot || user.healthProfile || {};
 
-        // Reason for Visit & Detailed Description
-        const reasonEl = document.getElementById("reasonBox");
-        if (reasonEl) {
-          let fullText = "";
-          if (visit.notes) {
-            fullText += `<div style="margin-bottom: 12px;"><strong>Reason for Visit:</strong><br>${visit.notes}</div>`;
-          }
-          if (visit.symptomLog && visit.symptomLog.description) {
-            fullText += `<div><strong>Detailed Symptoms:</strong><br>${visit.symptomLog.description}</div>`;
-          }
+      currentPatientId = user._id || user.id;
+      if (currentPatientId) loadDoctorNotes();
 
-          if (!fullText) {
-            fullText = "General consultation visit";
-          }
+      document.getElementById("fVisitType").value = visit.visitType || "General";
 
-          reasonEl.innerHTML = fullText;
+      // Topbar & Header population (with safety checks)
+      const patientFullName = user.fullName || visit.patientName || "Patient";
+      const topbarPatientEl = document.getElementById("topbarPatient");
+      if (topbarPatientEl) topbarPatientEl.textContent = patientFullName;
+      
+      const patientNameEl = document.getElementById("patientName");
+      if (patientNameEl) patientNameEl.textContent = patientFullName;
+      
+      // Calculate Age
+      let ageText = "";
+      if (user.age !== undefined && user.age !== null) {
+        ageText = `${user.age}yrs`;
+      } else {
+        const birthDate = user.dateOfBirth || hp.dateOfBirth || visit.dateOfBirth;
+        if (birthDate) {
+          const age = Math.floor((Date.now() - new Date(birthDate)) / 31557600000);
+          ageText = `${age}yrs`;
+        } else if (hp.ageRange) {
+          ageText = hp.ageRange;
         }
+      }
 
-        // Symptoms Tags
-        const symptomList = visit.symptomLog?.tags || visit.symptoms || [];
-        const symptomTagsEl = document.getElementById("symptomTags");
-        if (symptomTagsEl) {
-          if (symptomList.length) {
-            symptomTagsEl.innerHTML = symptomList
-              .map((t) => `<span class="symptom-tag">${t}</span>`)
-              .join("");
-          } else {
-            symptomTagsEl.innerHTML = `<span style="font-size:13px; color:var(--text-light);">No specific symptoms tagged.</span>`;
-          }
+      // Format Meta String
+      const dateSource = visit.preferredDate || visit.createdAt;
+      const timeStr = dateSource ? new Date(dateSource).toLocaleTimeString("en-NG", { hour: "2-digit", minute: "2-digit" }) : "";
+      const genderText = hp.gender || user.gender || visit.gender || "";
+      const idText = user.novaBukId || "";
+
+      const metaParts = [
+        timeStr ? `Consultation - ${timeStr}` : "Consultation",
+        genderText,
+        ageText,
+        idText
+      ].filter(Boolean);
+
+      const metaRowEl = document.getElementById("patientMetaRow");
+      if (metaRowEl) metaRowEl.textContent = metaParts.join(", ");
+
+      // Reason for Visit & Detailed Description
+      const reasonEl = document.getElementById("reasonBox");
+      if (reasonEl) {
+        let fullText = "";
+        if (visit.notes) {
+          fullText += `<div style="margin-bottom: 12px;"><strong>Reason for Visit:</strong><br>${visit.notes}</div>`;
         }
-
-        // Health flags
-        const flags = [];
-        const conditions =
-          hp.existingConditions || user.existingConditions || [];
-        const allergies = hp.allergies || user.allergies || [];
-        conditions.forEach((c) =>
-          flags.push(
-            `<div class="health-flag"><i class="fa-solid fa-triangle-exclamation"></i> ${c}</div>`,
-          ),
-        );
-        allergies.forEach((a) =>
-          flags.push(
-            `<div class="health-flag"><i class="fa-solid fa-ban"></i> Allergy: ${a}</div>`,
-          ),
-        );
-
-        const flagsListEl = document.getElementById("flagsList");
-        if (flagsListEl) {
-          if (flags.length) {
-            flagsListEl.innerHTML = flags.join("");
-          } else {
-            flagsListEl.innerHTML = `<span style="font-size:13px; color:var(--text-light);">No chronic conditions or allergies reported.</span>`;
-          }
+        if (visit.symptomLog && visit.symptomLog.description) {
+          fullText += `<div><strong>Detailed Symptoms:</strong><br>${visit.symptomLog.description}</div>`;
         }
+        
+        if (!fullText) {
+          fullText = "General consultation visit";
+        }
+        
+        reasonEl.innerHTML = fullText;
+      }
 
-        // Past visits
-        const pastVisitsEl = document.getElementById("pastVisitsList");
-        if (pastVisitsEl && pastVisits.length) {
-          pastVisitsEl.innerHTML = pastVisits
-            .map(
-              (pv) => `
+      // Symptoms Tags
+      const symptomList = visit.symptomLog?.tags || visit.symptoms || [];
+      const symptomTagsEl = document.getElementById("symptomTags");
+      if (symptomTagsEl) {
+        if (symptomList.length) {
+          symptomTagsEl.innerHTML = symptomList.map(t => `<span class="symptom-tag">${t}</span>`).join("");
+        } else {
+          symptomTagsEl.innerHTML = `<span style="font-size:13px; color:var(--text-light);">No specific symptoms tagged.</span>`;
+        }
+      }
+
+      // Health flags
+      const flags = [];
+      const conditions = hp.existingConditions || user.existingConditions || [];
+      const allergies = hp.allergies || user.allergies || [];
+      conditions.forEach(c => flags.push(`<div class="health-flag"><i class="fa-solid fa-triangle-exclamation"></i> ${c}</div>`));
+      allergies.forEach(a => flags.push(`<div class="health-flag"><i class="fa-solid fa-ban"></i> Allergy: ${a}</div>`));
+      
+      const flagsListEl = document.getElementById("flagsList");
+      if (flagsListEl) {
+        if (flags.length) {
+          flagsListEl.innerHTML = flags.join("");
+        } else {
+          flagsListEl.innerHTML = `<span style="font-size:13px; color:var(--text-light);">No chronic conditions or allergies reported.</span>`;
+        }
+      }
+
+      // Past visits
+      const pastVisitsEl = document.getElementById("pastVisitsList");
+      if (pastVisitsEl && pastVisits.length) {
+        pastVisitsEl.innerHTML = pastVisits.map(pv => `
           <div class="history-item">
             <div style="font-size:11px; color:var(--text-light);">${formatDate(pv.completedAt || pv.preferredDate)}</div>
             <div style="font-size:13px; font-weight:600; color:var(--text-dark); margin-top:4px;">${pv.diagnosis || "Consultation Record"}</div>
-            ${pv.prescription ? `<div style="font-size:12px; color:var(--text-mid); margin-top:2px;">Prescription: ${pv.prescription.slice(0, 50)}...</div>` : ""}
-          </div>`,
-            )
-            .join("");
-        }
+            ${pv.prescription ? `<div style="font-size:12px; color:var(--text-mid); margin-top:2px;">Prescription: ${pv.prescription.slice(0, 50)}...</div>` : ''}
+          </div>`).join("");
+      }
 
-        // Fill note fields
-        const fields = ["fDiagnosis", "fPrescription", "fTests", "fAdvice"];
-        const dataKeys = [
-          "diagnosis",
-          "prescription",
-          "testsOrdered",
-          "advice",
-        ];
-        fields.forEach((id, idx) => {
+      // Fill note fields
+      const fields = ["fDiagnosis", "fPrescription", "fTests", "fAdvice"];
+      const dataKeys = ["diagnosis", "prescription", "testsOrdered", "advice"];
+      fields.forEach((id, idx) => {
+        const el = document.getElementById(id);
+        if (el) el.value = visit[dataKeys[idx]] || "";
+      });
+
+      // Show container
+      const loaderEl = document.getElementById("loader");
+      if (loaderEl) loaderEl.style.display = "none";
+      
+      const wrapEl = document.getElementById("consultationWrap");
+      if (wrapEl) wrapEl.style.display = "flex";
+      
+      const completeBarEl = document.getElementById("completeBar");
+      if (completeBarEl) completeBarEl.style.display = "flex";
+
+      // Completed state
+      if (visit.status === "Completed") {
+        isDone = true;
+        fields.forEach(id => {
           const el = document.getElementById(id);
-          if (el) el.value = visit[dataKeys[idx]] || "";
+          if (el) el.readOnly = true;
         });
-
-        // Show container
-        const loaderEl = document.getElementById("loader");
-        if (loaderEl) loaderEl.style.display = "none";
-
-        const wrapEl = document.getElementById("consultationWrap");
-        if (wrapEl) wrapEl.style.display = "flex";
-
-        const completeBarEl = document.getElementById("completeBar");
-        if (completeBarEl) completeBarEl.style.display = "flex";
-
-        // Completed state
-        if (visit.status === "Completed") {
-          isDone = true;
-          fields.forEach((id) => {
-            const el = document.getElementById(id);
-            if (el) el.readOnly = true;
-          });
-          if (completeBarEl) {
-            completeBarEl.innerHTML = `<div style="color:var(--teal); font-weight:700;"><i class="fa-solid fa-circle-check"></i> This consultation record is complete.</div>`;
-          }
-          loadFeature4Status();
-        } else {
-          checkCompletable();
+        if (completeBarEl) {
+          completeBarEl.innerHTML = `<div style="color:var(--teal); font-weight:700;"><i class="fa-solid fa-circle-check"></i> This consultation record is complete.</div>`;
         }
-      }
-
-      // ── AUTO-SAVE ────────────────────────────────────────────
-      function scheduleAutosave() {
-        if (isDone) return;
+      } else {
         checkCompletable();
-        clearTimeout(autoSaveTimer);
-        setSaveStatus("saving");
-        autoSaveTimer = setTimeout(doSave, 1500);
       }
+    }
 
-      async function doSave() {
-        if (isDone) return;
-        try {
-          const res = await clinicFetch(
-            `${CLINIC_API}/visits/${visitId}/notes`,
-            {
-              method: "PATCH",
-              body: JSON.stringify(getFormData()),
-            },
-          );
-          const data = await res.json();
-          if (data.offline) {
+    // ── AUTO-SAVE ────────────────────────────────────────────
+    function scheduleAutosave() {
+      if (isDone) return;
+      checkCompletable();
+      clearTimeout(autoSaveTimer);
+      setSaveStatus("saving");
+      autoSaveTimer = setTimeout(doSave, 1500);
+    }
+
+    async function doSave() {
+      if (isDone) return;
+      try {
+        const res = await clinicFetch(`${CLINIC_API}/visits/${visitId}/notes`, {
+          method: "PATCH",
+          body: JSON.stringify(getFormData()),
+        });
+        const data = await res.json();
+        if (data.offline) {
             setSaveStatus("saved-offline");
-          } else {
+        } else {
             setSaveStatus("saved");
-          }
-        } catch {
-          setSaveStatus("error");
         }
+      } catch {
+        setSaveStatus("error");
       }
+    }
 
-      function setSaveStatus(state) {
-        const dot = document.getElementById("saveDot");
-        const text = document.getElementById("saveText");
-        // Both elements lived in the old topbar markup, which is now
-        // commented out (a redesign removed the visible save-status
-        // chip but this function was never updated to match). Bail
-        // out quietly instead of throwing — a null-reference error
-        // here previously aborted whatever called it, including
-        // completeVisit() right after a successful completion, which
-        // made a genuinely-saved visit look like it had failed.
-        if (!dot || !text) return;
-        if (state === "saving") {
-          dot.className = "save-dot saving";
-          dot.style.background = "";
-          text.textContent = "Saving…";
-        }
-        if (state === "saved") {
-          dot.className = "save-dot";
-          dot.style.background = "";
-          text.textContent = "Saved";
-        }
-        if (state === "saved-offline") {
-          dot.className = "save-dot";
-          dot.style.background = "#ff9800";
-          text.textContent = "Saved Offline";
-        }
-        if (state === "error") {
-          dot.className = "save-dot error";
-          dot.style.background = "";
-          text.textContent = "Not saved";
-        }
-      }
+    function setSaveStatus(state) {
+      const dot = document.getElementById("saveDot");
+      const text = document.getElementById("saveText");
+      if (state === "saving") { dot.className = "save-dot saving"; dot.style.background = ""; text.textContent = "Saving…"; }
+      if (state === "saved") { dot.className = "save-dot"; dot.style.background = ""; text.textContent = "Saved"; }
+      if (state === "saved-offline") { dot.className = "save-dot"; dot.style.background = "#ff9800"; text.textContent = "Saved Offline"; }
+      if (state === "error") { dot.className = "save-dot error"; dot.style.background = ""; text.textContent = "Not saved"; }
+    }
 
-      function getFormData() {
-        return {
-          diagnosis: document.getElementById("fDiagnosis").value,
-          prescription: document.getElementById("fPrescription").value,
-          testsOrdered: document.getElementById("fTests").value,
-          advice: document.getElementById("fAdvice").value,
-          visitType: document.getElementById("fVisitType").value,
-          nextAppointment:
-            document.getElementById("fNextAppointment").value || null,
-          medications: getMedicationRowsData(),
-        };
-      }
+    function getFormData() {
+      return {
+        diagnosis: document.getElementById("fDiagnosis").value,
+        prescription: document.getElementById("fPrescription").value,
+        testsOrdered: document.getElementById("fTests").value,
+        advice: document.getElementById("fAdvice").value,
+        visitType: document.getElementById("fVisitType").value,
+        nextAppointment: document.getElementById("fNextAppointment").value || null,
+        medications: getMedicationRowsData(),
+      };
+    }
 
-      // ── MEDICATION REMINDER ROWS (dynamic add/remove) ─────────
-      let medicationRowCount = 0;
+    // ── MEDICATION REMINDER ROWS (dynamic add/remove) ─────────
+    let medicationRowCount = 0;
 
-      function addMedicationRow() {
-        const id = medicationRowCount++;
-        const container = document.getElementById("medicationReminderRows");
-        const row = document.createElement("div");
-        row.id = `medRow-${id}`;
-        row.style.cssText =
-          "display:grid; grid-template-columns:1.5fr 1fr 0.8fr 0.8fr auto; gap:8px; margin-bottom:8px; align-items:center;";
-        row.innerHTML = `
+    function addMedicationRow() {
+      const id = medicationRowCount++;
+      const container = document.getElementById("medicationReminderRows");
+      const row = document.createElement("div");
+      row.id = `medRow-${id}`;
+      row.style.cssText = "display:grid; grid-template-columns:1.5fr 1fr 0.8fr 0.8fr auto; gap:8px; margin-bottom:8px; align-items:center;";
+      row.innerHTML = `
         <input type="text" placeholder="Drug name" class="med-drugName" style="padding:8px; border:1px solid var(--border, #ccc); border-radius:6px; font-size:12px;" />
         <input type="text" placeholder="Dosage (e.g. 500mg)" class="med-dosage" style="padding:8px; border:1px solid var(--border, #ccc); border-radius:6px; font-size:12px;" />
         <input type="number" min="1" placeholder="Times/day" class="med-frequency" style="padding:8px; border:1px solid var(--border, #ccc); border-radius:6px; font-size:12px;" />
         <input type="number" min="1" placeholder="Days" class="med-duration" style="padding:8px; border:1px solid var(--border, #ccc); border-radius:6px; font-size:12px;" />
         <button type="button" onclick="document.getElementById('medRow-${id}').remove()" style="background:none; border:none; color:#e53e3e; cursor:pointer; padding:4px;"><i class="fa-solid fa-trash"></i></button>
       `;
-        container.appendChild(row);
-      }
+      container.appendChild(row);
+    }
 
-      function getMedicationRowsData() {
-        const rows = document.querySelectorAll("#medicationReminderRows > div");
-        const meds = [];
-        rows.forEach((row) => {
-          const drugName = row.querySelector(".med-drugName")?.value.trim();
-          const dosage = row.querySelector(".med-dosage")?.value.trim();
-          const frequencyPerDay = row.querySelector(".med-frequency")?.value;
-          const durationDays = row.querySelector(".med-duration")?.value;
-          // Skip rows the doctor started but didn't finish filling in —
-          // backend also defensively skips incomplete entries, this just
-          // avoids sending obviously-empty rows at all.
-          if (drugName && dosage && frequencyPerDay && durationDays) {
-            meds.push({
-              drugName,
-              dosage,
-              frequencyPerDay: Number(frequencyPerDay),
-              durationDays: Number(durationDays),
-            });
-          }
-        });
-        return meds;
-      }
-
-      function checkCompletable() {
-        const has =
-          document.getElementById("fDiagnosis").value.trim().length > 0;
-        document.getElementById("completeBtnLg").disabled = !has;
-      }
-
-      // ── COMPLETE VISIT ───────────────────────────────────────
-      async function completeVisit() {
-        if (isDone) return;
-        const btnLg = document.getElementById("completeBtnLg");
-        btnLg.disabled = true;
-        btnLg.innerHTML =
-          '<i class="fa-solid fa-spinner fa-spin"></i> Finalizing Record…';
-
-        try {
-          const res = await clinicFetch(
-            `${CLINIC_API}/visits/${visitId}/complete`,
-            {
-              method: "PATCH",
-              body: JSON.stringify(getFormData()),
-            },
-          );
-          const data = await res.json();
-          if (data.success) {
-            isDone = true;
-            let extraNote = "";
-            if (data.appointment)
-              extraNote += ` Next appointment scheduled for ${new Date(data.appointment.scheduledAt).toLocaleString()}.`;
-            if (data.medicationReminders && data.medicationReminders.length > 0)
-              extraNote += ` ${data.medicationReminders.length} medication reminder(s) set.`;
-
-            // ── FEATURE 4: create the structured Prescription / LabRequest
-            // records now that the visit is closed. Only attempted on a
-            // Pro plan — a Growth clinic never has these fields filled in
-            // since the sections are replaced with an upgrade notice. If
-            // the device is offline, clinicFetch/smartFetch transparently
-            // queues these POSTs in the same outbox as the /complete call
-            // itself, in the same order, so they still sync correctly.
-            if (clinicIsPro) {
-              const prescriptionItems = getPrescriptionItemsData();
-              const labItems = getLabRequestItemsData();
-
-              if (prescriptionItems.length > 0) {
-                try {
-                  await clinicFetch(
-                    `${CLINIC_API}/visits/${visitId}/prescriptions`,
-                    {
-                      method: "POST",
-                      body: JSON.stringify({ items: prescriptionItems }),
-                    },
-                  );
-                  extraNote += ` Prescription issued (${prescriptionItems.length} item(s)).`;
-                } catch (err) {
-                  console.error("Create prescription error:", err);
-                }
-              }
-
-              if (labItems.length > 0) {
-                try {
-                  await clinicFetch(
-                    `${CLINIC_API}/visits/${visitId}/lab-requests`,
-                    {
-                      method: "POST",
-                      body: JSON.stringify({ items: labItems }),
-                    },
-                  );
-                  extraNote += ` Lab request sent (${labItems.length} test(s)).`;
-                } catch (err) {
-                  console.error("Create lab request error:", err);
-                }
-              }
-            }
-
-            if (data.offline) {
-              document.getElementById("completeBar").innerHTML =
-                `<div style="color:#ff9800; font-weight:700;"><i class="fa-solid fa-clock"></i> Completed Offline. Will sync when connected.</div>`;
-              setSaveStatus("saved-offline");
-            } else {
-              document.getElementById("completeBar").innerHTML =
-                `<div style="color:var(--teal); font-weight:700;"><i class="fa-solid fa-circle-check"></i> Consultation Completed Successfully.${extraNote}</div>`;
-              setSaveStatus("saved");
-            }
-            setTimeout(
-              () => (window.location.href = "./clinic-queue.html"),
-              2500,
-            );
-          }
-        } catch {
-          btnLg.disabled = false;
-          btnLg.innerHTML =
-            '<i class="fa-solid fa-circle-check"></i> Complete Consultation';
+    function getMedicationRowsData() {
+      const rows = document.querySelectorAll("#medicationReminderRows > div");
+      const meds = [];
+      rows.forEach((row) => {
+        const drugName = row.querySelector(".med-drugName")?.value.trim();
+        const dosage = row.querySelector(".med-dosage")?.value.trim();
+        const frequencyPerDay = row.querySelector(".med-frequency")?.value;
+        const durationDays = row.querySelector(".med-duration")?.value;
+        // Skip rows the doctor started but didn't finish filling in —
+        // backend also defensively skips incomplete entries, this just
+        // avoids sending obviously-empty rows at all.
+        if (drugName && dosage && frequencyPerDay && durationDays) {
+          meds.push({
+            drugName,
+            dosage,
+            frequencyPerDay: Number(frequencyPerDay),
+            durationDays: Number(durationDays),
+          });
         }
+      });
+      return meds;
+    }
+
+    function checkCompletable() {
+      const has = document.getElementById("fDiagnosis").value.trim().length > 0;
+      document.getElementById("completeBtnLg").disabled = !has;
+    }
+
+    // ── COMPLETE VISIT ───────────────────────────────────────
+    async function completeVisit() {
+      if (isDone) return;
+      const btnLg = document.getElementById("completeBtnLg");
+      btnLg.disabled = true;
+      btnLg.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Finalizing Record…';
+
+      try {
+        const res = await clinicFetch(`${CLINIC_API}/visits/${visitId}/complete`, {
+          method: "PATCH",
+          body: JSON.stringify(getFormData()),
+        });
+        const data = await res.json();
+        if (data.success) {
+          isDone = true;
+          let extraNote = "";
+          if (data.appointment) extraNote += ` Next appointment scheduled for ${new Date(data.appointment.scheduledAt).toLocaleString()}.`;
+          if (data.medicationReminders && data.medicationReminders.length > 0) extraNote += ` ${data.medicationReminders.length} medication reminder(s) set.`;
+
+          if (data.offline) {
+             document.getElementById("completeBar").innerHTML = `<div style="color:#ff9800; font-weight:700;"><i class="fa-solid fa-clock"></i> Completed Offline. Will sync when connected.</div>`;
+             setSaveStatus("saved-offline");
+          } else {
+             document.getElementById("completeBar").innerHTML = `<div style="color:var(--teal); font-weight:700;"><i class="fa-solid fa-circle-check"></i> Consultation Completed Successfully.${extraNote}</div>`;
+             setSaveStatus("saved");
+          }
+          setTimeout(() => window.location.href = "./clinic-queue.html", 2500);
+        }
+      } catch {
+        btnLg.disabled = false;
+        btnLg.innerHTML = '<i class="fa-solid fa-circle-check"></i> Complete Consultation';
       }
+    }
 
-      // ── TEMPLATES ────────────────────────────────────────────
-      const TEMPLATES = {
-        fever: {
-          diagnosis: "Acute febrile illness",
-          prescription:
-            "Paracetamol 500mg — 2 tabs every 6hrs for 3 days\nORS sachets as needed",
-          testsOrdered: "Full blood count\nMalaria RDT",
-          advice:
-            "Increase fluid intake. Rest. Return if fever persists beyond 3 days.",
-        },
-        malaria: {
-          diagnosis: "Suspected malaria",
-          prescription:
-            "Artemether-Lumefantrine (Coartem) as directed\nParacetamol 500mg for fever",
-          testsOrdered: "Malaria RDT / Blood film",
-          advice:
-            "Complete full antimalarial course. Use insecticide-treated nets. Follow up in 72hrs.",
-        },
-        hypertension: {
-          diagnosis: "Hypertension",
-          prescription: "Amlodipine 5mg — once daily",
-          testsOrdered: "Fasting blood glucose\nRenal function test",
-          advice: "Low-salt diet. Avoid alcohol. Follow up in 2 weeks.",
-        },
-        checkup: {
-          diagnosis: "General health assessment — no acute illness",
-          prescription: "",
-          testsOrdered:
-            "Fasting blood glucose\nFull blood count\nLipid profile",
-          advice:
-            "Maintain healthy diet and regular exercise. Annual check-up recommended.",
-        },
-      };
+    // ── TEMPLATES ────────────────────────────────────────────
+    const TEMPLATES = {
+      fever: {
+        diagnosis: "Acute febrile illness",
+        prescription: "Paracetamol 500mg — 2 tabs every 6hrs for 3 days\nORS sachets as needed",
+        testsOrdered: "Full blood count\nMalaria RDT",
+        advice: "Increase fluid intake. Rest. Return if fever persists beyond 3 days.",
+      },
+      malaria: {
+        diagnosis: "Suspected malaria",
+        prescription: "Artemether-Lumefantrine (Coartem) as directed\nParacetamol 500mg for fever",
+        testsOrdered: "Malaria RDT / Blood film",
+        advice: "Complete full antimalarial course. Use insecticide-treated nets. Follow up in 72hrs.",
+      },
+      hypertension: {
+        diagnosis: "Hypertension",
+        prescription: "Amlodipine 5mg — once daily",
+        testsOrdered: "Fasting blood glucose\nRenal function test",
+        advice: "Low-salt diet. Avoid alcohol. Follow up in 2 weeks.",
+      },
+      checkup: {
+        diagnosis: "General health assessment — no acute illness",
+        prescription: "",
+        testsOrdered: "Fasting blood glucose\nFull blood count\nLipid profile",
+        advice: "Maintain healthy diet and regular exercise. Annual check-up recommended.",
+      },
+    };
 
-      function applyTemplate(key) {
-        if (isDone) return;
-        const t = TEMPLATES[key];
-        if (!t) return;
-        // Only fill fields that are currently empty
-        if (!document.getElementById("fDiagnosis").value)
-          document.getElementById("fDiagnosis").value = t.diagnosis;
-        if (!document.getElementById("fPrescription").value)
-          document.getElementById("fPrescription").value = t.prescription;
-        if (!document.getElementById("fTests").value)
-          document.getElementById("fTests").value = t.testsOrdered;
-        if (!document.getElementById("fAdvice").value)
-          document.getElementById("fAdvice").value = t.advice;
-        scheduleAutosave();
-      }
+    function applyTemplate(key) {
+      if (isDone) return;
+      const t = TEMPLATES[key];
+      if (!t) return;
+      // Only fill fields that are currently empty
+      if (!document.getElementById("fDiagnosis").value) document.getElementById("fDiagnosis").value = t.diagnosis;
+      if (!document.getElementById("fPrescription").value) document.getElementById("fPrescription").value = t.prescription;
+      if (!document.getElementById("fTests").value) document.getElementById("fTests").value = t.testsOrdered;
+      if (!document.getElementById("fAdvice").value) document.getElementById("fAdvice").value = t.advice;
+      scheduleAutosave();
+    }
 
-      // ── INIT ─────────────────────────────────────────────────
-      loadClinicPlan();
-      loadVisit();
-    </script>
-  </body>
+    // ── INIT ─────────────────────────────────────────────────
+    loadVisit();
+  </script>
+</body>
+
 </html>

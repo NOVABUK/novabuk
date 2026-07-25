@@ -426,16 +426,107 @@
   </head>
 
   <body>
-    <header>
+    
+    <div class="logo-detail mobile-detail">
+      <div class="topbar-left">
+        <!-- clinic-name and staff-name classes are filled by clinic-shared.js -->
+        <div class="topbar-clinic clinic-name" id="topbarClinicName">
+          <script>
+            (function () {
+              try {
+                var u = JSON.parse(
+                  localStorage.getItem("novabuk_user") || "{}",
+                );
+                document.write(u.clinicName || "Your Clinic");
+              } catch (e) {
+                document.write("Your Clinic");
+              }
+            })();
+          </script>
+        </div>
+        <div class="topbar-date" id="topbarDate"></div>
+      </div>
+    </div>
+
+    <div class="all-content">
+      <aside class="sidebar" id="sidebar">
+        
+        <div class="sidebar-icon">
+          <div class="logo">
+            <a href="./clinic-queue.html">
+              <img
+                src="./images/logo.png"
+                class="sidebar-logo"
+                alt="NovaBuk"
+              />
+            </a>
+          </div>
+          <!-- Queue — this page (active) -->
+          <a
+            href="./clinic-queue.html"
+            class="sidebar-nav-btn active"
+            data-tip="Today's Queue"
+          >
+            <i class="fa-solid fa-list-check"></i><span>Appointment</span>
+          </a>
+
+          <!-- Search -->
+          <a
+            href="./clinic-search.html"
+            class="sidebar-nav-btn"
+            data-tip="Search Patients"
+          >
+            <i class="fa-solid fa-magnifying-glass"></i><span>Patients</span>
+          </a>
+
+          <!-- Checkout & Billing -->
+          <a
+            href="./clinic-checkout.html"
+            class="sidebar-nav-btn"
+            data-tip="Checkout & Billing"
+          >
+            <i class="fa-solid fa-money-bill-wave"></i><span>Billing</span>
+          </a>
+
+          <!-- <a href="./clinic-pharmacy.html" class="sidebar-nav-btn active" data-tip="Pharmacy"><i class="fa-solid fa-prescription-bottle-medical"> </i></a> -->
+
+          <!-- Settings pushed to bottom via margin-top: auto on logout -->
+          <a
+            href="./clinic-settings.html"
+            class="sidebar-nav-btn"
+            data-tip="Settings"
+          >
+            <i class="fa-solid fa-gear"></i><span>Settings</span>
+          </a>
+        </div>
+
+        <!-- Logout — at the bottom -->
+         
+        <div class="logout-sidebar">
+          <div>Need Help?</div>
+          <button
+            
+            class="sidebar-nav-btn sidebar-logout"
+            data-tip="Logout"
+            onclick="clinicLogout()"
+          >
+            <i class="fa-solid fa-right-from-bracket"></i> <span>Contact Support</span> <i class="fa-solid fa-arrow-right"></i>
+          </button>
+          <button
+            class="sidebar-nav-btn sidebar-logout"
+            data-tip="Logout"
+            onclick="clinicLogout()"
+          >
+            <i class="fa-solid fa-right-from-bracket"></i>
+          </button>
+        </div>
+      </aside>
+
+      <div class="main">
+        <header>
       <div class="logo">
         <!-- Logo — links back to queue (home for clinic staff) -->
-        <a href="./clinic-queue.html">
-          <img
-            src="./images/logo.png"
-            class="sidebar-logo"
-            alt="NovaBuk"
-          />
-        </a>
+        
         <div class="logo-detail">
           <div class="topbar-left">
             <!-- clinic-name and staff-name classes are filled by clinic-shared.js -->
@@ -502,81 +593,7 @@
           </div>
         </div>
       </div>
-    </header>
-    <div class="logo-detail mobile-detail">
-      <div class="topbar-left">
-        <!-- clinic-name and staff-name classes are filled by clinic-shared.js -->
-        <div class="topbar-clinic clinic-name" id="topbarClinicName">
-          <script>
-            (function () {
-              try {
-                var u = JSON.parse(
-                  localStorage.getItem("novabuk_user") || "{}",
-                );
-                document.write(u.clinicName || "Your Clinic");
-              } catch (e) {
-                document.write("Your Clinic");
-              }
-            })();
-          </script>
-        </div>
-        <div class="topbar-date" id="topbarDate"></div>
-      </div>
-    </div>
-
-    <div class="all-content">
-      <aside class="sidebar" id="sidebar">
-        <div class="sidebar-icon">
-          <!-- Queue — this page (active) -->
-          <a
-            href="./clinic-queue.html"
-            class="sidebar-nav-btn active"
-            data-tip="Today's Queue"
-          >
-            <i class="fa-solid fa-list-check"></i>
-          </a>
-
-          <!-- Search -->
-          <a
-            href="./clinic-search.html"
-            class="sidebar-nav-btn"
-            data-tip="Search Patients"
-          >
-            <i class="fa-solid fa-magnifying-glass"></i>
-          </a>
-
-          <!-- Checkout & Billing -->
-          <a
-            href="./clinic-checkout.html"
-            class="sidebar-nav-btn"
-            data-tip="Checkout & Billing"
-          >
-            <i class="fa-solid fa-money-bill-wave"></i>
-          </a>
-
-          <!-- Settings pushed to bottom via margin-top: auto on logout -->
-          <a
-            href="./clinic-settings.html"
-            class="sidebar-nav-btn"
-            data-tip="Settings"
-          >
-            <i class="fa-solid fa-gear"></i>
-          </a>
-        </div>
-
-        <!-- Logout — at the bottom -->
-        <div class="logout-sidebar">
-          <button
-            class="sidebar-nav-btn sidebar-logout"
-            data-tip="Logout"
-            onclick="clinicLogout()"
-          >
-            <i class="fa-solid fa-right-from-bracket"></i>
-          </button>
-        </div>
-      </aside>
-
-      <div class="main">
+        </header>
         <!-- CONTENT -->
         <div class="content">
           <!-- CONTROLS ROW: tabs on the left, walk-in button on the right -->
@@ -585,7 +602,7 @@
              data-status tells the click handler which status to filter by.
              The JS reads this attribute — no need for separate functions
              per tab.
-        -->
+            -->
             <div class="tab-list">
               <button
                 class="tab-btn active"
