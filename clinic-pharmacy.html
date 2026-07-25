@@ -4,12 +4,106 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="robots" content="noindex, nofollow" />
-  <title>Pharmacy Dashboard — NovaBuk Clinic</title>
+  <title>Pharmacy — NovaBuk Clinic</title>
   <link rel="icon" href="./images/logo.png" />
   <link rel="stylesheet" href="./clinic.css" />
   <link rel="stylesheet" href="./clinic-workflow.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" crossorigin="anonymous" />
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" />
+  <style>
+    /* ── Page-specific additions, layered on top of clinic-workflow.css ── */
+    .rx-item {
+      border: 1px solid var(--workflow-border);
+      border-radius: 12px;
+      padding: 14px;
+      margin-bottom: 10px;
+    }
+    .rx-item-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 10px;
+      margin-bottom: 4px;
+    }
+    .rx-item-drug {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--workflow-text);
+    }
+    .rx-item-detail {
+      font-size: 11px;
+      color: var(--workflow-muted);
+      margin-top: 2px;
+    }
+    .rx-item-notes {
+      font-size: 11px;
+      color: #a86c00;
+      background: var(--workflow-amber-bg);
+      padding: 6px 9px;
+      border-radius: 7px;
+      margin-top: 8px;
+    }
+    .rx-status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 10px;
+      font-weight: 700;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .rx-status-pill.pending { background: var(--workflow-amber-bg); color: var(--workflow-amber); }
+    .rx-status-pill.done { background: var(--workflow-green-bg); color: var(--workflow-green); }
+    .rx-dispense-form {
+      display: flex;
+      gap: 8px;
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px dashed var(--workflow-border);
+    }
+    .rx-dispense-form input {
+      border: 1px solid var(--workflow-border);
+      border-radius: 8px;
+      padding: 8px 10px;
+      font: 400 12px Poppins, sans-serif;
+      min-width: 0;
+    }
+    .rx-dispense-form input[data-role="price"] { flex: 1.4; }
+    .rx-dispense-form input[data-role="qty"] { flex: 0.7; }
+    .rx-field-label {
+      font-size: 9px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+      color: var(--workflow-muted);
+      display: block;
+      margin-bottom: 4px;
+    }
+    .rx-dispensed-note {
+      font-size: 11px;
+      color: var(--workflow-green);
+      margin-top: 8px;
+    }
+    .rx-toast {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%) translateY(20px);
+      background: var(--workflow-text);
+      color: #fff;
+      padding: 12px 20px;
+      border-radius: 10px;
+      font: 500 12px Poppins, sans-serif;
+      opacity: 0;
+      pointer-events: none;
+      transition: 0.25s;
+      z-index: 2000;
+    }
+    .rx-toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+    .rx-toast.error { background: var(--workflow-red); }
+  </style>
 </head>
 <body>
   <header>
@@ -17,75 +111,201 @@
     <div class="top-side"><div class="topbar-actions"><a href="./clinic-search.html" class="topbar-btn" title="Search patients"><i class="fa-solid fa-magnifying-glass"></i></a><a href="./clinic-notifications.html" class="topbar-btn" title="Notifications"><i class="fa-solid fa-bell"></i></a><div class="staff-chip" id="staffChip"><div class="staff-avatar-sm" id="topbarAvatar">?</div><span class="staff-name-sm staff-name">Staff</span><i class="fa-solid fa-angle-down" id="staffIcon"></i><div class="staff-dropdown" id="staffDropdown"><div class="staff-dropdown-item" onclick="location.href='./clinic-settings.html'"><i class="fa-solid fa-gear"></i> Settings</div><div class="staff-dropdown-item danger" onclick="clinicLogout()"><i class="fa-solid fa-right-from-bracket"></i> Logout</div></div></div></div></div>
   </header>
   <div class="all-content"><aside class="sidebar" id="sidebar"><div class="sidebar-icon"><a href="./clinic-queue.html" class="sidebar-nav-btn" data-tip="Today's Queue"><i class="fa-solid fa-list-check"></i></a><a href="./clinic-search.html" class="sidebar-nav-btn" data-tip="Search Patients"><i class="fa-solid fa-magnifying-glass"></i></a><a href="./clinic-pharmacy.html" class="sidebar-nav-btn active" data-tip="Pharmacy"><i class="fa-solid fa-prescription-bottle-medical"></i></a><a href="./clinic-laboratory.html" class="sidebar-nav-btn" data-tip="Laboratory"><i class="fa-solid fa-flask-vial"></i></a><a href="./clinic-settings.html" class="sidebar-nav-btn" data-tip="Settings"><i class="fa-solid fa-gear"></i></a></div><div class="logout-sidebar"><button class="sidebar-nav-btn sidebar-logout" data-tip="Logout" onclick="clinicLogout()"><i class="fa-solid fa-right-from-bracket"></i></button></div></aside></div>
-  <main class="workflow-main"><div class="workflow-shell">
-    <div class="workflow-heading"><div><div class="workflow-eyebrow" style="color:#6941c6;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;margin-bottom:6px;"><i class="fa-solid fa-shield-heart"></i> Premium pharmacy workflow</div><h1>Pharmacy Dashboard</h1><p>Review issued prescriptions and safely record dispensing.</p></div><div class="workflow-heading-actions"><button class="workflow-button secondary" onclick="window.print()"><i class="fa-solid fa-print"></i> Print queue</button></div></div>
-    <section class="workflow-stat-grid"><div class="workflow-stat"><div class="workflow-stat-icon purple"><i class="fa-solid fa-file-prescription"></i></div><div><strong id="issuedCount">3</strong><span>Issued today</span></div></div><div class="workflow-stat"><div class="workflow-stat-icon amber"><i class="fa-solid fa-hourglass-half"></i></div><div><strong id="pendingCount">2</strong><span>Awaiting dispensing</span></div></div><div class="workflow-stat"><div class="workflow-stat-icon teal"><i class="fa-solid fa-spinner"></i></div><div><strong>1</strong><span>Partially dispensed</span></div></div><div class="workflow-stat"><div class="workflow-stat-icon green"><i class="fa-solid fa-circle-check"></i></div><div><strong>12</strong><span>Completed this month</span></div></div></section>
-    <section class="workflow-panel"><div class="workflow-panel-header"><div class="workflow-panel-title"><i class="fa-solid fa-prescription-bottle-medical" style="color:#6941c6"></i><div><h2>Prescription queue</h2><p>Issued prescriptions awaiting dispensing at your clinic</p></div></div><div class="workflow-toolbar"><input class="workflow-input" id="pharmacySearch" placeholder="Search patient or doctor" /><select class="workflow-select" id="pharmacyStatus"><option value="all">All statuses</option><option value="ISSUED">Issued</option><option value="PARTIALLY_DISPENSED">Partially dispensed</option><option value="COMPLETED">Completed</option></select></div></div><div class="workflow-table-wrap"><table class="workflow-table"><thead><tr><th>Patient</th><th>Prescribed by</th><th>Issued</th><th>Items</th><th>Status</th><th></th></tr></thead><tbody id="pharmacyRows"></tbody></table></div><div class="workflow-empty" id="pharmacyEmpty"><i class="fa-solid fa-prescription-bottle"></i><p>No prescriptions match your search.</p></div></section>
-  </div></main>
-  <div class="workflow-modal-backdrop" id="pharmacyModal"><div class="workflow-modal"><div class="workflow-modal-head"><div><h2 id="modalPatient">Prescription details</h2><p class="workflow-subtext" id="modalMeta"></p></div><button class="workflow-close" onclick="closePharmacyModal()"><i class="fa-solid fa-xmark"></i></button></div><div class="workflow-detail-grid"><div class="workflow-detail"><label>Patient</label><strong id="modalPatientDetail"></strong></div><div class="workflow-detail"><label>Prescribing doctor</label><strong id="modalDoctor"></strong></div></div><div class="workflow-item-list" id="modalItems"></div><div style="display:flex;justify-content:flex-end;gap:10px"><button class="workflow-button secondary" onclick="closePharmacyModal()">Close</button><button class="workflow-button primary" id="dispenseButton" onclick="downloadPrescriptionPdf()"><i class="fa-solid fa-download"></i> Download PDF</button></div></div></div>
-  <script src="./db.js"></script><script src="./clinic-shared.js"></script>
+
+  <main class="workflow-main">
+    <div class="workflow-shell">
+      <div class="workflow-heading">
+        <div>
+          <div style="color:#6941c6;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;margin-bottom:6px;"><i class="fa-solid fa-shield-heart"></i> Premium pharmacy workflow</div>
+          <h1>Pharmacy</h1>
+          <p>Dispense prescriptions issued by doctors at your clinic.</p>
+        </div>
+        <div class="workflow-heading-actions">
+          <button class="workflow-button secondary" onclick="loadPrescriptions()"><i class="fa-solid fa-arrows-rotate"></i> Refresh</button>
+        </div>
+      </div>
+
+      <section class="workflow-stat-grid">
+        <div class="workflow-stat"><div class="workflow-stat-icon amber"><i class="fa-solid fa-hourglass-half"></i></div><div><strong id="statAwaiting">0</strong><span>Prescriptions awaiting dispensing</span></div></div>
+        <div class="workflow-stat"><div class="workflow-stat-icon teal"><i class="fa-solid fa-pills"></i></div><div><strong id="statItemsPending">0</strong><span>Individual drugs not yet dispensed</span></div></div>
+        <div class="workflow-stat"><div class="workflow-stat-icon purple"><i class="fa-solid fa-spinner"></i></div><div><strong id="statPartial">0</strong><span>Partially dispensed</span></div></div>
+      </section>
+
+      <section class="workflow-panel">
+        <div class="workflow-panel-header">
+          <div class="workflow-panel-title">
+            <i class="fa-solid fa-prescription-bottle-medical" style="color:#6941c6"></i>
+            <div><h2>Prescription queue</h2><p>Every prescription your clinic's doctors have issued that still has something to dispense</p></div>
+          </div>
+          <div class="workflow-toolbar">
+            <input class="workflow-input" id="pharmacySearch" placeholder="Search patient or doctor" />
+            <select class="workflow-select" id="pharmacyStatus">
+              <option value="all">All in queue</option>
+              <option value="ISSUED">Not started</option>
+              <option value="PARTIALLY_DISPENSED">Partially dispensed</option>
+            </select>
+          </div>
+        </div>
+        <div class="workflow-table-wrap">
+          <table class="workflow-table">
+            <thead><tr><th>Patient</th><th>Prescribed by</th><th>Issued</th><th>Drugs</th><th>Status</th><th></th></tr></thead>
+            <tbody id="pharmacyRows"></tbody>
+          </table>
+        </div>
+        <div class="workflow-empty" id="pharmacyEmpty">
+          <i class="fa-solid fa-prescription-bottle"></i>
+          <p id="pharmacyEmptyText">No prescriptions match your search.</p>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <div class="workflow-modal-backdrop" id="pharmacyModal">
+    <div class="workflow-modal">
+      <div class="workflow-modal-head">
+        <div><h2 id="modalPatient">Prescription</h2><p class="workflow-subtext" id="modalMeta"></p></div>
+        <button class="workflow-close" onclick="closePharmacyModal()"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="workflow-detail-grid">
+        <div class="workflow-detail"><label>Patient</label><strong id="modalPatientDetail"></strong></div>
+        <div class="workflow-detail"><label>Prescribing doctor</label><strong id="modalDoctor"></strong></div>
+      </div>
+      <div id="modalItems"></div>
+      <div style="display:flex;justify-content:flex-end;gap:10px;margin-top:6px;">
+        <button class="workflow-button secondary" onclick="closePharmacyModal()">Close</button>
+        <button class="workflow-button primary" onclick="downloadPrescriptionPdf()"><i class="fa-solid fa-download"></i> Download PDF</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="rx-toast" id="rxToast"></div>
+
+  <script src="./db.js"></script>
+  <script src="./clinic-shared.js"></script>
   <script>
     let prescriptions = [];
     let activePrescription;
-    const label = s => s === 'PARTIALLY_DISPENSED' ? 'Partially dispensed' : s.charAt(0) + s.slice(1).toLowerCase();
-    const badgeClass = s => s === 'ISSUED' ? 'issued' : s === 'PARTIALLY_DISPENSED' ? 'partial' : 'completed';
+
+    function showToast(message, isError) {
+      const el = document.getElementById('rxToast');
+      el.textContent = message;
+      el.className = 'rx-toast show' + (isError ? ' error' : '');
+      setTimeout(() => { el.className = 'rx-toast'; }, 2800);
+    }
+
+    // A prescription's own status already distinguishes "nothing dispensed
+    // yet" from "partially dispensed" — but "ISSUED" alone reads like the
+    // drug was already handed over. Everything patient-facing here says
+    // "Not started" / "Partially dispensed" instead, and every single item
+    // always carries its own explicit dispensed/not-dispensed badge so
+    // there's never a row with no status shown at all.
+    const STATUS_LABEL = { ISSUED: 'Not started', PARTIALLY_DISPENSED: 'Partially dispensed' };
+    const STATUS_CLASS = { ISSUED: 'issued', PARTIALLY_DISPENSED: 'partial' };
 
     async function loadPrescriptions() {
+      const rowsEl = document.getElementById('pharmacyRows');
+      rowsEl.innerHTML = `<tr><td colspan="6" style="text-align:center;padding:40px;color:var(--workflow-muted);"><i class="fa-solid fa-spinner fa-spin"></i> Loading queue…</td></tr>`;
+      document.getElementById('pharmacyEmpty').style.display = 'none';
+
       try {
         const res = await clinicFetch(`${CLINIC_API}/prescriptions/pending`);
         const data = await res.json();
         if (!data.success) throw new Error(data.message || 'Server error');
         prescriptions = data.data || [];
-        document.getElementById('issuedCount').textContent = prescriptions.filter(x => x.status === 'ISSUED').length;
-        document.getElementById('pendingCount').textContent = prescriptions.length;
+        updateStats();
         renderPharmacy();
       } catch (err) {
         console.error('Load prescriptions error:', err);
-        document.getElementById('pharmacyRows').innerHTML = '';
+        rowsEl.innerHTML = '';
+        document.getElementById('pharmacyEmptyText').innerHTML =
+          'Couldn\'t load the prescription queue. <a href="#" onclick="loadPrescriptions();return false;">Try again</a>.';
         document.getElementById('pharmacyEmpty').style.display = 'block';
-        document.getElementById('pharmacyEmpty').innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i><p>Failed to load prescriptions. <a href="#" onclick="loadPrescriptions();return false;">Retry</a></p>';
       }
     }
 
-    function renderPharmacy(){
-      const q=document.getElementById('pharmacySearch').value.toLowerCase();
-      const status=document.getElementById('pharmacyStatus').value;
-      const rows=prescriptions.filter(x=>(status==='all'||x.status===status)&&(`${x.patient?.fullName||''} ${x.doctorName||''}`).toLowerCase().includes(q));
-      document.getElementById('pharmacyRows').innerHTML=rows.map(x=>`<tr><td><div class="workflow-patient">${avatarInitials(x.patient?.fullName||'?',32)}<div>${x.patient?.fullName||'Unknown'}<div class="workflow-subtext">${x.patient?.novaBukId||'Patient record'}</div></div></div></td><td>${x.doctorName||'—'}</td><td>${formatDate(x.createdAt)}</td><td>${x.items.length} item${x.items.length>1?'s':''}</td><td><span class="workflow-badge ${badgeClass(x.status)}">${label(x.status)}</span></td><td><button class="workflow-button secondary" onclick="openPharmacyModal('${x._id}')">View <i class="fa-solid fa-arrow-right"></i></button></td></tr>`).join('');
-      document.getElementById('pharmacyEmpty').style.display=rows.length?'none':'block';
+    function updateStats() {
+      document.getElementById('statAwaiting').textContent = prescriptions.length;
+      document.getElementById('statPartial').textContent = prescriptions.filter(p => p.status === 'PARTIALLY_DISPENSED').length;
+      const pendingItems = prescriptions.reduce((sum, p) => sum + p.items.filter(i => !i.dispensed).length, 0);
+      document.getElementById('statItemsPending').textContent = pendingItems;
     }
 
-    function openPharmacyModal(id){
-      activePrescription=prescriptions.find(x=>x._id===id);
+    function renderPharmacy() {
+      const q = document.getElementById('pharmacySearch').value.toLowerCase();
+      const status = document.getElementById('pharmacyStatus').value;
+      const rows = prescriptions.filter(x =>
+        (status === 'all' || x.status === status) &&
+        `${x.patient?.fullName || ''} ${x.doctorName || ''}`.toLowerCase().includes(q)
+      );
+
+      document.getElementById('pharmacyRows').innerHTML = rows.map(x => {
+        const pendingCount = x.items.filter(i => !i.dispensed).length;
+        return `<tr>
+          <td><div class="workflow-patient">${avatarInitials(x.patient?.fullName || '?', 32)}<div>${x.patient?.fullName || 'Unknown patient'}<div class="workflow-subtext">${x.patient?.novaBukId || 'Patient record'}</div></div></div></td>
+          <td>${x.doctorName || '—'}</td>
+          <td>${formatDate(x.createdAt)}</td>
+          <td>${pendingCount} of ${x.items.length} left</td>
+          <td><span class="workflow-badge ${STATUS_CLASS[x.status]}">${STATUS_LABEL[x.status]}</span></td>
+          <td><button class="workflow-button secondary" onclick="openPharmacyModal('${x._id}')">Dispense <i class="fa-solid fa-arrow-right"></i></button></td>
+        </tr>`;
+      }).join('');
+
+      const empty = document.getElementById('pharmacyEmpty');
+      const emptyText = document.getElementById('pharmacyEmptyText');
+      if (!rows.length) {
+        emptyText.textContent = prescriptions.length
+          ? 'No prescriptions match your search.'
+          : 'Nothing waiting on pharmacy right now — every issued prescription has been fully dispensed.';
+        empty.style.display = 'block';
+      } else {
+        empty.style.display = 'none';
+      }
+    }
+
+    function openPharmacyModal(id) {
+      activePrescription = prescriptions.find(x => x._id === id);
       if (!activePrescription) return;
-      document.getElementById('modalPatient').textContent=(activePrescription.patient?.fullName||'Patient')+' · Prescription';
-      document.getElementById('modalMeta').textContent=formatDate(activePrescription.createdAt)+' · '+label(activePrescription.status);
-      document.getElementById('modalPatientDetail').textContent=activePrescription.patient?.fullName||'—';
-      document.getElementById('modalDoctor').textContent=activePrescription.doctorName||'—';
-      document.getElementById('modalItems').innerHTML=activePrescription.items.map((i)=>`
-        <div class="workflow-item" style="align-items:flex-start;">
-          <div>
-            <strong>${i.drugName}</strong>
-            <small>${i.dosage} · ${i.route} · ${i.frequency} · ${i.durationDays} day(s)${i.specialNotes ? ' · ' + i.specialNotes : ''}</small>
-          </div>
-          ${i.dispensed
-            ? `<span class="workflow-badge completed">Dispensed · ₦${(i.unitPrice*i.quantity).toLocaleString()}</span>`
-            : `<div style="display:flex;gap:6px;align-items:center;">
-                 <input type="number" min="0" placeholder="Unit price" id="price-${i._id}" style="width:90px;padding:7px;border:1px solid var(--workflow-border);border-radius:7px;font-size:11px;">
-                 <input type="number" min="1" placeholder="Qty" id="qty-${i._id}" value="1" style="width:55px;padding:7px;border:1px solid var(--workflow-border);border-radius:7px;font-size:11px;">
-                 <button class="workflow-button primary" style="padding:7px 10px;" onclick="dispenseItem('${i._id}')"><i class="fa-solid fa-check"></i></button>
-               </div>`}
-        </div>`).join('');
+
+      document.getElementById('modalPatient').textContent = `${activePrescription.patient?.fullName || 'Patient'} — Prescription`;
+      document.getElementById('modalMeta').textContent = `Issued ${formatDate(activePrescription.createdAt)}`;
+      document.getElementById('modalPatientDetail').textContent = activePrescription.patient?.fullName || '—';
+      document.getElementById('modalDoctor').textContent = activePrescription.doctorName || '—';
+      renderModalItems();
       document.getElementById('pharmacyModal').classList.add('open');
     }
 
-    async function dispenseItem(itemId){
+    function renderModalItems() {
+      document.getElementById('modalItems').innerHTML = activePrescription.items.map(i => `
+        <div class="rx-item">
+          <div class="rx-item-head">
+            <div>
+              <div class="rx-item-drug">${i.drugName}</div>
+              <div class="rx-item-detail">${i.dosage} · ${i.route} · ${i.frequency} · ${i.durationDays} day(s)</div>
+            </div>
+            <span class="rx-status-pill ${i.dispensed ? 'done' : 'pending'}">
+              <i class="fa-solid ${i.dispensed ? 'fa-circle-check' : 'fa-clock'}"></i>
+              ${i.dispensed ? 'Dispensed' : 'Not dispensed yet'}
+            </span>
+          </div>
+          ${i.specialNotes ? `<div class="rx-item-notes"><i class="fa-solid fa-note-sticky"></i> ${i.specialNotes}</div>` : ''}
+          ${i.dispensed
+            ? `<div class="rx-dispensed-note"><i class="fa-solid fa-check"></i> ₦${(i.unitPrice * i.quantity).toLocaleString()} · qty ${i.quantity} · ${formatDate(i.dispensedAt)}</div>`
+            : `<div class="rx-dispense-form">
+                 <div style="flex:1.4;"><span class="rx-field-label">Unit price (₦)</span><input type="number" min="0" data-role="price" id="price-${i._id}" style="width:100%;"></div>
+                 <div style="flex:0.7;"><span class="rx-field-label">Qty</span><input type="number" min="1" value="1" data-role="qty" id="qty-${i._id}" style="width:100%;"></div>
+                 <div style="display:flex;align-items:flex-end;"><button class="workflow-button primary" onclick="dispenseItem('${i._id}')"><i class="fa-solid fa-check"></i> Dispense</button></div>
+               </div>`}
+        </div>`).join('');
+    }
+
+    async function dispenseItem(itemId) {
       const priceEl = document.getElementById(`price-${itemId}`);
       const qtyEl = document.getElementById(`qty-${itemId}`);
       const unitPrice = Number(priceEl.value);
       const quantity = Number(qtyEl.value);
-      if (!unitPrice || unitPrice < 0) { priceEl.focus(); return; }
-      if (!quantity || quantity < 1) { qtyEl.focus(); return; }
+
+      if (!unitPrice || unitPrice < 0) { priceEl.focus(); showToast('Enter a unit price before dispensing.', true); return; }
+      if (!quantity || quantity < 1) { qtyEl.focus(); showToast('Enter a quantity of at least 1.', true); return; }
 
       try {
         const res = await clinicFetch(`${CLINIC_API}/prescriptions/${activePrescription._id}/items/${itemId}/dispense`, {
@@ -94,22 +314,43 @@
         });
         const data = await res.json();
         if (!data.success) throw new Error(data.message || 'Dispense failed');
-        closePharmacyModal();
-        await loadPrescriptions();
+
+        // The dispense endpoint returns the raw Prescription document —
+        // it doesn't re-populate patient or resolve doctorName the way
+        // the list/detail endpoints do. Merge in just the items array
+        // (the part that actually changed) rather than replacing the
+        // whole object, so the patient name and doctor stay correct in
+        // the UI instead of blanking out after a dispense action.
+        activePrescription = { ...activePrescription, items: data.data.items, status: data.data.status };
+        const idx = prescriptions.findIndex(p => p._id === activePrescription._id);
+        const allDone = activePrescription.items.every(i => i.dispensed);
+        if (allDone) {
+          prescriptions.splice(idx, 1);
+          closePharmacyModal();
+          showToast('All items dispensed — moved out of the queue.');
+        } else {
+          prescriptions[idx] = activePrescription;
+          renderModalItems();
+          showToast('Item dispensed.');
+        }
+        updateStats();
+        renderPharmacy();
       } catch (err) {
-        alert(err.message || 'Could not dispense this item. Please try again.');
+        showToast(err.message || 'Could not dispense this item. Please try again.', true);
       }
     }
 
-    function closePharmacyModal(){document.getElementById('pharmacyModal').classList.remove('open');}
+    function closePharmacyModal() {
+      document.getElementById('pharmacyModal').classList.remove('open');
+    }
 
-    function downloadPrescriptionPdf(){
+    function downloadPrescriptionPdf() {
       if (!activePrescription) return;
       window.open(`${CLINIC_API}/prescriptions/${activePrescription._id}/pdf`, '_blank');
     }
 
-    document.getElementById('pharmacySearch').addEventListener('input',renderPharmacy);
-    document.getElementById('pharmacyStatus').addEventListener('change',renderPharmacy);
+    document.getElementById('pharmacySearch').addEventListener('input', renderPharmacy);
+    document.getElementById('pharmacyStatus').addEventListener('change', renderPharmacy);
     loadPrescriptions();
   </script>
 </body>

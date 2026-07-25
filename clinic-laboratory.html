@@ -1,128 +1,377 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="robots" content="noindex, nofollow" />
-  <title>Laboratory Dashboard — NovaBuk Clinic</title><link rel="icon" href="./images/logo.png" /><link rel="stylesheet" href="./clinic.css" /><link rel="stylesheet" href="./clinic-workflow.css" /><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" crossorigin="anonymous" /><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>Laboratory — NovaBuk Clinic</title>
+  <link rel="icon" href="./images/logo.png" />
+  <link rel="stylesheet" href="./clinic.css" />
+  <link rel="stylesheet" href="./clinic-workflow.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" crossorigin="anonymous" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" />
+  <style>
+    .lab-item {
+      border: 1px solid var(--workflow-border);
+      border-radius: 12px;
+      padding: 14px;
+      margin-bottom: 10px;
+    }
+    .lab-item-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 10px;
+      margin-bottom: 4px;
+    }
+    .lab-item-test {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--workflow-text);
+    }
+    .lab-item-detail {
+      font-size: 11px;
+      color: var(--workflow-muted);
+      margin-top: 2px;
+    }
+    .lab-item-notes {
+      font-size: 11px;
+      color: #a86c00;
+      background: var(--workflow-amber-bg);
+      padding: 6px 9px;
+      border-radius: 7px;
+      margin-top: 8px;
+    }
+    .lab-status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 10px;
+      font-weight: 700;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .lab-status-pill.pending { background: var(--workflow-amber-bg); color: var(--workflow-amber); }
+    .lab-status-pill.done { background: var(--workflow-green-bg); color: var(--workflow-green); }
+    .lab-result-form { margin-top: 10px; padding-top: 10px; border-top: 1px dashed var(--workflow-border); }
+    .lab-result-form textarea {
+      width: 100%;
+      min-height: 64px;
+      border: 1px solid var(--workflow-border);
+      border-radius: 8px;
+      padding: 9px 11px;
+      font: 400 12px Poppins, sans-serif;
+      resize: vertical;
+    }
+    .lab-field-label {
+      font-size: 9px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+      color: var(--workflow-muted);
+      display: block;
+      margin-bottom: 4px;
+    }
+    .lab-result-text { font-size: 11px; color: var(--workflow-green); margin-top: 8px; white-space: pre-wrap; }
+    .lab-toast {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%) translateY(20px);
+      background: var(--workflow-text);
+      color: #fff;
+      padding: 12px 20px;
+      border-radius: 10px;
+      font: 500 12px Poppins, sans-serif;
+      opacity: 0;
+      pointer-events: none;
+      transition: 0.25s;
+      z-index: 2000;
+    }
+    .lab-toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+    .lab-toast.error { background: var(--workflow-red); }
+    .lab-banner {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      background: var(--workflow-amber-bg);
+      color: #7a5200;
+      border-radius: 10px;
+      padding: 11px 14px;
+      font-size: 11px;
+      margin-bottom: 16px;
+    }
+  </style>
 </head>
 <body>
-<header><div class="logo"><a href="./clinic-queue.html"><img src="./images/logo.png" class="sidebar-logo" alt="NovaBuk" /></a><div class="logo-detail"><div class="topbar-left"><div class="topbar-clinic clinic-name">Your Clinic</div><div class="topbar-date" id="topbarDate"></div></div></div></div><div class="top-side"><div class="topbar-actions"><a href="./clinic-search.html" class="topbar-btn" title="Search patients"><i class="fa-solid fa-magnifying-glass"></i></a><a href="./clinic-notifications.html" class="topbar-btn" title="Notifications"><i class="fa-solid fa-bell"></i></a><div class="staff-chip" id="staffChip"><div class="staff-avatar-sm" id="topbarAvatar">?</div><span class="staff-name-sm staff-name">Staff</span><i class="fa-solid fa-angle-down" id="staffIcon"></i><div class="staff-dropdown" id="staffDropdown"><div class="staff-dropdown-item" onclick="location.href='./clinic-settings.html'"><i class="fa-solid fa-gear"></i> Settings</div><div class="staff-dropdown-item danger" onclick="clinicLogout()"><i class="fa-solid fa-right-from-bracket"></i> Logout</div></div></div></div></div></header>
-<div class="all-content"><aside class="sidebar" id="sidebar"><div class="sidebar-icon"><a href="./clinic-queue.html" class="sidebar-nav-btn" data-tip="Today's Queue"><i class="fa-solid fa-list-check"></i></a><a href="./clinic-search.html" class="sidebar-nav-btn" data-tip="Search Patients"><i class="fa-solid fa-magnifying-glass"></i></a><a href="./clinic-pharmacy.html" class="sidebar-nav-btn" data-tip="Pharmacy"><i class="fa-solid fa-prescription-bottle-medical"></i></a><a href="./clinic-laboratory.html" class="sidebar-nav-btn active" data-tip="Laboratory"><i class="fa-solid fa-flask-vial"></i></a><a href="./clinic-settings.html" class="sidebar-nav-btn" data-tip="Settings"><i class="fa-solid fa-gear"></i></a></div><div class="logout-sidebar"><button class="sidebar-nav-btn sidebar-logout" data-tip="Logout" onclick="clinicLogout()"><i class="fa-solid fa-right-from-bracket"></i></button></div></aside></div>
-<main class="workflow-main"><div class="workflow-shell"><div class="workflow-heading"><div><div style="color:#1e9aaa;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;margin-bottom:6px;"><i class="fa-solid fa-microscope"></i> Premium laboratory workflow</div><h1>Laboratory Dashboard</h1><p>Track specimens from collection through result release.</p></div><div class="workflow-heading-actions"><button class="workflow-button secondary" onclick="window.print()"><i class="fa-solid fa-print"></i> Print queue</button></div></div>
-<section class="workflow-stat-grid"><div class="workflow-stat"><div class="workflow-stat-icon amber"><i class="fa-solid fa-inbox"></i></div><div><strong id="pendingCount">0</strong><span>Pending collection</span></div></div><div class="workflow-stat"><div class="workflow-stat-icon teal"><i class="fa-solid fa-vial"></i></div><div><strong id="collectedCount">0</strong><span>Samples collected</span></div></div><div class="workflow-stat"><div class="workflow-stat-icon green"><i class="fa-solid fa-file-circle-check"></i></div><div><strong id="totalQueueCount">0</strong><span>Total in queue</span></div></div><div class="workflow-stat"><div class="workflow-stat-icon purple"><i class="fa-solid fa-triangle-exclamation"></i></div><div><strong id="urgentCount">0</strong><span>Urgent requests</span></div></div></section>
-<section class="workflow-panel"><div class="workflow-panel-header"><div class="workflow-panel-title"><i class="fa-solid fa-flask-vial" style="color:#1e9aaa"></i><div><h2>Lab request queue</h2><p>Pending and in-progress requests at your clinic</p></div></div><div class="workflow-toolbar"><input class="workflow-input" id="labSearch" placeholder="Search patient or test" /><select class="workflow-select" id="labStatus"><option value="all">All statuses</option><option value="PENDING">Pending</option><option value="SAMPLE_COLLECTED">Sample collected</option></select></div></div><div class="workflow-table-wrap"><table class="workflow-table"><thead><tr><th>Patient</th><th>Test</th><th>Requested by</th><th>Priority</th><th>Requested</th><th>Status</th><th></th></tr></thead><tbody id="labRows"></tbody></table></div><div class="workflow-empty" id="labEmpty"><i class="fa-solid fa-flask"></i><p>No lab requests match your search.</p></div></section></div></main>
-<div class="workflow-modal-backdrop" id="labModal"><div class="workflow-modal"><div class="workflow-modal-head"><div><h2 id="labModalTitle">Lab request</h2><p class="workflow-subtext" id="labModalMeta"></p></div><button class="workflow-close" onclick="closeLabModal()"><i class="fa-solid fa-xmark"></i></button></div><div class="workflow-detail-grid"><div class="workflow-detail"><label>Patient</label><strong id="labPatient"></strong></div><div class="workflow-detail"><label>Test and specimen</label><strong id="labTest"></strong></div></div><label style="display:block;font-size:11px;font-weight:600;color:#718096;margin-bottom:6px">CLINICAL NOTES</label><p id="labNotes" style="font-size:12px;color:#102a35;background:#f8fafb;border:1px solid #e4ebf0;padding:12px;border-radius:9px;margin-bottom:18px"></p><div id="labActionArea"></div></div></div>
-<script src="./db.js"></script><script src="./clinic-shared.js"></script>
-<script>
-let labRequests = [];
-let activeLab;
-const labLabel=s=>s==='SAMPLE_COLLECTED'?'Sample collected':s==='RESULT_READY'?'Result ready':'Pending';
-const labClass=s=>s==='PENDING'?'pending':s==='SAMPLE_COLLECTED'?'collected':'ready';
-const hasUrgent = req => req.items.some(i => i.urgency === 'Urgent');
+  <header>
+    <div class="logo"><a href="./clinic-queue.html"><img src="./images/logo.png" class="sidebar-logo" alt="NovaBuk" /></a><div class="logo-detail"><div class="topbar-left"><div class="topbar-clinic clinic-name">Your Clinic</div><div class="topbar-date" id="topbarDate"></div></div></div></div>
+    <div class="top-side"><div class="topbar-actions"><a href="./clinic-search.html" class="topbar-btn" title="Search patients"><i class="fa-solid fa-magnifying-glass"></i></a><a href="./clinic-notifications.html" class="topbar-btn" title="Notifications"><i class="fa-solid fa-bell"></i></a><div class="staff-chip" id="staffChip"><div class="staff-avatar-sm" id="topbarAvatar">?</div><span class="staff-name-sm staff-name">Staff</span><i class="fa-solid fa-angle-down" id="staffIcon"></i><div class="staff-dropdown" id="staffDropdown"><div class="staff-dropdown-item" onclick="location.href='./clinic-settings.html'"><i class="fa-solid fa-gear"></i> Settings</div><div class="staff-dropdown-item danger" onclick="clinicLogout()"><i class="fa-solid fa-right-from-bracket"></i> Logout</div></div></div></div></div>
+  </header>
+  <div class="all-content"><aside class="sidebar" id="sidebar"><div class="sidebar-icon"><a href="./clinic-queue.html" class="sidebar-nav-btn" data-tip="Today's Queue"><i class="fa-solid fa-list-check"></i></a><a href="./clinic-search.html" class="sidebar-nav-btn" data-tip="Search Patients"><i class="fa-solid fa-magnifying-glass"></i></a><a href="./clinic-pharmacy.html" class="sidebar-nav-btn" data-tip="Pharmacy"><i class="fa-solid fa-prescription-bottle-medical"></i></a><a href="./clinic-laboratory.html" class="sidebar-nav-btn active" data-tip="Laboratory"><i class="fa-solid fa-flask-vial"></i></a><a href="./clinic-settings.html" class="sidebar-nav-btn" data-tip="Settings"><i class="fa-solid fa-gear"></i></a></div><div class="logout-sidebar"><button class="sidebar-nav-btn sidebar-logout" data-tip="Logout" onclick="clinicLogout()"><i class="fa-solid fa-right-from-bracket"></i></button></div></aside></div>
 
-async function loadLabRequests() {
-  try {
-    const res = await clinicFetch(`${CLINIC_API}/lab-requests/pending`);
-    const data = await res.json();
-    if (!data.success) throw new Error(data.message || 'Server error');
-    labRequests = data.data || [];
-    document.getElementById('pendingCount').textContent = labRequests.filter(r => r.status === 'PENDING').length;
-    document.getElementById('collectedCount').textContent = labRequests.filter(r => r.status === 'SAMPLE_COLLECTED').length;
-    document.getElementById('totalQueueCount').textContent = labRequests.length;
-    document.getElementById('urgentCount').textContent = labRequests.filter(hasUrgent).length;
-    renderLab();
-  } catch (err) {
-    console.error('Load lab requests error:', err);
-    document.getElementById('labRows').innerHTML = '';
-    document.getElementById('labEmpty').style.display = 'block';
-    document.getElementById('labEmpty').innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i><p>Failed to load lab requests. <a href="#" onclick="loadLabRequests();return false;">Retry</a></p>';
-  }
-}
-
-function renderLab(){
-  const q=document.getElementById('labSearch').value.toLowerCase(),st=document.getElementById('labStatus').value;
-  const rows=labRequests.filter(x=>(st==='all'||x.status===st)&&(`${x.patient?.fullName||''} ${x.items.map(i=>i.testName).join(' ')} ${x.doctorName||''}`).toLowerCase().includes(q));
-  document.getElementById('labRows').innerHTML=rows.map(x=>{
-    const testLabel = x.items.length > 1 ? `${x.items[0].testName} +${x.items.length - 1} more` : x.items[0]?.testName || '—';
-    const sampleLabel = x.items.length > 1 ? `${x.items.length} tests` : (x.items[0]?.sampleType || '');
-    return `<tr><td><div class="workflow-patient">${avatarInitials(x.patient?.fullName||'?',32)}<div>${x.patient?.fullName||'Unknown'}<div class="workflow-subtext">${x.patient?.novaBukId||'Patient record'}</div></div></div></td><td><strong>${testLabel}</strong><div class="workflow-subtext">${sampleLabel}</div></td><td>${x.doctorName||'—'}</td><td><span class="workflow-badge ${hasUrgent(x)?'urgent':'collected'}">${hasUrgent(x)?'Urgent':'Routine'}</span></td><td>${formatDate(x.createdAt)}</td><td><span class="workflow-badge ${labClass(x.status)}">${labLabel(x.status)}</span></td><td><button class="workflow-button secondary" onclick="openLabModal('${x._id}')">View <i class="fa-solid fa-arrow-right"></i></button></td></tr>`;
-  }).join('');
-  document.getElementById('labEmpty').style.display=rows.length?'none':'block';
-}
-
-function openLabModal(id){
-  activeLab=labRequests.find(x=>x._id===id);
-  if (!activeLab) return;
-  document.getElementById('labModalTitle').textContent=(activeLab.patient?.fullName||'Patient')+' · Lab request';
-  document.getElementById('labModalMeta').textContent=formatDate(activeLab.createdAt)+' · Requested by '+(activeLab.doctorName||'—');
-  document.getElementById('labPatient').textContent=activeLab.patient?.fullName||'—';
-  document.getElementById('labTest').textContent=activeLab.items.map(i=>`${i.testName} (${i.sampleType})`).join(', ');
-  document.getElementById('labNotes').textContent=activeLab.items.map(i=>i.clinicalNotes).filter(Boolean).join(' · ') || 'No clinical notes provided.';
-
-  let action;
-  if (activeLab.status === 'PENDING') {
-    action = `<button class="workflow-button primary" onclick="advanceLab('SAMPLE_COLLECTED')"><i class="fa-solid fa-vial"></i> Mark sample collected</button>`;
-  } else if (activeLab.status === 'SAMPLE_COLLECTED') {
-    action = `<div style="display:grid;gap:12px">
-      ${activeLab.items.map(i => `
+  <main class="workflow-main">
+    <div class="workflow-shell">
+      <div class="workflow-heading">
         <div>
-          <label style="display:block;font-size:11px;font-weight:600;color:#718096;margin-bottom:6px">${i.testName} — RESULT</label>
-          <textarea class="workflow-input" id="labResult-${i._id}" style="width:100%;min-height:70px" placeholder="Enter result for ${i.testName}..."></textarea>
-        </div>`).join('')}
-      <button class="workflow-button primary" onclick="saveLabResults()"><i class="fa-solid fa-file-circle-check"></i> Save results and mark ready</button>
-    </div>`;
-  } else {
-    action = `<div style="padding:12px;border-radius:9px;background:#e9f8ef;color:#198754;font-size:12px"><i class="fa-solid fa-circle-check"></i> Result is ready and visible to the prescribing doctor.</div>`;
-  }
-  document.getElementById('labActionArea').innerHTML=action;
-  document.getElementById('labModal').classList.add('open');
-}
+          <div style="color:#1e9aaa;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;margin-bottom:6px;"><i class="fa-solid fa-microscope"></i> Premium laboratory workflow</div>
+          <h1>Laboratory</h1>
+          <p>Process lab test requests ordered by doctors at your clinic.</p>
+        </div>
+        <div class="workflow-heading-actions">
+          <button class="workflow-button secondary" onclick="loadLabRequests()"><i class="fa-solid fa-arrows-rotate"></i> Refresh</button>
+        </div>
+      </div>
 
-function closeLabModal(){document.getElementById('labModal').classList.remove('open');}
+      <section class="workflow-stat-grid">
+        <div class="workflow-stat"><div class="workflow-stat-icon amber"><i class="fa-solid fa-inbox"></i></div><div><strong id="statPending">0</strong><span>Awaiting sample collection</span></div></div>
+        <div class="workflow-stat"><div class="workflow-stat-icon teal"><i class="fa-solid fa-vial"></i></div><div><strong id="statCollected">0</strong><span>Sample collected, awaiting result</span></div></div>
+        <div class="workflow-stat"><div class="workflow-stat-icon purple"><i class="fa-solid fa-triangle-exclamation"></i></div><div><strong id="statUrgent">0</strong><span>Urgent requests</span></div></div>
+      </section>
 
-async function advanceLab(status){
-  try {
-    const res = await clinicFetch(`${CLINIC_API}/lab-requests/${activeLab._id}/status`, {
-      method: 'PATCH',
-      body: JSON.stringify({ status }),
-    });
-    const data = await res.json();
-    if (!data.success) throw new Error(data.message || 'Could not update status.');
-    closeLabModal();
-    await loadLabRequests();
-  } catch (err) {
-    alert(err.message || 'Could not update this request. Please try again.');
-  }
-}
+      <section class="workflow-panel">
+        <div class="workflow-panel-header">
+          <div class="workflow-panel-title">
+            <i class="fa-solid fa-flask-vial" style="color:#1e9aaa"></i>
+            <div><h2>Lab request queue</h2><p>Every test your clinic's doctors have ordered that isn't finished yet</p></div>
+          </div>
+          <div class="workflow-toolbar">
+            <input class="workflow-input" id="labSearch" placeholder="Search patient or test" />
+            <select class="workflow-select" id="labStatus">
+              <option value="all">All in queue</option>
+              <option value="PENDING">Awaiting collection</option>
+              <option value="SAMPLE_COLLECTED">Awaiting result</option>
+            </select>
+          </div>
+        </div>
+        <div class="workflow-table-wrap">
+          <table class="workflow-table">
+            <thead><tr><th>Patient</th><th>Test(s)</th><th>Requested by</th><th>Priority</th><th>Requested</th><th>Status</th><th></th></tr></thead>
+            <tbody id="labRows"></tbody>
+          </table>
+        </div>
+        <div class="workflow-empty" id="labEmpty">
+          <i class="fa-solid fa-flask"></i>
+          <p id="labEmptyText">No lab requests match your search.</p>
+        </div>
+      </section>
+    </div>
+  </main>
 
-async function saveLabResults(){
-  const entries = activeLab.items
-    .map(i => ({ itemId: i._id, resultText: document.getElementById(`labResult-${i._id}`)?.value.trim() || '' }))
-    .filter(e => e.resultText);
+  <div class="workflow-modal-backdrop" id="labModal">
+    <div class="workflow-modal">
+      <div class="workflow-modal-head">
+        <div><h2 id="labModalTitle">Lab request</h2><p class="workflow-subtext" id="labModalMeta"></p></div>
+        <button class="workflow-close" onclick="closeLabModal()"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="workflow-detail-grid">
+        <div class="workflow-detail"><label>Patient</label><strong id="labPatientDetail"></strong></div>
+        <div class="workflow-detail"><label>Requested by</label><strong id="labDoctorDetail"></strong></div>
+      </div>
+      <div id="labActionBanner"></div>
+      <div id="labItems"></div>
+      <div id="labSaveArea" style="display:flex;justify-content:flex-end;gap:10px;margin-top:6px;"></div>
+    </div>
+  </div>
 
-  if (!entries.length) {
-    alert('Enter a result for at least one test before saving.');
-    return;
-  }
+  <div class="lab-toast" id="labToast"></div>
 
-  try {
-    for (const entry of entries) {
-      const res = await clinicFetch(`${CLINIC_API}/lab-requests/${activeLab._id}/items/${entry.itemId}/result`, {
-        method: 'PATCH',
-        body: JSON.stringify({ resultText: entry.resultText }),
-      });
-      const data = await res.json();
-      if (!data.success) throw new Error(data.message || 'Could not save this result.');
+  <script src="./db.js"></script>
+  <script src="./clinic-shared.js"></script>
+  <script>
+    let labRequests = [];
+    let activeLab;
+
+    function showToast(message, isError) {
+      const el = document.getElementById('labToast');
+      el.textContent = message;
+      el.className = 'lab-toast show' + (isError ? ' error' : '');
+      setTimeout(() => { el.className = 'lab-toast'; }, 2800);
     }
-    closeLabModal();
-    await loadLabRequests();
-  } catch (err) {
-    alert(err.message || 'Could not save results. Please try again.');
-  }
-}
 
-document.getElementById('labSearch').addEventListener('input',renderLab);
-document.getElementById('labStatus').addEventListener('change',renderLab);
-loadLabRequests();
-</script>
+    const STATUS_LABEL = { PENDING: 'Awaiting collection', SAMPLE_COLLECTED: 'Awaiting result' };
+    const STATUS_CLASS = { PENDING: 'pending', SAMPLE_COLLECTED: 'collected' };
+    const hasUrgent = req => req.items.some(i => i.urgency === 'Urgent');
+
+    async function loadLabRequests() {
+      const rowsEl = document.getElementById('labRows');
+      rowsEl.innerHTML = `<tr><td colspan="7" style="text-align:center;padding:40px;color:var(--workflow-muted);"><i class="fa-solid fa-spinner fa-spin"></i> Loading queue…</td></tr>`;
+      document.getElementById('labEmpty').style.display = 'none';
+
+      try {
+        const res = await clinicFetch(`${CLINIC_API}/lab-requests/pending`);
+        const data = await res.json();
+        if (!data.success) throw new Error(data.message || 'Server error');
+        labRequests = data.data || [];
+        updateStats();
+        renderLab();
+      } catch (err) {
+        console.error('Load lab requests error:', err);
+        rowsEl.innerHTML = '';
+        document.getElementById('labEmptyText').innerHTML =
+          'Couldn\'t load the lab queue. <a href="#" onclick="loadLabRequests();return false;">Try again</a>.';
+        document.getElementById('labEmpty').style.display = 'block';
+      }
+    }
+
+    function updateStats() {
+      document.getElementById('statPending').textContent = labRequests.filter(r => r.status === 'PENDING').length;
+      document.getElementById('statCollected').textContent = labRequests.filter(r => r.status === 'SAMPLE_COLLECTED').length;
+      document.getElementById('statUrgent').textContent = labRequests.filter(hasUrgent).length;
+    }
+
+    function renderLab() {
+      const q = document.getElementById('labSearch').value.toLowerCase();
+      const st = document.getElementById('labStatus').value;
+      const rows = labRequests.filter(x =>
+        (st === 'all' || x.status === st) &&
+        `${x.patient?.fullName || ''} ${x.items.map(i => i.testName).join(' ')} ${x.doctorName || ''}`.toLowerCase().includes(q)
+      );
+
+      document.getElementById('labRows').innerHTML = rows.map(x => {
+        const testLabel = x.items.length > 1 ? `${x.items[0].testName} +${x.items.length - 1} more` : (x.items[0]?.testName || '—');
+        const sampleLabel = x.items.length > 1 ? `${x.items.length} tests` : (x.items[0]?.sampleType || '');
+        return `<tr>
+          <td><div class="workflow-patient">${avatarInitials(x.patient?.fullName || '?', 32)}<div>${x.patient?.fullName || 'Unknown patient'}<div class="workflow-subtext">${x.patient?.novaBukId || 'Patient record'}</div></div></div></td>
+          <td><strong>${testLabel}</strong><div class="workflow-subtext">${sampleLabel}</div></td>
+          <td>${x.doctorName || '—'}</td>
+          <td><span class="workflow-badge ${hasUrgent(x) ? 'urgent' : 'collected'}">${hasUrgent(x) ? 'Urgent' : 'Routine'}</span></td>
+          <td>${formatDate(x.createdAt)}</td>
+          <td><span class="workflow-badge ${STATUS_CLASS[x.status]}">${STATUS_LABEL[x.status]}</span></td>
+          <td><button class="workflow-button secondary" onclick="openLabModal('${x._id}')">Open <i class="fa-solid fa-arrow-right"></i></button></td>
+        </tr>`;
+      }).join('');
+
+      const empty = document.getElementById('labEmpty');
+      const emptyText = document.getElementById('labEmptyText');
+      if (!rows.length) {
+        emptyText.textContent = labRequests.length
+          ? 'No lab requests match your search.'
+          : 'Nothing waiting on the lab right now — every ordered test has a result.';
+        empty.style.display = 'block';
+      } else {
+        empty.style.display = 'none';
+      }
+    }
+
+    function openLabModal(id) {
+      activeLab = labRequests.find(x => x._id === id);
+      if (!activeLab) return;
+
+      document.getElementById('labModalTitle').textContent = `${activeLab.patient?.fullName || 'Patient'} — Lab request`;
+      document.getElementById('labModalMeta').textContent = `Requested ${formatDate(activeLab.createdAt)} by ${activeLab.doctorName || '—'}`;
+      document.getElementById('labPatientDetail').textContent = activeLab.patient?.fullName || '—';
+      document.getElementById('labDoctorDetail').textContent = activeLab.doctorName || '—';
+      renderLabModal();
+      document.getElementById('labModal').classList.add('open');
+    }
+
+    function renderLabModal() {
+      const isPending = activeLab.status === 'PENDING';
+
+      document.getElementById('labItems').innerHTML = activeLab.items.map(i => `
+        <div class="lab-item">
+          <div class="lab-item-head">
+            <div>
+              <div class="lab-item-test">${i.testName}</div>
+              <div class="lab-item-detail">${i.sampleType} sample · ${i.urgency}</div>
+            </div>
+            <span class="lab-status-pill ${i.resultText ? 'done' : 'pending'}">
+              <i class="fa-solid ${i.resultText ? 'fa-circle-check' : 'fa-clock'}"></i>
+              ${i.resultText ? 'Result entered' : 'No result yet'}
+            </span>
+          </div>
+          ${i.clinicalNotes ? `<div class="lab-item-notes"><i class="fa-solid fa-note-sticky"></i> ${i.clinicalNotes}</div>` : ''}
+          ${i.resultText
+            ? `<div class="lab-result-text"><i class="fa-solid fa-check"></i> ${i.resultText}</div>`
+            : (!isPending
+                ? `<div class="lab-result-form">
+                     <span class="lab-field-label">Result for ${i.testName}</span>
+                     <textarea id="result-${i._id}" placeholder="Enter the result…"></textarea>
+                   </div>`
+                : '')}
+        </div>`).join('');
+
+      const banner = document.getElementById('labActionBanner');
+      const saveArea = document.getElementById('labSaveArea');
+
+      if (isPending) {
+        banner.innerHTML = `<div class="lab-banner"><i class="fa-solid fa-circle-info"></i> No sample has been collected yet — nothing to enter until then.</div>`;
+        saveArea.innerHTML = `
+          <button class="workflow-button secondary" onclick="closeLabModal()">Close</button>
+          <button class="workflow-button primary" onclick="markSampleCollected()"><i class="fa-solid fa-vial"></i> Mark sample collected</button>`;
+      } else {
+        banner.innerHTML = `<div class="lab-banner"><i class="fa-solid fa-circle-info"></i> Saving marks this whole request as ready for the doctor — enter every result you have before saving.</div>`;
+        saveArea.innerHTML = `
+          <button class="workflow-button secondary" onclick="closeLabModal()">Close</button>
+          <button class="workflow-button primary" onclick="saveLabResults()"><i class="fa-solid fa-file-circle-check"></i> Save results</button>`;
+      }
+    }
+
+    async function markSampleCollected() {
+      try {
+        const res = await clinicFetch(`${CLINIC_API}/lab-requests/${activeLab._id}/status`, {
+          method: 'PATCH',
+          body: JSON.stringify({ status: 'SAMPLE_COLLECTED' }),
+        });
+        const data = await res.json();
+        if (!data.success) throw new Error(data.message || 'Could not update status.');
+        // Same reasoning as the pharmacy page's dispense merge — this
+        // endpoint returns the raw LabRequest, without populated
+        // patient/doctorName, so merge in just the status rather than
+        // replacing the whole local object.
+        activeLab = { ...activeLab, status: data.data.status };
+        const idx = labRequests.findIndex(r => r._id === activeLab._id);
+        labRequests[idx] = activeLab;
+        updateStats();
+        renderLab();
+        renderLabModal();
+        showToast('Sample marked as collected.');
+      } catch (err) {
+        showToast(err.message || 'Could not update this request. Please try again.', true);
+      }
+    }
+
+    async function saveLabResults() {
+      const entries = activeLab.items
+        .filter(i => !i.resultText)
+        .map(i => ({ itemId: i._id, resultText: document.getElementById(`result-${i._id}`)?.value.trim() || '' }))
+        .filter(e => e.resultText);
+
+      if (!entries.length) {
+        showToast('Enter a result for at least one test before saving.', true);
+        return;
+      }
+
+      try {
+        for (const entry of entries) {
+          const res = await clinicFetch(`${CLINIC_API}/lab-requests/${activeLab._id}/items/${entry.itemId}/result`, {
+            method: 'PATCH',
+            body: JSON.stringify({ resultText: entry.resultText }),
+          });
+          const data = await res.json();
+          if (!data.success) throw new Error(data.message || 'Could not save this result.');
+        }
+        const idx = labRequests.findIndex(r => r._id === activeLab._id);
+        labRequests.splice(idx, 1);
+        updateStats();
+        closeLabModal();
+        renderLab();
+        showToast('Results saved — this request is now ready for the doctor.');
+      } catch (err) {
+        showToast(err.message || 'Could not save results. Please try again.', true);
+      }
+    }
+
+    function closeLabModal() {
+      document.getElementById('labModal').classList.remove('open');
+    }
+
+    document.getElementById('labSearch').addEventListener('input', renderLab);
+    document.getElementById('labStatus').addEventListener('change', renderLab);
+    loadLabRequests();
+  </script>
 </body>
 </html>
