@@ -735,6 +735,7 @@ window.refreshNavAvatar = function () {
 (function initNetworkUI() {
   let toastTimeout;
   let isToastForced = false;
+  let lastState = null; // dedup signature so the 3s poll can't resurrect a toast that just hid
 
   // 1. Create the toast element
   const toast = document.createElement("div");
@@ -751,25 +752,17 @@ window.refreshNavAvatar = function () {
     toast.className = `network-toast show ${isOnline ? "online" : "offline"}`;
     isToastForced = forceVisible;
 
-    // Decide auto-hide timeout:
-    // - not forced: short (3.5s)
-    // - forced but offline: still auto-hide after 10s (avoid persistent offline pill)
-    // - forced and online (e.g. syncing): remain visible until cleared
-    let timeoutMs;
-    if (!forceVisible) {
-      timeoutMs = 3500;
-    } else if (isOnline === false) {
-      timeoutMs = 10000;
-    } else {
-      timeoutMs = null; // keep visible (e.g. syncing) until programmatically cleared
-    }
-
-    if (timeoutMs !== null) {
-      toastTimeout = setTimeout(() => {
-        toast.classList.remove("show");
-        isToastForced = false;
-      }, timeoutMs);
-    }
+    // Every toast now auto-hides, full stop — nothing stays on screen
+    // forever. Forced states (offline / syncing) get a little longer
+    // (6s) so there's time to actually read them; everything else is a
+    // quick 5s pill.
+    const timeoutMs = forceVisible ? 6000 : 5000;
+    toastTimeout = setTimeout(() => {
+      // Reset fully, not just "show" — guards against any page-level CSS
+      // that might match .offline/.online alone and hold the toast visible.
+      toast.className = "network-toast";
+      isToastForced = false;
+    }, timeoutMs);
   }
   window.showNetworkToast = showToast;
 
@@ -779,6 +772,12 @@ window.refreshNavAvatar = function () {
 
     const count = await window.getOutboxCount();
     const isOnline = navigator.onLine;
+
+    // Only act when the real state actually changes. Without this, the
+    // 3s poll would keep re-showing the same toast right after it fades.
+    const signature = `${isOnline}:${count > 0 ? "pending" : "empty"}`;
+    if (signature === lastState) return;
+    lastState = signature;
 
     if (count > 0) {
       if (isOnline) {
@@ -792,20 +791,20 @@ window.refreshNavAvatar = function () {
     } else {
       // No pending items.
       if (!isOnline) {
-        // Just offline.
-        if (!isToastForced) showToast("offline.", false, true);
-      } else if (isToastForced) {
-        // We were forced visible (e.g. syncing), but now count is 0 and we are online!
-        // So we are officially "Back online" and synced!
-        showToast("", true, false);
+        showToast("You're offline.", false, true);
+      } else {
+        showToast("Back online — all synced.", true, false);
       }
     }
   }
 
   // 3. Listen for Explicit Network Changes
-  window.addEventListener("offline", () => checkStatus());
+  window.addEventListener("offline", () => {
+    lastState = null; // this is a real transition, always toast it
+    checkStatus();
+  });
   window.addEventListener("online", () => {
-    showToast("Online", true, false);
+    lastState = null;
     checkStatus();
   });
 

@@ -496,6 +496,105 @@ function initClinicUI() {
 
   // 4. Update Notifications
   updateNotificationBadge();
+
+  // 5. Lock Pharmacy/Laboratory sidebar icons for non-Pro clinics
+  applyPlanGatedNav();
+}
+
+// ── PLAN-GATED SIDEBAR ICONS (Pharmacy / Laboratory) ────────────
+// Both are Pro-plan only. Rather than hide these icons for a Growth
+// clinic — which means they'd never discover the feature exists at
+// all — show them with a lock badge and intercept the click with a
+// clear upgrade prompt, instead of letting the click through to a
+// page that would just fail to load its data (requireProPlan on the
+// backend would 403 every request there anyway).
+async function applyPlanGatedNav() {
+  const gatedLinks = document.querySelectorAll(
+    '[data-feature="pharmacy"], [data-feature="laboratory"]'
+  );
+  if (!gatedLinks.length) return;
+
+  let isPro = false;
+  try {
+    const res = await clinicFetch(`${API_BASE}/clinics/my`);
+    const data = await res.json();
+    isPro = data.success && data.clinic?.subscriptionPlan === "Pro";
+  } catch (err) {
+    isPro = false; // fail closed — show locked rather than risk a dead click
+  }
+
+  if (isPro) return; // links work normally, nothing to do
+
+  // Inject the lock-badge styling once, rather than editing clinic.css
+  // for two small classes.
+  if (!document.getElementById("nbPlanGateStyle")) {
+    const style = document.createElement("style");
+    style.id = "nbPlanGateStyle";
+    style.textContent = `
+      .sidebar-nav-btn.locked-feature { position: relative; opacity: 0.55; }
+      .sidebar-nav-btn.locked-feature .lock-badge {
+        position: absolute; top: -4px; right: -4px;
+        width: 15px; height: 15px; border-radius: 50%;
+        background: #6941c6; color: #fff;
+        display: flex; align-items: center; justify-content: center;
+        font-size: 8px;
+      }
+    `;
+    document.head.appendChild(style);
+  }
+
+  gatedLinks.forEach((link) => {
+    link.classList.add("locked-feature");
+    if (!link.querySelector(".lock-badge")) {
+      const badge = document.createElement("span");
+      badge.className = "lock-badge";
+      badge.innerHTML = '<i class="fa-solid fa-lock"></i>';
+      link.appendChild(badge);
+    }
+    link.addEventListener("click", (e) => {
+      e.preventDefault();
+      showUpgradePrompt(link.dataset.feature);
+    });
+  });
+}
+
+function showUpgradePrompt(feature) {
+  const label = feature === "pharmacy" ? "Pharmacy management" : "Laboratory management";
+
+  if (!document.getElementById("nbUpgradePromptModal")) {
+    const modal = document.createElement("div");
+    modal.id = "nbUpgradePromptModal";
+    modal.innerHTML = `
+      <div class="nb-logout-overlay" id="nbUpgradeOverlay">
+        <div class="nb-logout-box">
+          <div style="width:60px; height:60px; background:#f1ecff; border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 16px; color:#6941c6; font-size:22px;">
+            <i class="fa-solid fa-lock"></i>
+          </div>
+          <h3 style="font-size:18px; font-weight:700; margin-bottom:8px; font-family:'Poppins', sans-serif;" id="nbUpgradeTitle">Pro feature</h3>
+          <p style="font-size:13px; color:#718096; margin-bottom:24px; font-family:'Poppins', sans-serif;" id="nbUpgradeBody"></p>
+          <div style="display:flex; gap:10px;">
+            <button class="btn-cancel-logout" onclick="closeUpgradePrompt()">Not now</button>
+            <button class="btn-confirm-logout" style="background:#6941c6;" onclick="window.location.href='./clinic-settings.html'">Upgrade to Pro</button>
+          </div>
+        </div>
+      </div>`;
+    document.body.appendChild(modal);
+
+    // Close on outside click, same behavior as the logout modal.
+    modal.querySelector(".nb-logout-overlay").addEventListener("click", (e) => {
+      if (e.target.id === "nbUpgradeOverlay") closeUpgradePrompt();
+    });
+  }
+
+  document.getElementById("nbUpgradeTitle").textContent = `${label} is a Pro feature`;
+  document.getElementById("nbUpgradeBody").textContent =
+    `Upgrade your clinic to the Pro plan to unlock ${label.toLowerCase()}.`;
+  document.getElementById("nbUpgradeOverlay").classList.add("show");
+}
+
+function closeUpgradePrompt() {
+  const overlay = document.getElementById("nbUpgradeOverlay");
+  if (overlay) overlay.classList.remove("show");
 }
 
 // Auto-run when DOM is ready

@@ -44,7 +44,8 @@
 
 body {
     font-family: 'Poppins', sans-serif;
-    background: var(--body-bg);
+    background: rgba(204, 203, 203, 0.377);
+    box-shadow: 0px 20px 4px rgba(0, 0, 0, 0.1);
     color: var(--text-dark);
     min-height: 100vh;
 }
@@ -54,7 +55,7 @@ body {
     grid-template-columns: var(--sidebar-w) 1fr;
     min-height: 100vh;
 }
-header {
+.header {
     position: sticky;
     top: 0;
     z-index: 1000;
@@ -65,7 +66,7 @@ header {
     background: rgba(255, 255, 255, 0.7);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
-    border-bottom: 1px solid rgba(226, 232, 240, 0.8);
+    /* border-bottom: 1px solid rgba(226, 232, 240, 0.8); */
     transition: all 0.3s ease;
 }
 
@@ -73,7 +74,8 @@ header {
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 100px;
+    width: 120px;
+    
     /* gap: 60px; */
 }
 
@@ -82,7 +84,7 @@ header {
     width: 100%;
     /* object-fit: cover; */
     /* height: 36px; */
-    margin-bottom: 16px;
+    /* margin-bottom: 16px; */
 }
 
 .sidebar {
@@ -101,18 +103,22 @@ header {
     z-index: 200;
 }
 
-.sidebar-icon {
+.sidebar-icon i{
+    display: flex;
     align-items: center;
     /* padding: 0 24px 10px; */
     border-radius: 15px;
 }
-.sidebar-icon h3{
-    color: black;
+.sidebar-icon a{
+    display: flex;
+    align-items: center;
+    padding: 0 24px 10px;
+    border-radius: 15px;
 }
 
 /* Each nav icon button in the sidebar */
 .sidebar-nav-btn {
-    /* width: 44px; */
+    width: 100%;
     height: 44px;
     border-radius: 12px;
     border: none;
@@ -132,8 +138,13 @@ header {
 /* Active state — the current page's icon is highlighted */
 .sidebar-nav-btn.active,
 .sidebar-nav-btn:hover {
-    /* background: var(--teal); */
-    /* color: var(--white); */
+    color: var(--teal);
+    background: rgba(255, 255, 255, 0.377);
+    box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.1);
+    
+}
+.sidebar-nav-btn a:hover{
+    
 }
 
 /* Tooltip on hover — shows text label next to icon */
@@ -173,11 +184,31 @@ header {
     display: flex;
     align-items: flex-end;
 }
-
-.sidebar-logout i {
+.need-help {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 20px;
+}
+.need-help a{
+    text-decoration: none;
+    color: inherit;
     display: flex;
     align-items: center;
-    margin: auto;
+    gap: 10px;
+    /* color: var(--teal); */
+    background: rgba(255, 255, 255, 0.377);
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+    padding:16px 8px;
+    border-radius: 10px;
+}
+.need-help a span{font-size: 14px; font-weight: 400;}
+
+.sidebar-logout  {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    /* margin: auto; */
 }
 
 .sidebar-logout:hover {
@@ -287,6 +318,8 @@ header {
 }
 .main {
     margin-left: var(--sidebar-w);
+    background: rgba(255, 255, 255, 0.377);
+    box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.1);
     display: flex;
     flex-direction: column;
     min-height: 100vh;
@@ -310,6 +343,10 @@ header {
     display: flex;
     flex-direction: column;
     gap: 10px;
+    padding: 30px;
+}
+.topbar-left h3{
+    font-size: 28px;
 }
 
 .topbar-clinic {
@@ -423,7 +460,7 @@ header {
 .staff-dropdown-item.danger {
     color: #e53e3e;
 }
-.clinic-network-toast.show,.clinic-network-toast.offline, .clinic-network-toast.online{
+.clinic-network-toast.show.offline, .clinic-network-toast.show.online{
     top:40px
 }
 /* ============================================================
@@ -1017,6 +1054,13 @@ header {
     transition: border-color 0.15s
 }
 
+.field input::placeholder,
+.field textarea::placeholder {
+    color: var(--light);
+    font-weight: 400;
+    opacity: 1;
+}
+
 .field input:focus,
 .field textarea:focus {
     border-color: var(--teal);
@@ -1373,7 +1417,7 @@ header {
     .main {
         margin-left: 0;
         width: 100%;
-        margin-bottom: 70px;
+        margin-bottom: 78px;
     }
 
     .sidebar {
@@ -1381,83 +1425,118 @@ header {
         bottom: 0;
         left: 0;
         width: 100%;
-        height: 64px;
+        height: 68px;
         flex-direction: row;
         border-radius: 20px 20px 0 0;
-        padding: 0 20px;
+        padding: 0 8px;
         justify-content: space-around;
         box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.1);
     }
 
     .sidebar-icon {
         display: flex;
-        background: transparent;
+        /* background: transparent; */
         padding: 0;
         width: 100%;
         justify-content: space-around;
+        align-items: center;
     }
 
+    /* the logo has nowhere to go in a 64px-tall bar — the header already
+       carries the clinic identity on mobile */
+    .sidebar-icon .logo {
+        display: none;
+    }
+
+    /* stacked icon + tiny label bottom-nav buttons: equal-width slot
+       each, icon on top, one-word label underneath so it stays
+       recognizable without eating horizontal space */
     .sidebar-nav-btn {
         margin-top: 0;
-        color: white;
+        width: auto;
+        height: 52px;
+        flex: 1;
+        flex-direction: column;
+        /* color: white; */
+        justify-content: center;
+        gap: 2px;
+    }
+
+    .sidebar-nav-btn span {
+        display: block;
+        font-size: 9px;
+        font-weight: 500;
+        line-height: 1;
+        white-space: nowrap;
+    }
+
+    .sidebar-nav-btn i {
+        font-size: 17px;
     }
 
     .sidebar-nav-btn.active {
         background: rgba(255, 255, 255, 0.2);
-        border-radius: 50%;
+        border-radius: 12px;
     }
 
-    .logout-sidebar,
-    .sidebar-logo {
-        /* display: none; */
+    /* Need Help + Logout: logout is already one tap away from the staff
+       chip in the header, so this whole block just doesn't fit an
+       icon-only 64px bar and would overflow it */
+    .logout-sidebar {
+        display: none;
     }
-    .logout-sidebar i{
-        color: #333;
-    }
+
     .sidebar-nav-btn::after {
         display: none !important;
     }
-
-
 }
 
 @media (max-width: 768px) {
-    header {
-        /* position: fixed;
-        width: 100%;
-        top: 0; */
+    .header {
         z-index: 1000;
-        padding: 15px 15px 5px;
-        /* flex-direction: column; */
-        /* gap: 15px; */
-        align-items: flex-start;
+        padding: 12px 16px;
+        flex-wrap: wrap;
+        row-gap: 8px;
+        align-items: center;
     }
-    .main{
+
+    .main {
         padding: 0px;
     }
+
+    /* no more 120px of dead reserved space now that the sticky header
+       carries the clinic name itself instead of a separate scroll-away banner */
     .logo {
+        width: auto;
         gap: 15px;
     }
 
     .logo-detail {
-        display: none;
-        margin-left: auto;
-        padding: 5px 20px;
+        display: flex;
+        margin-left: 0;
+        padding: 0;
+    }
+
+    .topbar-left {
+        gap: 2px;
     }
 
     .topbar-clinic {
-        font-size: 18px;
+        font-size: 16px;
         color: black;
     }
 
     .topbar-date {
         display: block;
-        font-size: 13px;
+        font-size: 11.5px;
         color: black;
     }
 
+    /* the standalone hero banner duplicated what the sticky header now
+       shows on its own, and unlike the header it scrolled out of view —
+       keep only one source of truth for clinic name/date on mobile */
     .mobile-detail {
-        display: block;
+        display: none;
     }
 
     .content {

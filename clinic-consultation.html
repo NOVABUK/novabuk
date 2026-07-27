@@ -314,286 +314,318 @@
 </head>
 
 <body>
-  <header>
-    <div class="logo">
-      <!-- Logo — links back to queue (home for clinic staff) -->
-      <a href="./clinic-queue.html">
-        <img src="./images/logo.png" class="sidebar-logo" alt="NovaBuk" />
-      </a>
-      <div class="logo-detail">
-        <div class="topbar-left">
-          <!-- clinic-name and staff-name classes are filled by clinic-shared.js -->
-          <div class="topbar-clinic clinic-name" id="topbarClinicName">
-            <script>
-              (function () {
-                try {
-                  var u = JSON.parse(localStorage.getItem('novabuk_user') || '{}');
-                  document.write(u.clinicName || 'Your Clinic');
-                } catch (e) { document.write('Your Clinic'); }
-              })();
-            </script>
-          </div>
-          <div class="topbar-date" id="topbarDate"></div>
+  <div class="logo-detail mobile-detail">
+      <div class="topbar-left">
+        <div class="topbar-clinic clinic-name" id="topbarClinicName">
+          <script>
+            (function () {
+              try {
+                var u = JSON.parse(localStorage.getItem("novabuk_user") || "{}");
+                document.write(u.clinicName || "Your Clinic");
+              } catch (e) {
+                document.write("Your Clinic");
+              }
+            })();
+          </script>
         </div>
+        <div class="topbar-date" id="topbarDate"></div>
       </div>
     </div>
 
-    <div class="top-side">
+    <div class="all-content">
+      <aside class="sidebar" id="sidebar">
+        
+        <div class="sidebar-icon">
+          <div class="logo">
+            <a href="./clinic-queue.html">
+              <img
+                src="./images/logo.png"
+                class="sidebar-logo"
+                alt="NovaBuk"
+              />
+            </a>
+          </div>
+          <!-- Queue — this page (active) -->
+          <a
+            href="./clinic-queue.html"
+            class="sidebar-nav-btn active"
+            data-tip="Today's Queue"
+          >
+            <i class="fa-solid fa-list-check"></i><span>Appointment</span>
+          </a>
 
-      <div class="topbar-actions">
+          <!-- Search -->
+          <a
+            href="./clinic-search.html"
+            class="sidebar-nav-btn"
+            data-tip="Search Patients"
+          >
+            <i class="fa-solid fa-magnifying-glass"></i><span>Patients</span>
+          </a>
 
-        <!-- Search shortcut -->
-        <a href="./clinic-search.html" class="topbar-btn" title="Search patients">
-          <i class="fa-solid fa-magnifying-glass"></i>
-        </a>
+          <!-- Search -->
+          <a
+            href="./clinic-pharmacy.html"
+            class="sidebar-nav-btn"
+            data-tip="Pharmacy"
+          >
+            <i class="fa-solid fa-pills"></i><span>Pharmacy</span>
+          </a>
 
-        <!-- Notification bell -->
-        <a href="./clinic-notifications.html" class="topbar-btn" title="Notifications">
-          <i class="fa-solid fa-bell"></i>
-          <span class="notification-badge" id="topbarNotificationBadge"></span>
-        </a>
+          <a
+            href="./clinic-laboratory.html"
+            class="sidebar-nav-btn"
+            data-tip="Laboratory"
+          >
+            <i class="fa-solid fa-flask-vial"></i><span>Laboratory</span>
+          </a>
 
+          <!-- Checkout & Billing -->
+          <a
+            href="./clinic-checkout.html"
+            class="sidebar-nav-btn"
+            data-tip="Checkout & Billing"
+          >
+            <i class="fa-solid fa-money-bill-wave"></i><span>Billing</span>
+          </a>
 
-        <!-- Staff chip — shows name + dropdown -->
-        <div class="staff-chip" id="staffChip">
-          <div class="staff-avatar-sm" id="topbarAvatar">?</div>
-          <span class="staff-name-sm staff-name">Staff</span>
-          <i class="fa-solid fa-angle-down"id="staffIcon"></i>
+          <!-- <a href="./clinic-pharmacy.html" class="sidebar-nav-btn active" data-tip="Pharmacy"><i class="fa-solid fa-prescription-bottle-medical"> </i></a> -->
 
-          <div class="staff-dropdown" id="staffDropdown">
-            <div class="staff-dropdown-item" onclick="window.location.href='./clinic-settings.html'">
-              <i class="fa-solid fa-gear"></i> Settings
+          <!-- Settings pushed to bottom via margin-top: auto on logout -->
+          <a
+            href="./clinic-settings.html"
+            class="sidebar-nav-btn"
+            data-tip="Settings"
+          >
+            <i class="fa-solid fa-gear"></i><span>Settings</span>
+          </a>
+        </div>
+
+        <!-- Logout — at the bottom -->
+         
+        <div class="logout-sidebar">
+          <div class="need-help">
+            <span>Need Help?</span>
+            <a href="mailto:support@novabuk.com"><i class="fa-solid fa-headset"></i><span>Contact Support</span> <i class="fa-solid fa-arrow-right"></i></a>
+          </div>
+          <!-- <button
+            class="sidebar-nav-btn sidebar-logout"
+            data-tip="Logout"
+            onclick="clinicLogout()"
+          >
+            <i class="fa-solid fa-right-from-bracket"></i> <span>Logout</span>
+          </button> -->
+        </div>
+      </aside>
+
+      <main class="main">
+        <div class="header" style="width:100%;">
+          <div class="logo">
+            <div class="logo-detail">
+              <div class="topbar-left">
+                <h3>Consultation</h3>
+                <!-- <div class="topbar-clinic clinic-name" id="topbarClinicName">
+                  <script>
+                    (function () {
+                      try {
+                        var u = JSON.parse(localStorage.getItem("novabuk_user") || "{}");
+                        document.write(u.clinicName || "Your Clinic");
+                      } catch (e) {
+                        document.write("Your Clinic");
+                      }
+                    })();
+                  </script>
+                </div> -->
+                <!-- <div class="topbar-date" id="topbarDate"></div> -->
+              </div>
             </div>
-            <div class="staff-dropdown-item danger" onclick="clinicLogout()">
-              <i class="fa-solid fa-right-from-bracket"></i> Logout
+          </div>
+
+          <div class="top-side">
+            <div class="topbar-actions">
+              <a href="./clinic-search.html" class="topbar-btn" title="Search patients">
+                <i class="fa-solid fa-magnifying-glass"></i>
+              </a>
+              <a href="./clinic-notifications.html" class="topbar-btn active" title="Notifications">
+                <i class="fa-solid fa-bell"></i>
+                <span class="notification-badge" id="topbarNotificationBadge"></span>
+              </a>
+              <div class="staff-chip" id="staffChip" onclick="toggleStaffMenu(event)">
+                <div class="staff-avatar-sm" id="topbarAvatar">?</div>
+                <span class="staff-name-sm staff-name">Staff</span>
+                <i class="fa-solid fa-angle-down" id="staffIcon"></i>
+                <div class="staff-dropdown" id="staffDropdown">
+                  <div class="staff-dropdown-item" onclick="window.location.href='./clinic-settings.html'">
+                    <i class="fa-solid fa-gear"></i> Settings
+                  </div>
+                  <div class="staff-dropdown-item danger" onclick="clinicLogout()">
+                    <i class="fa-solid fa-right-from-bracket"></i> Logout
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
 
-      </div>
-    </div>
-  </header>
-
-  <div class="all-content">
-    <!-- ============================================================
-       SIDEBAR
-       We use <a> tags instead of <button> for navigation items
-       because they support href — better for semantics and
-       middle-click to open in new tab.
-  ============================================================ -->
-    <aside class="sidebar" id="sidebar">
-
-
-
-      <div class="sidebar-icon">
-        <!-- Queue — this page (active) -->
-        <a href="./clinic-queue.html" class="sidebar-nav-btn active" data-tip="Today's Queue">
-          <i class="fa-solid fa-list-check"></i>
-        </a>
-
-        <!-- Search -->
-        <a href="./clinic-search.html" class="sidebar-nav-btn" data-tip="Search Patients">
-          <i class="fa-solid fa-magnifying-glass"></i>
-        </a>
-
-        <!-- Settings pushed to bottom via margin-top: auto on logout -->
-        <a href="./clinic-settings.html" class="sidebar-nav-btn" data-tip="Settings">
-          <i class="fa-solid fa-gear"></i>
-        </a>
-      </div>
-
-      <!-- Logout — at the bottom -->
-      <div class="logout-sidebar">
-        <button class="sidebar-nav-btn sidebar-logout" data-tip="Logout" onclick="clinicLogout()">
-          <i class="fa-solid fa-right-from-bracket"></i>
-        </button>
-      </div>
-
-    </aside>
-  </div>
-  <!-- ============================================================
-       MAIN AREA — everything to the right of the sidebar
-  ============================================================ -->
-
-
-  <main class="main">
-    <!-- TOPBAR -->
-    <!-- <div class="topbar">
-      <div class="topbar-left" style="display: flex; align-items: center; gap: 16px;">
-        <a href="./clinic-queue.html" class="btn-back">
-          <i class="fa-solid fa-arrow-left"></i>
-        </a>
-        <div class="topbar-info">
-          <div class="topbar-title">Consultation</div>
-          <div class="topbar-patient-name" id="topbarPatient">Loading…</div>
+  
+        <!-- Loading state -->
+        <div class="full-loader" id="loader">
+          <div class="spinner"></div>
+          <span>Preparing clinical record…</span>
         </div>
-      </div>
 
-      <div class="topbar-actions">
-        <div class="autosave-chip">
-          <span id="saveText">Drafting…</span>
-        </div>
-        <div class="consult-staff">
-          <div class="consult-avatar" id="topbarAvatar">?</div>
-        </div>
-      </div>
-    </div> -->
-
-    <!-- Loading state -->
-    <div class="full-loader" id="loader">
-      <div class="spinner"></div>
-      <span>Preparing clinical record…</span>
-    </div>
-
-    <!-- NEW SINGLE COLUMN LAYOUT -->
-    <div class="consultation-container" id="consultationWrap" style="display:none;">
-      
-      <!-- Stale Data Warning -->
-      <div id="staleWarning" class="stale-warning">
-        <i class="fa-solid fa-triangle-exclamation"></i>
-        <span>Offline Mode: Showing data from <span id="staleTime">...</span>. Some details may have changed on the server.</span>
-      </div>
-
-      <!-- Patient Summary Card -->
-      <div class="patient-summary">
-        <div class="patient-info-row">
-          <div class="patient-name-big" id="patientName">Loading…</div>
-          <div class="patient-meta-row" id="patientMetaRow">
-            <!-- Populated by JS: Consultation - Time · Gender · Age · ID -->
-            Loading patient details…
+        <!-- NEW SINGLE COLUMN LAYOUT -->
+        <div class="consultation-container" id="consultationWrap" style="display:none;">
+          
+          <!-- Stale Data Warning -->
+          <div id="staleWarning" class="stale-warning">
+            <i class="fa-solid fa-triangle-exclamation"></i>
+            <span>Offline Mode: Showing data from <span id="staleTime">...</span>. Some details may have changed on the server.</span>
           </div>
-        </div>
-        <div class="consult-date" id="topbarDate"></div>
-      </div>
 
-      <!-- Reason for Visit -->
-      <div class="consult-card">
-        <div class="card-label"><i class="fa-solid fa-clipboard-question"></i> Reason for Visit</div>
-        <div class="reason-display" id="reasonBox">—</div>
-      </div>
+          <!-- Patient Summary Card -->
+          <div class="patient-summary">
+            <div class="patient-info-row">
+              <div class="patient-name-big" id="patientName">Loading…</div>
+              <div class="patient-meta-row" id="patientMetaRow">
+                <!-- Populated by JS: Consultation - Time · Gender · Age · ID -->
+                Loading patient details…
+              </div>
+            </div>
+            <div class="consult-date" id="topbarDate"></div>
+          </div>
 
-      <!-- Symptoms Section -->
-      <div class="consult-card" id="symptomsBlock">
-        <div class="card-label"><i class="fa-solid fa-thermometer"></i> Reported Symptoms</div>
-        <div class="tag-container" id="symptomTags">
-          <span style="font-size:13px; color:var(--text-light);">No symptoms reported.</span>
-        </div>
-      </div>
+          <!-- Reason for Visit -->
+          <div class="consult-card">
+            <div class="card-label"><i class="fa-solid fa-clipboard-question"></i> Reason for Visit</div>
+            <div class="reason-display" id="reasonBox">—</div>
+          </div>
 
-      <!-- Health Flags -->
-      <div class="consult-card" id="flagsBlock">
-        <div class="card-label"><i class="fa-solid fa-triangle-exclamation"></i> Health Flags</div>
-        <div class="tag-container" id="flagsList">
-          <span style="font-size:13px; color:var(--text-light);">No health flags recorded.</span>
-        </div>
-      </div>
+          <!-- Symptoms Section -->
+          <div class="consult-card" id="symptomsBlock">
+            <div class="card-label"><i class="fa-solid fa-thermometer"></i> Reported Symptoms</div>
+            <div class="tag-container" id="symptomTags">
+              <span style="font-size:13px; color:var(--text-light);">No symptoms reported.</span>
+            </div>
+          </div>
 
-      <!-- Visit Type — determines which fee applies when the bill auto-generates -->
-      <div class="consult-card">
-        <div class="card-label"><i class="fa-solid fa-tags"></i> Visit Type</div>
-        <select id="fVisitType" style="width:100%; padding:10px 12px; border:1px solid var(--border, #ccc); border-radius:8px; font-family:inherit; font-size:13px; background:white;">
-          <option value="General">General Consultation</option>
-          <option value="Specialist">Specialist Consultation</option>
-          <option value="Follow-up">Follow-up</option>
-          <option value="Emergency">Emergency</option>
-        </select>
-      </div>
+          <!-- Health Flags -->
+          <div class="consult-card" id="flagsBlock">
+            <div class="card-label"><i class="fa-solid fa-triangle-exclamation"></i> Health Flags</div>
+            <div class="tag-container" id="flagsList">
+              <span style="font-size:13px; color:var(--text-light);">No health flags recorded.</span>
+            </div>
+          </div>
 
-      <!-- Diagnosis -->
-      <div class="consult-card">
-        <div class="card-label"><i class="fa-solid fa-stethoscope"></i> Clinical Diagnosis</div>
-        <div class="note-input-wrap">
-          <textarea id="fDiagnosis" placeholder="Enter clinical diagnosis and observations…"
-            oninput="scheduleAutosave()"></textarea>
-        </div>
-      </div>
+          <!-- Visit Type — determines which fee applies when the bill auto-generates -->
+          <div class="consult-card">
+            <div class="card-label"><i class="fa-solid fa-tags"></i> Visit Type</div>
+            <select id="fVisitType" style="width:100%; padding:10px 12px; border:1px solid var(--border, #ccc); border-radius:8px; font-family:inherit; font-size:13px; background:white;">
+              <option value="General">General Consultation</option>
+              <option value="Specialist">Specialist Consultation</option>
+              <option value="Follow-up">Follow-up</option>
+              <option value="Emergency">Emergency</option>
+            </select>
+          </div>
 
-      <!-- Prescription -->
-      <div class="consult-card">
-        <div class="card-label"><i class="fa-solid fa-pills"></i> Prescription</div>
-        <div class="note-input-wrap">
-          <textarea id="fPrescription" placeholder="List medications, dosage, and frequency…"
-            oninput="scheduleAutosave()"></textarea>
-        </div>
-      </div>
+          <!-- Diagnosis -->
+          <div class="consult-card">
+            <div class="card-label"><i class="fa-solid fa-stethoscope"></i> Clinical Diagnosis</div>
+            <div class="note-input-wrap">
+              <textarea id="fDiagnosis" placeholder="Enter clinical diagnosis and observations…"
+                oninput="scheduleAutosave()"></textarea>
+            </div>
+          </div>
 
-      <!-- Medication Reminders (structured, feeds the reminder system) -->
-      <div class="consult-card">
-        <div class="card-label"><i class="fa-solid fa-bell"></i> Medication Reminders <span style="font-weight:400; font-size:11px; color:var(--text-light);">(optional — sends the patient dose reminders)</span></div>
-        <div id="medicationReminderRows"></div>
-        <button type="button" onclick="addMedicationRow()" style="margin-top:8px; padding:6px 14px; border:1px dashed var(--border, #ccc); background:none; border-radius:8px; font-size:12px; color:var(--teal, #35bac9); cursor:pointer;">
-          <i class="fa-solid fa-plus"></i> Add medication reminder
-        </button>
-      </div>
+          <!-- Prescription -->
+          <div class="consult-card">
+            <div class="card-label"><i class="fa-solid fa-pills"></i> Prescription</div>
+            <div class="note-input-wrap">
+              <textarea id="fPrescription" placeholder="List medications, dosage, and frequency…"
+                oninput="scheduleAutosave()"></textarea>
+            </div>
+          </div>
 
-      <!-- Next Appointment -->
-      <div class="consult-card">
-        <div class="card-label"><i class="fa-solid fa-calendar-check"></i> Next Appointment <span style="font-weight:400; font-size:11px; color:var(--text-light);">(optional)</span></div>
-        <div class="note-input-wrap">
-          <input type="datetime-local" id="fNextAppointment" style="width:100%; padding:10px 12px; border:1px solid var(--border, #ccc); border-radius:8px; font-family:inherit; font-size:13px;" />
-        </div>
-      </div>
+          <!-- Medication Reminders (structured, feeds the reminder system) -->
+          <div class="consult-card">
+            <div class="card-label"><i class="fa-solid fa-bell"></i> Medication Reminders <span style="font-weight:400; font-size:11px; color:var(--text-light);">(optional — sends the patient dose reminders)</span></div>
+            <div id="medicationReminderRows"></div>
+            <button type="button" onclick="addMedicationRow()" style="margin-top:8px; padding:6px 14px; border:1px dashed var(--border, #ccc); background:none; border-radius:8px; font-size:12px; color:var(--teal, #35bac9); cursor:pointer;">
+              <i class="fa-solid fa-plus"></i> Add medication reminder
+            </button>
+          </div>
 
-      <!-- Tests Ordered -->
-      <div class="consult-card">
-        <div class="card-label"><i class="fa-solid fa-vial"></i> Tests & Investigations</div>
-        <div class="note-input-wrap">
-          <textarea id="fTests" placeholder="List required lab tests or imaging investigations…"
-            oninput="scheduleAutosave()"></textarea>
-        </div>
-      </div>
+          <!-- Next Appointment -->
+          <div class="consult-card">
+            <div class="card-label"><i class="fa-solid fa-calendar-check"></i> Next Appointment <span style="font-weight:400; font-size:11px; color:var(--text-light);">(optional)</span></div>
+            <div class="note-input-wrap">
+              <input type="datetime-local" id="fNextAppointment" style="width:100%; padding:10px 12px; border:1px solid var(--border, #ccc); border-radius:8px; font-family:inherit; font-size:13px;" />
+            </div>
+          </div>
 
-      <!-- Advice / Instructions -->
-      <div class="consult-card">
-        <div class="card-label"><i class="fa-solid fa-comment-medical"></i> Advice to Patient</div>
-        <div class="note-input-wrap">
-          <textarea id="fAdvice" placeholder="Lifestyle advice, follow-up instructions, etc…"
-            oninput="scheduleAutosave()"></textarea>
-        </div>
-      </div>
+          <!-- Tests Ordered -->
+          <div class="consult-card">
+            <div class="card-label"><i class="fa-solid fa-vial"></i> Tests & Investigations</div>
+            <div class="note-input-wrap">
+              <textarea id="fTests" placeholder="List required lab tests or imaging investigations…"
+                oninput="scheduleAutosave()"></textarea>
+            </div>
+          </div>
 
-      <!-- Doctor Notes — PRIVATE/SHARED, separate from the official visit record above.
-           Patients, receptionists, pharmacists, and lab techs never see this section. -->
-      <div class="consult-card" style="background:#fdfaf3; border:1.5px dashed #e0c88a;">
-        <div class="card-label" style="color:#8a6d1f;">
-          <i class="fa-solid fa-lock"></i> Doctor Notes
-          <span style="font-weight:400; font-size:11px; color:#a08650;">— separate from the visit record. Patients and non-doctor staff never see this.</span>
-        </div>
+          <!-- Advice / Instructions -->
+          <div class="consult-card">
+            <div class="card-label"><i class="fa-solid fa-comment-medical"></i> Advice to Patient</div>
+            <div class="note-input-wrap">
+              <textarea id="fAdvice" placeholder="Lifestyle advice, follow-up instructions, etc…"
+                oninput="scheduleAutosave()"></textarea>
+            </div>
+          </div>
 
-        <div id="doctorNotesList" style="margin-bottom:12px;"></div>
+          <!-- Doctor Notes — PRIVATE/SHARED, separate from the official visit record above.
+              Patients, receptionists, pharmacists, and lab techs never see this section. -->
+          <div class="consult-card" style="background:#fdfaf3; border:1.5px dashed #e0c88a;">
+            <div class="card-label" style="color:#8a6d1f;">
+              <i class="fa-solid fa-lock"></i> Doctor Notes
+              <span style="font-weight:400; font-size:11px; color:#a08650;">— separate from the visit record. Patients and non-doctor staff never see this.</span>
+            </div>
 
-        <div class="note-input-wrap">
-          <textarea id="fDoctorNote" placeholder="Write a note only you (or doctors you choose to share with) can see…" style="min-height:70px;"></textarea>
-        </div>
-        <div style="display:flex; align-items:center; justify-content:space-between; margin-top:8px; flex-wrap:wrap; gap:8px;">
-          <label style="display:flex; align-items:center; gap:6px; font-size:12px; color:#8a6d1f; cursor:pointer;">
-            <input type="checkbox" id="fDoctorNoteShared" />
-            Visible to all doctors at this clinic (unchecked = only me)
-          </label>
-          <button type="button" onclick="submitDoctorNote()" style="padding:7px 16px; background:#8a6d1f; color:white; border:none; border-radius:8px; font-size:12px; cursor:pointer;">
-            <i class="fa-solid fa-plus"></i> Add Note
+            <div id="doctorNotesList" style="margin-bottom:12px;"></div>
+
+            <div class="note-input-wrap">
+              <textarea id="fDoctorNote" placeholder="Write a note only you (or doctors you choose to share with) can see…" style="min-height:70px;"></textarea>
+            </div>
+            <div style="display:flex; align-items:center; justify-content:space-between; margin-top:8px; flex-wrap:wrap; gap:8px;">
+              <label style="display:flex; align-items:center; gap:6px; font-size:12px; color:#8a6d1f; cursor:pointer;">
+                <input type="checkbox" id="fDoctorNoteShared" />
+                Visible to all doctors at this clinic (unchecked = only me)
+              </label>
+              <button type="button" onclick="submitDoctorNote()" style="padding:7px 16px; background:#8a6d1f; color:white; border:none; border-radius:8px; font-size:12px; cursor:pointer;">
+                <i class="fa-solid fa-plus"></i> Add Note
+              </button>
+            </div>
+          </div>
+
+          <!-- Visit History -->
+          <div class="consult-card" id="pastBlock">
+            <div class="card-label"><i class="fa-solid fa-clock-rotate-left"></i> Visit History</div>
+            <div class="history-list" id="pastVisitsList">
+              <p style="font-size:13px; color:var(--text-light); padding: 10px;">No previous visits recorded.</p>
+            </div>
+          </div>
+
+          <div class="action-bar" id="completeBar" style="display:none;">
+          <button class="btn-complete-fancy" id="completeBtnLg" onclick="completeVisit()" disabled>
+            <i class="fa-solid fa-circle-check"></i> Complete Consultation
           </button>
         </div>
-      </div>
-
-      <!-- Visit History -->
-      <div class="consult-card" id="pastBlock">
-        <div class="card-label"><i class="fa-solid fa-clock-rotate-left"></i> Visit History</div>
-        <div class="history-list" id="pastVisitsList">
-          <p style="font-size:13px; color:var(--text-light); padding: 10px;">No previous visits recorded.</p>
         </div>
-      </div>
 
-      <div class="action-bar" id="completeBar" style="display:none;">
-      <button class="btn-complete-fancy" id="completeBtnLg" onclick="completeVisit()" disabled>
-        <i class="fa-solid fa-circle-check"></i> Complete Consultation
-      </button>
-    </div>
-    </div>
-
-    <!-- Complete Action Bar -->
+        <!-- Complete Action Bar -->
     
-  </main>
+      </main>
+    </div>
+    
+  </div>
 
   
   <script src="./db.js"></script>

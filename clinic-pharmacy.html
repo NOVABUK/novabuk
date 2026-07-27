@@ -86,6 +86,48 @@
       color: var(--workflow-green);
       margin-top: 8px;
     }
+    .rx-bill-preview {
+      font-size: 11px;
+      color: var(--workflow-muted);
+      margin-top: 8px;
+      padding: 7px 10px;
+      border-radius: 7px;
+      background: #fbfcfd;
+      border: 1px dashed var(--workflow-border);
+    }
+    .rx-bill-preview.ready {
+      color: var(--workflow-teal-dark);
+      background: #e5f8fa;
+      border: 1px solid rgba(53,186,201,0.3);
+      font-weight: 600;
+    }
+    .rx-bill-preview.warning {
+      color: var(--workflow-red);
+      background: var(--workflow-red-bg);
+      border: 1px solid rgba(192,57,43,0.3);
+      font-weight: 600;
+    }
+    .rx-payment-panel {
+      background: #fbfcfd;
+      border: 1.5px solid var(--workflow-teal);
+      border-radius: 12px;
+      padding: 14px;
+      margin-bottom: 16px;
+    }
+    .rx-payment-head { margin-bottom: 10px; }
+    .rx-payment-form {
+      display: flex;
+      gap: 8px;
+      align-items: flex-end;
+    }
+    .rx-payment-form select,
+    .rx-payment-form input {
+      border: 1px solid var(--workflow-border);
+      border-radius: 8px;
+      padding: 8px 10px;
+      font: 400 12px Poppins, sans-serif;
+      width: 100%;
+    }
     .rx-toast {
       position: fixed;
       bottom: 24px;
@@ -106,12 +148,93 @@
   </style>
 </head>
 <body>
-  <header>
-    <div class="logo"><a href="./clinic-queue.html"><img src="./images/logo.png" class="sidebar-logo" alt="NovaBuk" /></a><div class="logo-detail"><div class="topbar-left"><div class="topbar-clinic clinic-name">Your Clinic</div><div class="topbar-date" id="topbarDate"></div></div></div></div>
-    <div class="top-side"><div class="topbar-actions"><a href="./clinic-search.html" class="topbar-btn" title="Search patients"><i class="fa-solid fa-magnifying-glass"></i></a><a href="./clinic-notifications.html" class="topbar-btn" title="Notifications"><i class="fa-solid fa-bell"></i></a><div class="staff-chip" id="staffChip"><div class="staff-avatar-sm" id="topbarAvatar">?</div><span class="staff-name-sm staff-name">Staff</span><i class="fa-solid fa-angle-down" id="staffIcon"></i><div class="staff-dropdown" id="staffDropdown"><div class="staff-dropdown-item" onclick="location.href='./clinic-settings.html'"><i class="fa-solid fa-gear"></i> Settings</div><div class="staff-dropdown-item danger" onclick="clinicLogout()"><i class="fa-solid fa-right-from-bracket"></i> Logout</div></div></div></div></div>
-  </header>
-  <div class="all-content"><aside class="sidebar" id="sidebar"><div class="sidebar-icon"><a href="./clinic-queue.html" class="sidebar-nav-btn" data-tip="Today's Queue">
-    <i class="fa-solid fa-list-check">Patients</i></a><a href="./clinic-search.html" class="sidebar-nav-btn" data-tip="Search Patients"><i class="fa-solid fa-magnifying-glass">Search</i></a><a href="./clinic-pharmacy.html" class="sidebar-nav-btn active" data-tip="Pharmacy"><i class="fa-solid fa-prescription-bottle-medical">Pharmacy</i></a><a href="./clinic-laboratory.html" class="sidebar-nav-btn" data-tip="Laboratory"><i class="fa-solid fa-flask-vial">Laboratory</i></a><a href="./clinic-settings.html" class="sidebar-nav-btn" data-tip="Settings"><i class="fa-solid fa-gear">Settings</i></a></div><div class="logout-sidebar"><button class="sidebar-nav-btn sidebar-logout" data-tip="Logout" onclick="clinicLogout()"><i class="fa-solid fa-right-from-bracket">Logout</i></button></div></aside></div>
+
+  <div class="all-content">
+    <aside class="sidebar" id="sidebar">
+        
+        <div class="sidebar-icon">
+          <div class="logo">
+            <a href="./clinic-queue.html">
+              <img
+                src="./images/logo.png"
+                class="sidebar-logo"
+                alt="NovaBuk"
+              />
+            </a>
+          </div>
+          <!-- Queue — this page (active) -->
+          <a
+            href="./clinic-queue.html"
+            class="sidebar-nav-btn active"
+            data-tip="Today's Queue"
+          >
+            <i class="fa-solid fa-list-check"></i><span>Appointment</span>
+          </a>
+
+          <!-- Search -->
+          <a
+            href="./clinic-search.html"
+            class="sidebar-nav-btn"
+            data-tip="Search Patients"
+          >
+            <i class="fa-solid fa-magnifying-glass"></i><span>Patients</span>
+          </a>
+
+          <!-- Search -->
+          <a
+            href="./clinic-pharmacy.html"
+            class="sidebar-nav-btn"
+            data-tip="Pharmacy"
+          >
+            <i class="fa-solid fa-pills"></i><span>Pharmacy</span>
+          </a>
+
+          <a
+            href="./clinic-laboratory.html"
+            class="sidebar-nav-btn"
+            data-tip="Laboratory"
+          >
+            <i class="fa-solid fa-flask-vial"></i><span>Laboratory</span>
+          </a>
+
+          <!-- Checkout & Billing -->
+          <a
+            href="./clinic-checkout.html"
+            class="sidebar-nav-btn"
+            data-tip="Checkout & Billing"
+          >
+            <i class="fa-solid fa-money-bill-wave"></i><span>Billing</span>
+          </a>
+
+          <!-- <a href="./clinic-pharmacy.html" class="sidebar-nav-btn active" data-tip="Pharmacy"><i class="fa-solid fa-prescription-bottle-medical"> </i></a> -->
+
+          <!-- Settings pushed to bottom via margin-top: auto on logout -->
+          <a
+            href="./clinic-settings.html"
+            class="sidebar-nav-btn"
+            data-tip="Settings"
+          >
+            <i class="fa-solid fa-gear"></i><span>Settings</span>
+          </a>
+        </div>
+
+        <!-- Logout — at the bottom -->
+         
+        <div class="logout-sidebar">
+          <div class="need-help">
+            <span>Need Help?</span>
+            <a href="mailto:support@novabuk.com"><i class="fa-solid fa-headset"></i><span>Contact Support</span> <i class="fa-solid fa-arrow-right"></i></a>
+          </div>
+          <!-- <button
+            class="sidebar-nav-btn sidebar-logout"
+            data-tip="Logout"
+            onclick="clinicLogout()"
+          >
+            <i class="fa-solid fa-right-from-bracket"></i> <span>Logout</span>
+          </button> -->
+        </div>
+      </aside>
+    </div>
 
   <main class="workflow-main">
     <div class="workflow-shell">
@@ -246,7 +369,14 @@
           <td>${x.doctorName || '—'}</td>
           <td>${formatDate(x.createdAt)}</td>
           <td>${pendingCount} of ${x.items.length} left</td>
-          <td><span class="workflow-badge ${STATUS_CLASS[x.status]}">${STATUS_LABEL[x.status]}</span></td>
+          <td>
+            <span class="workflow-badge ${STATUS_CLASS[x.status]}">${STATUS_LABEL[x.status]}</span>
+            ${x.bill.settled
+              ? `<div style="margin-top:4px;font-size:9px;font-weight:700;color:var(--workflow-red);"><i class="fa-solid fa-triangle-exclamation"></i> Bill already settled</div>`
+              : x.bill.pharmacyRemaining > 0
+                ? `<div style="margin-top:4px;font-size:9px;font-weight:700;color:var(--workflow-amber);"><i class="fa-solid fa-coins"></i> ₦${x.bill.pharmacyRemaining.toLocaleString()} owed</div>`
+                : ''}
+          </td>
           <td><button class="workflow-button secondary" onclick="openPharmacyModal('${x._id}')">Dispense <i class="fa-solid fa-arrow-right"></i></button></td>
         </tr>`;
       }).join('');
@@ -276,7 +406,49 @@
     }
 
     function renderModalItems() {
-      document.getElementById('modalItems').innerHTML = activePrescription.items.map(i => `
+      const bill = activePrescription.bill;
+
+      const summaryHtml = bill.settled
+        ? `<div style="display:flex;gap:10px;align-items:flex-start;background:var(--workflow-red-bg);color:var(--workflow-red);border-radius:10px;padding:12px 14px;font-size:12px;font-weight:600;margin-bottom:12px;">
+             <i class="fa-solid fa-triangle-exclamation" style="margin-top:1px;"></i>
+             <span>This patient's bill is already settled (paid or waived). Dispensing from here on will <u>not</u> automatically add a charge — someone with billing-correction access will need to add it manually afterward.</span>
+           </div>`
+        : `<div style="display:flex;justify-content:space-between;align-items:center;background:var(--workflow-green-bg);color:var(--workflow-green);border-radius:10px;padding:10px 14px;font-size:12px;font-weight:600;margin-bottom:12px;">
+             <span><i class="fa-solid fa-receipt"></i> Total pharmacy charges on this bill</span>
+             <span>₦${bill.pharmacySubtotal.toLocaleString()}</span>
+           </div>`;
+
+      const paymentPanelHtml = bill.settled
+        ? ''
+        : bill.pharmacyRemaining > 0
+          ? `<div class="rx-payment-panel">
+               <div class="rx-payment-head">
+                 <div>
+                   <div style="font-weight:700;font-size:12px;color:var(--workflow-text);"><i class="fa-solid fa-cash-register"></i> Collect payment here</div>
+                   <div class="workflow-subtext">Only the pharmacy portion — ₦${bill.pharmacyRemaining.toLocaleString()} owed of ₦${bill.pharmacySubtotal.toLocaleString()} in drugs${bill.amountPaidPharmacy > 0 ? ` (₦${bill.amountPaidPharmacy.toLocaleString()} already collected)` : ''}. Consultation and lab charges stay with the front desk.</div>
+                 </div>
+               </div>
+               <div class="rx-payment-form">
+                 <div style="flex:1;"><span class="rx-field-label">Method</span>
+                   <select id="payMethod" class="workflow-select" style="width:100%;min-width:0;">
+                     <option value="CASH">Cash</option>
+                     <option value="TRANSFER">Transfer</option>
+                     <option value="POS">POS</option>
+                   </select>
+                 </div>
+                 <div style="flex:1;"><span class="rx-field-label">Amount (₦)</span>
+                   <input type="number" min="1" max="${bill.pharmacyRemaining}" value="${bill.pharmacyRemaining}" id="payAmount" style="width:100%;">
+                 </div>
+                 <div style="display:flex;align-items:flex-end;">
+                   <button class="workflow-button primary" onclick="recordPharmacyPayment()"><i class="fa-solid fa-check"></i> Record Payment</button>
+                 </div>
+               </div>
+             </div>`
+          : `<div style="display:flex;gap:8px;align-items:center;background:var(--workflow-green-bg);color:var(--workflow-green);border-radius:10px;padding:10px 14px;font-size:12px;font-weight:600;margin-bottom:16px;">
+               <i class="fa-solid fa-circle-check"></i> Pharmacy charges on this bill are fully settled.
+             </div>`;
+
+      const itemsHtml = activePrescription.items.map(i => `
         <div class="rx-item">
           <div class="rx-item-head">
             <div>
@@ -290,13 +462,41 @@
           </div>
           ${i.specialNotes ? `<div class="rx-item-notes"><i class="fa-solid fa-note-sticky"></i> ${i.specialNotes}</div>` : ''}
           ${i.dispensed
-            ? `<div class="rx-dispensed-note"><i class="fa-solid fa-check"></i> ₦${(i.unitPrice * i.quantity).toLocaleString()} · qty ${i.quantity} · ${formatDate(i.dispensedAt)}</div>`
+            ? `<div class="rx-dispensed-note"><i class="fa-solid fa-check"></i> ₦${(i.unitPrice * i.quantity).toLocaleString()} added to bill · qty ${i.quantity} · ${formatDate(i.dispensedAt)}</div>`
             : `<div class="rx-dispense-form">
-                 <div style="flex:1.4;"><span class="rx-field-label">Unit price (₦)</span><input type="number" min="0" data-role="price" id="price-${i._id}" style="width:100%;"></div>
-                 <div style="flex:0.7;"><span class="rx-field-label">Qty</span><input type="number" min="1" value="1" data-role="qty" id="qty-${i._id}" style="width:100%;"></div>
+                 <div style="flex:1.4;"><span class="rx-field-label">Unit price (₦)</span><input type="number" min="0" data-role="price" id="price-${i._id}" oninput="updateBillPreview('${i._id}')" style="width:100%;"></div>
+                 <div style="flex:0.7;"><span class="rx-field-label">Qty</span><input type="number" min="1" value="1" data-role="qty" id="qty-${i._id}" oninput="updateBillPreview('${i._id}')" style="width:100%;"></div>
                  <div style="display:flex;align-items:flex-end;"><button class="workflow-button primary" onclick="dispenseItem('${i._id}')"><i class="fa-solid fa-check"></i> Dispense</button></div>
-               </div>`}
+               </div>
+               <div class="rx-bill-preview" id="preview-${i._id}">${bill.settled ? '<i class="fa-solid fa-triangle-exclamation"></i> Bill is settled — this will NOT be added automatically.' : '<i class="fa-solid fa-circle-info"></i> Enter a price and quantity to see what this adds to the bill.'}</div>`}
         </div>`).join('');
+
+      document.getElementById('modalItems').innerHTML = summaryHtml + paymentPanelHtml + itemsHtml;
+    }
+
+    function updateBillPreview(itemId) {
+      const priceEl = document.getElementById(`price-${itemId}`);
+      const qtyEl = document.getElementById(`qty-${itemId}`);
+      const previewEl = document.getElementById(`preview-${itemId}`);
+      if (!priceEl || !qtyEl || !previewEl) return;
+
+      const unitPrice = Number(priceEl.value);
+      const quantity = Number(qtyEl.value) || 0;
+
+      if (activePrescription.bill.settled) {
+        previewEl.innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i> Bill is settled — this will NOT be added automatically, even though the price/quantity are entered here.`;
+        previewEl.classList.add('warning');
+        previewEl.classList.remove('ready');
+        return;
+      }
+
+      if (!unitPrice || !quantity) {
+        previewEl.innerHTML = `<i class="fa-solid fa-circle-info"></i> Enter a price and quantity to see what this adds to the bill.`;
+        previewEl.classList.remove('ready');
+        return;
+      }
+      previewEl.innerHTML = `<i class="fa-solid fa-receipt"></i> This will add <strong>₦${(unitPrice * quantity).toLocaleString()}</strong> to the patient's bill.`;
+      previewEl.classList.add('ready');
     }
 
     async function dispenseItem(itemId) {
@@ -316,28 +516,76 @@
         const data = await res.json();
         if (!data.success) throw new Error(data.message || 'Dispense failed');
 
-        // The dispense endpoint returns the raw Prescription document —
-        // it doesn't re-populate patient or resolve doctorName the way
-        // the list/detail endpoints do. Merge in just the items array
-        // (the part that actually changed) rather than replacing the
-        // whole object, so the patient name and doctor stay correct in
-        // the UI instead of blanking out after a dispense action.
-        activePrescription = { ...activePrescription, items: data.data.items, status: data.data.status };
+        // Dispensing just added a new PHARMACY line item to the bill —
+        // the dispense response itself doesn't include updated bill
+        // totals, so refetch the full detail (which does resolve
+        // patient/doctorName AND fresh bill info) rather than trying to
+        // patch together partial state that would go stale.
+        const wasSettled = activePrescription.bill.settled;
+        const addedAmount = unitPrice * quantity;
+        await refreshActivePrescription();
+
         const idx = prescriptions.findIndex(p => p._id === activePrescription._id);
         const allDone = activePrescription.items.every(i => i.dispensed);
+        const billNote = wasSettled
+          ? `Dispensed — but this patient's bill is already settled, so ₦${addedAmount.toLocaleString()} was NOT added automatically. It needs a manual correction.`
+          : `₦${addedAmount.toLocaleString()} added to the patient's bill.`;
         if (allDone) {
           prescriptions.splice(idx, 1);
           closePharmacyModal();
-          showToast('All items dispensed — moved out of the queue.');
+          showToast(wasSettled ? billNote : `${billNote} All items dispensed, moved out of the queue.`, wasSettled);
         } else {
           prescriptions[idx] = activePrescription;
           renderModalItems();
-          showToast('Item dispensed.');
+          showToast(billNote, wasSettled);
         }
         updateStats();
         renderPharmacy();
       } catch (err) {
         showToast(err.message || 'Could not dispense this item. Please try again.', true);
+      }
+    }
+
+    // Re-fetches the single prescription (with fresh, fully-resolved
+    // patient/doctorName/bill info) and updates activePrescription in
+    // place. Used after any action that changes the bill or item
+    // state, so the modal never shows numbers that have drifted out of
+    // sync with the server.
+    async function refreshActivePrescription() {
+      const res = await clinicFetch(`${CLINIC_API}/prescriptions/${activePrescription._id}`);
+      const data = await res.json();
+      if (data.success) activePrescription = data.data;
+    }
+
+    async function recordPharmacyPayment() {
+      const methodEl = document.getElementById('payMethod');
+      const amountEl = document.getElementById('payAmount');
+      const paymentMethod = methodEl.value;
+      const amountPaid = Number(amountEl.value);
+
+      if (!amountPaid || amountPaid <= 0) { amountEl.focus(); showToast('Enter an amount to collect.', true); return; }
+      if (amountPaid > activePrescription.bill.pharmacyRemaining) {
+        amountEl.focus();
+        showToast(`Amount can't exceed the ₦${activePrescription.bill.pharmacyRemaining.toLocaleString()} owed for pharmacy charges.`, true);
+        return;
+      }
+
+      try {
+        const res = await clinicFetch(`${CLINIC_API}/bills/${activePrescription.bill.id}/pay-pharmacy`, {
+          method: 'PATCH',
+          body: JSON.stringify({ paymentMethod, amountPaid }),
+        });
+        const data = await res.json();
+        if (!data.success) throw new Error(data.message || 'Could not record payment.');
+
+        await refreshActivePrescription();
+        const idx = prescriptions.findIndex(p => p._id === activePrescription._id);
+        if (idx !== -1) prescriptions[idx] = activePrescription;
+        renderModalItems();
+        renderPharmacy();
+        showToast(`₦${amountPaid.toLocaleString()} collected for pharmacy charges.`);
+      } catch (err) {
+        showToast(err.message || 'Could not record this payment. Please try again.', true);
       }
     }
 

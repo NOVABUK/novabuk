@@ -716,8 +716,46 @@
                   : ""
               }
 
+              ${
+                visit.diagnosis
+                  ? `
+                <div class="clinic-notes">
+                  <strong>Diagnosis:</strong> ${visit.diagnosis}
+                </div>`
+                  : ""
+              }
+
+              ${
+                visit.advice
+                  ? `
+                <div class="clinic-notes">
+                  <strong>Doctor's advice:</strong> ${visit.advice}
+                </div>`
+                  : ""
+              }
+
+              ${
+                visit.testsOrdered
+                  ? `
+                <div class="clinic-notes">
+                  <strong>Tests ordered:</strong> ${visit.testsOrdered}
+                </div>`
+                  : ""
+              }
+
               ${visitPrescriptions.map((p) => renderPrescriptionBlock(p)).join("")}
               ${visitLabRequests.map((l) => renderLabResultBlock(l)).join("")}
+
+              ${
+                visit.status === "Completed"
+                  ? `
+                <div class="visit-actions">
+                  <button class="btn-cancel-visit" style="border-color:#35bac9;color:#35bac9;" onclick="downloadVisitSummary('${visit._id}')">
+                    <i class="fa-solid fa-file-arrow-down"></i> Download Visit Summary
+                  </button>
+                </div>`
+                  : ""
+              }
 
               ${
                 visit.status === "Pending"
@@ -795,6 +833,22 @@
           .catch((err) => {
             console.error("Download prescription error:", err);
             alert("Could not load your prescription. Please try again.");
+          });
+      }
+
+      function downloadVisitSummary(visitId) {
+        fetch(`${API_URL}/visits/${visitId}/summary-pdf`, {
+          headers: { Authorization: `Bearer ${token}` },
+          credentials: "include",
+        })
+          .then((res) => res.blob())
+          .then((blob) => {
+            const url = URL.createObjectURL(blob);
+            window.open(url, "_blank");
+          })
+          .catch((err) => {
+            console.error("Download visit summary error:", err);
+            alert("Could not load your visit summary. Please try again.");
           });
       }
 

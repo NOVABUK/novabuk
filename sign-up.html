@@ -47,6 +47,15 @@
       .field-error.show { display: block; }
       .submit button:disabled { opacity: 0.6; cursor: not-allowed; }
 
+      .account-type-label {
+        font-size: 12px;
+        font-weight: 600;
+        color: #718096;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-bottom: 8px;
+      }
+
       /* Social Login Styling */
       .social-divider {
         display: flex;
@@ -181,6 +190,7 @@
               <div class="field-error" id="emailError"></div>
             </div>
 
+            <div class="account-type-label">Account type</div>
             <div class="locheck signup-check">
               <input type="radio" id="Patient" name="role" value="Patient" checked required />
               <label for="Patient"> Patient</label>

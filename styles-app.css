@@ -1207,7 +1207,7 @@ body {
   opacity: 1;
   gap: 0px;
   border-radius: 30px;
-  padding: 20px 50px;
+  padding: 48px 50px 20px;
   background: #fbfbfb;
 }
 
@@ -1501,12 +1501,25 @@ body {
 
 /* SIGN UP */
 .signup-cont {
-  background-image: url(./images/signup-banner.jpg);
+  position: relative;
   height: 135vh;
+  width: 100%;
+  overflow: hidden;
+}
+.signup-cont::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url(./images/signup-banner.jpg);
   background-size: cover;
   background-position: center center;
-  width: 100%;
-  
+  filter: blur(6px);
+  transform: scale(1.05); /* hide the blurred edge fringe */
+  z-index: 0;
+}
+.signup-cont > .sign-info {
+  position: relative;
+  z-index: 1;
 }
 .signup-input {
   padding: 20px 0;

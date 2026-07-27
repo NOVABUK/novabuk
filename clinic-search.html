@@ -155,96 +155,82 @@
   </head>
 
   <body>
-    <header>
-      <div class="notif-left">
-        <div class="bck-icon">
-          <a
-            href="./clinic-queue.html"
-            class="btn-back"
-            style="font-size: 24px; color: var(--text); text-decoration: none"
-          >
-            <i class="fa-solid fa-arrow-left"></i>
-          </a>
+    <div class="logo-detail mobile-detail">
+      <div class="topbar-left">
+        <div class="topbar-clinic clinic-name" id="topbarClinicName">
+          <script>
+            (function () {
+              try {
+                var u = JSON.parse(localStorage.getItem("novabuk_user") || "{}");
+                document.write(u.clinicName || "Your Clinic");
+              } catch (e) {
+                document.write("Your Clinic");
+              }
+            })();
+          </script>
         </div>
-        <div class="notify">
-          <h3 class="topbar-title" style="font-size: 28px; font-weight: 700">
-            Search
-          </h3>
-        </div>
+        <div class="topbar-date" id="topbarDate"></div>
       </div>
-
-      <div class="top-side">
-        <div class="topbar-actions">
-          <!-- Search shortcut -->
-          <a
-            href="./clinic-search.html"
-            class="topbar-btn"
-            title="Search patients"
-          >
-            <i class="fa-solid fa-magnifying-glass"></i>
-          </a>
-
-          <!-- Notification bell -->
-          <a
-            href="./clinic-notifications.html"
-            class="topbar-btn"
-            title="Notifications"
-          >
-            <i class="fa-solid fa-bell"></i>
-            <span
-              class="notification-badge"
-              id="topbarNotificationBadge"
-            ></span>
-          </a>
-
-          <!-- Staff chip — shows name + dropdown -->
-          <div class="staff-chip" id="staffChip">
-            <div class="staff-avatar-sm" id="topbarAvatar">?</div>
-            <span class="staff-name-sm staff-name">Staff</span>
-            <i class="fa-solid fa-angle-down" id="staffIcon"></i>
-
-            <div class="staff-dropdown" id="staffDropdown">
-              <div
-                class="staff-dropdown-item"
-                onclick="window.location.href = './clinic-settings.html'"
-              >
-                <i class="fa-solid fa-gear"></i> Settings
-              </div>
-              <div class="staff-dropdown-item danger" onclick="clinicLogout()">
-                <i class="fa-solid fa-right-from-bracket"></i> Logout
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </header>
+    </div>
 
     <div class="all-content">
-      <!-- ============================================================
-       SIDEBAR
-       We use <a> tags instead of <button> for navigation items
-       because they support href — better for semantics and
-       middle-click to open in new tab.
-    ============================================================ -->
       <aside class="sidebar" id="sidebar">
+        
         <div class="sidebar-icon">
+          <div class="logo">
+            <a href="./clinic-queue.html">
+              <img
+                src="./images/logo.png"
+                class="sidebar-logo"
+                alt="NovaBuk"
+              />
+            </a>
+          </div>
           <!-- Queue — this page (active) -->
           <a
             href="./clinic-queue.html"
-            class="sidebar-nav-btn"
+            class="sidebar-nav-btn active"
             data-tip="Today's Queue"
           >
-            <i class="fa-solid fa-list-check"></i>
+            <i class="fa-solid fa-list-check"></i><span>Appointment</span>
           </a>
 
           <!-- Search -->
           <a
             href="./clinic-search.html"
-            class="sidebar-nav-btn active"
+            class="sidebar-nav-btn"
             data-tip="Search Patients"
           >
-            <i class="fa-solid fa-magnifying-glass"></i>
+            <i class="fa-solid fa-magnifying-glass"></i><span>Patients</span>
           </a>
+
+          <!-- Search -->
+          <a
+            href="./clinic-pharmacy.html"
+            class="sidebar-nav-btn"
+            data-tip="Pharmacy"
+          >
+            <i class="fa-solid fa-pills"></i><span>Pharmacy</span>
+          </a>
+
+          <a
+            href="./clinic-laboratory.html"
+            class="sidebar-nav-btn"
+            data-tip="Laboratory"
+          >
+            <i class="fa-solid fa-flask-vial"></i><span>Laboratory</span>
+          </a>
+
+          <!-- Checkout & Billing -->
+          <a
+            href="./clinic-checkout.html"
+            class="sidebar-nav-btn"
+            data-tip="Checkout & Billing"
+          >
+            <i class="fa-solid fa-money-bill-wave"></i><span>Billing</span>
+          </a>
+
+          <!-- <a href="./clinic-pharmacy.html" class="sidebar-nav-btn active" data-tip="Pharmacy"><i class="fa-solid fa-prescription-bottle-medical"> </i></a> -->
 
           <!-- Settings pushed to bottom via margin-top: auto on logout -->
           <a
@@ -252,26 +238,75 @@
             class="sidebar-nav-btn"
             data-tip="Settings"
           >
-            <i class="fa-solid fa-gear"></i>
+            <i class="fa-solid fa-gear"></i><span>Settings</span>
           </a>
         </div>
 
         <!-- Logout — at the bottom -->
+         
         <div class="logout-sidebar">
-          <button
+          <div class="need-help">
+            <span>Need Help?</span>
+            <a href="mailto:support@novabuk.com"><i class="fa-solid fa-headset"></i><span>Contact Support</span> <i class="fa-solid fa-arrow-right"></i></a>
+          </div>
+          <!-- <button
             class="sidebar-nav-btn sidebar-logout"
             data-tip="Logout"
             onclick="clinicLogout()"
           >
-            <i class="fa-solid fa-right-from-bracket"></i>
-          </button>
+            <i class="fa-solid fa-right-from-bracket"></i> <span>Logout</span>
+          </button> -->
         </div>
       </aside>
-    </div>
 
-    <!-- main content -->
-    <div class="main search-main" style="padding: 18px 0px">
-      <div class="content">
+      <div class="main search-main" style="padding: 18px 0px">
+        <div class="header">
+          <div class="logo">
+            <div class="logo-detail">
+              <div class="topbar-left">
+                <div class="topbar-clinic clinic-name" id="topbarClinicName">
+                  <script>
+                    (function () {
+                      try {
+                        var u = JSON.parse(localStorage.getItem("novabuk_user") || "{}");
+                        document.write(u.clinicName || "Your Clinic");
+                      } catch (e) {
+                        document.write("Your Clinic");
+                      }
+                    })();
+                  </script>
+                </div>
+                <div class="topbar-date" id="topbarDate"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="top-side">
+            <div class="topbar-actions">
+              <a href="./clinic-search.html" class="topbar-btn active" title="Search patients">
+                <i class="fa-solid fa-magnifying-glass"></i>
+              </a>
+              <a href="./clinic-notifications.html" class="topbar-btn" title="Notifications">
+                <i class="fa-solid fa-bell"></i>
+                <span class="notification-badge" id="topbarNotificationBadge"></span>
+              </a>
+              <div class="staff-chip" id="staffChip" onclick="toggleStaffMenu(event)">
+                <div class="staff-avatar-sm" id="topbarAvatar">?</div>
+                <span class="staff-name-sm staff-name">Staff</span>
+                <i class="fa-solid fa-angle-down" id="staffIcon"></i>
+                <div class="staff-dropdown" id="staffDropdown">
+                  <div class="staff-dropdown-item" onclick="window.location.href='./clinic-settings.html'">
+                    <i class="fa-solid fa-gear"></i> Settings
+                  </div>
+                  <div class="staff-dropdown-item danger" onclick="clinicLogout()">
+                    <i class="fa-solid fa-right-from-bracket"></i> Logout
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="content">
         <div class="search-wrap">
           <i class="fa-solid fa-magnifying-glass"></i>
           <input
@@ -305,6 +340,7 @@
           </div>
         </div>
       </div>
+    </div>
     </div>
 
     <script src="./db.js"></script>
