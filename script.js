@@ -734,8 +734,6 @@ window.refreshNavAvatar = function () {
 
 (function initNetworkUI() {
   let toastTimeout;
-  let isToastForced = false;
-  let lastState = null; // dedup signature so the 3s poll can't resurrect a toast that just hid
 
   // 1. Create the toast element
   const toast = document.createElement("div");
@@ -750,67 +748,54 @@ window.refreshNavAvatar = function () {
       : `<i class="fa-solid fa-cloud-showers-water"></i> <span>${message}</span>`;
 
     toast.className = `network-toast show ${isOnline ? "online" : "offline"}`;
-    isToastForced = forceVisible;
 
-    // Every toast now auto-hides, full stop — nothing stays on screen
-    // forever. Forced states (offline / syncing) get a little longer
-    // (6s) so there's time to actually read them; everything else is a
-    // quick 5s pill.
+    // Every toast auto-hides — nothing stays on screen forever. Forced
+    // states (offline / syncing) get a little longer (6s) so there's
+    // time to actually read them; everything else is a quick 5s pill.
     const timeoutMs = forceVisible ? 6000 : 5000;
     toastTimeout = setTimeout(() => {
       // Reset fully, not just "show" — guards against any page-level CSS
       // that might match .offline/.online alone and hold the toast visible.
       toast.className = "network-toast";
-      isToastForced = false;
     }, timeoutMs);
   }
   window.showNetworkToast = showToast;
 
-  // 2. Smart Polling for Outbox Status
-  async function checkStatus() {
-    if (typeof window.getOutboxCount !== "function") return;
-
+  // 2. Flush the outbox when we can. `announce` controls whether this
+  // run is allowed to put up a toast — background/periodic flushes stay
+  // silent, only a real connectivity change is allowed to speak up.
+  async function trySync(announce) {
+    if (typeof window.getOutboxCount !== "function") return false;
     const count = await window.getOutboxCount();
-    const isOnline = navigator.onLine;
-
-    // Only act when the real state actually changes. Without this, the
-    // 3s poll would keep re-showing the same toast right after it fades.
-    const signature = `${isOnline}:${count > 0 ? "pending" : "empty"}`;
-    if (signature === lastState) return;
-    lastState = signature;
-
-    if (count > 0) {
-      if (isOnline) {
-        // If we are online but have pending items, we must be trying to sync them
-        showToast(`Syncing ${count} pending item(s)...`, true, true);
-        if (typeof window.syncOutbox === "function") window.syncOutbox();
-      } else {
-        // Offline with pending items
-        showToast(`Offline. ${count} item(s) waiting to sync.`, false, true);
-      }
-    } else {
-      // No pending items.
-      if (!isOnline) {
-        showToast("You're offline.", false, true);
-      } else {
-        showToast("Back online — all synced.", true, false);
-      }
+    if (count > 0 && navigator.onLine) {
+      if (announce) showToast(`Syncing ${count} pending item(s)...`, true, true);
+      if (typeof window.syncOutbox === "function") await window.syncOutbox();
+      return true;
     }
+    return false;
   }
 
-  // 3. Listen for Explicit Network Changes
+  // 3. Toast ONLY on a real connectivity transition — never on a timer,
+  // never just because a new page loaded while everything was fine.
   window.addEventListener("offline", () => {
-    lastState = null; // this is a real transition, always toast it
-    checkStatus();
-  });
-  window.addEventListener("online", () => {
-    lastState = null;
-    checkStatus();
+    showToast("You're offline. Changes will be saved and synced later.", false, true);
   });
 
-  // Start polling status every 3 seconds to catch edge cases
-  setInterval(checkStatus, 3000);
-  checkStatus();
+  window.addEventListener("online", async () => {
+    const hadPending = await trySync(true);
+    showToast(hadPending ? "Back online — all synced." : "Back online.", true, false);
+  });
+
+  // On this page's first load: only speak up if we're actually offline
+  // right now. If we're online, stay quiet — nothing has changed.
+  if (!navigator.onLine) {
+    showToast("You're offline. Changes will be saved and synced later.", false, true);
+  }
+
+  // Keep flushing the outbox in the background so pending items don't
+  // just sit there, but do it silently — no toast spam every few seconds.
+  setInterval(() => trySync(false), 15000);
+})();
 
   // 4. Exit Guard: Warning if trying to leave with pending data
   window.addEventListener("beforeunload", (e) => {

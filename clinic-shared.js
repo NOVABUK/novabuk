@@ -496,105 +496,6 @@ function initClinicUI() {
 
   // 4. Update Notifications
   updateNotificationBadge();
-
-  // 5. Lock Pharmacy/Laboratory sidebar icons for non-Pro clinics
-  applyPlanGatedNav();
-}
-
-// ── PLAN-GATED SIDEBAR ICONS (Pharmacy / Laboratory) ────────────
-// Both are Pro-plan only. Rather than hide these icons for a Growth
-// clinic — which means they'd never discover the feature exists at
-// all — show them with a lock badge and intercept the click with a
-// clear upgrade prompt, instead of letting the click through to a
-// page that would just fail to load its data (requireProPlan on the
-// backend would 403 every request there anyway).
-async function applyPlanGatedNav() {
-  const gatedLinks = document.querySelectorAll(
-    '[data-feature="pharmacy"], [data-feature="laboratory"]'
-  );
-  if (!gatedLinks.length) return;
-
-  let isPro = false;
-  try {
-    const res = await clinicFetch(`${API_BASE}/clinics/my`);
-    const data = await res.json();
-    isPro = data.success && data.clinic?.subscriptionPlan === "Pro";
-  } catch (err) {
-    isPro = false; // fail closed — show locked rather than risk a dead click
-  }
-
-  if (isPro) return; // links work normally, nothing to do
-
-  // Inject the lock-badge styling once, rather than editing clinic.css
-  // for two small classes.
-  if (!document.getElementById("nbPlanGateStyle")) {
-    const style = document.createElement("style");
-    style.id = "nbPlanGateStyle";
-    style.textContent = `
-      .sidebar-nav-btn.locked-feature { position: relative; opacity: 0.55; }
-      .sidebar-nav-btn.locked-feature .lock-badge {
-        position: absolute; top: -4px; right: -4px;
-        width: 15px; height: 15px; border-radius: 50%;
-        background: #6941c6; color: #fff;
-        display: flex; align-items: center; justify-content: center;
-        font-size: 8px;
-      }
-    `;
-    document.head.appendChild(style);
-  }
-
-  gatedLinks.forEach((link) => {
-    link.classList.add("locked-feature");
-    if (!link.querySelector(".lock-badge")) {
-      const badge = document.createElement("span");
-      badge.className = "lock-badge";
-      badge.innerHTML = '<i class="fa-solid fa-lock"></i>';
-      link.appendChild(badge);
-    }
-    link.addEventListener("click", (e) => {
-      e.preventDefault();
-      showUpgradePrompt(link.dataset.feature);
-    });
-  });
-}
-
-function showUpgradePrompt(feature) {
-  const label = feature === "pharmacy" ? "Pharmacy management" : "Laboratory management";
-
-  if (!document.getElementById("nbUpgradePromptModal")) {
-    const modal = document.createElement("div");
-    modal.id = "nbUpgradePromptModal";
-    modal.innerHTML = `
-      <div class="nb-logout-overlay" id="nbUpgradeOverlay">
-        <div class="nb-logout-box">
-          <div style="width:60px; height:60px; background:#f1ecff; border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 16px; color:#6941c6; font-size:22px;">
-            <i class="fa-solid fa-lock"></i>
-          </div>
-          <h3 style="font-size:18px; font-weight:700; margin-bottom:8px; font-family:'Poppins', sans-serif;" id="nbUpgradeTitle">Pro feature</h3>
-          <p style="font-size:13px; color:#718096; margin-bottom:24px; font-family:'Poppins', sans-serif;" id="nbUpgradeBody"></p>
-          <div style="display:flex; gap:10px;">
-            <button class="btn-cancel-logout" onclick="closeUpgradePrompt()">Not now</button>
-            <button class="btn-confirm-logout" style="background:#6941c6;" onclick="window.location.href='./clinic-settings.html'">Upgrade to Pro</button>
-          </div>
-        </div>
-      </div>`;
-    document.body.appendChild(modal);
-
-    // Close on outside click, same behavior as the logout modal.
-    modal.querySelector(".nb-logout-overlay").addEventListener("click", (e) => {
-      if (e.target.id === "nbUpgradeOverlay") closeUpgradePrompt();
-    });
-  }
-
-  document.getElementById("nbUpgradeTitle").textContent = `${label} is a Pro feature`;
-  document.getElementById("nbUpgradeBody").textContent =
-    `Upgrade your clinic to the Pro plan to unlock ${label.toLowerCase()}.`;
-  document.getElementById("nbUpgradeOverlay").classList.add("show");
-}
-
-function closeUpgradePrompt() {
-  const overlay = document.getElementById("nbUpgradeOverlay");
-  if (overlay) overlay.classList.remove("show");
 }
 
 // Auto-run when DOM is ready
@@ -658,7 +559,6 @@ setInterval(updateNotificationBadge, 30000);
   }
 
   let toastTimeout;
-  let isToastForced = false;
 
   function showClinicToast(message, isOnline, forceVisible = false) {
     const toast =
@@ -681,74 +581,68 @@ setInterval(updateNotificationBadge, 30000);
 
     toast.innerHTML = `<i class="fa-solid ${icon}"></i> <span>${message}</span>`;
     toast.className = `clinic-network-toast show ${cls}`;
-    isToastForced = forceVisible;
 
-    if (!forceVisible) {
-      toastTimeout = setTimeout(() => {
-        toast.classList.remove("show");
-        isToastForced = false;
-      }, 3500);
-    }
+    // Every toast auto-hides — forced states (offline / syncing /
+    // conflict warnings) just get a bit longer (6s) so there's time to
+    // read them, instead of sticking around indefinitely.
+    const timeoutMs = forceVisible ? 6000 : 3500;
+    toastTimeout = setTimeout(() => {
+      // Reset fully, not just "show" — some page-level CSS matches
+      // .offline/.online alone (without requiring .show), so leftover
+      // state classes can keep the toast visibly pinned even with
+      // "show" removed. Wiping back to the base class avoids that.
+      toast.className = "clinic-network-toast";
+    }, timeoutMs);
   }
 
   // Expose to window so db.js sync conflict alerts also use this
   window.showNetworkToast = showClinicToast;
 
-  // 3. Smart status check (mirrors patient side)
-  async function checkClinicStatus() {
-    if (typeof window.getOutboxCount !== "function") return;
+  // 3. Flush the outbox when we can. `announce` gates whether this run
+  // is allowed to show a toast — background flushes stay silent, only a
+  // real connectivity change gets to speak up.
+  async function trySync(announce) {
+    if (typeof window.getOutboxCount !== "function") return false;
     const count = await window.getOutboxCount();
-    const isOnline = navigator.onLine;
+    if (count > 0 && navigator.onLine) {
+      if (announce) showClinicToast(`Syncing ${count} pending item(s)…`, true, true);
+      if (typeof window.syncOutbox === "function") await window.syncOutbox();
+      return true;
+    }
+    return false;
+  }
 
-    if (count > 0) {
-      if (isOnline) {
-        showClinicToast(`Syncing ${count} pending item(s)…`, true, true);
-        if (typeof window.syncOutbox === "function") window.syncOutbox();
-      } else {
-        showClinicToast(
-          `Offline — ${count} item(s) queued for sync.`,
-          false,
-          true,
-        );
-      }
-    } else {
-      if (!isOnline) {
-        if (!isToastForced) showClinicToast("You are offline.", false, true);
-      } else if (isToastForced) {
-        showClinicToast("All data synced successfully!", true, false);
-      }
+  // 4. Toast ONLY on a real connectivity transition — never on a timer,
+  // never on window focus, and never just because a new page loaded
+  // while everything was fine.
+  window.addEventListener("offline", () => {
+    showClinicToast("You are offline. Changes will be saved and synced later.", false, true);
+  });
+
+  window.addEventListener("online", async () => {
+    const hadPending = await trySync(true);
+    showClinicToast(hadPending ? "All data synced successfully!" : "Back online.", true, false);
+  });
+
+  // 5. Run once DOM is ready — only to create the toast element and, if
+  // this page happens to load while genuinely offline, say so once.
+  // Otherwise stay completely silent.
+  function initOnReady() {
+    createToast();
+    if (!navigator.onLine) {
+      showClinicToast("You are offline. Changes will be saved and synced later.", false, true);
     }
   }
 
-  // 4. Event listeners
-  window.addEventListener("offline", () => {
-    showClinicToast("You are offline.", false, true);
-    checkClinicStatus();
-  });
-
-  window.addEventListener("online", () => {
-    showClinicToast("Connection restored. Checking sync status…", true, false);
-    checkClinicStatus();
-  });
-
-  window.addEventListener("focus", () => checkClinicStatus());
-
-  // 5. Poll every 3 seconds (same as patient side)
-  setInterval(checkClinicStatus, 3000);
-
-  // 6. Run once DOM is ready
   if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", () => {
-      createToast();
-      checkClinicStatus();
-    });
+    document.addEventListener("DOMContentLoaded", initOnReady);
   } else {
-    // Small delay so body exists
-    setTimeout(() => {
-      createToast();
-      checkClinicStatus();
-    }, 50);
+    setTimeout(initOnReady, 50);
   }
+
+  // 6. Keep flushing the outbox in the background so pending items
+  // don't just sit there, but do it quietly — no toast spam.
+  setInterval(() => trySync(false), 15000);
 })();
 // ── REGISTER SERVICE WORKER FOR CLINIC PAGES ──────────────────
 if ("serviceWorker" in navigator) {
