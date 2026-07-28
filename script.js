@@ -795,7 +795,6 @@ window.refreshNavAvatar = function () {
   // Keep flushing the outbox in the background so pending items don't
   // just sit there, but do it silently — no toast spam every few seconds.
   setInterval(() => trySync(false), 15000);
-})();
 
   // 4. Exit Guard: Warning if trying to leave with pending data
   window.addEventListener("beforeunload", (e) => {
@@ -810,8 +809,9 @@ window.refreshNavAvatar = function () {
     }
   });
 
-  // 5. Sync whenever window gets focus
-  window.addEventListener("focus", () => checkStatus());
+  // 5. Quietly try to sync whenever the window regains focus (no toast —
+  // this isn't a connectivity transition, just an opportunistic flush)
+  window.addEventListener("focus", () => trySync(false));
 })();
 
 // ── SHARED INDEX/PUBLIC PAGE NAVBAR SYNC ─────────────────────
