@@ -106,7 +106,7 @@
   </style>
 </head>
 <body>
-  <div class="logo-detail mobile-detail">
+    <div class="logo-detail mobile-detail">
       <div class="topbar-left">
         <div class="topbar-clinic clinic-name" id="topbarClinicName">
           <script>
@@ -125,157 +125,121 @@
     </div>
 
     <div class="all-content">
-      <aside class="sidebar" id="sidebar">
-        <div class="sidebar-icon">
-          <div class="logo">
-            <a href="./clinic-queue.html">
-              <img src="./images/logo.png" class="sidebar-logo" alt="NovaBuk" />
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-icon">
+            <div class="logo">
+                <a href="./clinic-queue.html">
+                <img src="./images/logo.png" class="sidebar-logo" alt="NovaBuk" />
+                </a>
+            </div>
+
+            <a href="./clinic-queue.html" class="sidebar-nav-btn" data-tip="Today's Queue">
+                <i class="fa-solid fa-list-check"></i><span>Appointment</span>
             </a>
-          </div>
 
-          <a href="./clinic-queue.html" class="sidebar-nav-btn" data-tip="Today's Queue">
-            <i class="fa-solid fa-list-check"></i><span>Appointment</span>
-          </a>
+            <a href="./clinic-search.html" class="sidebar-nav-btn" data-tip="Search Patients">
+                <i class="fa-solid fa-magnifying-glass"></i><span>Patients</span>
+            </a>
 
-          <a href="./clinic-search.html" class="sidebar-nav-btn" data-tip="Search Patients">
-            <i class="fa-solid fa-magnifying-glass"></i><span>Patients</span>
-          </a>
+            <a href="./clinic-pharmacy.html" class="sidebar-nav-btn" data-tip="Pharmacy">
+                <i class="fa-solid fa-prescription-bottle-medical"></i><span>Pharmacy</span>
+            </a>
 
-          <a href="./clinic-pharmacy.html" class="sidebar-nav-btn" data-tip="Pharmacy">
-            <i class="fa-solid fa-prescription-bottle-medical"></i><span>Pharmacy</span>
-          </a>
+            <a href="./clinic-laboratory.html" class="sidebar-nav-btn active" data-tip="Laboratory">
+                <i class="fa-solid fa-flask-vial"></i><span>Laboratory</span>
+            </a>
 
-          <a href="./clinic-laboratory.html" class="sidebar-nav-btn active" data-tip="Laboratory">
-            <i class="fa-solid fa-flask-vial"></i><span>Laboratory</span>
-          </a>
+            <!-- Checkout & Billing -->
+            <a
+                href="./clinic-checkout.html"
+                class="sidebar-nav-btn"
+                data-tip="Checkout & Billing"
+            >
+                <i class="fa-solid fa-money-bill-wave"></i><span>Billing</span>
+            </a>
 
-          <a href="./clinic-settings.html" class="sidebar-nav-btn" data-tip="Settings">
-            <i class="fa-solid fa-gear"></i><span>Settings</span>
-          </a>
-        </div>
-
-        <div class="logout-sidebar">
-          <div class="need-help">
-            <span>Need Help?</span>
-            <a href="mailto:support@novabuk.com"><i class="fa-solid fa-headset"></i><span>Contact Support</span> <i class="fa-solid fa-arrow-right"></i></a>
-          </div>
-          <!-- <button class="sidebar-nav-btn sidebar-logout" data-tip="Logout" onclick="clinicLogout()">
-            <i class="fa-solid fa-right-from-bracket"></i> <span>Logout</span>
-          </button> -->
-        </div>
-      </aside>
-
-      <main class="workflow-main">
-        <div class="header">
-          <div class="lo">
-            <div class="logo-detail">
-              <div class="topbar-left">
-                <div class="topbar-clinic clinic-name" id="topbarClinicName">
-                  <script>
-                    (function () {
-                      try {
-                        var u = JSON.parse(localStorage.getItem("novabuk_user") || "{}");
-                        document.write(u.clinicName || "Your Clinic");
-                      } catch (e) {
-                        document.write("Your Clinic");
-                      }
-                    })();
-                  </script>
-                </div>
-                <div class="topbar-date" id="topbarDate"></div>
-              </div>
+            <a href="./clinic-settings.html" class="sidebar-nav-btn" data-tip="Settings">
+                <i class="fa-solid fa-gear"></i><span>Settings</span>
+            </a>
             </div>
-          </div>
 
-          <div class="top-side">
-            <div class="topbar-actions">
-              <a href="./clinic-search.html" class="topbar-btn" title="Search patients">
-                <i class="fa-solid fa-magnifying-glass"></i>
-              </a>
-              <a href="./clinic-notifications.html" class="topbar-btn" title="Notifications">
-                <i class="fa-solid fa-bell"></i>
-                <span class="notification-badge" id="topbarNotificationBadge"></span>
-              </a>
-              <div class="staff-chip" id="staffChip" onclick="toggleStaffMenu(event)">
-                <div class="staff-avatar-sm" id="topbarAvatar">?</div>
-                <span class="staff-name-sm staff-name">Staff</span>
-                <i class="fa-solid fa-angle-down" id="staffIcon"></i>
-                <div class="staff-dropdown" id="staffDropdown">
-                  <div class="staff-dropdown-item" onclick="window.location.href='./clinic-settings.html'">
-                    <i class="fa-solid fa-gear"></i> Settings
-                  </div>
-                  <div class="staff-dropdown-item danger" onclick="clinicLogout()">
-                    <i class="fa-solid fa-right-from-bracket"></i> Logout
-                  </div>
-                </div>
-              </div>
+            <div class="logout-sidebar">
+            <div class="need-help">
+                <span>Need Help?</span>
+                <a href="mailto:support@novabuk.com"><i class="fa-solid fa-headset"></i><span>Contact Support</span> <i class="fa-solid fa-arrow-right"></i></a>
             </div>
-          </div>
-        </div>
+            <!-- <button class="sidebar-nav-btn sidebar-logout" data-tip="Logout" onclick="clinicLogout()">
+                <i class="fa-solid fa-right-from-bracket"></i> <span>Logout</span>
+            </button> -->
+            </div>
+        </aside>
 
-    <div class="workflow-shell">
-      <div class="workflow-heading">
-        <div>
-          <!-- <div style="color:#1e9aaa;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;margin-bottom:6px;"><i class="fa-solid fa-microscope"></i> Premium laboratory workflow</div> -->
-          <h1>Laboratory</h1>
-          <p>Process lab test requests ordered by doctors at your clinic.</p>
-        </div>
-        <div class="workflow-heading-actions">
-          <button class="workflow-button secondary" onclick="loadLabRequests()"><i class="fa-solid fa-arrows-rotate"></i> Refresh</button>
-        </div>
-      </div>
+        <main class="workflow-main">
+            <div class="workflow-shell">
+            <div class="workflow-heading">
+                <div>
+                <!-- <div style="color:#1e9aaa;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;margin-bottom:6px;"><i class="fa-solid fa-microscope"></i> Premium laboratory workflow</div> -->
+                <h1>Laboratory</h1>
+                <p>Process lab test requests ordered by doctors at your clinic.</p>
+                </div>
+                <div class="workflow-heading-actions">
+                <button class="workflow-button secondary" onclick="loadLabRequests()"><i class="fa-solid fa-arrows-rotate"></i> Refresh</button>
+                </div>
+            </div>
 
-      <section class="workflow-stat-grid">
-        <div class="workflow-stat"><div class="workflow-stat-icon amber"><i class="fa-solid fa-inbox"></i></div><div><strong id="statPending">0</strong><span>Awaiting sample collection</span></div></div>
-        <div class="workflow-stat"><div class="workflow-stat-icon teal"><i class="fa-solid fa-vial"></i></div><div><strong id="statCollected">0</strong><span>Sample collected, awaiting result</span></div></div>
-        <div class="workflow-stat"><div class="workflow-stat-icon purple"><i class="fa-solid fa-triangle-exclamation"></i></div><div><strong id="statUrgent">0</strong><span>Urgent requests</span></div></div>
-      </section>
+            <section class="workflow-stat-grid">
+                <div class="workflow-stat"><div class="workflow-stat-icon amber"><i class="fa-solid fa-inbox"></i></div><div><strong id="statPending">0</strong><span>Awaiting sample collection</span></div></div>
+                <div class="workflow-stat"><div class="workflow-stat-icon teal"><i class="fa-solid fa-vial"></i></div><div><strong id="statCollected">0</strong><span>Sample collected, awaiting result</span></div></div>
+                <div class="workflow-stat"><div class="workflow-stat-icon purple"><i class="fa-solid fa-triangle-exclamation"></i></div><div><strong id="statUrgent">0</strong><span>Urgent requests</span></div></div>
+            </section>
 
-      <section class="workflow-panel">
-        <div class="workflow-panel-header">
-          <div class="workflow-panel-title">
-            <i class="fa-solid fa-flask-vial" style="color:#1e9aaa"></i>
-            <div><h2>Lab request queue</h2><p>Every test your clinic's doctors have ordered that isn't finished yet</p></div>
-          </div>
-          <div class="workflow-toolbar">
-            <input class="workflow-input" id="labSearch" placeholder="Search patient or test" />
-            <select class="workflow-select" id="labStatus">
-              <option value="all">All in queue</option>
-              <option value="PENDING">Awaiting collection</option>
-              <option value="SAMPLE_COLLECTED">Awaiting result</option>
-            </select>
-          </div>
-        </div>
-        <div class="workflow-table-wrap">
-          <table class="workflow-table">
-            <thead><tr><th>Patient</th><th>Test(s)</th><th>Requested by</th><th>Priority</th><th>Requested</th><th>Status</th><th></th></tr></thead>
-            <tbody id="labRows"></tbody>
-          </table>
-        </div>
-        <div class="workflow-empty" id="labEmpty">
-          <i class="fa-solid fa-flask"></i>
-          <p id="labEmptyText">No lab requests match your search.</p>
-        </div>
-      </section>
+            <section class="workflow-panel">
+                <div class="workflow-panel-header">
+                <div class="workflow-panel-title">
+                    <i class="fa-solid fa-flask-vial" style="color:#1e9aaa"></i>
+                    <div><h2>Lab request queue</h2><p>Every test your clinic's doctors have ordered that isn't finished yet</p></div>
+                </div>
+                <div class="workflow-toolbar">
+                    <input class="workflow-input" id="labSearch" placeholder="Search patient or test" />
+                    <select class="workflow-select" id="labStatus">
+                    <option value="all">All in queue</option>
+                    <option value="PENDING">Awaiting collection</option>
+                    <option value="SAMPLE_COLLECTED">Awaiting result</option>
+                    </select>
+                </div>
+                </div>
+                <div class="workflow-table-wrap">
+                <table class="workflow-table">
+                    <thead><tr><th>Patient</th><th>Test(s)</th><th>Requested by</th><th>Priority</th><th>Requested</th><th>Status</th><th></th></tr></thead>
+                    <tbody id="labRows"></tbody>
+                </table>
+                </div>
+                <div class="workflow-empty" id="labEmpty">
+                <i class="fa-solid fa-flask"></i>
+                <p id="labEmptyText">No lab requests match your search.</p>
+                </div>
+            </section>
+            </div>
+        </main>
     </div>
-  </main>
-  </div>
 
-  <div class="workflow-modal-backdrop" id="labModal">
-    <div class="workflow-modal">
-      <div class="workflow-modal-head">
-        <div><h2 id="labModalTitle">Lab request</h2><p class="workflow-subtext" id="labModalMeta"></p></div>
-        <button class="workflow-close" onclick="closeLabModal()"><i class="fa-solid fa-xmark"></i></button>
-      </div>
-      <div class="workflow-detail-grid">
-        <div class="workflow-detail"><label>Patient</label><strong id="labPatientDetail"></strong></div>
-        <div class="workflow-detail"><label>Requested by</label><strong id="labDoctorDetail"></strong></div>
-      </div>
-      <div id="labActionBanner"></div>
-      <div id="labItems"></div>
-      <div id="labSaveArea" style="display:flex;justify-content:flex-end;gap:10px;margin-top:6px;"></div>
+    <div class="workflow-modal-backdrop" id="labModal">
+        <div class="workflow-modal">
+        <div class="workflow-modal-head">
+            <div><h2 id="labModalTitle">Lab request</h2><p class="workflow-subtext" id="labModalMeta"></p></div>
+            <button class="workflow-close" onclick="closeLabModal()"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div class="workflow-detail-grid">
+            <div class="workflow-detail"><label>Patient</label><strong id="labPatientDetail"></strong></div>
+            <div class="workflow-detail"><label>Requested by</label><strong id="labDoctorDetail"></strong></div>
+        </div>
+        <div id="labActionBanner"></div>
+        <div id="labItems"></div>
+        <div id="labSaveArea" style="display:flex;justify-content:flex-end;gap:10px;margin-top:6px;"></div>
+        </div>
     </div>
-  </div>
+
+  
 
   <div class="lab-toast" id="labToast"></div>
 
@@ -386,11 +350,18 @@
           </div>
           ${i.clinicalNotes ? `<div class="lab-item-notes"><i class="fa-solid fa-note-sticky"></i> ${i.clinicalNotes}</div>` : ''}
           ${i.resultText
-            ? `<div class="lab-result-text"><i class="fa-solid fa-check"></i> ${i.resultText}</div>`
+            ? `<div class="lab-result-text"><i class="fa-solid fa-check"></i> ${i.resultText}</div>
+               ${i.resultFileUrl ? `<a href="${i.resultFileUrl}" target="_blank" class="lab-result-file-link"><i class="fa-solid fa-paperclip"></i> View attached file</a>` : ''}`
             : (!isPending
                 ? `<div class="lab-result-form">
                      <span class="lab-field-label">Result for ${i.testName}</span>
                      <textarea id="result-${i._id}" placeholder="Enter the result…"></textarea>
+                     <div class="lab-file-attach">
+                       <label class="lab-file-attach-btn" for="file-${i._id}">
+                         <i class="fa-solid fa-paperclip"></i> <span id="fileLabel-${i._id}">Attach file (optional — scan, image)</span>
+                       </label>
+                       <input type="file" id="file-${i._id}" accept="image/*,.pdf" style="display:none;" onchange="handleResultFileSelect('${i._id}')">
+                     </div>
                    </div>`
                 : '')}
         </div>`).join('');
@@ -435,10 +406,67 @@
       }
     }
 
+    let labCloudCfg = null;
+    const pendingResultFiles = {}; // itemId -> uploaded secure_url
+
+    async function getLabCloudCfg() {
+      if (labCloudCfg) return labCloudCfg;
+      const res = await clinicFetch(`${API_URL}/uploads/cloudinary/sign`, { method: 'POST' });
+      labCloudCfg = await res.json();
+      return labCloudCfg;
+    }
+
+    async function handleResultFileSelect(itemId) {
+      const input = document.getElementById(`file-${itemId}`);
+      const label = document.getElementById(`fileLabel-${itemId}`);
+      const btn = input?.previousElementSibling;
+      const file = input?.files[0];
+      if (!file) return;
+
+      if (file.size > 10 * 1024 * 1024) {
+        showToast('File must be under 10MB.', true);
+        input.value = '';
+        return;
+      }
+
+      label.textContent = 'Uploading…';
+      try {
+        const cfg = await getLabCloudCfg();
+        const form = new FormData();
+        form.append('file', file);
+        if (cfg.unsigned) {
+          form.append('upload_preset', cfg.upload_preset);
+        } else {
+          form.append('signature', cfg.signature);
+          form.append('timestamp', cfg.timestamp);
+          form.append('api_key', cfg.api_key);
+        }
+        const res = await fetch(`https://api.cloudinary.com/v1_1/${cfg.cloud_name}/auto/upload`, {
+          method: 'POST',
+          body: form,
+        });
+        const data = await res.json();
+        if (!data.secure_url) throw new Error('Upload failed');
+
+        pendingResultFiles[itemId] = data.secure_url;
+        label.textContent = file.name;
+        if (btn) btn.classList.add('attached');
+      } catch (err) {
+        console.error('Result file upload error:', err);
+        showToast('File upload failed. You can still save the text result without it.', true);
+        label.textContent = 'Attach file (optional — scan, image)';
+        input.value = '';
+      }
+    }
+
     async function saveLabResults() {
       const entries = activeLab.items
         .filter(i => !i.resultText)
-        .map(i => ({ itemId: i._id, resultText: document.getElementById(`result-${i._id}`)?.value.trim() || '' }))
+        .map(i => ({
+          itemId: i._id,
+          resultText: document.getElementById(`result-${i._id}`)?.value.trim() || '',
+          resultFileUrl: pendingResultFiles[i._id] || null,
+        }))
         .filter(e => e.resultText);
 
       if (!entries.length) {
@@ -450,7 +478,7 @@
         for (const entry of entries) {
           const res = await clinicFetch(`${CLINIC_API}/lab-requests/${activeLab._id}/items/${entry.itemId}/result`, {
             method: 'PATCH',
-            body: JSON.stringify({ resultText: entry.resultText }),
+            body: JSON.stringify({ resultText: entry.resultText, resultFileUrl: entry.resultFileUrl }),
           });
           const data = await res.json();
           if (!data.success) throw new Error(data.message || 'Could not save this result.');

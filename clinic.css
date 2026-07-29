@@ -62,7 +62,7 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 1px 24px;
+    padding: 10px 24px;
     width: 100%;
     background: rgba(255, 255, 255, 0.7);
     backdrop-filter: blur(12px);
@@ -344,12 +344,12 @@ body {
     display: flex;
     align-items: center;
     gap: 20px;
-    width:100% !important;
+    /* width:100% !important; */
 }
 .topbar-left {
     display: flex;
     flex-direction: column;
-    align-items: center;
+    /* align-items: center; */
     gap: 10px;
     width: 100%;
     padding: 14px 12px;
@@ -361,6 +361,9 @@ body {
     display: flex;
     align-items: center;
     gap: 20px;
+}
+.topbar-left a{
+    font-size: 22px;
 }
 
 .topbar-clinic {
@@ -1397,8 +1400,9 @@ body {
     margin-top: 30px;
 }
 
-.hour-row {
-    display: grid;
+.hour-row, .hrs-combined{
+    display: flex;
+    justify-content: space-between;
     grid-template-columns: 100px 1fr 1fr;
     align-items: center;
     gap: 10px;
@@ -1421,7 +1425,25 @@ body {
     font-size: 12px !important;
 }
 
-
+@media (max-width: 375px) {
+    .hour-row{
+        /* grid-template-columns: 1fr 1fr; */
+        flex-direction: column;
+        padding: 10px 0;
+        align-items: flex-start;
+    }
+     .hrs-combined{
+        /* flex-direction: column; */
+        align-items: flex-start;
+    }
+    .hour-day {
+        font-size: 12px;
+    }
+    .hour-time input {
+        padding: 4px 6px !important;
+        font-size: 11px !important;
+    }
+}
 
 @media (max-width: 1024px) {
     .layout {
@@ -1445,6 +1467,8 @@ body {
         padding: 0 8px;
         justify-content: space-around;
         box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.1);
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
     }
 
     .sidebar-icon {
@@ -1452,6 +1476,7 @@ body {
         /* background: transparent; */
         padding: 0;
         width: 100%;
+        min-width: max-content;
         justify-content: space-around;
         align-items: center;
     }
@@ -1505,12 +1530,34 @@ body {
     }
 }
 
+/* Six nav items with labels need more room than a typical phone width
+   gives them. Below ~430px, drop the text labels and go icon-only so
+   every item still fits and stays reachable without swiping. */
+@media (max-width: 430px) {
+    .sidebar-icon {
+        min-width: 0;
+    }
+
+    .sidebar-nav-btn span {
+        display: none;
+    }
+
+    .sidebar-nav-btn {
+        height: 44px;
+    }
+
+    .sidebar-nav-btn i {
+        font-size: 19px;
+    }
+}
+
 @media (max-width: 768px) {
     .header {
         z-index: 1000;
-        padding: 12px 16px;
-        flex-wrap: wrap;
-        row-gap: 8px;
+        padding: 12px 5px;
+        gap: 2px;
+        /* flex-wrap: wrap; */
+        /* row-gap: 8px; */
         align-items: center;
     }
 
@@ -1533,6 +1580,11 @@ body {
 
     .topbar-left {
         gap: 2px;
+        padding: 0px;
+    }
+    .topbar-left a, .topbar-left h3{
+        font-size: 18px;
+        gap: 5px;
     }
 
     .topbar-clinic {
@@ -1544,6 +1596,20 @@ body {
         display: block;
         font-size: 11.5px;
         color: black;
+    }
+    .topbar-actions a{
+        gap: 4px;
+        /* font-size: 2px; */
+    }
+    .topbar-actions .topbar-btn{
+        /* font-size: 1px; */
+        height: 28px;
+        width: 28px;
+    }
+    .staff-chip{
+        /* padding: 18px 8px 18px 4px; */
+        height: 38px;
+        width: auto;
     }
 
     /* the standalone hero banner duplicated what the sticky header now

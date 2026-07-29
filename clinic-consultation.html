@@ -419,8 +419,8 @@
       </aside>
 
       <main class="main">
-        <div class="header" style="width:100%;">
-          <div class="logo">
+        <div class="header">
+          <div class="lo">
             <div class="logo-detail">
               <div class="topbar-left">
                 <h3>Consultation</h3>
@@ -546,6 +546,27 @@
             </div>
           </div>
 
+          <!-- Pharmacy Order — structured, sent immediately (Premium) -->
+          <div class="consult-card" id="pharmacyOrderCard">
+            <div class="card-label" style="justify-content: space-between;">
+              <span><i class="fa-solid fa-prescription-bottle-medical"></i> Pharmacy Order</span>
+              <span style="font-size:10px;background:#f1ecff;color:#6941c6;padding:4px 9px;border-radius:20px;">PREMIUM</span>
+            </div>
+            <!-- <p style="font-weight:400; font-size:11px; color:var(--text-light); margin:-4px 0 10px;">
+              Sends straight to the pharmacy the moment you click Send — the pharmacist can start preparing it while you're still with the patient, instead of waiting until the whole consultation is complete.
+            </p> -->
+            <div id="pharmacyOrderRows"></div>
+            <div id="pharmacyOrderControls">
+              <button type="button" onclick="addPharmacyOrderRow()" style="margin-top:4px; padding:6px 14px; border:1px dashed var(--border, #ccc); background:none; border-radius:8px; font-size:12px; color:var(--teal, #35bac9); cursor:pointer;">
+                <i class="fa-solid fa-plus"></i> Add drug
+              </button>
+              <button type="button" onclick="sendToPharmacy()" id="sendToPharmacyBtn" style="margin-top:4px; margin-left:8px; padding:6px 16px; border:none; background:var(--teal, #35bac9); color:#fff; border-radius:8px; font-size:12px; cursor:pointer;">
+                <i class="fa-solid fa-paper-plane"></i> Send to Pharmacy
+              </button>
+            </div>
+            <div id="pharmacyOrderStatus"></div>
+          </div>
+
           <!-- Medication Reminders (structured, feeds the reminder system) -->
           <div class="consult-card">
             <div class="card-label"><i class="fa-solid fa-bell"></i> Medication Reminders <span style="font-weight:400; font-size:11px; color:var(--text-light);">(optional — sends the patient dose reminders)</span></div>
@@ -570,6 +591,27 @@
               <textarea id="fTests" placeholder="List required lab tests or imaging investigations…"
                 oninput="scheduleAutosave()"></textarea>
             </div>
+          </div>
+
+          <!-- Lab Requests — structured, sent immediately (Premium) -->
+          <div class="consult-card" id="labRequestCard">
+            <div class="card-label" style="justify-content: space-between;">
+              <span><i class="fa-solid fa-flask-vial"></i> Lab Requests</span>
+              <span style="font-size:10px;background:#f1ecff;color:#6941c6;padding:4px 9px;border-radius:20px;">PREMIUM</span>
+            </div>
+            <!-- <p style="font-weight:400; font-size:11px; color:var(--text-light); margin:-4px 0 10px;">
+              Sends straight to the lab the moment you click Send, so the sample can be collected and the result can come back to you before you finish this consultation — rather than only being ordered once you're done.
+            </p> -->
+            <div id="labRequestRows"></div>
+            <div id="labRequestControls">
+              <button type="button" onclick="addLabRequestRow()" style="margin-top:4px; padding:6px 14px; border:1px dashed var(--border, #ccc); background:none; border-radius:8px; font-size:12px; color:var(--teal, #35bac9); cursor:pointer;">
+                <i class="fa-solid fa-plus"></i> Add test
+              </button>
+              <button type="button" onclick="sendToLab()" id="sendToLabBtn" style="margin-top:4px; margin-left:8px; padding:6px 16px; border:none; background:var(--teal, #35bac9); color:#fff; border-radius:8px; font-size:12px; cursor:pointer;">
+                <i class="fa-solid fa-paper-plane"></i> Send to Lab
+              </button>
+            </div>
+            <div id="labRequestStatus"></div>
           </div>
 
           <!-- Advice / Instructions -->
@@ -878,6 +920,14 @@
           const el = document.getElementById(id);
           if (el) el.readOnly = true;
         });
+        // Feature 4 state loads independently (loadFeature4State) and
+        // will already show a status view if something was sent — this
+        // just makes sure a visit that's closed with NOTHING sent
+        // doesn't still invite new sends after the fact.
+        const pharmControls = document.getElementById("pharmacyOrderControls");
+        const labControls = document.getElementById("labRequestControls");
+        if (pharmControls) pharmControls.style.display = "none";
+        if (labControls) labControls.style.display = "none";
         if (completeBarEl) {
           completeBarEl.innerHTML = `<div style="color:var(--teal); font-weight:700;"><i class="fa-solid fa-circle-check"></i> This consultation record is complete.</div>`;
         }
@@ -981,6 +1031,302 @@
       document.getElementById("completeBtnLg").disabled = !has;
     }
 
+    // ═══════════════════════════════════════════════════════════
+    // PHARMACY ORDER + LAB REQUESTS — sent immediately, not batched
+    // at the end of the consultation. A doctor ordering a test needs
+    // the result back WHILE they're still deciding on diagnosis and
+    // treatment, and a pharmacist should be able to start preparing a
+    // prescription the moment it's written, not after the whole
+    // visit is closed out.
+    // ═══════════════════════════════════════════════════════════
+    let clinicIsPro = false;
+    let pharmacyOrderRowCount = 0;
+    let labRequestRowCount = 0;
+    let labPollTimer = null;
+
+    // ── PLAN GATING ──────────────────────────────────────────
+    async function loadClinicPlan() {
+      try {
+        const res = await clinicFetch(`${API_URL}/clinics/my`);
+        const data = await res.json();
+        clinicIsPro = data.success && data.clinic?.subscriptionPlan === "Pro";
+      } catch (err) {
+        clinicIsPro = false; // fail closed
+      }
+      if (!clinicIsPro) applyPlanLock();
+      loadFeature4State();
+    }
+
+    function applyPlanLock() {
+      const notice = (label) => `
+        <div class="card-label" style="justify-content: space-between">
+          <span>${label}</span>
+          <span style="font-size:10px;background:#f1ecff;color:#6941c6;padding:4px 9px;border-radius:20px;">PREMIUM</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;padding:14px;background:#faf8ff;border:1px dashed #d8c9f7;border-radius:10px;color:#6941c6;font-size:12px;">
+          <i class="fa-solid fa-lock"></i>
+          This feature is available on the Premium plan. Upgrade to unlock lab and pharmacy workflow.
+        </div>`;
+      const pharm = document.getElementById("pharmacyOrderCard");
+      const lab = document.getElementById("labRequestCard");
+      if (pharm) pharm.innerHTML = notice('<i class="fa-solid fa-prescription-bottle-medical"></i> Pharmacy Order');
+      if (lab) lab.innerHTML = notice('<i class="fa-solid fa-flask-vial"></i> Lab Requests');
+    }
+
+    // ── PHARMACY ORDER ROWS ──────────────────────────────────
+    const ROUTE_MAP = { Oral: "oral", Topical: "topical", IV: "IV", IM: "IM" };
+
+    function addPharmacyOrderRow() {
+      const id = pharmacyOrderRowCount++;
+      const container = document.getElementById("pharmacyOrderRows");
+      const row = document.createElement("div");
+      row.id = `pharmRow-${id}`;
+      row.className = "pharm-order-row";
+      row.style.cssText = "display:grid; grid-template-columns:1.3fr 0.8fr 0.7fr 1fr 0.5fr auto; gap:6px; margin-bottom:8px; align-items:center;";
+      row.innerHTML = `
+        <input type="text" placeholder="Drug name" class="pharm-drug" style="padding:8px; border:1px solid var(--border, #ccc); border-radius:6px; font-size:12px;" />
+        <input type="text" placeholder="Dosage" class="pharm-dosage" style="padding:8px; border:1px solid var(--border, #ccc); border-radius:6px; font-size:12px;" />
+        <select class="pharm-route" style="padding:8px; border:1px solid var(--border, #ccc); border-radius:6px; font-size:12px;">
+          <option>Oral</option><option>Topical</option><option>IV</option><option>IM</option>
+        </select>
+        <input type="text" placeholder="Frequency (e.g. Twice daily)" class="pharm-frequency" style="padding:8px; border:1px solid var(--border, #ccc); border-radius:6px; font-size:12px;" />
+        <input type="number" min="1" placeholder="Days" class="pharm-duration" style="padding:8px; border:1px solid var(--border, #ccc); border-radius:6px; font-size:12px;" />
+        <button type="button" onclick="document.getElementById('pharmRow-${id}').remove()" style="background:none; border:none; color:#e53e3e; cursor:pointer; padding:4px;"><i class="fa-solid fa-trash"></i></button>
+      `;
+      container.appendChild(row);
+    }
+
+    function getPharmacyOrderRowsData() {
+      return [...document.querySelectorAll("#pharmacyOrderRows > div")]
+        .map((row) => {
+          const drugName = row.querySelector(".pharm-drug")?.value.trim();
+          const dosage = row.querySelector(".pharm-dosage")?.value.trim();
+          const durationDays = row.querySelector(".pharm-duration")?.value;
+          if (!drugName || !dosage || !durationDays) return null;
+          return {
+            drugName,
+            dosage,
+            route: ROUTE_MAP[row.querySelector(".pharm-route")?.value] || "oral",
+            frequency: row.querySelector(".pharm-frequency")?.value.trim() || "",
+            durationDays: Number(durationDays),
+            specialNotes: "",
+          };
+        })
+        .filter(Boolean);
+    }
+
+    // ── LAB REQUEST ROWS ─────────────────────────────────────
+    function addLabRequestRow() {
+      const id = labRequestRowCount++;
+      const container = document.getElementById("labRequestRows");
+      const row = document.createElement("div");
+      row.id = `labRow-${id}`;
+      row.className = "lab-request-row";
+      row.style.cssText = "display:grid; grid-template-columns:1.3fr 0.8fr 0.7fr 1.2fr auto; gap:6px; margin-bottom:8px; align-items:center;";
+      row.innerHTML = `
+        <input type="text" placeholder="Test name" class="lab-test" style="padding:8px; border:1px solid var(--border, #ccc); border-radius:6px; font-size:12px;" />
+        <select class="lab-sample" style="padding:8px; border:1px solid var(--border, #ccc); border-radius:6px; font-size:12px;">
+          <option>Blood</option><option>Urine</option><option>Stool</option><option>Swab</option><option>Other</option>
+        </select>
+        <select class="lab-urgency" style="padding:8px; border:1px solid var(--border, #ccc); border-radius:6px; font-size:12px;">
+          <option>Routine</option><option>Urgent</option>
+        </select>
+        <input type="text" placeholder="Clinical notes (optional)" class="lab-notes" style="padding:8px; border:1px solid var(--border, #ccc); border-radius:6px; font-size:12px;" />
+        <button type="button" onclick="document.getElementById('labRow-${id}').remove()" style="background:none; border:none; color:#e53e3e; cursor:pointer; padding:4px;"><i class="fa-solid fa-trash"></i></button>
+      `;
+      container.appendChild(row);
+    }
+
+    function getLabRequestRowsData() {
+      return [...document.querySelectorAll("#labRequestRows > div")]
+        .map((row) => {
+          const testName = row.querySelector(".lab-test")?.value.trim();
+          if (!testName) return null;
+          return {
+            testName,
+            sampleType: row.querySelector(".lab-sample")?.value || "Other",
+            urgency: row.querySelector(".lab-urgency")?.value || "Routine",
+            clinicalNotes: row.querySelector(".lab-notes")?.value.trim() || "",
+          };
+        })
+        .filter(Boolean);
+    }
+
+    // ── SEND ACTIONS ─────────────────────────────────────────
+    async function sendToPharmacy() {
+      const items = getPharmacyOrderRowsData();
+      if (!items.length) {
+        alert("Add at least one drug with a name, dosage, and duration before sending.");
+        return;
+      }
+      const btn = document.getElementById("sendToPharmacyBtn");
+      btn.disabled = true;
+      btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Sending…';
+      try {
+        const res = await clinicFetch(`${CLINIC_API}/visits/${visitId}/prescriptions`, {
+          method: "POST",
+          body: JSON.stringify({ items }),
+        });
+        const data = await res.json();
+        if (!data.success) throw new Error(data.message || "Could not send to pharmacy.");
+        renderPharmacyStatus(data.data);
+      } catch (err) {
+        alert(err.message || "Could not send to pharmacy. Please try again.");
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Send to Pharmacy';
+      }
+    }
+
+    async function sendToLab() {
+      const items = getLabRequestRowsData();
+      if (!items.length) {
+        alert("Add at least one test before sending.");
+        return;
+      }
+      const btn = document.getElementById("sendToLabBtn");
+      btn.disabled = true;
+      btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Sending…';
+      try {
+        const res = await clinicFetch(`${CLINIC_API}/visits/${visitId}/lab-requests`, {
+          method: "POST",
+          body: JSON.stringify({ items }),
+        });
+        const data = await res.json();
+        if (!data.success) throw new Error(data.message || "Could not send to lab.");
+        renderLabStatus(data.data);
+        startLabPolling();
+      } catch (err) {
+        alert(err.message || "Could not send to lab. Please try again.");
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Send to Lab';
+      }
+    }
+
+    // ── STATUS VIEWS (read-only, once sent) ──────────────────
+    function renderPharmacyStatus(prescription) {
+      document.getElementById("pharmacyOrderRows").innerHTML = "";
+      document.getElementById("pharmacyOrderControls").style.display = "none";
+      const anyDispensed = prescription.items.some((item) => item.dispensed);
+      const rows = prescription.items.map((item) => `
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 12px;border:1px solid #e2e8f0;border-radius:8px;margin-bottom:6px;font-size:12px;">
+          <div><strong>${item.drugName}</strong> — ${item.dosage} · ${item.route} · ${item.frequency} · ${item.durationDays}d</div>
+          <span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:20px;${item.dispensed ? "background:#e9f8ef;color:#198754" : "background:#f1ecff;color:#6941c6"}">${item.dispensed ? "Dispensed" : "Sent — awaiting pharmacy"}</span>
+        </div>`).join("");
+      document.getElementById("pharmacyOrderStatus").innerHTML = `
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+          <span style="font-size:11px;color:#198754;font-weight:600;"><i class="fa-solid fa-circle-check"></i> Sent to pharmacy</span>
+          <div style="display:flex;gap:12px;align-items:center;">
+            <a href="${CLINIC_API}/prescriptions/${prescription._id}/pdf" target="_blank" style="font-size:11px;color:var(--teal-dark, #1e9aaa);text-decoration:none;"><i class="fa-solid fa-download"></i> PDF</a>
+            ${!anyDispensed ? `<button type="button" onclick="cancelPharmacyOrder('${prescription._id}')" style="background:none;border:none;color:#e53e3e;font-size:11px;cursor:pointer;padding:0;"><i class="fa-solid fa-xmark"></i> Cancel</button>` : ""}
+          </div>
+        </div>
+        ${rows}`;
+    }
+
+    async function cancelPharmacyOrder(id) {
+      if (!confirm("Cancel this pharmacy order? This can't be undone.")) return;
+      try {
+        const res = await clinicFetch(`${CLINIC_API}/prescriptions/${id}`, { method: "DELETE" });
+        const data = await res.json();
+        if (!data.success) throw new Error(data.message || "Could not cancel.");
+        document.getElementById("pharmacyOrderStatus").innerHTML = "";
+        document.getElementById("pharmacyOrderControls").style.display = "";
+      } catch (err) {
+        alert(err.message || "Could not cancel this order. Please try again.");
+      }
+    }
+
+    function renderLabStatus(labRequest) {
+      document.getElementById("labRequestRows").innerHTML = "";
+      document.getElementById("labRequestControls").style.display = "none";
+      const statusLabel = { PENDING: "Sent — awaiting sample collection", SAMPLE_COLLECTED: "Sample collected — awaiting result", RESULT_READY: "Result ready" };
+      const rows = labRequest.items.map((item) => `
+        <div style="padding:10px 12px;border:1px solid #e2e8f0;border-radius:8px;margin-bottom:6px;font-size:12px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;">
+            <strong>${item.testName}</strong>
+            <span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:20px;${labRequest.status === "RESULT_READY" ? "background:#e9f8ef;color:#198754" : "background:#fff5dc;color:#a86c00"}">${labRequest.status === "RESULT_READY" ? "Ready" : "Pending"}</span>
+          </div>
+          ${item.resultText ? `<div style="margin-top:6px;color:#444;"><strong>Result:</strong> ${item.resultText}</div>` : ""}
+          ${item.resultFileUrl ? `<a href="${item.resultFileUrl}" target="_blank" style="display:inline-flex;align-items:center;gap:5px;margin-top:6px;font-size:11px;color:var(--teal-dark, #1e9aaa);text-decoration:none;"><i class="fa-solid fa-paperclip"></i> View attached result file</a>` : ""}
+        </div>`).join("");
+      document.getElementById("labRequestStatus").innerHTML = `
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+          <span style="font-size:11px;color:${labRequest.status === "RESULT_READY" ? "#198754" : "#a86c00"};font-weight:600;"><i class="fa-solid ${labRequest.status === "RESULT_READY" ? "fa-circle-check" : "fa-clock"}"></i> ${statusLabel[labRequest.status]}</span>
+          <div style="display:flex;gap:12px;align-items:center;">
+            ${labRequest.status !== "RESULT_READY" ? `<button type="button" onclick="checkLabStatus()" style="background:none;border:1px solid var(--border,#ccc);border-radius:6px;padding:4px 10px;font-size:11px;cursor:pointer;"><i class="fa-solid fa-arrows-rotate"></i> Check now</button>` : ""}
+            ${labRequest.status === "PENDING" ? `<button type="button" onclick="cancelLabRequest('${labRequest._id}')" style="background:none;border:none;color:#e53e3e;font-size:11px;cursor:pointer;padding:0;"><i class="fa-solid fa-xmark"></i> Cancel</button>` : ""}
+          </div>
+        </div>
+        ${rows}`;
+    }
+
+    async function cancelLabRequest(id) {
+      if (!confirm("Cancel this lab request? This can't be undone.")) return;
+      try {
+        const res = await clinicFetch(`${CLINIC_API}/lab-requests/${id}`, { method: "DELETE" });
+        const data = await res.json();
+        if (!data.success) throw new Error(data.message || "Could not cancel.");
+        if (labPollTimer) { clearInterval(labPollTimer); labPollTimer = null; }
+        document.getElementById("labRequestStatus").innerHTML = "";
+        document.getElementById("labRequestControls").style.display = "";
+        if (data.message && data.message.includes("not reversed")) {
+          alert(data.message);
+        }
+      } catch (err) {
+        alert(err.message || "Could not cancel this request. Please try again.");
+      }
+    }
+
+    // ── LAB POLLING ───────────────────────────────────────────
+    // Once sent, quietly re-checks every 25s so a result that comes
+    // back while the doctor is still with the patient shows up
+    // without them needing to leave the page. Stops automatically
+    // once the result is ready.
+    function startLabPolling() {
+      if (labPollTimer) clearInterval(labPollTimer);
+      labPollTimer = setInterval(checkLabStatus, 25000);
+    }
+
+    async function checkLabStatus() {
+      try {
+        const res = await clinicFetch(`${CLINIC_API}/visits/${visitId}/lab-requests`);
+        const data = await res.json();
+        if (data.success && data.data.length > 0) {
+          const labRequest = data.data[0];
+          renderLabStatus(labRequest);
+          if (labRequest.status === "RESULT_READY" && labPollTimer) {
+            clearInterval(labPollTimer);
+            labPollTimer = null;
+          }
+        }
+      } catch (err) {
+        console.error("Check lab status error:", err);
+      }
+    }
+
+    // ── LOAD EXISTING STATE (already sent earlier / page reload) ──
+    async function loadFeature4State() {
+      if (!clinicIsPro) return; // cards already replaced with the upgrade notice
+      try {
+        const [presRes, labRes] = await Promise.all([
+          clinicFetch(`${CLINIC_API}/visits/${visitId}/prescriptions`),
+          clinicFetch(`${CLINIC_API}/visits/${visitId}/lab-requests`),
+        ]);
+        const presData = await presRes.json();
+        const labData = await labRes.json();
+
+        if (presData.success && presData.data.length > 0) {
+          renderPharmacyStatus(presData.data[0]);
+        }
+        if (labData.success && labData.data.length > 0) {
+          renderLabStatus(labData.data[0]);
+          if (labData.data[0].status !== "RESULT_READY") startLabPolling();
+        }
+      } catch (err) {
+        console.error("Load Feature 4 state error:", err);
+      }
+    }
+
     // ── COMPLETE VISIT ───────────────────────────────────────
     async function completeVisit() {
       if (isDone) return;
@@ -1056,6 +1402,7 @@
     }
 
     // ── INIT ─────────────────────────────────────────────────
+    loadClinicPlan();
     loadVisit();
   </script>
 </body>

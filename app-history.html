@@ -807,6 +807,7 @@
           <div style="padding:8px 0;border-bottom:1px solid #f0f0f0;font-size:12px;">
             <strong>${item.testName}</strong> <span style="color:#888;">(${item.sampleType})</span>
             ${item.resultText ? `<div style="margin-top:4px;color:#444;">${item.resultText}</div>` : ""}
+            ${item.resultFileUrl ? `<a href="${item.resultFileUrl}" target="_blank" style="display:inline-flex;align-items:center;gap:5px;margin-top:4px;font-size:11px;color:#35bac9;text-decoration:none;"><i class="fa-solid fa-paperclip"></i> View attached result file</a>` : ""}
           </div>`,
           )
           .join("");

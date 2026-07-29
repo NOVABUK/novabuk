@@ -80,11 +80,65 @@
       }
 
       /* Staff Table Styling */
+      .staff-table-wrap {
+        width: 100%;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+      }
       .staff-table {
         width: 100%;
+        min-width: 480px; /* keeps columns legible; the wrapper scrolls instead of squishing them */
         border-collapse: collapse;
         margin-top: 8px;
         font-size: 13px;
+      }
+      /* Below 600px a scrolling table is still awkward on a phone, so the
+         table itself turns into a stack of labeled mini-cards instead. */
+      @media (max-width: 600px) {
+        .staff-table-wrap {
+          overflow-x: visible;
+        }
+        .staff-table {
+          min-width: 0;
+        }
+        .staff-table thead {
+          display: none;
+        }
+        .staff-table tbody tr {
+          display: block;
+          border: 1.5px solid var(--border);
+          border-radius: 12px;
+          margin-bottom: 10px;
+          padding: 10px 12px;
+        }
+        .staff-table tbody td {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          gap: 12px;
+          padding: 7px 0;
+          border-bottom: none;
+          text-align: right;
+        }
+        .staff-table tbody td[data-label]::before {
+          content: attr(data-label);
+          font-size: 11px;
+          font-weight: 600;
+          text-transform: uppercase;
+          letter-spacing: 0.3px;
+          color: var(--light);
+          text-align: left;
+          flex-shrink: 0;
+        }
+        .staff-table tbody td:first-child {
+          font-size: 14px;
+        }
+        .staff-table tbody td:last-child {
+          justify-content: flex-end;
+          padding-top: 10px;
+          border-top: 1px solid var(--border);
+          margin-top: 4px;
+        }
       }
       .staff-table th {
         text-align: left;
@@ -95,6 +149,7 @@
         text-transform: uppercase;
         font-size: 11px;
         letter-spacing: 0.5px;
+        white-space: nowrap;
       }
       .staff-table td {
         padding: 14px 10px;
@@ -274,14 +329,6 @@
         justify-content: space-between;
         align-items: center;
       }
-      @media(max-width: 772px){
-        .staff
-        .staff-table .email-staff{
-          width: auto;
-          display: flex;
-          flex-wrap: wrap;
-        }
-      }
     </style>
   </head>
 
@@ -394,8 +441,8 @@
         <div class="header">
           <div class="logo">
             <div class="logo-detail">
-              <div class="topbar-left" style="padding: 30px;">
-                <h3 style="font-size: 28px;">Settings</h3>
+              <div class="topbar-left">
+                <a href="./clinic-queue.html"><i class="fa-solid fa-arrow-left"></i> Settings</a>
                 <!-- <div class="topbar-clinic clinic-name" id="topbarClinicName">
                   <script>
                     (function () {
@@ -497,7 +544,7 @@
 
           <!-- Clinic details -->
           <div class="card">
-            <div class="card-head" style="">
+            <div class="card-head">
               <h3>Clinic Information</h3>
               <button
                 id="editToggleBtn"
@@ -678,11 +725,13 @@
                           <span>Mon - Fri</span>
                         </label>
                       </div>
-                      <div class="hour-time">
-                        <input type="time" id="hMonFriStart" disabled />
-                      </div>
-                      <div class="hour-time">
-                        <input type="time" id="hMonFriEnd" disabled />
+                      <div class="hrs-combined">
+                        <div class="hour-time">
+                          <input type="time" id="hMonFriStart" disabled />
+                        </div>
+                        <div class="hour-time">
+                          <input type="time" id="hMonFriEnd" disabled />
+                        </div>
                       </div>
                     </div>
 
@@ -699,11 +748,13 @@
                           <span>Saturday</span>
                         </label>
                       </div>
-                      <div class="hour-time">
-                        <input type="time" id="hSatStart" disabled />
-                      </div>
-                      <div class="hour-time">
-                        <input type="time" id="hSatEnd" disabled />
+                      <div class="hrs-combined">
+                        <div class="hour-time">
+                          <input type="time" id="hSatStart" disabled />
+                        </div>
+                        <div class="hour-time">
+                          <input type="time" id="hSatEnd" disabled />
+                        </div>
                       </div>
                     </div>
 
@@ -720,11 +771,13 @@
                           <span>Sunday</span>
                         </label>
                       </div>
-                      <div class="hour-time">
-                        <input type="time" id="hSunStart" disabled />
-                      </div>
-                      <div class="hour-time">
-                        <input type="time" id="hSunEnd" disabled />
+                      <div class="hrs-combined">
+                        <div class="hour-time">
+                          <input type="time" id="hSunStart" disabled />
+                        </div>
+                        <div class="hour-time">
+                          <input type="time" id="hSunEnd" disabled />
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -2017,7 +2070,7 @@
 
           const activityHeader = SHOW_STAFF_ACTIVITY_MONITORING ? "<th>Last Active</th>" : "";
 
-          let html = `<table class="staff-table">
+          let html = `<div class="staff-table-wrap"><table class="staff-table">
               <thead><tr>
                 <th>Name</th>
                 <th>Email</th>
@@ -2028,12 +2081,12 @@
 
           data.data.forEach((s) => {
             const activityCell = SHOW_STAFF_ACTIVITY_MONITORING
-              ? `<td style="font-size:12px; color:var(--light);">${timeAgoOrNever(s.lastLoginAt)}</td>`
+              ? `<td data-label="Last Active" style="font-size:12px; color:var(--light);">${timeAgoOrNever(s.lastLoginAt)}</td>`
               : "";
             html += `<tr>
-                <td style="font-weight:600;">${s.fullName}</td>
-                <td class ="email-staff" >${s.email}</td>
-                <td><span class="role-badge role-${s.role}">${s.role}</span></td>
+                <td data-label="Name" style="font-weight:600;">${s.fullName}</td>
+                <td data-label="Email" class="staff-email">${s.email}</td>
+                <td data-label="Role"><span class="role-badge role-${s.role}">${s.role}</span></td>
                 ${activityCell}
                 <td style="white-space:nowrap;">
                   <button class="btn-delete-staff" onclick="openEditStaffModal('${s._id}', '${s.fullName}', '${s.role}')" title="Edit role" style="margin-right:6px;"><i class="fa-solid fa-pen"></i></button>
@@ -2042,7 +2095,7 @@
               </tr>`;
           });
 
-          html += "</tbody></table>";
+          html += "</tbody></table></div>";
           container.innerHTML = html;
         } catch (e) {
           console.error("Load staff error:", e);
