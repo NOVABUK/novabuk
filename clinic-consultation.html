@@ -1195,6 +1195,12 @@
         if (!data.success) throw new Error(data.message || "Could not send to lab.");
         renderLabStatus(data.data);
         startLabPolling();
+        if (data.billWarning) {
+          // The lab request itself was created fine — this is purely
+          // about the billing side not landing anywhere, which
+          // shouldn't block the clinical action, just be visible.
+          setTimeout(() => alert(`Sent to lab. Note: ${data.billWarning}`), 200);
+        }
       } catch (err) {
         alert(err.message || "Could not send to lab. Please try again.");
         btn.disabled = false;
@@ -1216,11 +1222,38 @@
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
           <span style="font-size:11px;color:#198754;font-weight:600;"><i class="fa-solid fa-circle-check"></i> Sent to pharmacy</span>
           <div style="display:flex;gap:12px;align-items:center;">
-            <a href="${CLINIC_API}/prescriptions/${prescription._id}/pdf" target="_blank" style="font-size:11px;color:var(--teal-dark, #1e9aaa);text-decoration:none;"><i class="fa-solid fa-download"></i> PDF</a>
+            <a href="javascript:void(0)" onclick="downloadPrescriptionPdfFromConsultation('${prescription._id}')" style="font-size:11px;color:var(--teal-dark, #1e9aaa);text-decoration:none;"><i class="fa-solid fa-download"></i> PDF</a>
             ${!anyDispensed ? `<button type="button" onclick="cancelPharmacyOrder('${prescription._id}')" style="background:none;border:none;color:#e53e3e;font-size:11px;cursor:pointer;padding:0;"><i class="fa-solid fa-xmark"></i> Cancel</button>` : ""}
           </div>
         </div>
         ${rows}`;
+    }
+
+    // A plain <a href="${CLINIC_API}/...pdf"> here used to send an
+    // unauthenticated browser navigation straight to the protected API
+    // — no way for a raw link click to attach the Bearer token that
+    // lives in localStorage — so protectClinicPortal rejected it and
+    // the tab just showed the raw 401 JSON instead of the PDF. Fetching
+    // through clinicFetch (which does attach the token) and opening a
+    // local blob URL instead is the same fix used in clinic-checkout.html
+    // and clinic-pharmacy.html.
+    async function downloadPrescriptionPdfFromConsultation(prescriptionId) {
+      try {
+        const res = await clinicFetch(`${CLINIC_API}/prescriptions/${prescriptionId}/pdf`);
+        if (!res.ok) throw new Error(`Server responded ${res.status}`);
+        const blob = await res.blob();
+        const blobUrl = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = blobUrl;
+        a.download = `prescription-${prescriptionId}.pdf`;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        setTimeout(() => URL.revokeObjectURL(blobUrl), 5000);
+      } catch (err) {
+        console.error('Download prescription PDF error:', err);
+        alert('Could not load the prescription PDF. Please try again.');
+      }
     }
 
     async function cancelPharmacyOrder(id) {

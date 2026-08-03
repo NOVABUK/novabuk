@@ -296,21 +296,30 @@
         }
       }
 
-      function downloadReceipt(billId) {
+      async function downloadReceipt(billId) {
         const token = localStorage.getItem("novabuk_token");
-        fetch(`${API_URL}/visits/bills/${billId}/receipt`, {
-          headers: { Authorization: `Bearer ${token}` },
-          credentials: "include",
-        })
-          .then((res) => res.blob())
-          .then((blob) => {
-            const url = URL.createObjectURL(blob);
-            window.open(url, "_blank");
-          })
-          .catch((err) => {
-            console.error("Download receipt error:", err);
-            alert("Could not load your receipt. Please try again.");
+        try {
+          const res = await fetch(`${API_URL}/visits/bills/${billId}/receipt`, {
+            headers: { Authorization: `Bearer ${token}` },
+            credentials: "include",
           });
+          if (!res.ok) throw new Error(`Server responded ${res.status}`);
+          const blob = await res.blob();
+          // An <a download> click (rather than window.open in an async
+          // callback) isn't subject to popup-blocker timing, and gives
+          // a real downloaded file with a proper name.
+          const blobUrl = URL.createObjectURL(blob);
+          const a = document.createElement("a");
+          a.href = blobUrl;
+          a.download = `receipt-${billId}.pdf`;
+          document.body.appendChild(a);
+          a.click();
+          a.remove();
+          setTimeout(() => URL.revokeObjectURL(blobUrl), 5000);
+        } catch (err) {
+          console.error("Download receipt error:", err);
+          alert("Could not load your receipt. Please try again.");
+        }
       }
 
       loadMyBills();

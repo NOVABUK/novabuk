@@ -821,36 +821,50 @@
           </div>`;
       }
 
-      function downloadPrescriptionPdf(prescriptionId) {
-        fetch(`${API_URL}/visits/prescriptions/${prescriptionId}/pdf`, {
-          headers: { Authorization: `Bearer ${token}` },
-          credentials: "include",
-        })
-          .then((res) => res.blob())
-          .then((blob) => {
-            const url = URL.createObjectURL(blob);
-            window.open(url, "_blank");
-          })
-          .catch((err) => {
-            console.error("Download prescription error:", err);
-            alert("Could not load your prescription. Please try again.");
+      // ── SHARED FILE DOWNLOAD HELPER ──────────────────────
+      // window.open() inside an async .then() runs after the browser
+      // no longer considers it tied to the original click, so popup
+      // blockers can silently kill it — worse the longer the request
+      // takes (which is exactly why the summary PDF, the slowest of
+      // these, failed more often than the others). An <a download>
+      // click isn't subject to that same block, and it gives a real
+      // downloaded file with a proper name instead of just a new tab.
+      async function downloadBlobFile(url, filename, failMessage) {
+        try {
+          const res = await fetch(url, {
+            headers: { Authorization: `Bearer ${token}` },
+            credentials: "include",
           });
+          if (!res.ok) throw new Error(`Server responded ${res.status}`);
+          const blob = await res.blob();
+          const blobUrl = URL.createObjectURL(blob);
+          const a = document.createElement("a");
+          a.href = blobUrl;
+          a.download = filename;
+          document.body.appendChild(a);
+          a.click();
+          a.remove();
+          setTimeout(() => URL.revokeObjectURL(blobUrl), 5000);
+        } catch (err) {
+          console.error(failMessage, err);
+          alert("Could not load your file. Please try again.");
+        }
+      }
+
+      function downloadPrescriptionPdf(prescriptionId) {
+        downloadBlobFile(
+          `${API_URL}/visits/prescriptions/${prescriptionId}/pdf`,
+          `prescription-${prescriptionId}.pdf`,
+          "Download prescription error:",
+        );
       }
 
       function downloadVisitSummary(visitId) {
-        fetch(`${API_URL}/visits/${visitId}/summary-pdf`, {
-          headers: { Authorization: `Bearer ${token}` },
-          credentials: "include",
-        })
-          .then((res) => res.blob())
-          .then((blob) => {
-            const url = URL.createObjectURL(blob);
-            window.open(url, "_blank");
-          })
-          .catch((err) => {
-            console.error("Download visit summary error:", err);
-            alert("Could not load your visit summary. Please try again.");
-          });
+        downloadBlobFile(
+          `${API_URL}/visits/${visitId}/summary-pdf`,
+          `visit-summary-${visitId}.pdf`,
+          "Download visit summary error:",
+        );
       }
 
       // ── CANCEL VISIT ─────────────────────────────────────

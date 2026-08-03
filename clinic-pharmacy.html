@@ -148,140 +148,122 @@
   </style>
 </head>
 <body>
-
+  <div class="logo-detail mobile-detail">
+      <div class="topbar-left">
+        <div class="topbar-clinic clinic-name" id="topbarClinicName">
+          <script>
+            (function () {
+              try {
+                var u = JSON.parse(localStorage.getItem("novabuk_user") || "{}");
+                document.write(u.clinicName || "Your Clinic");
+              } catch (e) {
+                document.write("Your Clinic");
+              }
+            })();
+          </script>
+        </div>
+        <div class="topbar-date" id="topbarDate"></div>
+      </div>
+  </div>
   <div class="all-content">
     <aside class="sidebar" id="sidebar">
-        
         <div class="sidebar-icon">
-          <div class="logo">
+        <div class="logo">
             <a href="./clinic-queue.html">
-              <img
-                src="./images/logo.png"
-                class="sidebar-logo"
-                alt="NovaBuk"
-              />
+            <img src="./images/logo.png" class="sidebar-logo" alt="NovaBuk" />
             </a>
-          </div>
-          <!-- Queue — this page (active) -->
-          <a
-            href="./clinic-queue.html"
-            class="sidebar-nav-btn active"
-            data-tip="Today's Queue"
-          >
+        </div>
+
+        <a href="./clinic-queue.html" class="sidebar-nav-btn" data-tip="Today's Queue">
             <i class="fa-solid fa-list-check"></i><span>Appointment</span>
-          </a>
+        </a>
 
-          <!-- Search -->
-          <a
-            href="./clinic-search.html"
-            class="sidebar-nav-btn"
-            data-tip="Search Patients"
-          >
+        <a href="./clinic-search.html" class="sidebar-nav-btn" data-tip="Search Patients">
             <i class="fa-solid fa-magnifying-glass"></i><span>Patients</span>
-          </a>
+        </a>
 
-          <!-- Search -->
-          <a
-            href="./clinic-pharmacy.html"
-            class="sidebar-nav-btn"
-            data-tip="Pharmacy"
-          >
-            <i class="fa-solid fa-pills"></i><span>Pharmacy</span>
-          </a>
+        <a href="./clinic-pharmacy.html" class="sidebar-nav-btn" data-tip="Pharmacy">
+            <i class="fa-solid fa-prescription-bottle-medical"></i><span>Pharmacy</span>
+        </a>
 
-          <a
-            href="./clinic-laboratory.html"
-            class="sidebar-nav-btn"
-            data-tip="Laboratory"
-          >
+        <a href="./clinic-laboratory.html" class="sidebar-nav-btn active" data-tip="Laboratory">
             <i class="fa-solid fa-flask-vial"></i><span>Laboratory</span>
-          </a>
+        </a>
 
-          <!-- Checkout & Billing -->
-          <a
+        <!-- Checkout & Billing -->
+        <a
             href="./clinic-checkout.html"
             class="sidebar-nav-btn"
             data-tip="Checkout & Billing"
-          >
+        >
             <i class="fa-solid fa-money-bill-wave"></i><span>Billing</span>
-          </a>
+        </a>
 
-          <!-- <a href="./clinic-pharmacy.html" class="sidebar-nav-btn active" data-tip="Pharmacy"><i class="fa-solid fa-prescription-bottle-medical"> </i></a> -->
-
-          <!-- Settings pushed to bottom via margin-top: auto on logout -->
-          <a
-            href="./clinic-settings.html"
-            class="sidebar-nav-btn"
-            data-tip="Settings"
-          >
+        <a href="./clinic-settings.html" class="sidebar-nav-btn" data-tip="Settings">
             <i class="fa-solid fa-gear"></i><span>Settings</span>
-          </a>
+        </a>
         </div>
 
-        <!-- Logout — at the bottom -->
-         
         <div class="logout-sidebar">
-          <div class="need-help">
+        <div class="need-help">
             <span>Need Help?</span>
             <a href="mailto:support@novabuk.com"><i class="fa-solid fa-headset"></i><span>Contact Support</span> <i class="fa-solid fa-arrow-right"></i></a>
-          </div>
-          <!-- <button
-            class="sidebar-nav-btn sidebar-logout"
-            data-tip="Logout"
-            onclick="clinicLogout()"
-          >
+        </div>
+        <!-- <button class="sidebar-nav-btn sidebar-logout" data-tip="Logout" onclick="clinicLogout()">
             <i class="fa-solid fa-right-from-bracket"></i> <span>Logout</span>
-          </button> -->
+        </button> -->
         </div>
     </aside>
 
-  <main class="workflow-main">
-    <div class="workflow-shell">
-      <div class="workflow-heading">
-        <div>
-          <!-- <div style="color:#6941c6;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;margin-bottom:6px;"><i class="fa-solid fa-shield-heart"></i> Premium pharmacy workflow</div> -->
-          <h1>Pharmacy</h1>
-          <p>Dispense prescriptions issued by doctors at your clinic.</p>
+    <main class="workflow-main">
+      <div class="workflow-shell">
+        <div class="workflow-heading">
+          <div>
+            <div style="color:#6941c6;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;margin-bottom:6px;"><i class="fa-solid fa-shield-heart"></i> Premium pharmacy workflow</div>
+            <h1>Pharmacy</h1>
+            <p>Dispense prescriptions issued by doctors at your clinic.</p>
+          </div>
+          <div class="workflow-heading-actions">
+            <button class="workflow-button secondary" onclick="loadPrescriptions()"><i class="fa-solid fa-arrows-rotate"></i> Refresh</button>
+          </div>
         </div>
-        <div class="workflow-heading-actions">
-          <button class="workflow-button secondary" onclick="loadPrescriptions()"><i class="fa-solid fa-arrows-rotate"></i> Refresh</button>
-        </div>
+
+        <section class="workflow-stat-grid">
+          <div class="workflow-stat"><div class="workflow-stat-icon amber"><i class="fa-solid fa-hourglass-half"></i></div><div><strong id="statAwaiting">0</strong><span>Prescriptions awaiting dispensing</span></div></div>
+          <div class="workflow-stat"><div class="workflow-stat-icon teal"><i class="fa-solid fa-pills"></i></div><div><strong id="statItemsPending">0</strong><span>Individual drugs not yet dispensed</span></div></div>
+          <div class="workflow-stat"><div class="workflow-stat-icon purple"><i class="fa-solid fa-spinner"></i></div><div><strong id="statPartial">0</strong><span>Partially dispensed</span></div></div>
+        </section>
+
+        <section class="workflow-panel">
+          <div class="workflow-panel-header">
+            <div class="workflow-panel-title">
+              <i class="fa-solid fa-prescription-bottle-medical" style="color:#6941c6"></i>
+              <div><h2>Prescription queue</h2><p>Every prescription your clinic's doctors have issued that still has something to dispense</p></div>
+            </div>
+            <div class="workflow-toolbar">
+              <input class="workflow-input" id="pharmacySearch" placeholder="Search patient or doctor" />
+              <select class="workflow-select" id="pharmacyStatus">
+                <option value="all">All in queue</option>
+                <option value="ISSUED">Not started</option>
+                <option value="PARTIALLY_DISPENSED">Partially dispensed</option>
+              </select>
+            </div>
+          </div>
+          <div class="workflow-table-wrap">
+            <table class="workflow-table">
+              <thead><tr><th>Patient</th><th>Prescribed by</th><th>Issued</th><th>Drugs</th><th>Status</th><th></th></tr></thead>
+              <tbody id="pharmacyRows"></tbody>
+            </table>
+          </div>
+          <div class="workflow-empty" id="pharmacyEmpty">
+            <i class="fa-solid fa-prescription-bottle"></i>
+            <p id="pharmacyEmptyText">No prescriptions match your search.</p>
+          </div>
+        </section>
       </div>
-
-      <section class="workflow-stat-grid">
-        <div class="workflow-stat"><div class="workflow-stat-icon amber"><i class="fa-solid fa-hourglass-half"></i></div><div><strong id="statAwaiting">0</strong><span>Prescriptions awaiting dispensing</span></div></div>
-        <div class="workflow-stat"><div class="workflow-stat-icon teal"><i class="fa-solid fa-pills"></i></div><div><strong id="statItemsPending">0</strong><span>Individual drugs not yet dispensed</span></div></div>
-        <div class="workflow-stat"><div class="workflow-stat-icon purple"><i class="fa-solid fa-spinner"></i></div><div><strong id="statPartial">0</strong><span>Partially dispensed</span></div></div>
-      </section>
-
-      <section class="workflow-panel">
-        <div class="workflow-panel-header">
-          <div class="workflow-panel-title">
-            <i class="fa-solid fa-prescription-bottle-medical" style="color:#6941c6"></i>
-            <div><h2>Prescription queue</h2><p>Every prescription your clinic's doctors have issued that still has something to dispense</p></div>
-          </div>
-          <div class="workflow-toolbar">
-            <input class="workflow-input" id="pharmacySearch" placeholder="Search patient or doctor" />
-            <select class="workflow-select" id="pharmacyStatus">
-              <option value="all">All in queue</option>
-              <option value="ISSUED">Not started</option>
-              <option value="PARTIALLY_DISPENSED">Partially dispensed</option>
-            </select>
-          </div>
-        </div>
-        <div class="workflow-table-wrap">
-          <table class="workflow-table">
-            <thead><tr><th>Patient</th><th>Prescribed by</th><th>Issued</th><th>Drugs</th><th>Status</th><th></th></tr></thead>
-            <tbody id="pharmacyRows"></tbody>
-          </table>
-        </div>
-        <div class="workflow-empty" id="pharmacyEmpty">
-          <i class="fa-solid fa-prescription-bottle"></i>
-          <p id="pharmacyEmptyText">No prescriptions match your search.</p>
-        </div>
-      </section>
-    </div>
-  </main>
+    </main>
+  </div>
+  
 
   <div class="workflow-modal-backdrop" id="pharmacyModal">
     <div class="workflow-modal">
@@ -370,7 +352,9 @@
           <td>${pendingCount} of ${x.items.length} left</td>
           <td>
             <span class="workflow-badge ${STATUS_CLASS[x.status]}">${STATUS_LABEL[x.status]}</span>
-            ${x.bill.settled
+            ${!x.bill.exists
+              ? `<div style="margin-top:4px;font-size:9px;font-weight:700;color:var(--workflow-red);"><i class="fa-solid fa-triangle-exclamation"></i> No bill for this visit</div>`
+              : x.bill.settled
               ? `<div style="margin-top:4px;font-size:9px;font-weight:700;color:var(--workflow-red);"><i class="fa-solid fa-triangle-exclamation"></i> Bill already settled</div>`
               : x.bill.pharmacyRemaining > 0
                 ? `<div style="margin-top:4px;font-size:9px;font-weight:700;color:var(--workflow-amber);"><i class="fa-solid fa-coins"></i> ₦${x.bill.pharmacyRemaining.toLocaleString()} owed</div>`
@@ -407,7 +391,12 @@
     function renderModalItems() {
       const bill = activePrescription.bill;
 
-      const summaryHtml = bill.settled
+      const summaryHtml = !bill.exists
+        ? `<div style="display:flex;gap:10px;align-items:flex-start;background:var(--workflow-red-bg);color:var(--workflow-red);border-radius:10px;padding:12px 14px;font-size:12px;font-weight:600;margin-bottom:12px;">
+             <i class="fa-solid fa-triangle-exclamation" style="margin-top:1px;"></i>
+             <span>No bill exists yet for this visit — dispensing will <u>not</u> add a charge anywhere. This usually means a consultation fee hasn't been configured for this visit type in Settings → Billing.</span>
+           </div>`
+        : bill.settled
         ? `<div style="display:flex;gap:10px;align-items:flex-start;background:var(--workflow-red-bg);color:var(--workflow-red);border-radius:10px;padding:12px 14px;font-size:12px;font-weight:600;margin-bottom:12px;">
              <i class="fa-solid fa-triangle-exclamation" style="margin-top:1px;"></i>
              <span>This patient's bill is already settled (paid or waived). Dispensing from here on will <u>not</u> automatically add a charge — someone with billing-correction access will need to add it manually afterward.</span>
@@ -482,6 +471,13 @@
       const unitPrice = Number(priceEl.value);
       const quantity = Number(qtyEl.value) || 0;
 
+      if (!activePrescription.bill.exists) {
+        previewEl.innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i> No bill exists for this visit — this will NOT be added anywhere.`;
+        previewEl.classList.add('warning');
+        previewEl.classList.remove('ready');
+        return;
+      }
+
       if (activePrescription.bill.settled) {
         previewEl.innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i> Bill is settled — this will NOT be added automatically, even though the price/quantity are entered here.`;
         previewEl.classList.add('warning');
@@ -520,23 +516,31 @@
         // totals, so refetch the full detail (which does resolve
         // patient/doctorName AND fresh bill info) rather than trying to
         // patch together partial state that would go stale.
-        const wasSettled = activePrescription.bill.settled;
         const addedAmount = unitPrice * quantity;
         await refreshActivePrescription();
 
         const idx = prescriptions.findIndex(p => p._id === activePrescription._id);
         const allDone = activePrescription.items.every(i => i.dispensed);
-        const billNote = wasSettled
-          ? `Dispensed — but this patient's bill is already settled, so ₦${addedAmount.toLocaleString()} was NOT added automatically. It needs a manual correction.`
+        // data.billWarning is authoritative — it's set server-side
+        // whenever the charge genuinely didn't land anywhere (bill
+        // already settled, OR no bill exists at all for this visit).
+        // Previously this was guessed client-side from the bill's
+        // settled flag BEFORE dispensing, which correctly caught an
+        // already-settled bill but had no way to detect "no bill
+        // exists at all" — that case silently showed a false "added
+        // to the bill" success message.
+        const hadIssue = !!data.billWarning;
+        const billNote = hadIssue
+          ? `Dispensed — but ₦${addedAmount.toLocaleString()} was NOT added to any bill. ${data.billWarning}`
           : `₦${addedAmount.toLocaleString()} added to the patient's bill.`;
         if (allDone) {
           prescriptions.splice(idx, 1);
           closePharmacyModal();
-          showToast(wasSettled ? billNote : `${billNote} All items dispensed, moved out of the queue.`, wasSettled);
+          showToast(hadIssue ? billNote : `${billNote} All items dispensed, moved out of the queue.`, hadIssue);
         } else {
           prescriptions[idx] = activePrescription;
           renderModalItems();
-          showToast(billNote, wasSettled);
+          showToast(billNote, hadIssue);
         }
         updateStats();
         renderPharmacy();
@@ -592,9 +596,28 @@
       document.getElementById('pharmacyModal').classList.remove('open');
     }
 
-    function downloadPrescriptionPdf() {
+    async function downloadPrescriptionPdf() {
       if (!activePrescription) return;
-      window.open(`${CLINIC_API}/prescriptions/${activePrescription._id}/pdf`, '_blank');
+      // Same two fixes as clinic-checkout.html's viewReceipt(): auth
+      // header (clinicFetch, not a bare window.open to the API), and
+      // <a download> instead of window.open() so an async-callback popup
+      // can't get silently blocked.
+      try {
+        const res = await clinicFetch(`${CLINIC_API}/prescriptions/${activePrescription._id}/pdf`);
+        if (!res.ok) throw new Error(`Server responded ${res.status}`);
+        const blob = await res.blob();
+        const blobUrl = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = blobUrl;
+        a.download = `prescription-${activePrescription._id}.pdf`;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        setTimeout(() => URL.revokeObjectURL(blobUrl), 5000);
+      } catch (err) {
+        console.error('Download prescription PDF error:', err);
+        alert('Could not load the prescription PDF. Please try again.');
+      }
     }
 
     document.getElementById('pharmacySearch').addEventListener('input', renderPharmacy);

@@ -624,13 +624,16 @@ setInterval(updateNotificationBadge, 30000);
     showClinicToast(hadPending ? "All data synced successfully!" : "Back online.", true, false);
   });
 
-  // 5. Run once DOM is ready — only to create the toast element and, if
-  // this page happens to load while genuinely offline, say so once.
-  // Otherwise stay completely silent.
+  // 5. Run once DOM is ready — create the toast element, and either
+  // announce we're offline right now, or quietly try a sync in case
+  // something is already pending (don't make it wait for the next
+  // online/focus event).
   function initOnReady() {
     createToast();
     if (!navigator.onLine) {
       showClinicToast("You are offline. Changes will be saved and synced later.", false, true);
+    } else {
+      trySync(false);
     }
   }
 
@@ -641,8 +644,20 @@ setInterval(updateNotificationBadge, 30000);
   }
 
   // 6. Keep flushing the outbox in the background so pending items
-  // don't just sit there, but do it quietly — no toast spam.
-  setInterval(() => trySync(false), 15000);
+  // don't just sit there. The "online" event is the primary trigger,
+  // but it's known to be unreliable on some mobile browsers/WebViews
+  // (reflects "network interface up," not "internet actually
+  // reachable," and can be missed or delayed) — this short interval is
+  // the catch-up net so staff never have to refresh to see a sync happen.
+  setInterval(() => trySync(false), 5000);
+
+  // 7. Quietly retry whenever the window/tab regains focus or comes back
+  // to the foreground — "focus" alone can miss mobile/PWA app-switching,
+  // so visibilitychange backs it up.
+  window.addEventListener("focus", () => trySync(false));
+  document.addEventListener("visibilitychange", () => {
+    if (document.visibilityState === "visible") trySync(false);
+  });
 })();
 // ── REGISTER SERVICE WORKER FOR CLINIC PAGES ──────────────────
 if ("serviceWorker" in navigator) {

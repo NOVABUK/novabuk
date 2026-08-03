@@ -374,6 +374,20 @@
             `${CLINIC_API}/patients/search?q=${encodeURIComponent(q)}&clinicId=${getClinicId() || ""}`,
           );
           const data = await res.json();
+
+          if (!data.success) {
+            if (data.error === "FREE_TIER_LIMIT_REACHED") {
+              renderLimitReached(data.message, data.cta);
+            } else {
+              document.getElementById("results").innerHTML = `
+              <div class="hint">
+                <i class="fa-solid fa-triangle-exclamation"></i>
+                ${data.message || "Search failed. Please try again."}
+              </div>`;
+            }
+            return;
+          }
+
           renderResults(data.data || [], q);
         } catch {
           document.getElementById("results").innerHTML = `
@@ -382,6 +396,28 @@
             Search failed. Please try again.
           </div>`;
         }
+      }
+
+      // Feature 3 (Free Degraded Tier): shown once a FREE_TIER clinic
+      // hits its 10 searches/month cap. Spec calls for the upgrade
+      // prompt to appear on every blocked search, not just once — this
+      // re-renders fresh on every keystroke that still returns the
+      // limit error, rather than being dismissible. The button label
+      // comes from the backend (cta.label) rather than being hardcoded
+      // here — a clinic whose PAID subscription lapsed sees "Renew
+      // Subscription", not "Upgrade Now", since they aren't upgrading,
+      // they're renewing what they already had.
+      function renderLimitReached(message, cta) {
+        const label = (cta && cta.label) || "Subscribe Now";
+        const href = (cta && cta.href) || "./clinic-settings.html";
+        document.getElementById("results").innerHTML = `
+        <div class="hint" style="max-width:420px; margin:0 auto;">
+          <i class="fa-solid fa-lock"></i>
+          <p style="margin-bottom:14px;">${message}</p>
+          <a href="${href}" style="display:inline-block; padding:10px 20px; background:var(--teal); color:white; border-radius:8px; text-decoration:none; font-weight:600; font-size:13px;">
+            ${label}
+          </a>
+        </div>`;
       }
 
       function renderResults(patients, q) {

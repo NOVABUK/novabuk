@@ -787,14 +787,23 @@ window.refreshNavAvatar = function () {
   });
 
   // On this page's first load: only speak up if we're actually offline
-  // right now. If we're online, stay quiet — nothing has changed.
+  // right now. If we're online, stay quiet — nothing has changed. But
+  // DO try a silent sync in case anything is already pending, so it
+  // doesn't just sit there waiting for the next online/focus event.
   if (!navigator.onLine) {
     showToast("You're offline. Changes will be saved and synced later.", false, true);
+  } else {
+    trySync(false);
   }
 
   // Keep flushing the outbox in the background so pending items don't
-  // just sit there, but do it silently — no toast spam every few seconds.
-  setInterval(() => trySync(false), 15000);
+  // just sit there. The browser's "online" event is the primary
+  // trigger, but it's known to be unreliable on some mobile browsers/
+  // WebViews (it reflects "network interface up," not "internet
+  // actually reachable," and can be missed or delayed) — this short
+  // interval is the catch-up net so a sync never has to wait for a
+  // page refresh. Stays silent; only real transitions get a toast.
+  setInterval(() => trySync(false), 5000);
 
   // 4. Exit Guard: Warning if trying to leave with pending data
   window.addEventListener("beforeunload", (e) => {
@@ -812,6 +821,13 @@ window.refreshNavAvatar = function () {
   // 5. Quietly try to sync whenever the window regains focus (no toast —
   // this isn't a connectivity transition, just an opportunistic flush)
   window.addEventListener("focus", () => trySync(false));
+
+  // 6. "focus" doesn't always fire when a mobile browser tab or an
+  // installed PWA is brought back to the foreground — visibilitychange
+  // catches that case too.
+  document.addEventListener("visibilitychange", () => {
+    if (document.visibilityState === "visible") trySync(false);
+  });
 })();
 
 // ── SHARED INDEX/PUBLIC PAGE NAVBAR SYNC ─────────────────────

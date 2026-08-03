@@ -587,8 +587,34 @@
       }
     }
 
-    function viewReceipt() {
-      window.open(`${CLINIC_API}/bills/${currentBill._id}/receipt`, '_blank');
+    async function viewReceipt() {
+      // window.open() straight to the API used to send an unauthenticated
+      // browser navigation — no way to attach the Bearer token that lives
+      // in localStorage — so protectClinicPortal rejected it and the tab
+      // just showed the raw 401 JSON instead of the PDF. Fetching through
+      // clinicFetch (which does attach the token) fixes that part.
+      //
+      // Second issue: window.open() inside an async callback runs after
+      // the browser no longer considers it tied to the original click,
+      // so popup blockers can silently kill it — worse the longer the
+      // request takes. An <a download> click isn't subject to that same
+      // block, and gives a real downloaded file with a proper name.
+      try {
+        const res = await clinicFetch(`${CLINIC_API}/bills/${currentBill._id}/receipt`);
+        if (!res.ok) throw new Error(`Server responded ${res.status}`);
+        const blob = await res.blob();
+        const blobUrl = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = blobUrl;
+        a.download = `receipt-${currentBill._id}.pdf`;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        setTimeout(() => URL.revokeObjectURL(blobUrl), 5000);
+      } catch (err) {
+        console.error('View receipt error:', err);
+        alert('Could not load the receipt. Please try again.');
+      }
     }
 
     async function shareViaWhatsApp() {

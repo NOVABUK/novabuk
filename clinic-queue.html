@@ -1424,6 +1424,27 @@
         const errEl = document.getElementById("walkInError");
         errEl.classList.remove("show");
 
+        // Feature 3 (Free Degraded Tier): the backend returns
+        // error: "FREE_TIER_LIMIT_REACHED" once a FREE_TIER clinic
+        // hits its 10/month walk-in cap. Spec calls for the upgrade
+        // prompt to appear on every blocked action, not just once —
+        // so this always re-renders it fresh rather than caching.
+        // The link text comes from data.cta.label (backend decides
+        // "Renew Subscription" vs "Subscribe Now" based on whether
+        // this clinic has actually paid before) rather than being
+        // hardcoded here.
+        function showWalkInError(data, fallback) {
+          const message = (data && data.message) || fallback;
+          if (data && data.error === "FREE_TIER_LIMIT_REACHED") {
+            const label = (data.cta && data.cta.label) || "Subscribe Now";
+            const href = (data.cta && data.cta.href) || "./clinic-settings.html";
+            errEl.innerHTML = `${message} <a href="${href}" style="color:var(--teal); font-weight:600; text-decoration:underline;">${label}</a>`;
+          } else {
+            errEl.textContent = message;
+          }
+          errEl.classList.add("show");
+        }
+
         const isNew = document.getElementById("isNewPatient").checked;
         const notes = document.getElementById("walkInNotes").value.trim();
         const btn = document.getElementById("walkInConfirmBtn");
@@ -1465,8 +1486,7 @@
               closeWalkInModal();
               loadQueue();
             } else {
-              errEl.textContent = data.message || "Registration failed.";
-              errEl.classList.add("show");
+              showWalkInError(data, "Registration failed.");
             }
           } catch (err) {
             errEl.textContent = "Network error. Please try again.";
@@ -1501,8 +1521,7 @@
               closeWalkInModal();
               loadQueue();
             } else {
-              errEl.textContent = data.message || "Failed to add walk-in.";
-              errEl.classList.add("show");
+              showWalkInError(data, "Failed to add walk-in.");
             }
           } catch (err) {
             errEl.textContent = "Network error. Please try again.";

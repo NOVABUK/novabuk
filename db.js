@@ -3,7 +3,7 @@
 // ================================================================
 
 const DB_NAME = "NovaBukOffline";
-const DB_VERSION = 6; // Upgraded version for caching
+const DB_VERSION = 4; // Upgraded version for caching
 const STORE_OUTBOX = "outbox";
 const STORE_CACHE = "cache";
 
@@ -150,80 +150,100 @@ async function smartFetch(url, options = {}) {
 }
 
 // ── THE SYNC ENGINE ──────────────────────────────────────────
+// Guard against overlapping runs: multiple places listen for "online"
+// (this file's own listeners below, plus script.js/clinic-shared.js's
+// toast logic) and can all call syncOutbox() at nearly the same moment.
+// Without this flag, two overlapping passes would both read the same
+// still-pending outbox item before either had deleted it, and both
+// would POST it to the server — the duplicate record you're seeing.
+let syncInProgress = false;
+
 async function syncOutbox() {
   if (!navigator.onLine) return;
 
-  const db = await openDB();
-  const tx = db.transaction(STORE_OUTBOX, "readonly");
-  const store = tx.objectStore(STORE_OUTBOX);
+  if (syncInProgress) {
+    console.log(
+      "[SyncEngine] A sync is already running — skipping this overlapping call.",
+    );
+    return 0;
+  }
+  syncInProgress = true;
 
-  const requests = await new Promise((resolve) => {
-    const req = store.getAll();
-    req.onsuccess = () => resolve(req.result);
-    req.onerror = () => resolve([]);
-  });
+  try {
+    const db = await openDB();
+    const tx = db.transaction(STORE_OUTBOX, "readonly");
+    const store = tx.objectStore(STORE_OUTBOX);
 
-  if (requests.length === 0) return 0;
+    const requests = await new Promise((resolve) => {
+      const req = store.getAll();
+      req.onsuccess = () => resolve(req.result);
+      req.onerror = () => resolve([]);
+    });
 
-  let syncedCount = 0;
-  for (const req of requests) {
-    try {
-      const headers = {
-        ...(req.headers || {}),
-        "Content-Type": "application/json",
-      };
+    if (requests.length === 0) return 0;
 
-      if (req.baseVersion) {
-        headers["X-Base-Version"] = req.baseVersion;
-      }
+    let syncedCount = 0;
+    for (const req of requests) {
+      try {
+        const headers = {
+          ...(req.headers || {}),
+          "Content-Type": "application/json",
+        };
 
-      const response = await fetch(req.url, {
-        method: req.method,
-        headers,
-        body: req.body,
-      });
+        if (req.baseVersion) {
+          headers["X-Base-Version"] = req.baseVersion;
+        }
 
-      if (response.ok) {
-        syncedCount += 1;
-        console.log(
-          `[SyncEngine] Successfully synced offline data to server: ${req.url}`,
-        );
-        const deleteTx = db.transaction(STORE_OUTBOX, "readwrite");
-        deleteTx.objectStore(STORE_OUTBOX).delete(req.id);
-      } else if (response.status === 409) {
-        console.error(
-          `[SyncEngine] Conflict detected on ${req.url}. Deleting outdated offline action.`,
-        );
-        const deleteTx = db.transaction(STORE_OUTBOX, "readwrite");
-        deleteTx.objectStore(STORE_OUTBOX).delete(req.id);
+        const response = await fetch(req.url, {
+          method: req.method,
+          headers,
+          body: req.body,
+        });
 
-        if (
-          typeof window !== "undefined" &&
-          typeof window.showNetworkToast === "function"
-        ) {
-          window.showNetworkToast(
-            "Sync Conflict: An offline change was rejected because another staff member updated the record first.",
-            false,
-            true,
+        if (response.ok) {
+          syncedCount += 1;
+          console.log(
+            `[SyncEngine] Successfully synced offline data to server: ${req.url}`,
+          );
+          const deleteTx = db.transaction(STORE_OUTBOX, "readwrite");
+          deleteTx.objectStore(STORE_OUTBOX).delete(req.id);
+        } else if (response.status === 409) {
+          console.error(
+            `[SyncEngine] Conflict detected on ${req.url}. Deleting outdated offline action.`,
+          );
+          const deleteTx = db.transaction(STORE_OUTBOX, "readwrite");
+          deleteTx.objectStore(STORE_OUTBOX).delete(req.id);
+
+          if (
+            typeof window !== "undefined" &&
+            typeof window.showNetworkToast === "function"
+          ) {
+            window.showNetworkToast(
+              "Sync Conflict: An offline change was rejected because another staff member updated the record first.",
+              false,
+              true,
+            );
+          }
+        } else {
+          console.warn(
+            `[SyncEngine] Server rejected sync data: ${req.url} (Status: ${response.status})`,
           );
         }
-      } else {
-        console.warn(
-          `[SyncEngine] Server rejected sync data: ${req.url} (Status: ${response.status})`,
-        );
+      } catch (err) {
+        break;
       }
-    } catch (err) {
-      break;
     }
-  }
 
-  if (typeof window !== "undefined") {
-    window.dispatchEvent(
-      new CustomEvent("novabuk-sync-complete", { detail: { syncedCount } }),
-    );
-  }
+    if (typeof window !== "undefined") {
+      window.dispatchEvent(
+        new CustomEvent("novabuk-sync-complete", { detail: { syncedCount } }),
+      );
+    }
 
-  return syncedCount;
+    return syncedCount;
+  } finally {
+    syncInProgress = false;
+  }
 }
 
 // ── HELPERS FOR UI ───────────────────────────────────────────
