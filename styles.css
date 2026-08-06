@@ -492,7 +492,7 @@ footer .navfoot .nav-menu ul {
 .nav-icon {
   display: none;
   color: white;
-  font-size: 38px;
+  font-size: 28px;
 }
 
 /* Mobile mode */
@@ -507,7 +507,7 @@ footer .navfoot .nav-menu ul {
   /*  Navbar Layout  */
   .header .logo img , .brand img{
     width: auto;
-    /* height: 35px; */
+    height: 45px;
   }
 
   .header .nav {
