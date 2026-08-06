@@ -146,6 +146,8 @@ img {
 .nav-links ul li a {
   color: black;
   display: flex;
+  font-size: 18px;
+  font-weight: 500;
   /* margin: 14px; */
   text-decoration: none;
   transition:
@@ -157,9 +159,9 @@ img {
   position: fixed;
   width: 100% !important;
   display: flex;
-  justify-content: space-around !important;
+  justify-content: space-between !important;
   align-items: center;
-  padding: 20px 0;
+  padding: 20px 24px;
   z-index: 1000;
   /* background: linear-gradient(130deg, #7ecad7, #35bac9); */
   background-color: #35bac9;
@@ -490,6 +492,7 @@ footer .navfoot .nav-menu ul {
 .nav-icon {
   display: none;
   color: white;
+  font-size: 38px;
 }
 
 /* Mobile mode */
@@ -504,13 +507,13 @@ footer .navfoot .nav-menu ul {
   /*  Navbar Layout  */
   .header .logo img , .brand img{
     width: auto;
-    height: 35px;
+    /* height: 35px; */
   }
 
   .header .nav {
     align-items: flex-start;
     align-items: center;
-    padding: 20px 10px !important;
+    /* padding: 20px 10px !important; */
     justify-content: space-between !important;
   }
 

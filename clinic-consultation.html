@@ -552,9 +552,9 @@
               <span><i class="fa-solid fa-prescription-bottle-medical"></i> Pharmacy Order</span>
               <span style="font-size:10px;background:#f1ecff;color:#6941c6;padding:4px 9px;border-radius:20px;">PREMIUM</span>
             </div>
-            <!-- <p style="font-weight:400; font-size:11px; color:var(--text-light); margin:-4px 0 10px;">
+            <p style="font-weight:400; font-size:11px; color:var(--text-light); margin:-4px 0 10px;">
               Sends straight to the pharmacy the moment you click Send — the pharmacist can start preparing it while you're still with the patient, instead of waiting until the whole consultation is complete.
-            </p> -->
+            </p>
             <div id="pharmacyOrderRows"></div>
             <div id="pharmacyOrderControls">
               <button type="button" onclick="addPharmacyOrderRow()" style="margin-top:4px; padding:6px 14px; border:1px dashed var(--border, #ccc); background:none; border-radius:8px; font-size:12px; color:var(--teal, #35bac9); cursor:pointer;">
@@ -580,7 +580,7 @@
           <div class="consult-card">
             <div class="card-label"><i class="fa-solid fa-calendar-check"></i> Next Appointment <span style="font-weight:400; font-size:11px; color:var(--text-light);">(optional)</span></div>
             <div class="note-input-wrap">
-              <input type="datetime-local" id="fNextAppointment" style="width:100%; padding:10px 12px; border:1px solid var(--border, #ccc); border-radius:8px; font-family:inherit; font-size:13px;" />
+              <input type="datetime-local" id="fNextAppointment" onchange="scheduleAutosave()" style="width:100%; padding:10px 12px; border:1px solid var(--border, #ccc); border-radius:8px; font-family:inherit; font-size:13px;" />
             </div>
           </div>
 
@@ -903,6 +903,19 @@
         if (el) el.value = visit[dataKeys[idx]] || "";
       });
 
+      // Restore in-progress draft state — next appointment and
+      // medication reminders the doctor had started filling in before
+      // navigating away. See Visit.js's draftNextAppointment comment
+      // for why these live separately from the real Appointment/
+      // MedicationReminder records created at completion.
+      const nextApptEl = document.getElementById("fNextAppointment");
+      if (nextApptEl && visit.draftNextAppointment) {
+        nextApptEl.value = toDatetimeLocalValue(visit.draftNextAppointment);
+      }
+      if (Array.isArray(visit.draftMedications) && visit.draftMedications.length) {
+        visit.draftMedications.forEach((med) => addMedicationRow(med));
+      }
+
       // Show container
       const loaderEl = document.getElementById("loader");
       if (loaderEl) loaderEl.style.display = "none";
@@ -987,20 +1000,38 @@
     // ── MEDICATION REMINDER ROWS (dynamic add/remove) ─────────
     let medicationRowCount = 0;
 
-    function addMedicationRow() {
+    function addMedicationRow(prefill) {
       const id = medicationRowCount++;
       const container = document.getElementById("medicationReminderRows");
       const row = document.createElement("div");
       row.id = `medRow-${id}`;
       row.style.cssText = "display:grid; grid-template-columns:1.5fr 1fr 0.8fr 0.8fr auto; gap:8px; margin-bottom:8px; align-items:center;";
       row.innerHTML = `
-        <input type="text" placeholder="Drug name" class="med-drugName" style="padding:8px; border:1px solid var(--border, #ccc); border-radius:6px; font-size:12px;" />
-        <input type="text" placeholder="Dosage (e.g. 500mg)" class="med-dosage" style="padding:8px; border:1px solid var(--border, #ccc); border-radius:6px; font-size:12px;" />
-        <input type="number" min="1" placeholder="Times/day" class="med-frequency" style="padding:8px; border:1px solid var(--border, #ccc); border-radius:6px; font-size:12px;" />
-        <input type="number" min="1" placeholder="Days" class="med-duration" style="padding:8px; border:1px solid var(--border, #ccc); border-radius:6px; font-size:12px;" />
-        <button type="button" onclick="document.getElementById('medRow-${id}').remove()" style="background:none; border:none; color:#e53e3e; cursor:pointer; padding:4px;"><i class="fa-solid fa-trash"></i></button>
+        <input type="text" placeholder="Drug name" class="med-drugName" oninput="scheduleAutosave()" style="padding:8px; border:1px solid var(--border, #ccc); border-radius:6px; font-size:12px;" />
+        <input type="text" placeholder="Dosage (e.g. 500mg)" class="med-dosage" oninput="scheduleAutosave()" style="padding:8px; border:1px solid var(--border, #ccc); border-radius:6px; font-size:12px;" />
+        <input type="number" min="1" placeholder="Times/day" class="med-frequency" oninput="scheduleAutosave()" style="padding:8px; border:1px solid var(--border, #ccc); border-radius:6px; font-size:12px;" />
+        <input type="number" min="1" placeholder="Days" class="med-duration" oninput="scheduleAutosave()" style="padding:8px; border:1px solid var(--border, #ccc); border-radius:6px; font-size:12px;" />
+        <button type="button" onclick="document.getElementById('medRow-${id}').remove(); scheduleAutosave();" style="background:none; border:none; color:#e53e3e; cursor:pointer; padding:4px;"><i class="fa-solid fa-trash"></i></button>
       `;
       container.appendChild(row);
+
+      if (prefill) {
+        row.querySelector(".med-drugName").value = prefill.drugName || "";
+        row.querySelector(".med-dosage").value = prefill.dosage || "";
+        row.querySelector(".med-frequency").value = prefill.frequencyPerDay || "";
+        row.querySelector(".med-duration").value = prefill.durationDays || "";
+      }
+    }
+
+    // Converts a stored ISO date string into the "YYYY-MM-DDTHH:mm"
+    // format <input type="datetime-local"> expects — new Date(iso)
+    // .toISOString() won't do, since that's always UTC and would
+    // silently shift the displayed time for any non-UTC clinic.
+    function toDatetimeLocalValue(isoString) {
+      const d = new Date(isoString);
+      if (isNaN(d.getTime())) return "";
+      const pad = (n) => String(n).padStart(2, "0");
+      return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
     }
 
     function getMedicationRowsData() {
@@ -1199,7 +1230,8 @@
           // The lab request itself was created fine — this is purely
           // about the billing side not landing anywhere, which
           // shouldn't block the clinical action, just be visible.
-          setTimeout(() => alert(`Sent to lab. Note: ${data.billWarning}`), 200);
+          setTimeout(() => alert(`Sent to lab.`), 200);
+          //setTimeout(() => alert(`Sent to lab. Note: ${data.billWarning}`), 200);//
         }
       } catch (err) {
         alert(err.message || "Could not send to lab. Please try again.");
@@ -1222,38 +1254,11 @@
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
           <span style="font-size:11px;color:#198754;font-weight:600;"><i class="fa-solid fa-circle-check"></i> Sent to pharmacy</span>
           <div style="display:flex;gap:12px;align-items:center;">
-            <a href="javascript:void(0)" onclick="downloadPrescriptionPdfFromConsultation('${prescription._id}')" style="font-size:11px;color:var(--teal-dark, #1e9aaa);text-decoration:none;"><i class="fa-solid fa-download"></i> PDF</a>
+            <a href="${CLINIC_API}/prescriptions/${prescription._id}/pdf" target="_blank" style="font-size:11px;color:var(--teal-dark, #1e9aaa);text-decoration:none;"><i class="fa-solid fa-download"></i> PDF</a>
             ${!anyDispensed ? `<button type="button" onclick="cancelPharmacyOrder('${prescription._id}')" style="background:none;border:none;color:#e53e3e;font-size:11px;cursor:pointer;padding:0;"><i class="fa-solid fa-xmark"></i> Cancel</button>` : ""}
           </div>
         </div>
         ${rows}`;
-    }
-
-    // A plain <a href="${CLINIC_API}/...pdf"> here used to send an
-    // unauthenticated browser navigation straight to the protected API
-    // — no way for a raw link click to attach the Bearer token that
-    // lives in localStorage — so protectClinicPortal rejected it and
-    // the tab just showed the raw 401 JSON instead of the PDF. Fetching
-    // through clinicFetch (which does attach the token) and opening a
-    // local blob URL instead is the same fix used in clinic-checkout.html
-    // and clinic-pharmacy.html.
-    async function downloadPrescriptionPdfFromConsultation(prescriptionId) {
-      try {
-        const res = await clinicFetch(`${CLINIC_API}/prescriptions/${prescriptionId}/pdf`);
-        if (!res.ok) throw new Error(`Server responded ${res.status}`);
-        const blob = await res.blob();
-        const blobUrl = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = blobUrl;
-        a.download = `prescription-${prescriptionId}.pdf`;
-        document.body.appendChild(a);
-        a.click();
-        a.remove();
-        setTimeout(() => URL.revokeObjectURL(blobUrl), 5000);
-      } catch (err) {
-        console.error('Download prescription PDF error:', err);
-        alert('Could not load the prescription PDF. Please try again.');
-      }
     }
 
     async function cancelPharmacyOrder(id) {

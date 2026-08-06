@@ -84,19 +84,25 @@
               <li><a href="./contact.html">Contact Us</a></li>
               <!-- Mobile hamburger — auth links shown when logged out -->
               <li class="mobile-only" id="mobileSignUp">
-                <a href="./sign-up.html" class="btn-signin ">Sign Up</a>
+                <a href="./sign-up.html" class="btn-signin">Get Started</a>
               </li>
               <li class="mobile-only" id="mobileLogin">
-                <a href="./sign-in.html" class="btn-getstarted">Login</a>
+                <a href="./sign-in.html" class="btn-getstarted">Sign In</a>
               </li>
             </ul>
           </nav>
 
-          <!-- Logged out right: Sign Up + Login buttons -->
+          <!-- Logged out right: Sign In + Get Started buttons -->
           <div class="signup-btns idx-loggedout" id="idxAuthBtns">
             <ul>
-              <li class="nb-log"><a href="./sign-up.html" class="">Log In</a></li>
-              <li class="primary-button nb-sign"><a href="./sign-in.html">Book Demo <span><i class="fas fa-arrow-right"></i></span></a></li>
+              <li class="nb-log">
+                <a href="./sign-in.html" class="">Sign In</a>
+              </li>
+              <li class="primary-button nb-sign">
+                <a href="./sign-up.html"
+                  >Get Started <span><i class="fas fa-arrow-right"></i></span
+                ></a>
+              </li>
             </ul>
           </div>
 
@@ -392,84 +398,97 @@
 
       <!-- Pricing Section -->
       <div class="nb-section nb-pricing nb-reveal">
-          <h3 class="nb-section-title">Simple, Transparent Pricing</h3>
-          <p class="nb-section-subtitle">
-            Flexible packages designed for patients and clinics of all sizes.
-          </p>
+        <h3 class="nb-section-title">Simple, Transparent Pricing</h3>
+        <p class="nb-section-subtitle">
+          Flexible packages designed for patients and clinics of all sizes.
+        </p>
 
-          <div class="nb-pricing-toggle">
-            <button
-              type="button"
-              class="nb-toggle-btn active"
-              data-period="monthly"
-            >
-              Monthly
-            </button>
-            <button type="button" class="nb-toggle-btn" data-period="annually">
-              Annually
-            </button>
-          </div>
+        <div class="nb-pricing-toggle">
+          <button
+            type="button"
+            class="nb-toggle-btn active"
+            data-period="monthly"
+          >
+            Monthly
+          </button>
+          <button type="button" class="nb-toggle-btn" data-period="annually">
+            Annually
+          </button>
+        </div>
 
-          <div class="nb-pricing-cards">
-            <!-- Patient Plan -->
-            <div class="nb-price-card">
-              <h4>Patient Basic</h4>
-              <p class="nb-price-desc">For individuals to track health records</p>
-              <div class="nb-price-amount">₦0<span>/mo</span></div>
-              <p class="nb-price-period">Free forever</p>
-              <div class="mob-price-expand">
-                <span class="mob-price-expand-label">See what's included</span>
-                <span class="mob-price-expand-icon"><i class="fas fa-chevron-down"></i></span>
-              </div>
-              <ul class="nb-price-features">
-                <li><i class="fa-solid fa-check"></i> Basic Health Records</li>
-                <li><i class="fa-solid fa-check"></i> 1 Connected Clinic</li>
-                <li><i class="fa-solid fa-check"></i> Medical Appointment Booking</li>
-                <li><i class="fa-solid fa-xmark"></i> AI Insights & Ann Alerts</li>
-                <li><i class="fa-solid fa-xmark"></i> NLP Symptom Checker</li>
-              </ul>
-              <a href="./sign-up.html" class="nb-price-btn">Get Started</a>
+        <div class="nb-pricing-cards">
+          <!-- Patient Plan -->
+          <div class="nb-price-card">
+            <h4>Basic</h4>
+            <p class="nb-price-desc">For individuals to track health records</p>
+            <div class="nb-price-amount">₦0<span>/mo</span></div>
+            <p class="nb-price-period">Free forever</p>
+            <div class="mob-price-expand">
+              <span class="mob-price-expand-label">See what's included</span>
+              <span class="mob-price-expand-icon"><i class="fas fa-chevron-down"></i></span>
             </div>
-            <!-- Clinic Starter Plan -->
-            <div class="nb-price-card popular">
-              <span class="nb-price-badge">Most Popular</span>
-              <h4>Clinic Starter</h4>
-              <p class="nb-price-desc">For small clinics and private practices</p>
-              <div class="nb-price-amount nb-dynamic-price" data-monthly="25000" data-annual="20000">₦25,000<span>/mo</span></div>
-              <p class="nb-price-period">Billed monthly</p>
-              <div class="mob-price-expand">
-                <span class="mob-price-expand-label">See what's included</span>
-                <span class="mob-price-expand-icon"><i class="fas fa-chevron-down"></i></span>
-              </div>
-              <ul class="nb-price-features">
-                <li><i class="fa-solid fa-check"></i> Up to 3 Doctors/Staff</li>
-                <li><i class="fa-solid fa-check"></i> Unlimited Digital Records</li>
-                <li><i class="fa-solid fa-check"></i> Smart Reminders & Scheduling</li>
-                <li><i class="fa-solid fa-check"></i> Core EHR Dashboard</li>
-                <li><i class="fa-solid fa-xmark"></i> Advanced AI Analytics</li>
-              </ul>
-              <a href="https://tally.so/r/PdAKA1" target="_blank" class="nb-price-btn">Join Pilot</a>
-            </div>
-            <!-- Clinic Pro Plan -->
-            <div class="nb-price-card">
-              <h4>Clinic Pro</h4>
-              <p class="nb-price-desc">For growing medical clinics</p>
-              <div class="nb-price-amount nb-dynamic-price" data-monthly="60000" data-annual="48000">₦60,000<span>/mo</span></div>
-              <p class="nb-price-period">Billed monthly</p>
-              <div class="mob-price-expand">
-                <span class="mob-price-expand-label">See what's included</span>
-                <span class="mob-price-expand-icon"><i class="fas fa-chevron-down"></i></span>
-              </div>
-              <ul class="nb-price-features">
-                <li><i class="fa-solid fa-check"></i> Unlimited Doctors/Staff</li>
-                <li><i class="fa-solid fa-check"></i> AI Prescription Safety Check</li>
-                <li><i class="fa-solid fa-check"></i> NLP Symptom Checker</li>
-                <li><i class="fa-solid fa-check"></i> Predictive Patient Analytics</li>
-                <li><i class="fa-solid fa-check"></i> Premium Support 24/7</li>
-              </ul>
-              <a href="https://tally.so/r/PdAKA1" target="_blank" class="nb-price-btn">Contact Sales</a>
-            </div>
+            <ul class="nb-price-features">
+              <li><i class="fa-solid fa-check"></i> Basic Health Records (EHR)</li>
+              <li><i class="fa-solid fa-check"></i> Patient Records Management</li>
+              <li><i class="fa-solid fa-check"></i> Medical Appointment Scheduling</li>
+              <li><i class="fa-solid fa-check"></i> Patient Search (Limited)</li>
+              <li><i class="fa-solid fa-check"></i> Walk-In Patient Registration (Limited)</li>
+              <li><i class="fa-solid fa-check"></i> Appointment & Medication Reminders</li>
+              <li><i class="fa-solid fa-check"></i> Offline Support</li>
+              <li><i class="fa-solid fa-check"></i> Premium Support 24/7</li>
+            </ul>
+            <a href="./sign-up.html" class="nb-price-btn">Get Started</a>
           </div>
+          <!-- Clinic Starter Plan -->
+          <div class="nb-price-card popular">
+            <span class="nb-price-badge">Most Popular</span>
+            <h4>Growth Starter</h4>
+            <p class="nb-price-desc">For Growing clinics and private practices</p>
+            <div class="nb-price-amount nb-dynamic-price" data-monthly="25000" data-annual="20000">₦25,000<span>/mo</span></div>
+            <p class="nb-price-period">Billed monthly</p>
+            <div class="mob-price-expand">
+              <span class="mob-price-expand-label">See what's included</span>
+              <span class="mob-price-expand-icon"><i class="fas fa-chevron-down"></i></span>
+            </div>
+            <ul class="nb-price-features">
+              <li><i class="fa-solid fa-check"></i> Up to 3 Doctors/Staff</li>
+              <li><i class="fa-solid fa-check"></i> Unlimited Digital Records</li>
+              <li><i class="fa-solid fa-check"></i> Queue Management</li>
+              <li><i class="fa-solid fa-check"></i> Clinic Analytics Dashboard</li>
+              <li><i class="fa-solid fa-check"></i> Pre-Visit Patient Summaries</li>
+              <li><i class="fa-solid fa-check"></i>	Multi-Department Workflows (Limited)</li>
+              <li><i class="fa-solid fa-xmark"></i> Laboratory Management</li>
+              <li><i class="fa-solid fa-xmark"></i> Advanced Staff Roles</li>
+              <li><i class="fa-solid fa-xmark"></i> Pharmacy Management</li>
+              <li><i class="fa-solid fa-check"></i> Premium Support 24/7</li>
+            </ul>
+              <a href="./sign-in.html" class="nb-price-btn">Get Started</a>
+          </div>
+          <!-- Clinic Pro Plan -->
+          <div class="nb-price-card">
+            <h4>Clinic Pro</h4>
+            <p class="nb-price-desc">For Full clinic Experience</p>
+            <div class="nb-price-amount nb-dynamic-price" data-monthly="60000" data-annual="50000">₦60,000<span>/mo</span></div>
+            <p class="nb-price-period">Billed monthly</p>
+            <div class="mob-price-expand">
+              <span class="mob-price-expand-label">See what's included</span>
+              <span class="mob-price-expand-icon"><i class="fas fa-chevron-down"></i></span>
+            </div>
+            <ul class="nb-price-features">
+              <li><i class="fa-solid fa-check"></i> Unlimited Doctors/Staff</li>
+              <li><i class="fa-solid fa-check"></i> Unlimited Digital Records</li>
+              <li><i class="fa-solid fa-check"></i> Queue Management</li>
+              <li><i class="fa-solid fa-check"></i> Clinic Analytics Dashboard</li>
+              <li><i class="fa-solid fa-check"></i> Pre-Visit Patient Summaries</li>
+              <li><i class="fa-solid fa-check"></i>	Multi-Department Workflows</li>
+              <li><i class="fa-solid fa-check"></i> Laboratory Management</li>
+              <li><i class="fa-solid fa-check"></i> Advanced Staff Roles</li>
+              <li><i class="fa-solid fa-check"></i> Pharmacy Management</li>
+              <li><i class="fa-solid fa-check"></i> Premium Support 24/7</li>
+            </ul>
+            <a href="./sign-in.html" class="nb-price-btn">Get Started</a>
+          </div>
+        </div>
       </div>
 
       <section class="modal-box">
@@ -730,7 +749,6 @@
     </script>
 
     <!-- Floating WhatsApp widget -->
-    
 
     <!-- New sections scripts -->
     <script>

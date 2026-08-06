@@ -224,6 +224,7 @@
             <p>Dispense prescriptions issued by doctors at your clinic.</p>
           </div>
           <div class="workflow-heading-actions">
+            <button class="workflow-button secondary" onclick="openInventoryModal()"><i class="fa-solid fa-boxes-stacked"></i> Inventory</button>
             <button class="workflow-button secondary" onclick="loadPrescriptions()"><i class="fa-solid fa-arrows-rotate"></i> Refresh</button>
           </div>
         </div>
@@ -284,6 +285,30 @@
   </div>
 
   <div class="rx-toast" id="rxToast"></div>
+
+  <!-- ═══════════════ INVENTORY MODAL ═══════════════ -->
+  <div class="workflow-modal-backdrop" id="inventoryModal">
+    <div class="workflow-modal">
+      <div class="workflow-modal-head">
+        <div><h2>Drug Inventory</h2><p class="workflow-subtext">Optional — dispensing works fine without this. Once a drug has a stock record, dispensing is capped by what's actually on hand.</p></div>
+        <button class="workflow-close" onclick="closeInventoryModal()"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1.4fr 0.8fr 0.8fr 0.8fr auto;gap:8px;align-items:end;">
+        <input type="hidden" id="invEditId" value="">
+        <div><span class="rx-field-label">Drug name</span><input type="text" id="invDrugName" placeholder="e.g. Paracetamol 500mg" style="width:100%;padding:8px 10px;border:1px solid var(--workflow-border);border-radius:8px;font-size:12px;"></div>
+        <div><span class="rx-field-label">Quantity</span><input type="number" min="0" id="invQuantity" placeholder="0" style="width:100%;padding:8px 10px;border:1px solid var(--workflow-border);border-radius:8px;font-size:12px;"></div>
+        <div><span class="rx-field-label">Reorder at</span><input type="number" min="0" id="invThreshold" placeholder="10" style="width:100%;padding:8px 10px;border:1px solid var(--workflow-border);border-radius:8px;font-size:12px;"></div>
+        <div><span class="rx-field-label">Counted in</span><input type="text" id="invUnit" placeholder="tablets" style="width:100%;padding:8px 10px;border:1px solid var(--workflow-border);border-radius:8px;font-size:12px;"></div>
+        <button class="workflow-button primary" id="invSaveBtn" onclick="addOrUpdateDrug()"><i class="fa-solid fa-plus"></i> Save</button>
+      </div>
+      <p style="font-size:10.5px;color:var(--workflow-muted);margin:4px 0 16px;">
+        "Counted in" is how you count this drug on the shelf — <strong>tablets, bottles, vials, packs</strong>. Not the dosage strength (that already goes in the drug name, e.g. "500mg").
+      </p>
+
+      <div id="inventoryList"></div>
+    </div>
+  </div>
 
   <script src="./db.js"></script>
   <script src="./clinic-shared.js"></script>
@@ -413,7 +438,7 @@
                <div class="rx-payment-head">
                  <div>
                    <div style="font-weight:700;font-size:12px;color:var(--workflow-text);"><i class="fa-solid fa-cash-register"></i> Collect payment here</div>
-                   <div class="workflow-subtext">Only the pharmacy portion — ₦${bill.pharmacyRemaining.toLocaleString()} owed of ₦${bill.pharmacySubtotal.toLocaleString()} in drugs${bill.amountPaidPharmacy > 0 ? ` (₦${bill.amountPaidPharmacy.toLocaleString()} already collected)` : ''}. Consultation and lab charges stay with the front desk.</div>
+                   <div class="workflow-subtext">Only the pharmacy portion — ₦${bill.pharmacyRemaining.toLocaleString()} owed of ₦${bill.pharmacySubtotal.toLocaleString()} in drugs${bill.amountPaidPharmacy > 0 ? ` (₦${bill.amountPaidPharmacy.toLocaleString()} already collected)` : ''}. Consultation charges are handled at checkout; lab charges by the lab team.</div>
                  </div>
                </div>
                <div class="rx-payment-form">
@@ -449,6 +474,7 @@
             </span>
           </div>
           ${i.specialNotes ? `<div class="rx-item-notes"><i class="fa-solid fa-note-sticky"></i> ${i.specialNotes}</div>` : ''}
+          ${!i.dispensed ? renderStockLine(i.drugName) : ''}
           ${i.dispensed
             ? `<div class="rx-dispensed-note"><i class="fa-solid fa-check"></i> ₦${(i.unitPrice * i.quantity).toLocaleString()} added to bill · qty ${i.quantity} · ${formatDate(i.dispensedAt)}</div>`
             : `<div class="rx-dispense-form">
@@ -460,6 +486,21 @@
         </div>`).join('');
 
       document.getElementById('modalItems').innerHTML = summaryHtml + paymentPanelHtml + itemsHtml;
+    }
+
+    // Stock line shown above the dispense form for each not-yet-
+    // dispensed item — matched case-insensitively/trimmed against
+    // drugStock, same convention as the backend's own lookup. No
+    // record at all → shows nothing (this drug just isn't tracked,
+    // dispensing works normally). Record exists → shows what's on
+    // hand, red if at/below reorder threshold or literally zero.
+    function renderStockLine(drugName) {
+      const entry = drugStock.find(d => d.drugName.trim().toLowerCase() === drugName.trim().toLowerCase());
+      if (!entry) return '';
+      const low = entry.quantityOnHand <= entry.reorderThreshold;
+      return `<div style="font-size:11px;margin-bottom:6px;${low ? 'color:var(--workflow-red);font-weight:700;' : 'color:var(--workflow-muted);'}">
+        <i class="fa-solid fa-boxes-stacked"></i> ${entry.quantityOnHand} ${entry.unit} in stock${low ? ' — low' : ''}
+      </div>`;
     }
 
     function updateBillPreview(itemId) {
@@ -524,24 +565,23 @@
         // data.billWarning is authoritative — it's set server-side
         // whenever the charge genuinely didn't land anywhere (bill
         // already settled, OR no bill exists at all for this visit).
-        // Previously this was guessed client-side from the bill's
-        // settled flag BEFORE dispensing, which correctly caught an
-        // already-settled bill but had no way to detect "no bill
-        // exists at all" — that case silently showed a false "added
-        // to the bill" success message.
         const hadIssue = !!data.billWarning;
         const billNote = hadIssue
           ? `Dispensed — but ₦${addedAmount.toLocaleString()} was NOT added to any bill. ${data.billWarning}`
           : `₦${addedAmount.toLocaleString()} added to the patient's bill.`;
-        if (allDone) {
-          prescriptions.splice(idx, 1);
-          closePharmacyModal();
-          showToast(hadIssue ? billNote : `${billNote} All items dispensed, moved out of the queue.`, hadIssue);
-        } else {
-          prescriptions[idx] = activePrescription;
-          renderModalItems();
-          showToast(billNote, hadIssue);
-        }
+        // The last item finishing no longer force-closes this modal —
+        // that used to yank away the payment section right when there
+        // was finally something to collect. Same treatment as a
+        // partial dispense: modal stays open, payment section stays
+        // available (see renderModalItems(), gated on
+        // bill.pharmacyRemaining > 0, not on prescription status). It
+        // still drops out of the queue on its own once closed — GET
+        // /prescriptions/pending already excludes COMPLETED server-side.
+        prescriptions[idx] = activePrescription;
+        renderModalItems();
+        let toastMsg = allDone ? `${billNote} All items now dispensed.` : billNote;
+        if (data.stockWarning) toastMsg += ` ${data.stockWarning}`;
+        showToast(toastMsg, hadIssue);
         updateStats();
         renderPharmacy();
       } catch (err) {
@@ -596,6 +636,169 @@
       document.getElementById('pharmacyModal').classList.remove('open');
     }
 
+    // ═══════════════════════════════════════════════════════════
+    // INVENTORY — optional stock tracking. See models/DrugStock.js:
+    // a drug with no stock record here doesn't block dispensing at
+    // all; only drugs YOU'VE added here get capped against what's
+    // actually on hand.
+    // ═══════════════════════════════════════════════════════════
+    let drugStock = [];
+
+    async function openInventoryModal() {
+      document.getElementById('inventoryModal').classList.add('open');
+      await loadInventory();
+    }
+    function closeInventoryModal() {
+      document.getElementById('inventoryModal').classList.remove('open');
+      resetDrugForm();
+    }
+
+    async function loadInventory() {
+      const listEl = document.getElementById('inventoryList');
+      listEl.innerHTML = '<div style="text-align:center;padding:30px;color:var(--workflow-muted);"><i class="fa-solid fa-spinner fa-spin"></i></div>';
+      try {
+        const res = await clinicFetch(`${CLINIC_API}/drug-stock`);
+        const data = await res.json();
+        if (!data.success) throw new Error(data.message || 'Server error');
+        drugStock = data.data || [];
+        renderInventory();
+      } catch (err) {
+        console.error('Load inventory error:', err);
+        listEl.innerHTML = '<p style="text-align:center;color:var(--workflow-red);padding:20px;">Failed to load inventory.</p>';
+      }
+    }
+
+    function renderInventory() {
+      const listEl = document.getElementById('inventoryList');
+      if (!drugStock.length) {
+        listEl.innerHTML = '<p style="text-align:center;color:var(--workflow-muted);padding:30px 20px;font-size:12px;">No drugs tracked yet — add one above to start capping dispense against actual stock.</p>';
+        return;
+      }
+
+      listEl.innerHTML = `
+        <table class="workflow-table" style="min-width:0;">
+          <thead><tr><th>Drug</th><th>On hand</th><th>Reorder at</th><th>Last restocked</th><th></th></tr></thead>
+          <tbody>
+            ${drugStock.map(d => {
+              const low = d.quantityOnHand <= d.reorderThreshold;
+              // Quantity and unit are visually separated (unit small,
+              // muted, in parentheses) rather than run together as
+              // "200 500" — a mistaken or unusual unit value should
+              // never be readable as a second quantity.
+              const qtyDisplay = `<strong>${d.quantityOnHand}</strong> <span style="font-size:10px;color:var(--workflow-muted);">(${d.unit})</span>`;
+              return `
+              <tr>
+                <td style="font-weight:600;">${d.drugName}</td>
+                <td>
+                  <span style="${low ? 'color:var(--workflow-red);' : ''}">${qtyDisplay}</span>
+                  ${low ? '<span class="workflow-badge urgent" style="margin-left:6px;">Low</span>' : ''}
+                </td>
+                <td>${d.reorderThreshold} <span style="font-size:10px;color:var(--workflow-muted);">(${d.unit})</span></td>
+                <td class="workflow-subtext">${d.lastRestockedAt ? formatDate(d.lastRestockedAt) : 'Never'}</td>
+                <td>
+                  <div style="display:flex;gap:6px;align-items:center;">
+                    <input type="number" min="1" placeholder="Qty" id="restock-${d._id}" style="width:60px;padding:6px 8px;border:1px solid var(--workflow-border);border-radius:6px;font-size:11px;">
+                    <button class="workflow-button secondary" style="padding:6px 10px;" onclick="restockDrug('${d._id}')" title="Add newly delivered stock"><i class="fa-solid fa-plus"></i></button>
+                    <button class="workflow-button secondary" style="padding:6px 10px;" onclick="editDrug('${d._id}')" title="Edit"><i class="fa-solid fa-pen"></i></button>
+                    <button class="workflow-button secondary" style="padding:6px 10px;color:var(--workflow-red);" onclick="deleteDrug('${d._id}', '${d.drugName.replace(/'/g, "\\'")}')" title="Remove"><i class="fa-solid fa-trash"></i></button>
+                  </div>
+                </td>
+              </tr>`;
+            }).join('')}
+          </tbody>
+        </table>`;
+    }
+
+    function resetDrugForm() {
+      document.getElementById('invEditId').value = '';
+      document.getElementById('invDrugName').value = '';
+      document.getElementById('invQuantity').value = '';
+      document.getElementById('invThreshold').value = '';
+      document.getElementById('invUnit').value = '';
+      document.getElementById('invSaveBtn').innerHTML = '<i class="fa-solid fa-plus"></i> Save';
+    }
+
+    // Pre-fills the form from an existing row instead of expecting the
+    // user to retype the exact drug name to "find" it again — much
+    // less error-prone, and makes it obvious you're correcting an
+    // existing entry rather than possibly creating a new one.
+    function editDrug(id) {
+      const d = drugStock.find(x => x._id === id);
+      if (!d) return;
+      document.getElementById('invEditId').value = d._id;
+      document.getElementById('invDrugName').value = d.drugName;
+      document.getElementById('invQuantity').value = d.quantityOnHand;
+      document.getElementById('invThreshold').value = d.reorderThreshold;
+      document.getElementById('invUnit').value = d.unit;
+      document.getElementById('invSaveBtn').innerHTML = '<i class="fa-solid fa-check"></i> Update';
+      document.getElementById('invDrugName').scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
+    async function deleteDrug(id, name) {
+      if (!confirm(`Stop tracking stock for "${name}"? Dispensing it will no longer be checked against a stock count.`)) return;
+      try {
+        const res = await clinicFetch(`${CLINIC_API}/drug-stock/${id}`, { method: 'DELETE' });
+        const data = await res.json();
+        if (!data.success) throw new Error(data.message || 'Could not remove.');
+        showToast(`${name} removed from inventory.`);
+        await loadInventory();
+      } catch (err) {
+        showToast(err.message || 'Could not remove this drug. Please try again.', true);
+      }
+    }
+
+    async function addOrUpdateDrug() {
+      const drugName = document.getElementById('invDrugName').value.trim();
+      const quantityOnHand = Number(document.getElementById('invQuantity').value);
+      const reorderThresholdInput = document.getElementById('invThreshold').value;
+      const unit = document.getElementById('invUnit').value.trim() || 'units';
+
+      if (!drugName || isNaN(quantityOnHand) || quantityOnHand < 0) {
+        showToast('Enter a drug name and a valid quantity.', true);
+        return;
+      }
+
+      const payload = { drugName, quantityOnHand, unit };
+      if (reorderThresholdInput !== '') payload.reorderThreshold = Number(reorderThresholdInput);
+
+      try {
+        const res = await clinicFetch(`${CLINIC_API}/drug-stock`, {
+          method: 'PUT',
+          body: JSON.stringify({ drugs: [payload] }),
+        });
+        const data = await res.json();
+        if (!data.success) throw new Error(data.message || 'Could not save.');
+
+        resetDrugForm();
+        showToast(`${drugName} saved.`);
+        await loadInventory();
+      } catch (err) {
+        showToast(err.message || 'Could not save this drug. Please try again.', true);
+      }
+    }
+
+    async function restockDrug(id) {
+      const input = document.getElementById(`restock-${id}`);
+      const quantity = Number(input.value);
+      if (!quantity || quantity <= 0) {
+        showToast('Enter how many units arrived.', true);
+        return;
+      }
+
+      try {
+        const res = await clinicFetch(`${CLINIC_API}/drug-stock/${id}/restock`, {
+          method: 'POST',
+          body: JSON.stringify({ quantity }),
+        });
+        const data = await res.json();
+        if (!data.success) throw new Error(data.message || 'Could not restock.');
+        showToast(`+${quantity} added to stock.`);
+        await loadInventory();
+      } catch (err) {
+        showToast(err.message || 'Could not restock this drug. Please try again.', true);
+      }
+    }
+
     async function downloadPrescriptionPdf() {
       if (!activePrescription) return;
       // Same two fixes as clinic-checkout.html's viewReceipt(): auth
@@ -623,6 +826,11 @@
     document.getElementById('pharmacySearch').addEventListener('input', renderPharmacy);
     document.getElementById('pharmacyStatus').addEventListener('change', renderPharmacy);
     loadPrescriptions();
+    // Quiet background load — populates drugStock so the dispense
+    // modal's stock indicator works without requiring the Inventory
+    // modal to be opened first. Failures here are non-critical (the
+    // indicator just won't show), so no error UI on this one.
+    loadInventory().catch(() => {});
   </script>
 </body>
 </html>

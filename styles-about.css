@@ -217,6 +217,7 @@ header, .hero, .banner, .feature-card, img, .button a {
     /* FOOT-BANNER */
     .foot-banner{
         padding: 40px 1px;
+        margin: 0;
     }
     .foot-banner-text{
         padding: 10px 15px;

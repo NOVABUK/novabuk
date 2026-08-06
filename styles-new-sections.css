@@ -635,7 +635,7 @@ h1 {
 }
 
 .site-footer {
-  margin-top: 72px;
+  /* margin-top: 72px; */
   background: linear-gradient(180deg, #111827 0%, #0f172a 100%);
   padding-top: 44px;
   border-top: 1px solid rgba(15, 23, 42, 0.08);
@@ -744,6 +744,7 @@ h1 {
    ══════════════════════════════════════════════ */
 .nb-testimonials {
   background: linear-gradient(135deg, #eaf6f8, #f0f9fb);
+  margin: 20px 0px 15px;
 }
 .nb-testimonials-track {
   display: flex;
@@ -1362,7 +1363,8 @@ main {
 .ghost-button {
   background: transparent;
   color: var(--primary-strong);
-  padding: 14px 24px;
+  padding: 14px 32px;
+  font-size: 16px;
   border: 1px solid rgba(0, 183, 199, 0.18);
 }
 
@@ -1983,43 +1985,7 @@ button {
   justify-content: center;
   flex-shrink: 0;
 }
-.nav-links {
-  list-style: none;
-  display: flex;
-  align-items: center;
-  gap: 2px;
-}
-.nav-links a {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  padding: 7px 13px;
-  border-radius: var(--r-xs);
-  font-size: 0.845rem;
-  font-weight: 500;
-  color: var(--text-mid);
-  transition:
-    color 0.18s,
-    background 0.18s;
-  position: relative;
-}
-.nav-links a:hover {
-  color: var(--blue);
-  background: var(--blue-pale);
-}
-.nav-links a.active {
-  color: var(--blue);
-}
-.nav-links a.active::after {
-  content: "";
-  position: absolute;
-  bottom: -1px;
-  left: 13px;
-  right: 13px;
-  height: 2.5px;
-  border-radius: 2px;
-  background: var(--blue);
-}
+
 .nav-caret {
   font-size: 0.6rem;
   opacity: 0.6;
@@ -2417,8 +2383,11 @@ button {
   .mission-wrap-card {
     grid-template-columns: 1fr 1fr;
   }
+  .dotted-line{
+    display: none;
+  }
 }
-@media (max-width: 540px) {
+@media (max-width: 768px) {
   .mission-wrap-card {
     grid-template-columns: 1fr;
   }
@@ -2735,17 +2704,19 @@ button {
 }
 .ch-left p {
   font-size: 0.875rem;
-  color: rgba(255, 255, 255, 0.55);
+  color: rgba(168, 150, 150, 0.55);
   line-height: 1.7;
   margin-bottom: 28px;
 }
 .ch-cards {
   display: flex;
   gap: 14px;
+  align-items: center;
 }
 .ch-card {
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: 20px;
   /* background:rgba(255,255,255,.05);
   border:1px solid rgba(255,255,255,.09);
@@ -2989,7 +2960,7 @@ button {
   }
   .ch-cards {
     display: flex;
-    flex-wrap: wrap;
+    flex-direction: column;
   }
   .team-grid {
     grid-template-columns: 1fr;
@@ -3699,7 +3670,7 @@ button {
   .site-footer {
     grid-template-columns: 1fr !important;
     gap: 0;
-    margin-top: 48px;
+    /* margin-top: 48px; */
     padding-top: 32px;
   }
   .footer-brand {

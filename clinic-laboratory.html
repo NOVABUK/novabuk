@@ -103,6 +103,38 @@
       font-size: 11px;
       margin-bottom: 16px;
     }
+    /* Payment panel — mirrors clinic-pharmacy.html's .rx-payment-*
+       classes exactly, renamed for this page's own naming convention. */
+    .lab-field-label {
+      font-size: 9px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+      color: var(--workflow-muted);
+      display: block;
+      margin-bottom: 4px;
+    }
+    .lab-payment-panel {
+      background: #fbfcfd;
+      border: 1.5px solid var(--workflow-teal);
+      border-radius: 12px;
+      padding: 14px;
+      margin-bottom: 16px;
+    }
+    .lab-payment-head { margin-bottom: 10px; }
+    .lab-payment-form {
+      display: flex;
+      gap: 8px;
+      align-items: flex-end;
+    }
+    .lab-payment-form select,
+    .lab-payment-form input {
+      border: 1px solid var(--workflow-border);
+      border-radius: 8px;
+      padding: 8px 10px;
+      font: 400 12px Poppins, sans-serif;
+      width: 100%;
+    }
   </style>
 </head>
 <body>
@@ -233,6 +265,7 @@
             <div class="workflow-detail"><label>Patient</label><strong id="labPatientDetail"></strong></div>
             <div class="workflow-detail"><label>Requested by</label><strong id="labDoctorDetail"></strong></div>
         </div>
+        <div id="labPaymentArea"></div>
         <div id="labActionBanner"></div>
         <div id="labItems"></div>
         <div id="labSaveArea" style="display:flex;justify-content:flex-end;gap:10px;margin-top:6px;"></div>
@@ -336,6 +369,50 @@
     function renderLabModal() {
       const isPending = activeLab.status === 'PENDING';
 
+      // Payment panel — same states as clinic-pharmacy.html's
+      // paymentPanelHtml: no bill exists, bill already settled, has an
+      // outstanding lab balance to collect, or fully paid already.
+      // Lab charges land on the bill at ORDER time (see LabRequest.js),
+      // so this is meaningful even before any result is entered.
+      const bill = activeLab.bill || { exists: false, settled: false, labSubtotal: 0, amountPaidLab: 0, labRemaining: 0 };
+      const paymentAreaHtml = !bill.exists
+        ? `<div style="display:flex;gap:10px;align-items:flex-start;background:var(--workflow-red-bg);color:var(--workflow-red);border-radius:10px;padding:12px 14px;font-size:12px;font-weight:600;margin-bottom:12px;">
+             <i class="fa-solid fa-triangle-exclamation" style="margin-top:1px;"></i>
+             <span>No bill exists yet for this visit — nothing to collect here. This usually means a consultation fee hasn't been configured for this visit type in Settings → Billing.</span>
+           </div>`
+        : bill.settled
+        ? `<div style="display:flex;gap:8px;align-items:center;background:var(--workflow-green-bg);color:var(--workflow-green);border-radius:10px;padding:10px 14px;font-size:12px;font-weight:600;margin-bottom:12px;">
+             <i class="fa-solid fa-circle-check"></i> This patient's bill is already settled (paid or waived).
+           </div>`
+        : bill.labRemaining > 0
+          ? `<div class="lab-payment-panel">
+               <div class="lab-payment-head">
+                 <div>
+                   <div style="font-weight:700;font-size:12px;color:var(--workflow-text);"><i class="fa-solid fa-cash-register"></i> Collect payment here</div>
+                   <div class="workflow-subtext">Only the lab portion — ₦${bill.labRemaining.toLocaleString()} owed of ₦${bill.labSubtotal.toLocaleString()} in tests${bill.amountPaidLab > 0 ? ` (₦${bill.amountPaidLab.toLocaleString()} already collected)` : ''}. Consultation charges are handled at checkout; pharmacy charges by the pharmacist.</div>
+                 </div>
+               </div>
+               <div class="lab-payment-form">
+                 <div style="flex:1;"><span class="lab-field-label">Method</span>
+                   <select id="labPayMethod" class="workflow-select" style="width:100%;min-width:0;">
+                     <option value="CASH">Cash</option>
+                     <option value="TRANSFER">Transfer</option>
+                     <option value="POS">POS</option>
+                   </select>
+                 </div>
+                 <div style="flex:1;"><span class="lab-field-label">Amount (₦)</span>
+                   <input type="number" min="1" max="${bill.labRemaining}" value="${bill.labRemaining}" id="labPayAmount" style="width:100%;">
+                 </div>
+                 <div style="display:flex;align-items:flex-end;">
+                   <button class="workflow-button primary" onclick="recordLabPayment()"><i class="fa-solid fa-check"></i> Record Payment</button>
+                 </div>
+               </div>
+             </div>`
+          : `<div style="display:flex;gap:8px;align-items:center;background:var(--workflow-green-bg);color:var(--workflow-green);border-radius:10px;padding:10px 14px;font-size:12px;font-weight:600;margin-bottom:12px;">
+               <i class="fa-solid fa-circle-check"></i> Lab charges on this bill are fully settled.
+             </div>`;
+      document.getElementById('labPaymentArea').innerHTML = paymentAreaHtml;
+
       document.getElementById('labItems').innerHTML = activeLab.items.map(i => `
         <div class="lab-item">
           <div class="lab-item-head">
@@ -403,6 +480,48 @@
         showToast('Sample marked as collected.');
       } catch (err) {
         showToast(err.message || 'Could not update this request. Please try again.', true);
+      }
+    }
+
+    // Re-fetches this single request (with fresh bill/payment info)
+    // and updates activeLab in place — same pattern as
+    // clinic-pharmacy.html's refreshActivePrescription(), so the modal
+    // never shows numbers that have drifted out of sync with the server.
+    async function refreshActiveLab() {
+      const res = await clinicFetch(`${CLINIC_API}/lab-requests/${activeLab._id}`);
+      const data = await res.json();
+      if (data.success) activeLab = data.data;
+    }
+
+    async function recordLabPayment() {
+      const methodEl = document.getElementById('labPayMethod');
+      const amountEl = document.getElementById('labPayAmount');
+      const paymentMethod = methodEl.value;
+      const amountPaid = Number(amountEl.value);
+
+      if (!amountPaid || amountPaid <= 0) { amountEl.focus(); showToast('Enter an amount to collect.', true); return; }
+      if (amountPaid > activeLab.bill.labRemaining) {
+        amountEl.focus();
+        showToast(`Amount can't exceed the ₦${activeLab.bill.labRemaining.toLocaleString()} owed for lab charges.`, true);
+        return;
+      }
+
+      try {
+        const res = await clinicFetch(`${CLINIC_API}/bills/${activeLab.bill.id}/pay-lab`, {
+          method: 'PATCH',
+          body: JSON.stringify({ paymentMethod, amountPaid }),
+        });
+        const data = await res.json();
+        if (!data.success) throw new Error(data.message || 'Could not record payment.');
+
+        await refreshActiveLab();
+        const idx = labRequests.findIndex(r => r._id === activeLab._id);
+        if (idx !== -1) labRequests[idx] = activeLab;
+        renderLabModal();
+        renderLab();
+        showToast(`₦${amountPaid.toLocaleString()} collected for lab charges.`);
+      } catch (err) {
+        showToast(err.message || 'Could not record this payment. Please try again.', true);
       }
     }
 

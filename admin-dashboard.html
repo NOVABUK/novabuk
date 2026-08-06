@@ -852,6 +852,11 @@
               ><i class="fas fa-users"></i> Users</a
             >
           </li>
+          <li data-admin-only="true">
+            <a href="#" onclick="showSection('payments')" class="menu-link"
+              ><i class="fas fa-money-check-dollar"></i> Payments</a
+            >
+          </li>
           <li>
             <a href="#" onclick="showSection('blogs')" class="menu-link"
               ><i class="fas fa-newspaper"></i> Blog Posts</a
@@ -860,6 +865,11 @@
           <li>
             <a href="#" onclick="showSection('tips')" class="menu-link"
               ><i class="fas fa-lightbulb"></i> Health Tips</a
+            >
+          </li>
+          <li data-admin-only="true">
+            <a href="#" onclick="showSection('team')" class="menu-link"
+              ><i class="fas fa-user-shield"></i> Team</a
             >
           </li>
           <li>
@@ -956,76 +966,28 @@
             </div>
           </div>
 
-          <div class="grid-2">
-            <div class="card">
-              <h3>Recent Clinics</h3>
-              <div class="table-responsive">
-                <table style="font-size: 0.85rem">
-                  <thead>
-                    <tr>
-                      <th>Clinic</th>
-                      <th>City</th>
-                      <th>Joined</th>
-                    </tr>
-                  </thead>
-                  <tbody id="recentClinicsTable">
-                    <tr>
-                      <td
-                        colspan="3"
-                        style="text-align: center; padding: 20px; color: #ccc"
-                      >
-                        Loading...
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-            <div class="card">
-              <h3>System Status</h3>
-              <div style="padding: 10px 0">
-                <div
-                  style="
-                    display: flex;
-                    justify-content: space-between;
-                    margin-bottom: 12px;
-                    font-size: 0.9rem;
-                  "
-                >
-                  <span>API Server</span>
-                  <span style="color: #2ecc71"
-                    ><i class="fas fa-circle" style="font-size: 10px"></i>
-                    Online</span
-                  >
-                </div>
-                <div
-                  style="
-                    display: flex;
-                    justify-content: space-between;
-                    margin-bottom: 12px;
-                    font-size: 0.9rem;
-                  "
-                >
-                  <span>Database</span>
-                  <span style="color: #2ecc71"
-                    ><i class="fas fa-circle" style="font-size: 10px"></i>
-                    Healthy</span
-                  >
-                </div>
-                <div
-                  style="
-                    display: flex;
-                    justify-content: space-between;
-                    font-size: 0.9rem;
-                  "
-                >
-                  <span>Cloudinary Storage</span>
-                  <span style="color: #2ecc71"
-                    ><i class="fas fa-circle" style="font-size: 10px"></i>
-                    Connected</span
-                  >
-                </div>
-              </div>
+          <div class="card">
+            <h3>Recent Clinics</h3>
+            <div class="table-responsive">
+              <table style="font-size: 0.85rem">
+                <thead>
+                  <tr>
+                    <th>Clinic</th>
+                    <th>City</th>
+                    <th>Joined</th>
+                  </tr>
+                </thead>
+                <tbody id="recentClinicsTable">
+                  <tr>
+                    <td
+                      colspan="3"
+                      style="text-align: center; padding: 20px; color: #ccc"
+                    >
+                      Loading...
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
           </div>
         </section>
@@ -1254,6 +1216,19 @@
             >
               <h2 style="margin: 0">All Clinics</h2>
               <div style="display: flex; gap: 15px; align-items: center">
+                <input
+                  type="text"
+                  id="clinicSearchInput"
+                  placeholder="Search by name or city…"
+                  oninput="debounceClinicSearch()"
+                  style="
+                    padding: 8px 12px;
+                    border: 1px solid #ddd;
+                    border-radius: 6px;
+                    font-size: 0.9rem;
+                    width: 220px;
+                  "
+                />
                 <label
                   style="
                     display: flex;
@@ -1267,7 +1242,7 @@
                   <input
                     type="checkbox"
                     id="filterActiveClinics"
-                    onchange="loadClinics()"
+                    onchange="clinicsCurrentPage = 1; loadClinics();"
                     style="width: auto"
                   />
                   Active Only
@@ -1290,6 +1265,7 @@
                     <th>Name</th>
                     <th>Location</th>
                     <th>Plan</th>
+                    <th>Subscription</th>
                     <th>Status</th>
                     <th>Open</th>
                     <th>Actions</th>
@@ -1298,7 +1274,7 @@
                 <tbody id="clinicsTable">
                   <tr>
                     <td
-                      colspan="6"
+                      colspan="7"
                       style="text-align: center; padding: 40px; color: #aaa"
                     >
                       Loading...
@@ -1307,6 +1283,18 @@
                 </tbody>
               </table>
             </div>
+            <div
+              id="clinicsPagination"
+              style="
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                gap: 12px;
+                margin-top: 16px;
+                font-size: 0.9rem;
+                color: #666;
+              "
+            ></div>
           </div>
         </section>
 
@@ -1323,6 +1311,19 @@
             >
               <h2 style="margin: 0">All Registered Patients</h2>
               <div style="display: flex; gap: 15px; align-items: center">
+                <input
+                  type="text"
+                  id="userSearchInput"
+                  placeholder="Search by name, email, phone…"
+                  oninput="debounceUserSearch()"
+                  style="
+                    padding: 8px 12px;
+                    border: 1px solid #ddd;
+                    border-radius: 6px;
+                    font-size: 0.9rem;
+                    width: 220px;
+                  "
+                />
                 <label
                   style="
                     display: flex;
@@ -1336,7 +1337,7 @@
                   <input
                     type="checkbox"
                     id="filterVerifiedUsers"
-                    onchange="loadUsers()"
+                    onchange="usersCurrentPage = 1; loadUsers();"
                     style="width: auto"
                   />
                   Verified Only
@@ -1367,6 +1368,148 @@
                     <td colspan="6" class="loader">
                       <div class="spinner"></div>
                       Loading…
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div
+              id="usersPagination"
+              style="
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                gap: 12px;
+                margin-top: 16px;
+                font-size: 0.9rem;
+                color: #666;
+              "
+            ></div>
+          </div>
+        </section>
+
+        <!-- ── Payments Section ── -->
+        <section id="paymentsSection" class="hidden">
+          <div class="card">
+            <div
+              style="
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 20px;
+              "
+            >
+              <h2 style="margin: 0">Subscription Payment Submissions</h2>
+              <select
+                id="paymentStatusFilter"
+                onchange="loadPayments()"
+                style="
+                  padding: 8px 12px;
+                  border: 1px solid #ddd;
+                  border-radius: 6px;
+                  font-size: 0.9rem;
+                "
+              >
+                <option value="PENDING">Pending Review</option>
+                <option value="VERIFIED">Verified</option>
+                <option value="REJECTED">Rejected</option>
+                <option value="">All</option>
+              </select>
+            </div>
+            <p style="color: #888; font-size: 0.85rem; margin-top: -10px">
+              Manual bank-transfer submissions awaiting review. NexaPay
+              payments are verified automatically and don't appear here.
+            </p>
+            <div class="table-responsive">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Clinic</th>
+                    <th>Submitted</th>
+                    <th>Status</th>
+                    <th>Reviewed By</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="paymentsTable">
+                  <tr>
+                    <td
+                      colspan="5"
+                      style="text-align: center; padding: 40px; color: #aaa"
+                    >
+                      Loading...
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- ── Team Section ── -->
+        <section id="teamSection" class="hidden">
+          <div class="card">
+            <h2 style="margin-top: 0">Add Team Member</h2>
+            <p style="color: #888; font-size: 0.85rem">
+              Admins have full access. Editors can manage Blog Posts and
+              Health Tips only.
+            </p>
+            <form
+              id="teamForm"
+              onsubmit="handleCreateTeamMember(event)"
+              style="
+                display: grid;
+                grid-template-columns: 1fr 1fr 1fr auto auto;
+                gap: 12px;
+                align-items: end;
+                margin-bottom: 10px;
+              "
+            >
+              <div class="form-group" style="margin: 0">
+                <label>Name</label>
+                <input type="text" id="teamName" required />
+              </div>
+              <div class="form-group" style="margin: 0">
+                <label>Email</label>
+                <input type="email" id="teamEmail" required />
+              </div>
+              <div class="form-group" style="margin: 0">
+                <label>Password</label>
+                <input type="password" id="teamPassword" minlength="6" required />
+              </div>
+              <div class="form-group" style="margin: 0">
+                <label>Role</label>
+                <select id="teamRole">
+                  <option value="editor">Editor</option>
+                  <option value="admin">Admin</option>
+                </select>
+              </div>
+              <button type="submit" class="btn btn-primary" id="teamSubmitBtn">
+                <i class="fas fa-plus"></i> Add
+              </button>
+            </form>
+          </div>
+
+          <div class="card">
+            <h2 style="margin-top: 0">Team Members</h2>
+            <div class="table-responsive">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Role</th>
+                    <th>Added</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="teamTable">
+                  <tr>
+                    <td
+                      colspan="5"
+                      style="text-align: center; padding: 40px; color: #aaa"
+                    >
+                      Loading...
                     </td>
                   </tr>
                 </tbody>
@@ -1768,6 +1911,8 @@
           "createClinicSection",
           "usersSection",
           "tipsSection",
+          "paymentsSection",
+          "teamSection",
         ].forEach((id) => {
           const el = document.getElementById(id);
           if (el) el.classList.add("hidden");
@@ -1850,6 +1995,23 @@
             .querySelector("[onclick=\"showSection('tips')\"]")
             .classList.add("active");
           loadTips();
+        } else if (section === "payments") {
+          document
+            .getElementById("paymentsSection")
+            .classList.remove("hidden");
+          document.getElementById("pageTitle").textContent =
+            "Subscription Payments";
+          document
+            .querySelector("[onclick=\"showSection('payments')\"]")
+            .classList.add("active");
+          loadPayments();
+        } else if (section === "team") {
+          document.getElementById("teamSection").classList.remove("hidden");
+          document.getElementById("pageTitle").textContent = "Team";
+          document
+            .querySelector("[onclick=\"showSection('team')\"]")
+            .classList.add("active");
+          loadTeam();
         } else if (section === "createClinicSection") {
           document
             .getElementById("createClinicSection")
@@ -1872,9 +2034,23 @@
         document.getElementById("dashboard").classList.add("hidden");
         document.getElementById("loginPage").classList.remove("hidden");
       }
+
+      // Editor accounts get the same login as full admins, but shouldn't
+      // see clinic/patient-financial management or team administration —
+      // those stay admin-only. This only hides the nav entries; the real
+      // enforcement is server-side (requireAdminRole on the API routes),
+      // so this is purely to avoid showing editors links that will just
+      // 403 if clicked.
+      function applyRoleVisibility() {
+        const isFullAdmin = currentUser && currentUser.role === "admin";
+        document.querySelectorAll("[data-admin-only]").forEach((el) => {
+          el.style.display = isFullAdmin ? "" : "none";
+        });
+      }
       function showDashboard() {
         document.getElementById("loginPage").classList.add("hidden");
         document.getElementById("dashboard").classList.remove("hidden");
+        applyRoleVisibility();
         showSection("overview");
       }
 
@@ -2392,9 +2568,85 @@
 
       // ── Clinics ───────────────────────────────────────────
 
+      let clinicsCurrentPage = 1;
+      let clinicSearchDebounce = null;
+
+      function debounceClinicSearch() {
+        clearTimeout(clinicSearchDebounce);
+        clinicSearchDebounce = setTimeout(() => {
+          clinicsCurrentPage = 1;
+          loadClinics();
+        }, 350);
+      }
+
+      function renderPagination(containerId, currentPage, totalPages, goToPageFn) {
+        const el = document.getElementById(containerId);
+        if (!el) return;
+        if (!totalPages || totalPages <= 1) {
+          el.innerHTML = "";
+          return;
+        }
+        el.innerHTML = `
+          <button class="btn btn-secondary btn-sm" ${currentPage <= 1 ? "disabled" : ""} onclick="${goToPageFn}(${currentPage - 1})">
+            <i class="fas fa-chevron-left"></i> Prev
+          </button>
+          <span>Page ${currentPage} of ${totalPages}</span>
+          <button class="btn btn-secondary btn-sm" ${currentPage >= totalPages ? "disabled" : ""} onclick="${goToPageFn}(${currentPage + 1})">
+            Next <i class="fas fa-chevron-right"></i>
+          </button>
+        `;
+      }
+
+      function goToClinicsPage(page) {
+        clinicsCurrentPage = page;
+        loadClinics();
+      }
+
+      // Renders trial/active/expiring/expired state from fields Clinic.js
+      // already returns (subscriptionStatus, subscriptionExpiry,
+      // trialEndsAt) — no backend change needed, this data was already
+      // in the API response, just never shown anywhere in the UI.
+      function formatSubscriptionInfo(c) {
+        const now = new Date();
+
+        // Still inside the free trial window and no paid subscription set yet
+        if (c.trialEndsAt && new Date(c.trialEndsAt) > now && !c.subscriptionExpiry) {
+          const daysLeft = Math.ceil((new Date(c.trialEndsAt) - now) / 86400000);
+          return `<span class="status-badge status-draft">Trial</span><br><span style="font-size:11px;color:#888;">${daysLeft}d left</span>`;
+        }
+
+        if (!c.subscriptionExpiry) {
+          return `<span style="color:#ccc;">—</span>`;
+        }
+
+        const expiry = new Date(c.subscriptionExpiry);
+        const daysLeft = Math.ceil((expiry - now) / 86400000);
+        const badgeClass =
+          c.subscriptionStatus === "Active" ? "status-published" : "status-draft";
+        let sub;
+        if (daysLeft < 0) {
+          sub = `<span style="font-size:11px;color:#e53e3e;">Expired ${Math.abs(daysLeft)}d ago</span>`;
+        } else if (daysLeft <= 7) {
+          sub = `<span style="font-size:11px;color:#f39c12;">Expires in ${daysLeft}d</span>`;
+        } else {
+          sub = `<span style="font-size:11px;color:#888;">${expiry.toLocaleDateString("en-NG", { day: "numeric", month: "short", year: "numeric" })}</span>`;
+        }
+        return `<span class="status-badge ${badgeClass}">${c.subscriptionStatus || "Active"}</span><br>${sub}`;
+      }
+
       async function loadClinics() {
         try {
-          const res = await fetch(`${API_URL}/clinics`, {
+          const search = document.getElementById("clinicSearchInput").value.trim();
+          const onlyActive = document.getElementById("filterActiveClinics").checked;
+
+          const params = new URLSearchParams({
+            page: clinicsCurrentPage,
+            limit: 10,
+          });
+          if (search) params.set("search", search);
+          if (onlyActive) params.set("isActive", "true");
+
+          const res = await fetch(`${API_URL}/clinics/admin/all?${params}`, {
             headers: { Authorization: `Bearer ${authToken}` },
           });
           const data = await res.json();
@@ -2404,25 +2656,19 @@
             return;
           }
 
-          let filtered = data.data;
-          const onlyActive = document.getElementById(
-            "filterActiveClinics",
-          ).checked;
-          if (onlyActive) {
-            filtered = filtered.filter((c) => c.isActive);
-          }
-
-          if (!filtered.length) {
-            tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;padding:40px;color:#aaa">No clinics found matching criteria.</td></tr>`;
+          if (!data.data.length) {
+            tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;padding:40px;color:#aaa">No clinics found matching criteria.</td></tr>`;
+            document.getElementById("clinicsPagination").innerHTML = "";
             return;
           }
-          tbody.innerHTML = filtered
+          tbody.innerHTML = data.data
             .map(
               (c) => `
             <tr>
               <td><strong>${c.name}</strong></td>
               <td>${c.location.city}</td>
               <td><span class="status-badge ${c.subscriptionPlan === "Pro" ? "status-published" : "status-draft"}" style="text-transform:capitalize">${c.subscriptionPlan || "Free"}</span></td>
+              <td>${formatSubscriptionInfo(c)}</td>
               <td><span class="status-badge ${c.isActive ? "status-published" : "status-draft"}">${c.isActive ? "Active" : "Inactive"}</span></td>
               <td><span class="status-badge ${c.isOpen ? "status-published" : "status-draft"}">${c.isOpen ? "Open" : "Closed"}</span></td>
               <td>
@@ -2436,16 +2682,44 @@
             </tr>`,
             )
             .join("");
+
+          renderPagination("clinicsPagination", data.currentPage, data.pages, "goToClinicsPage");
         } catch (err) {
           showAlert("Error loading clinics: " + err.message, "error");
         }
       }
 
       // ── Users ─────────────────────────────────────────────
+      let usersCurrentPage = 1;
+      let userSearchDebounce = null;
+
+      function debounceUserSearch() {
+        clearTimeout(userSearchDebounce);
+        userSearchDebounce = setTimeout(() => {
+          usersCurrentPage = 1;
+          loadUsers();
+        }, 350);
+      }
+
+      function goToUsersPage(page) {
+        usersCurrentPage = page;
+        loadUsers();
+      }
+
       async function loadUsers() {
         const tbody = document.getElementById("usersTable");
         try {
-          const res = await fetch(`${API_URL}/users/admin/all`, {
+          const search = document.getElementById("userSearchInput").value.trim();
+          const onlyVerified = document.getElementById("filterVerifiedUsers").checked;
+
+          const params = new URLSearchParams({
+            page: usersCurrentPage,
+            limit: 10,
+          });
+          if (search) params.set("search", search);
+          if (onlyVerified) params.set("isVerified", "true");
+
+          const res = await fetch(`${API_URL}/users/admin/all?${params}`, {
             headers: { Authorization: `Bearer ${authToken}` },
             signal: AbortSignal.timeout(10000),
           });
@@ -2455,20 +2729,13 @@
             return;
           }
 
-          let filtered = data.data;
-          const onlyVerified = document.getElementById(
-            "filterVerifiedUsers",
-          ).checked;
-          if (onlyVerified) {
-            filtered = filtered.filter((u) => u.isVerified);
-          }
-
-          if (!filtered.length) {
+          if (!data.data.length) {
             tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;padding:40px;color:#aaa">No patients found matching criteria.</td></tr>`;
+            document.getElementById("usersPagination").innerHTML = "";
             return;
           }
 
-          tbody.innerHTML = filtered
+          tbody.innerHTML = data.data
             .map(
               (u) => `
             <tr>
@@ -2486,6 +2753,8 @@
           `,
             )
             .join("");
+
+          renderPagination("usersPagination", data.currentPage, data.pages, "goToUsersPage");
         } catch (err) {
           tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;padding:40px;color:var(--error)">Error: ${err.message}</td></tr>`;
         }
@@ -2547,6 +2816,192 @@
             .join("");
         } catch (err) {
           showAlert("Error loading tips", "error");
+        }
+      }
+
+      // ── Payments ──────────────────────────────────────────
+      async function loadPayments() {
+        const tbody = document.getElementById("paymentsTable");
+        try {
+          const status = document.getElementById("paymentStatusFilter").value;
+          const params = new URLSearchParams();
+          if (status) params.set("status", status);
+
+          const res = await fetch(
+            `${API_URL}/clinics/admin/subscription-payments?${params}`,
+            { headers: { Authorization: `Bearer ${authToken}` } },
+          );
+          const data = await res.json();
+          if (!data.success) {
+            tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;padding:40px;color:var(--error)">${data.message}</td></tr>`;
+            return;
+          }
+
+          if (!data.data.length) {
+            tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;padding:40px;color:#aaa">No submissions found.</td></tr>`;
+            return;
+          }
+
+          tbody.innerHTML = data.data
+            .map((p) => {
+              const statusClass =
+                p.status === "VERIFIED"
+                  ? "status-published"
+                  : p.status === "REJECTED"
+                    ? "status-draft"
+                    : "status-draft";
+              const reviewedInfo = p.reviewedByName
+                ? `${p.reviewedByName}${p.reviewNote ? ` — "${p.reviewNote}"` : ""}`
+                : "—";
+              const actions =
+                p.status === "PENDING"
+                  ? `
+                  <button class="btn btn-primary btn-sm" onclick="reviewPayment('${p._id}', 'VERIFIED')"><i class="fas fa-check"></i> Approve</button>
+                  <button class="btn btn-danger btn-sm" onclick="reviewPayment('${p._id}', 'REJECTED')"><i class="fas fa-xmark"></i> Reject</button>
+                `
+                  : "—";
+              return `
+              <tr>
+                <td><strong>${p.clinic?.name || "Unknown clinic"}</strong></td>
+                <td>${new Date(p.createdAt).toLocaleDateString("en-NG", { day: "numeric", month: "short", year: "numeric" })}</td>
+                <td><span class="status-badge ${statusClass}">${p.status}</span></td>
+                <td style="font-size:0.85rem; color:#666;">${reviewedInfo}</td>
+                <td><div class="action-buttons">${actions}</div></td>
+              </tr>`;
+            })
+            .join("");
+        } catch (err) {
+          tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;padding:40px;color:var(--error)">Error: ${err.message}</td></tr>`;
+        }
+      }
+
+      async function reviewPayment(id, decision) {
+        let reviewNote = "";
+        if (decision === "REJECTED") {
+          reviewNote = prompt(
+            "Reason for rejecting this payment (shown to the clinic):",
+          );
+          if (!reviewNote || !reviewNote.trim()) {
+            showAlert("A reason is required to reject a payment.", "error");
+            return;
+          }
+        } else {
+          if (!confirm("Approve this payment and activate the clinic's plan?"))
+            return;
+        }
+
+        try {
+          const res = await fetch(
+            `${API_URL}/clinics/admin/subscription-payments/${id}/review`,
+            {
+              method: "PATCH",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${authToken}`,
+              },
+              body: JSON.stringify({ decision, reviewNote }),
+            },
+          );
+          const data = await res.json();
+          if (data.success) {
+            showAlert(
+              decision === "VERIFIED" ? "Payment approved." : "Payment rejected.",
+              "success",
+            );
+            loadPayments();
+          } else {
+            showAlert(data.message, "error");
+          }
+        } catch (err) {
+          showAlert("Error reviewing payment: " + err.message, "error");
+        }
+      }
+
+      // ── Team ──────────────────────────────────────────────
+      async function loadTeam() {
+        const tbody = document.getElementById("teamTable");
+        try {
+          const res = await fetch(`${API_URL}/admin/all`, {
+            headers: { Authorization: `Bearer ${authToken}` },
+          });
+          const data = await res.json();
+          if (!data.success) {
+            tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;padding:40px;color:var(--error)">${data.message}</td></tr>`;
+            return;
+          }
+
+          tbody.innerHTML = data.data
+            .map((a) => {
+              const isSelf = currentUser && a._id === currentUser.id;
+              return `
+              <tr>
+                <td><strong>${a.name}</strong>${isSelf ? ' <span style="color:#aaa; font-size:0.8rem;">(you)</span>' : ""}</td>
+                <td>${a.email}</td>
+                <td><span class="status-badge ${a.role === "admin" ? "status-published" : "status-draft"}" style="text-transform:capitalize">${a.role}</span></td>
+                <td>${new Date(a.createdAt).toLocaleDateString("en-NG", { day: "numeric", month: "short", year: "numeric" })}</td>
+                <td>
+                  ${isSelf ? "—" : `<button class="btn btn-danger btn-sm" onclick="removeTeamMember('${a._id}', '${a.name.replace(/'/g, "\\'")}')"><i class="fas fa-trash"></i> Remove</button>`}
+                </td>
+              </tr>`;
+            })
+            .join("");
+        } catch (err) {
+          tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;padding:40px;color:var(--error)">Error: ${err.message}</td></tr>`;
+        }
+      }
+
+      async function handleCreateTeamMember(event) {
+        event.preventDefault();
+        const btn = document.getElementById("teamSubmitBtn");
+        const payload = {
+          name: document.getElementById("teamName").value.trim(),
+          email: document.getElementById("teamEmail").value.trim(),
+          password: document.getElementById("teamPassword").value,
+          role: document.getElementById("teamRole").value,
+        };
+
+        btn.disabled = true;
+        try {
+          const res = await fetch(`${API_URL}/admin/create`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${authToken}`,
+            },
+            body: JSON.stringify(payload),
+          });
+          const data = await res.json();
+          if (data.success) {
+            showAlert("Team member added.", "success");
+            document.getElementById("teamForm").reset();
+            loadTeam();
+          } else {
+            showAlert(data.message, "error");
+          }
+        } catch (err) {
+          showAlert("Error adding team member: " + err.message, "error");
+        } finally {
+          btn.disabled = false;
+        }
+      }
+
+      async function removeTeamMember(id, name) {
+        if (!confirm(`Remove ${name}'s account? This cannot be undone.`))
+          return;
+        try {
+          const res = await fetch(`${API_URL}/admin/${id}`, {
+            method: "DELETE",
+            headers: { Authorization: `Bearer ${authToken}` },
+          });
+          const data = await res.json();
+          if (data.success) {
+            showAlert("Team member removed.", "success");
+            loadTeam();
+          } else {
+            showAlert(data.message, "error");
+          }
+        } catch (err) {
+          showAlert("Error removing team member: " + err.message, "error");
         }
       }
 

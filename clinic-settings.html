@@ -1069,7 +1069,7 @@
         <div class="nb-modal-header">
           <h3>
             <i
-              class="fa-solid fa-gem"
+              class="fa-solid fa-credit-card"
               style="color: var(--teal); margin-right: 8px"
             ></i>
             Upgrade to Pro
@@ -1083,64 +1083,91 @@
         <div class="checkout-summary">
           <div>
             <div style="font-size: 12px; color: #64748b; font-weight: 500">
-              Clinic Pro Plan
+              Premium Pro Plan
             </div>
-            <div
-              style="font-size: 11px; color: #94a3b8"
-              id="checkoutCycleLabel"
-            >
+            <div style="font-size: 11px; color: #94a3b8">
               Monthly subscription
             </div>
           </div>
           <div style="font-size: 20px; font-weight: 700; color: #0f766e">
-            <span id="checkoutPrice">—</span
-            ><span
+            ₦10,000<span
               style="font-size: 11px; font-weight: 400; color: #64748b"
-              id="checkoutPriceSuffix"
               >/mo</span
             >
           </div>
         </div>
 
-        <!-- Billing cycle -->
-        <div class="checkout-tabs" id="billingCycleTabs">
+        <!-- Payment tabs -->
+        <div class="checkout-tabs">
           <button
             class="checkout-tab-btn active"
-            onclick="switchBillingCycle('MONTHLY', this)"
+            onclick="switchPaymentTab('card', this)"
           >
-            Monthly
+            <i class="fa-solid fa-credit-card" style="margin-right: 5px"></i>
+            Card
           </button>
           <button
             class="checkout-tab-btn"
-            onclick="switchBillingCycle('ANNUAL', this)"
-          >
-            Annual
-          </button>
-        </div>
-
-        <!-- STEP 1: choose cycle, generate payment details -->
-        <div class="payment-panel active" id="panel-select">
-          <p style="font-size: 12.5px; color: #64748b; margin: 0 0 18px">
-            You'll get a dedicated account number to transfer into. Your plan
-            activates automatically once the transfer is confirmed — usually
-            within a minute or two, no reference to submit.
-          </p>
-          <button
-            class="btn-save"
-            id="generatePaymentBtn"
-            onclick="initiatePayment()"
-            style="width: 100%; justify-content: center"
+            onclick="switchPaymentTab('transfer', this)"
           >
             <i
               class="fa-solid fa-building-columns"
-              style="margin-right: 6px"
+              style="margin-right: 5px"
             ></i>
-            Get Payment Details
+            Bank Transfer
           </button>
         </div>
 
-        <!-- STEP 2: transfer + auto-confirmation -->
-        <div class="payment-panel" id="panel-pending">
+        <!-- Card Payment Panel -->
+        <div class="payment-panel active" id="panel-card">
+          <div class="field">
+            <label>Cardholder Name</label>
+            <input type="text" id="cardName" placeholder="Full name on card" />
+          </div>
+          <div class="field">
+            <label>Card Number</label>
+            <input
+              type="text"
+              id="cardNumber"
+              placeholder="0000  0000  0000  0000"
+              maxlength="22"
+              oninput="formatCardNumber(this)"
+            />
+          </div>
+          <div class="form-row">
+            <div class="field">
+              <label>Expiry Date</label
+              ><input
+                type="text"
+                id="cardExpiry"
+                placeholder="MM/YY"
+                maxlength="5"
+                oninput="formatExpiry(this)"
+              />
+            </div>
+            <div class="field">
+              <label>CVV</label
+              ><input
+                type="password"
+                id="cardCvv"
+                placeholder="•••"
+                maxlength="4"
+              />
+            </div>
+          </div>
+          <button
+            class="btn-save"
+            id="payCardBtn"
+            onclick="processCardPayment()"
+            style="width: 100%; justify-content: center; margin-top: 20px"
+          >
+            <i class="fa-solid fa-lock" style="margin-right: 6px"></i> Pay
+            ₦10,000
+          </button>
+        </div>
+
+        <!-- Bank Transfer Panel -->
+        <div class="payment-panel" id="panel-transfer">
           <div class="bank-info-box">
             <div
               style="
@@ -1154,96 +1181,33 @@
             </div>
             <div class="bank-info-row">
               <span class="bank-label">Bank</span
-              ><span class="bank-value" id="vaBankName">—</span>
+              ><span class="bank-value">NovaBuk Payments Ltd</span>
             </div>
             <div class="bank-info-row">
               <span class="bank-label">Account Number</span
-              ><span
-                class="bank-value"
-                id="vaAccountNumber"
-                style="cursor: pointer"
-                onclick="copyAccountNumber()"
-                title="Click to copy"
-                >—</span
-              >
+              ><span class="bank-value">0123456789</span>
             </div>
             <div class="bank-info-row">
               <span class="bank-label">Amount</span
-              ><span class="bank-value" id="vaAmount">—</span>
-            </div>
-            <div class="bank-info-row">
-              <span class="bank-label">Reference</span
-              ><span
-                class="bank-value"
-                id="vaReference"
-                style="font-size: 11px"
-                >—</span
-              >
+              ><span class="bank-value">₦10,000.00</span>
             </div>
           </div>
-          <div
-            id="vaCopiedNote"
-            style="
-              display: none;
-              font-size: 11px;
-              color: #16a34a;
-              margin: -10px 0 14px;
-              text-align: center;
-            "
-          >
-            <i class="fa-solid fa-circle-check"></i> Account number copied
-          </div>
-          <div
-            style="
-              display: flex;
-              align-items: center;
-              justify-content: center;
-              gap: 8px;
-              padding: 14px;
-              background: #f8fafc;
-              border-radius: 10px;
-              font-size: 12.5px;
-              color: #475569;
-              font-weight: 600;
-            "
-          >
-            <i
-              class="fa-solid fa-circle-notch fa-spin"
-              style="color: var(--teal)"
-            ></i>
-            <span id="vaStatusText">Waiting for your transfer to confirm…</span>
-          </div>
-          <p
-            style="
-              font-size: 11px;
-              color: #94a3b8;
-              text-align: center;
-              margin: 10px 0 0;
-            "
-          >
-            This page updates itself — don't close it until you see the
-            confirmation.
-          </p>
-        </div>
-
-        <!-- STEP 3: payment could not be confirmed -->
-        <div class="payment-panel" id="panel-failed">
-          <div style="text-align: center; padding: 10px 0 18px">
-            <i
-              class="fa-solid fa-circle-exclamation"
-              style="font-size: 28px; color: #dc2626; margin-bottom: 10px"
-            ></i>
-            <p style="font-size: 13px; color: #475569; margin: 0" id="vaFailedReason">
-              We couldn't confirm this payment.
-            </p>
+          <div class="field">
+            <label>Transaction Reference / Receipt ID</label>
+            <input
+              type="text"
+              id="transferRef"
+              placeholder="Enter your transaction reference"
+            />
           </div>
           <button
             class="btn-save"
-            style="width: 100%; justify-content: center"
-            onclick="resetCheckoutModal()"
+            id="payTransferBtn"
+            onclick="processTransferPayment()"
+            style="width: 100%; justify-content: center; margin-top: 20px"
           >
-            <i class="fa-solid fa-rotate-right" style="margin-right: 6px"></i>
-            Try Again
+            <i class="fa-solid fa-paper-plane" style="margin-right: 6px"></i>
+            Submit & Upgrade
           </button>
         </div>
       </div>
@@ -1292,12 +1256,10 @@
           </select>
         </div>
         <div class="field">
-          <label>Password</label>
-          <input
-            type="password"
-            id="staffPassword"
-            placeholder="Min 6 characters"
-          />
+          <p style="font-size: 12px; color: var(--text-light); margin: 0; padding: 10px 12px; background: #f8fafc; border-radius: 8px;">
+            <i class="fa-solid fa-envelope" style="color: var(--teal); margin-right: 6px"></i>
+            They'll get an email to set their own password — no need to create one for them.
+          </p>
         </div>
         <button
           class="btn-save"
@@ -1913,187 +1875,127 @@
       }
 
       // ═══════════════════════════════════════════════════════════
-      // CHECKOUT MODAL — NexaPay virtual account flow
+      // CHECKOUT MODAL
       // ═══════════════════════════════════════════════════════════
-      let plansCache = null;
-      let selectedBillingCycle = "MONTHLY";
-      let currentPaymentReference = null;
-      let paymentPollTimer = null;
-
-      async function fetchPlans() {
-        if (plansCache) return plansCache;
-        try {
-          const res = await clinicFetch(`${API_URL}/clinics/plans`);
-          const data = await res.json();
-          if (data.success) plansCache = data.data;
-        } catch (e) {
-          console.error("Load plans error:", e);
-        }
-        return plansCache;
-      }
-
-      function proPlanPricing() {
-        return plansCache ? plansCache.find((p) => p.key === "Pro") : null;
-      }
-
-      function updateCheckoutSummary() {
-        const pro = proPlanPricing();
-        const priceEl = document.getElementById("checkoutPrice");
-        const suffixEl = document.getElementById("checkoutPriceSuffix");
-        const cycleLabel = document.getElementById("checkoutCycleLabel");
-        if (!pro) {
-          priceEl.textContent = "—";
-          return;
-        }
-        if (selectedBillingCycle === "ANNUAL") {
-          priceEl.textContent = `₦${pro.priceAnnualTotal.toLocaleString()}`;
-          suffixEl.textContent = "/yr";
-          cycleLabel.textContent = `Annual subscription (₦${pro.priceAnnual.toLocaleString()}/mo)`;
-        } else {
-          priceEl.textContent = `₦${pro.priceMonthly.toLocaleString()}`;
-          suffixEl.textContent = "/mo";
-          cycleLabel.textContent = "Monthly subscription";
-        }
-      }
-
-      function switchBillingCycle(cycle, btn) {
-        selectedBillingCycle = cycle;
-        document
-          .querySelectorAll("#billingCycleTabs .checkout-tab-btn")
-          .forEach((b) => b.classList.remove("active"));
-        btn.classList.add("active");
-        updateCheckoutSummary();
-      }
-
-      async function openCheckoutModal() {
-        resetCheckoutModal();
+      function openCheckoutModal() {
         document.getElementById("nbCheckoutModal").classList.add("show");
-        await fetchPlans();
-        updateCheckoutSummary();
       }
-
       function closeCheckoutModal() {
         document.getElementById("nbCheckoutModal").classList.remove("show");
-        stopPolling();
       }
 
-      function showPanel(name) {
+      function switchPaymentTab(tab, btn) {
         document
-          .querySelectorAll("#nbCheckoutModal .payment-panel")
+          .querySelectorAll(".checkout-tab-btn")
+          .forEach((b) => b.classList.remove("active"));
+        document
+          .querySelectorAll(".payment-panel")
           .forEach((p) => p.classList.remove("active"));
-        document.getElementById("panel-" + name).classList.add("active");
-        // Billing cycle only makes sense before payment details exist
-        document.getElementById("billingCycleTabs").style.display =
-          name === "select" ? "flex" : "none";
+        btn.classList.add("active");
+        document.getElementById("panel-" + tab).classList.add("active");
       }
 
-      function resetCheckoutModal() {
-        stopPolling();
-        currentPaymentReference = null;
-        showPanel("select");
-        const btn = document.getElementById("generatePaymentBtn");
-        btn.disabled = false;
-        btn.innerHTML =
-          '<i class="fa-solid fa-building-columns" style="margin-right: 6px"></i> Get Payment Details';
+      // Card number formatting
+      function formatCardNumber(input) {
+        let v = input.value.replace(/\D/g, "").substring(0, 16);
+        input.value = v.replace(/(\d{4})(?=\d)/g, "$1  ");
+      }
+      function formatExpiry(input) {
+        let v = input.value.replace(/\D/g, "").substring(0, 4);
+        if (v.length >= 3) v = v.substring(0, 2) + "/" + v.substring(2);
+        input.value = v;
       }
 
-      async function initiatePayment() {
-        const btn = document.getElementById("generatePaymentBtn");
+      // Process Card Payment
+      async function processCardPayment() {
+        const name = document.getElementById("cardName").value.trim();
+        const number = document
+          .getElementById("cardNumber")
+          .value.replace(/\s/g, "");
+        const expiry = document.getElementById("cardExpiry").value.trim();
+        const cvv = document.getElementById("cardCvv").value.trim();
+
+        if (!name || !number || !expiry || !cvv) {
+          showAlert("error", "Please fill in all card details.");
+          return;
+        }
+        if (number.length < 16) {
+          showAlert("error", "Card number must be 16 digits.");
+          return;
+        }
+
+        const btn = document.getElementById("payCardBtn");
         btn.disabled = true;
         btn.innerHTML =
-          '<i class="fa-solid fa-spinner fa-spin" style="margin-right: 6px"></i> Generating…';
+          '<i class="fa-solid fa-spinner fa-spin"></i> Processing payment…';
 
+        // Simulate a brief payment processing delay
+        await new Promise((r) => setTimeout(r, 1500));
+
+        // Generate a mock reference from card details
+        const reference = "CARD-" + Date.now() + "-" + number.slice(-4);
+        await finalizeUpgrade(
+          reference,
+          btn,
+          '<i class="fa-solid fa-lock" style="margin-right:6px;"></i> Pay ₦10,000',
+        );
+      }
+
+      // Process Bank Transfer
+      async function processTransferPayment() {
+        const ref = document.getElementById("transferRef").value.trim();
+        if (!ref) {
+          showAlert("error", "Please enter your transaction reference.");
+          return;
+        }
+
+        const btn = document.getElementById("payTransferBtn");
+        btn.disabled = true;
+        btn.innerHTML =
+          '<i class="fa-solid fa-spinner fa-spin"></i> Verifying…';
+
+        await finalizeUpgrade(
+          ref,
+          btn,
+          '<i class="fa-solid fa-paper-plane" style="margin-right:6px;"></i> Submit & Upgrade',
+        );
+      }
+
+      // Shared upgrade finalization
+      async function finalizeUpgrade(reference, btn, originalHTML) {
         try {
-          const res = await clinicFetch(`${API_URL}/clinics/subscription-payments/nexapay`, {
+          btn.innerHTML =
+            '<i class="fa-solid fa-spinner fa-spin"></i> Upgrading account…';
+
+          const res = await clinicFetch(`${API_URL}/clinics/upgrade`, {
             method: "POST",
-            body: JSON.stringify({ plan: "Pro", billingCycle: selectedBillingCycle }),
+            body: JSON.stringify({ reference, plan: "Pro" }),
           });
           const data = await res.json();
 
-          if (!data.success) {
-            showAlert("error", data.message || "Could not start payment. Please try again.");
-            btn.disabled = false;
-            btn.innerHTML =
-              '<i class="fa-solid fa-building-columns" style="margin-right: 6px"></i> Get Payment Details';
-            return;
-          }
-
-          currentPaymentReference = data.data.reference;
-          document.getElementById("vaBankName").textContent = data.data.bankName || "—";
-          document.getElementById("vaAccountNumber").textContent = data.data.accountNumber;
-          document.getElementById("vaAmount").textContent =
-            `₦${data.data.amount.toLocaleString()}`;
-          document.getElementById("vaReference").textContent = data.data.reference;
-
-          showPanel("pending");
-          startPolling();
-        } catch (e) {
-          console.error("Initiate payment error:", e);
-          showAlert("error", "Network error. Please check your connection and try again.");
-          btn.disabled = false;
-          btn.innerHTML =
-            '<i class="fa-solid fa-building-columns" style="margin-right: 6px"></i> Get Payment Details';
-        }
-      }
-
-      function copyAccountNumber() {
-        const num = document.getElementById("vaAccountNumber").textContent;
-        if (!num || num === "—") return;
-        const showCopied = () => {
-          const note = document.getElementById("vaCopiedNote");
-          note.style.display = "block";
-          setTimeout(() => (note.style.display = "none"), 2000);
-        };
-        if (navigator.clipboard) {
-          navigator.clipboard.writeText(num).then(showCopied).catch(() => {});
-        } else {
-          const ta = document.createElement("textarea");
-          ta.value = num;
-          document.body.appendChild(ta);
-          ta.select();
-          document.execCommand("copy");
-          document.body.removeChild(ta);
-          showCopied();
-        }
-      }
-
-      function startPolling() {
-        stopPolling();
-        paymentPollTimer = setInterval(checkPaymentStatus, 4000);
-        checkPaymentStatus();
-      }
-
-      function stopPolling() {
-        if (paymentPollTimer) {
-          clearInterval(paymentPollTimer);
-          paymentPollTimer = null;
-        }
-      }
-
-      async function checkPaymentStatus() {
-        if (!currentPaymentReference) return;
-        try {
-          const res = await clinicFetch(
-            `${API_URL}/clinics/subscription-payments/status/${currentPaymentReference}`,
-          );
-          const data = await res.json();
-          if (!data.success) return;
-
-          if (data.data.status === "VERIFIED") {
-            stopPolling();
+          if (data.success) {
             closeCheckoutModal();
-            showAlert("success", "🎉 Congratulations! Your clinic is now on Clinic Pro!");
+            showAlert(
+              "success",
+              "🎉 Congratulations! Your clinic is now on Premium Pro!",
+            );
+            // Reload clinic data to refresh the UI
             loadClinic();
-          } else if (data.data.status === "REJECTED") {
-            stopPolling();
-            document.getElementById("vaFailedReason").textContent =
-              data.data.reviewNote || "We couldn't confirm this payment.";
-            showPanel("failed");
+          } else {
+            showAlert(
+              "error",
+              data.message || "Upgrade failed. Please try again.",
+            );
           }
-          // PENDING — keep polling silently, no UI change needed
         } catch (e) {
-          console.error("Poll payment status error:", e);
-          // transient network hiccup — don't interrupt polling for one failed check
+          console.error("Upgrade error:", e);
+          showAlert(
+            "error",
+            "Network error. Please check your connection and try again.",
+          );
+        } finally {
+          btn.disabled = false;
+          btn.innerHTML = originalHTML;
         }
       }
 
@@ -2115,7 +2017,6 @@
         // Clear fields
         document.getElementById("staffFullName").value = "";
         document.getElementById("staffEmail").value = "";
-        document.getElementById("staffPassword").value = "";
         updateStaffRoleOptions(); // resets to the correct default option for the current plan
       }
 
@@ -2268,15 +2169,10 @@
       async function createStaffMember() {
         const fullName = document.getElementById("staffFullName").value.trim();
         const email = document.getElementById("staffEmail").value.trim();
-        const password = document.getElementById("staffPassword").value;
         const role = document.getElementById("staffRole").value;
 
-        if (!fullName || !email || !password) {
+        if (!fullName || !email) {
           showAlert("error", "Please fill in all staff fields.");
-          return;
-        }
-        if (password.length < 6) {
-          showAlert("error", "Password must be at least 6 characters.");
           return;
         }
 
@@ -2287,7 +2183,7 @@
         try {
           const res = await clinicFetch(`${API_URL}/clinic-auth/my-staff`, {
             method: "POST",
-            body: JSON.stringify({ fullName, email, password, role }),
+            body: JSON.stringify({ fullName, email, role }),
           });
           const data = await res.json();
 
@@ -2295,7 +2191,7 @@
             closeStaffModal();
             showAlert(
               "success",
-              `Staff member "${fullName}" created successfully!`,
+              `Staff member "${fullName}" added — they'll get an email to set their password.`,
             );
             loadStaffList();
           } else {

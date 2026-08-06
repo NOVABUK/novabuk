@@ -75,6 +75,8 @@ body {
   color: black;
   display: flex;
   margin: 14px;
+  font-size: 18px;
+  font-weight: 500;
   text-decoration: none;
   transition:
     color 0.3s ease,
@@ -679,14 +681,24 @@ body {
 
   .navbar img {
     width: auto;
-    object-fit: contain;
-    height: 35px;
+    /* object-fit: contain; */
+    /* height: 35px; */
   }
 
   /* Toggle Button */
   .nav-toggle,
   .hamburger {
-    display: block;
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    /* height: 40px; */
+    background: transparent;
+    border: none;
+    font-size: 28px;
+    color: #fff;
+    cursor: pointer;
+    z-index: 1001;
     order: 1;
   }
 
@@ -867,7 +879,7 @@ body {
   /* Toggle Button */
   .nav-toggle,
   .hamburger {
-    display: block;
+    /* display: flex; */
     order: 1;
   }
 
@@ -2379,10 +2391,10 @@ body {
     align-items: center;
     justify-content: center;
     width: 40px;
-    height: 40px;
+    /* height: 40px; */
     background: transparent;
     border: none;
-    font-size: 20px;
+    font-size: 28px;
     color: #fff;
     cursor: pointer;
     z-index: 1001;

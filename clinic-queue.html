@@ -56,6 +56,24 @@
         transform: translateY(-1px);
       }
 
+      /* New-arrival flag — a calm, static highlight (no animation)
+         for any Pending visit added in roughly the last 2 minutes.
+         Disappears on its own once that window passes on the next
+         refresh — nothing to dismiss, nothing to track. */
+      .patient-card.just-arrived {
+        background: var(--teal-pale, #e8f8fb);
+        border-color: var(--teal);
+      }
+      .new-dot {
+        display: inline-block;
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: var(--teal);
+        margin-right: 6px;
+        vertical-align: middle;
+      }
+
       /* Avatar — coloured circle with patient initials */
       .card-avatar {
         width: 42px;
@@ -965,6 +983,29 @@
           filtered = [...allVisits].sort(
             (a, b) => new Date(b.createdAt) - new Date(a.createdAt),
           );
+        } else if (activeTab === "Pending" || activeTab === "Confirmed") {
+          // The backend sorts by { preferredDate: 1, createdAt: 1 } —
+          // fine for its own purposes, but Mongo puts every walk-in
+          // (preferredDate: null sorts before any date) ahead of every
+          // scheduled request, regardless of how overdue a scheduled
+          // patient actually is. A patient whose 10am slot came and
+          // went two hours ago should outrank a walk-in who arrived
+          // five minutes ago — this list's job is "who do I call
+          // next", so it sorts by actual current wait time instead.
+          filtered = allVisits
+            .filter((v) => v.status === activeTab)
+            .sort((a, b) => {
+              const waitA = getWaitInfo(a);
+              const waitB = getWaitInfo(b);
+              if (waitA && waitB) return waitB.waitMinutes - waitA.waitMinutes;
+              if (waitA) return -1; // actually waiting beats not-yet-due
+              if (waitB) return 1;
+              // Neither is due yet (future bookings) — soonest first.
+              return (
+                new Date(a.preferredDate || a.createdAt) -
+                new Date(b.preferredDate || b.createdAt)
+              );
+            });
         } else {
           filtered = allVisits.filter((v) => v.status === activeTab);
         }
@@ -989,6 +1030,49 @@
 
         // Build the HTML for each card
         list.innerHTML = filtered.map((visit) => buildCardHTML(visit)).join("");
+      }
+
+      // ============================================================
+      // WAIT-TIME INFO — Pending/Confirmed only, and only when the
+      // patient is actually waiting RIGHT NOW: a walk-in (no
+      // preferredDate), or a scheduled visit whose time has already
+      // arrived. A future booking isn't "waiting" yet, so it returns
+      // null and the card just shows its scheduled time as before.
+      //
+      // For an overdue scheduled visit, wait is measured from the
+      // scheduled time (how overdue), not from createdAt (which could
+      // be days earlier, from when the booking was made) — those are
+      // different questions, and "how overdue" is the useful one here.
+      // ============================================================
+      function getWaitInfo(visit) {
+        if (!["Pending", "Confirmed"].includes(visit.status)) return null;
+
+        const now = new Date();
+        const scheduled = visit.preferredDate ? new Date(visit.preferredDate) : null;
+        if (scheduled && scheduled > now) return null; // future booking — not due yet
+
+        const waitFrom = scheduled || new Date(visit.createdAt);
+        const waitMinutes = Math.max(0, Math.floor((now - waitFrom) / 60000));
+        const overdue = waitMinutes >= 30;
+
+        const label =
+          waitMinutes < 60
+            ? `Waiting ${waitMinutes}m`
+            : `Waiting ${Math.floor(waitMinutes / 60)}h ${waitMinutes % 60}m`;
+
+        return { label, overdue, waitMinutes };
+      }
+
+      // ============================================================
+      // JUST ARRIVED — a Pending visit created in roughly the last 2
+      // minutes. Doesn't move it in the list (serve order stays
+      // wait-time-based), just makes it visually obvious even sitting
+      // at the bottom, so a fresh walk-in is never silently missed.
+      // ============================================================
+      function isJustArrived(visit) {
+        if (visit.status !== "Pending") return false;
+        const ageMinutes = (Date.now() - new Date(visit.createdAt)) / 60000;
+        return ageMinutes < 2;
       }
 
       // ============================================================
@@ -1046,8 +1130,10 @@
         //   Completed           → "View" (read-only)
         const actionBtn = buildActionBtn(visit);
 
+        const justArrived = isJustArrived(visit);
+
         return `
-        <div class="patient-card" onclick="openVisit('${visit._id}')">
+        <div class="patient-card${justArrived ? " just-arrived" : ""}" onclick="openVisit('${visit._id}')">
 
           <div class="card-avatar" style="background:none; border:none; padding:0;">
             ${avatarInitials(name, 42, user.avatarUrl)}
@@ -1055,7 +1141,7 @@
 
           <div class="card-body">
             <div class="card-name">
-              ${name}
+              ${justArrived ? '<span class="new-dot" title="Just arrived"></span>' : ""}${name}
               <span style="font-size: 10px; color: var(--teal); background: var(--teal-pale); padding: 1px 5px; border-radius: 4px; margin-left: 6px; font-weight: 700;">
                 ${user.novaBukId || "NB-TEMP"}
               </span>
@@ -1424,27 +1510,6 @@
         const errEl = document.getElementById("walkInError");
         errEl.classList.remove("show");
 
-        // Feature 3 (Free Degraded Tier): the backend returns
-        // error: "FREE_TIER_LIMIT_REACHED" once a FREE_TIER clinic
-        // hits its 10/month walk-in cap. Spec calls for the upgrade
-        // prompt to appear on every blocked action, not just once —
-        // so this always re-renders it fresh rather than caching.
-        // The link text comes from data.cta.label (backend decides
-        // "Renew Subscription" vs "Subscribe Now" based on whether
-        // this clinic has actually paid before) rather than being
-        // hardcoded here.
-        function showWalkInError(data, fallback) {
-          const message = (data && data.message) || fallback;
-          if (data && data.error === "FREE_TIER_LIMIT_REACHED") {
-            const label = (data.cta && data.cta.label) || "Subscribe Now";
-            const href = (data.cta && data.cta.href) || "./clinic-settings.html";
-            errEl.innerHTML = `${message} <a href="${href}" style="color:var(--teal); font-weight:600; text-decoration:underline;">${label}</a>`;
-          } else {
-            errEl.textContent = message;
-          }
-          errEl.classList.add("show");
-        }
-
         const isNew = document.getElementById("isNewPatient").checked;
         const notes = document.getElementById("walkInNotes").value.trim();
         const btn = document.getElementById("walkInConfirmBtn");
@@ -1486,7 +1551,8 @@
               closeWalkInModal();
               loadQueue();
             } else {
-              showWalkInError(data, "Registration failed.");
+              errEl.textContent = data.message || "Registration failed.";
+              errEl.classList.add("show");
             }
           } catch (err) {
             errEl.textContent = "Network error. Please try again.";
@@ -1521,7 +1587,8 @@
               closeWalkInModal();
               loadQueue();
             } else {
-              showWalkInError(data, "Failed to add walk-in.");
+              errEl.textContent = data.message || "Failed to add walk-in.";
+              errEl.classList.add("show");
             }
           } catch (err) {
             errEl.textContent = "Network error. Please try again.";
