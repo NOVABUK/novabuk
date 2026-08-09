@@ -3391,7 +3391,9 @@ button {
     gap: 14px;
   }
   .role-image img {
-    height: 140px;
+    /* height: 180px; */
+    object-fit: cover;
+    object-position: center;
   }
   .role-card {
     padding: 16px;
@@ -3426,7 +3428,9 @@ button {
     min-width: 0;
   }
   .role-image img {
-    height: 160px;
+    /* height: 160px; */
+    object-fit: cover;
+    object-position: center;
   }
 
   /* scroll hint dots */
