@@ -3,7 +3,7 @@
 // ================================================================
 
 const DB_NAME = "NovaBukOffline";
-const DB_VERSION = 8; // Upgraded version for caching
+const DB_VERSION = 9; // Upgraded version for caching
 const STORE_OUTBOX = "outbox";
 const STORE_CACHE = "cache";
 

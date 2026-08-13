@@ -223,6 +223,7 @@
       <div class="workflow-heading">
         <div><h1>Checkout & Billing</h1><p>Collect payment on pending bills and look up how past bills were actually paid.</p></div>
         <div class="workflow-heading-actions">
+          <button class="workflow-button secondary" onclick="openReportModal()"><i class="fa-solid fa-file-invoice"></i> Reports</button>
           <button class="workflow-button secondary" onclick="refreshAll()"><i class="fa-solid fa-arrows-rotate"></i> Refresh</button>
         </div>
       </div>
@@ -337,6 +338,42 @@
       </div>
 
       <div id="modalHistoryView" style="display:none;margin-top:10px;"></div>
+    </div>
+  </div>
+
+  <!-- Reports modal — date range picker + inline preview + PDF download -->
+  <div class="workflow-modal-backdrop" id="reportModal">
+    <div class="workflow-modal">
+      <div class="workflow-modal-head">
+        <div><h2>Billing Report</h2><p class="workflow-subtext">Patients seen, revenue, and payment breakdown for any date range — for your daily print, or a weekly/monthly/yearly report.</p></div>
+        <button class="workflow-close" onclick="closeReportModal()"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px;">
+        <button class="workflow-button secondary" onclick="setReportPreset('today')">Today</button>
+        <button class="workflow-button secondary" onclick="setReportPreset('week')">This Week</button>
+        <button class="workflow-button secondary" onclick="setReportPreset('month')">This Month</button>
+        <button class="workflow-button secondary" onclick="setReportPreset('year')">This Year</button>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;">
+        <div>
+          <label style="display:block;margin-bottom:6px;font-size:11px;font-weight:600;color:var(--workflow-text);">From</label>
+          <input type="date" class="workflow-input" id="reportStartDate" style="width:100%;">
+        </div>
+        <div>
+          <label style="display:block;margin-bottom:6px;font-size:11px;font-weight:600;color:var(--workflow-text);">To</label>
+          <input type="date" class="workflow-input" id="reportEndDate" style="width:100%;">
+        </div>
+      </div>
+
+      <button class="workflow-button primary" onclick="previewReport()" style="width:100%;margin-bottom:16px;"><i class="fa-solid fa-magnifying-glass"></i> Preview</button>
+
+      <div id="reportPreview"></div>
+
+      <button class="workflow-button primary" onclick="downloadReportPdf()" id="downloadReportBtn" style="width:100%;display:none;margin-top:6px;">
+        <i class="fa-solid fa-file-pdf"></i> Download PDF
+      </button>
     </div>
   </div>
 
@@ -588,17 +625,10 @@
     }
 
     async function viewReceipt() {
-      // window.open() straight to the API used to send an unauthenticated
-      // browser navigation — no way to attach the Bearer token that lives
-      // in localStorage — so protectClinicPortal rejected it and the tab
-      // just showed the raw 401 JSON instead of the PDF. Fetching through
-      // clinicFetch (which does attach the token) fixes that part.
-      //
-      // Second issue: window.open() inside an async callback runs after
-      // the browser no longer considers it tied to the original click,
-      // so popup blockers can silently kill it — worse the longer the
-      // request takes. An <a download> click isn't subject to that same
-      // block, and gives a real downloaded file with a proper name.
+      // window.open() straight to the API sends no Authorization
+      // header — protectClinicPortal rejects it and the tab shows raw
+      // JSON instead of the PDF. Same fix applied here before; this
+      // file came back from a stale upload without it.
       try {
         const res = await clinicFetch(`${CLINIC_API}/bills/${currentBill._id}/receipt`);
         if (!res.ok) throw new Error(`Server responded ${res.status}`);
@@ -614,6 +644,125 @@
       } catch (err) {
         console.error('View receipt error:', err);
         alert('Could not load the receipt. Please try again.');
+      }
+    }
+
+    // ═══════════════════════════════════════════════════════════
+    // REPORTS
+    // ═══════════════════════════════════════════════════════════
+    function openReportModal() {
+      document.getElementById('reportModal').classList.add('open');
+      document.getElementById('reportPreview').innerHTML = '';
+      document.getElementById('downloadReportBtn').style.display = 'none';
+      setReportPreset('today');
+    }
+    function closeReportModal() {
+      document.getElementById('reportModal').classList.remove('open');
+    }
+
+    // Presets decide what "this week/month/year" means client-side —
+    // deliberately not baked into the backend, which just takes
+    // whatever startDate/endDate it's given. Week starts Monday.
+    function setReportPreset(preset) {
+      const today = new Date();
+      const fmt = (d) => d.toISOString().split('T')[0];
+      let start = new Date(today);
+      let end = new Date(today);
+
+      if (preset === 'week') {
+        const day = today.getDay(); // 0=Sun..6=Sat
+        const diffToMonday = day === 0 ? 6 : day - 1;
+        start.setDate(today.getDate() - diffToMonday);
+      } else if (preset === 'month') {
+        start = new Date(today.getFullYear(), today.getMonth(), 1);
+      } else if (preset === 'year') {
+        start = new Date(today.getFullYear(), 0, 1);
+      }
+      // 'today' — start and end both stay as today
+
+      document.getElementById('reportStartDate').value = fmt(start);
+      document.getElementById('reportEndDate').value = fmt(end);
+      previewReport();
+    }
+
+    async function previewReport() {
+      const startDate = document.getElementById('reportStartDate').value;
+      const endDate = document.getElementById('reportEndDate').value;
+      const previewEl = document.getElementById('reportPreview');
+      const downloadBtn = document.getElementById('downloadReportBtn');
+
+      if (!startDate || !endDate) {
+        alert('Pick a start and end date first.');
+        return;
+      }
+      if (startDate > endDate) {
+        alert('Start date must be before the end date.');
+        return;
+      }
+
+      previewEl.innerHTML = '<div style="text-align:center;padding:20px;"><i class="fa-solid fa-spinner fa-spin"></i></div>';
+      downloadBtn.style.display = 'none';
+
+      try {
+        const res = await clinicFetch(`${CLINIC_API}/bills/report?startDate=${startDate}&endDate=${endDate}`);
+        const data = await res.json();
+        if (!data.success) throw new Error(data.message || 'Could not load report.');
+
+        const s = data.data;
+        previewEl.innerHTML = `
+          <div class="workflow-stat-grid" style="grid-template-columns:repeat(3,1fr);margin-bottom:14px;">
+            <div class="workflow-stat"><div class="workflow-stat-icon teal"><i class="fa-solid fa-user-check"></i></div><div><strong>${s.patientsSeen}</strong><span>Patients seen</span></div></div>
+            <div class="workflow-stat"><div class="workflow-stat-icon green"><i class="fa-solid fa-sack-dollar"></i></div><div><strong>₦${s.totalRevenue.toLocaleString()}</strong><span>Revenue collected</span></div></div>
+            <div class="workflow-stat"><div class="workflow-stat-icon amber"><i class="fa-solid fa-hourglass-half"></i></div><div><strong>₦${s.outstandingBalance.toLocaleString()}</strong><span>Outstanding</span></div></div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+            <div>
+              <div style="font-weight:700;font-size:12px;margin-bottom:8px;">By Payment Method</div>
+              <div class="workflow-subtext">Cash: ₦${s.byPaymentMethod.CASH.toLocaleString()}</div>
+              <div class="workflow-subtext">Transfer: ₦${s.byPaymentMethod.TRANSFER.toLocaleString()}</div>
+              <div class="workflow-subtext">POS: ₦${s.byPaymentMethod.POS.toLocaleString()}</div>
+              <div class="workflow-subtext">Waived: ₦${s.byPaymentMethod.WAIVED.toLocaleString()}</div>
+            </div>
+            <div>
+              <div style="font-weight:700;font-size:12px;margin-bottom:8px;">By Category</div>
+              <div class="workflow-subtext">Consultation: ₦${s.byCategory.GENERAL.toLocaleString()}</div>
+              <div class="workflow-subtext">Pharmacy: ₦${s.byCategory.PHARMACY.toLocaleString()}</div>
+              <div class="workflow-subtext">Lab: ₦${s.byCategory.LAB.toLocaleString()}</div>
+            </div>
+          </div>`;
+        downloadBtn.style.display = '';
+      } catch (err) {
+        console.error('Preview report error:', err);
+        previewEl.innerHTML = `<p style="text-align:center;color:var(--workflow-red);padding:20px;">${err.message || 'Could not load this report.'}</p>`;
+      }
+    }
+
+    async function downloadReportPdf() {
+      const startDate = document.getElementById('reportStartDate').value;
+      const endDate = document.getElementById('reportEndDate').value;
+      const btn = document.getElementById('downloadReportBtn');
+      const original = btn.innerHTML;
+      btn.disabled = true;
+      btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Generating…';
+
+      try {
+        const res = await clinicFetch(`${CLINIC_API}/bills/report/pdf?startDate=${startDate}&endDate=${endDate}`);
+        if (!res.ok) throw new Error(`Server responded ${res.status}`);
+        const blob = await res.blob();
+        const blobUrl = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = blobUrl;
+        a.download = `novabuk-report-${startDate}_to_${endDate}.pdf`;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        setTimeout(() => URL.revokeObjectURL(blobUrl), 5000);
+      } catch (err) {
+        console.error('Download report error:', err);
+        alert('Could not generate the report PDF. Please try again.');
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = original;
       }
     }
 
