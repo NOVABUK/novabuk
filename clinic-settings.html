@@ -1169,7 +1169,14 @@
             </div>
             <div class="bank-info-row">
               <span class="bank-label">Amount</span
-              ><span class="bank-value" id="vaAmount">—</span>
+              ><span
+                class="bank-value"
+                id="vaAmount"
+                style="cursor: pointer"
+                onclick="copyAmount()"
+                title="Click to copy"
+                >—</span
+              >
             </div>
             <div class="bank-info-row">
               <span class="bank-label">Reference</span
@@ -1181,6 +1188,22 @@
               >
             </div>
           </div>
+          <p
+            style="
+              font-size: 11px;
+              color: #b45309;
+              background: #fffbeb;
+              border: 1px solid #fde68a;
+              border-radius: 6px;
+              padding: 8px 10px;
+              margin: 0 0 12px;
+              text-align: center;
+            "
+          >
+            <i class="fa-solid fa-triangle-exclamation"></i>
+            Transfer this <strong>exact</strong> amount. A different amount
+            can't be completed automatically and will need a manual refund.
+          </p>
           <div
             id="vaCopiedNote"
             style="
@@ -1762,17 +1785,25 @@
       // PLAN STATUS & DYNAMIC RENDERING
       // ═══════════════════════════════════════════════════════════
       let currentClinicPlan = "Growth";
+      let currentEffectivePlanLevel = "FREE_TIER"; // FREE_TIER | BASIC | PREMIUM — what's actually unlocked right now
 
       function updatePlanUI(clinic) {
         const plan = clinic.subscriptionPlan || "Growth";
         currentClinicPlan = plan;
-        // isPro means "actually has active Pro access right now" — not
-        // just "subscriptionPlan field says Pro". That field never
-        // resets once set, so a Pro subscription that lapsed still
-        // reads "Pro" there forever. effectiveStatus (from
-        // getEffectiveStatus() server-side) is the real answer; see
-        // routes/clinics.js's GET /my for why it's attached there.
-        const isPro = clinic.effectiveStatus === "PREMIUM";
+        currentEffectivePlanLevel = clinic.effectivePlanLevel || "FREE_TIER";
+
+        // effectiveStatus: lifecycle (TRIAL / FREE_TIER / BASIC / PREMIUM
+        // for a genuinely active paid subscription).
+        // effectivePlanLevel: what's ACTUALLY unlocked right now — during
+        // TRIAL this resolves to BASIC or PREMIUM based on which plan was
+        // selected at signup (see services/subscriptionService.js), not
+        // blanket full access. This is what feature locks should follow;
+        // effectiveStatus alone is what the pill/messaging should follow,
+        // since "real Pro" and "trial operating as Pro" need different
+        // wording even though they unlock the same features.
+        const isPremiumLevel = clinic.effectivePlanLevel === "PREMIUM";
+        const isTrial = clinic.effectiveStatus === "TRIAL";
+        const realPro = clinic.effectiveStatus === "PREMIUM";
         // True specifically for "was Pro, subscriptionPlan still says
         // so, but it's actually lapsed" — as opposed to a clinic that
         // was never Pro at all. Changes the upgrade card's wording
@@ -1781,10 +1812,16 @@
 
         // 1. Update Plan Pill
         const pill = document.getElementById("planPill");
-        if (isPro) {
+        if (realPro) {
           pill.innerHTML = '<i class="fa-solid fa-gem"></i> Clinic Pro';
           pill.style.background = "#d1fae5";
           pill.style.color = "#065f46";
+        } else if (isTrial) {
+          pill.innerHTML = isPremiumLevel
+            ? '<i class="fa-solid fa-star"></i> Free Trial — Pro features'
+            : '<i class="fa-solid fa-star"></i> Free Trial — Growth features';
+          pill.style.background = "#e0e7ff";
+          pill.style.color = "#3730a3";
         } else if (isLapsedPro) {
           pill.innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i> Pro Expired';
           pill.style.background = "#fee2e2";
@@ -1795,10 +1832,20 @@
           pill.style.color = "#b7791f";
         }
 
-        // 2. Show/hide expiry
+        // 2. Show/hide expiry — trial shows when the TRIAL ends
+        // (trialEndsAt), a real/lapsed subscription shows subscriptionExpiry.
         const expiryRow = document.getElementById("planExpiryRow");
         const expiryVal = document.getElementById("planExpiry");
-        if ((isPro || isLapsedPro) && clinic.subscriptionExpiry) {
+        if (isTrial && clinic.trialEndsAt) {
+          expiryRow.style.display = "";
+          expiryVal.textContent =
+            "Trial ends " +
+            new Date(clinic.trialEndsAt).toLocaleDateString("en-NG", {
+              day: "numeric",
+              month: "short",
+              year: "numeric",
+            });
+        } else if ((realPro || isLapsedPro) && clinic.subscriptionExpiry) {
           expiryRow.style.display = "";
           expiryVal.textContent = new Date(
             clinic.subscriptionExpiry,
@@ -1812,11 +1859,14 @@
           expiryRow.style.display = "none";
         }
 
-        // 3. Update upgrade card features
+        // 3. Update upgrade card features — follows effectivePlanLevel
+        // (what's ACTUALLY unlocked), not just realPro, so a trial
+        // clinic operating at Pro level correctly shows those features
+        // as available rather than locked.
         document
           .querySelectorAll(".upgrade-feature[data-premium]")
           .forEach((el) => {
-            if (isPro) {
+            if (isPremiumLevel) {
               el.classList.remove("lock");
               el.querySelector("i").className = "fa-solid fa-circle-check";
               el.querySelector("i").style.color = "#22c55e";
@@ -1833,13 +1883,32 @@
         // unlocked, with genuinely no way to pay again from this page.
         const upgradeBtn = document.getElementById("upgradeBtn");
         const activeNotice = document.getElementById("planActiveNotice");
-        if (isPro) {
+        if (realPro) {
           upgradeBtn.style.display = "none";
           activeNotice.style.display = "block";
           document.getElementById("upgradeCardTitle").textContent =
             "NovaBuk Clinic Pro";
           document.getElementById("upgradeCardDesc").textContent =
             "All premium features are unlocked for your clinic.";
+        } else if (isTrial && isPremiumLevel) {
+          // Selected Pro at signup — Pro features work now, but nothing's
+          // actually been paid for yet, so still needs a button, just not
+          // framed as "locked, upgrade to unlock" since it's already unlocked.
+          upgradeBtn.style.display = "";
+          upgradeBtn.innerHTML = '<i class="fa-solid fa-gem"></i> Set Up Pro Billing';
+          activeNotice.style.display = "none";
+          document.getElementById("upgradeCardTitle").textContent =
+            "Pro Features Active — Trial Period";
+          document.getElementById("upgradeCardDesc").textContent =
+            "You selected Pro, so these features are already unlocked during your trial. Set up billing before your trial ends to keep them.";
+        } else if (isTrial) {
+          upgradeBtn.style.display = "";
+          upgradeBtn.innerHTML = '<i class="fa-solid fa-gem"></i> Upgrade to Pro';
+          activeNotice.style.display = "none";
+          document.getElementById("upgradeCardTitle").textContent =
+            "Unlock Full Hospital Features";
+          document.getElementById("upgradeCardDesc").textContent =
+            "You're on a Growth trial. Upgrade to Pro for unlimited staff, pharmacists, lab techs, and lab/pharmacy workflow — during and after your trial.";
         } else if (isLapsedPro) {
           upgradeBtn.style.display = "";
           upgradeBtn.innerHTML = '<i class="fa-solid fa-rotate-right"></i> Renew Pro Subscription';
@@ -1928,7 +1997,13 @@
       // Pro: full roster.
       function updateStaffRoleOptions() {
         const select = document.getElementById("staffRole");
-        const isPro = currentClinicPlan === "Pro";
+        // Was `currentClinicPlan === "Pro"` — the raw field, which never
+        // resets, so a LAPSED Pro clinic kept seeing the full Pro role
+        // list here even after their access was correctly downgraded
+        // everywhere else. currentEffectivePlanLevel tracks the real
+        // thing (also correctly resolves a trial-as-Pro clinic to the
+        // full list, same as genuinely-paid Pro).
+        const isPro = currentEffectivePlanLevel === "PREMIUM";
 
         select.innerHTML = isPro
           ? `<option value="doctor">Doctor</option>
@@ -2050,8 +2125,12 @@
           currentPaymentReference = data.data.reference;
           document.getElementById("vaBankName").textContent = data.data.bankName || "—";
           document.getElementById("vaAccountNumber").textContent = data.data.accountNumber;
-          document.getElementById("vaAmount").textContent =
-            `₦${data.data.amount.toLocaleString()}`;
+          const vaAmountEl = document.getElementById("vaAmount");
+          vaAmountEl.textContent = `₦${data.data.amount.toLocaleString()}`;
+          // Copying should send plain digits — a "₦" or "," in the amount
+          // field breaks in some banking apps' transfer forms, even though
+          // it's fine to look at here.
+          vaAmountEl.dataset.rawAmount = data.data.amount;
           document.getElementById("vaReference").textContent = data.data.reference;
 
           showPanel("pending");
@@ -2068,16 +2147,30 @@
       function copyAccountNumber() {
         const num = document.getElementById("vaAccountNumber").textContent;
         if (!num || num === "—") return;
+        copyToClipboard(num, "Account number copied");
+      }
+
+      function copyAmount() {
+        const el = document.getElementById("vaAmount");
+        const raw = el.dataset.rawAmount;
+        if (!raw) return;
+        // Plain digits only — see the comment where dataset.rawAmount is
+        // set, above, for why we don't copy the "₦"-formatted display text.
+        copyToClipboard(raw, "Amount copied");
+      }
+
+      function copyToClipboard(text, message) {
         const showCopied = () => {
           const note = document.getElementById("vaCopiedNote");
+          note.innerHTML = `<i class="fa-solid fa-circle-check"></i> ${message}`;
           note.style.display = "block";
           setTimeout(() => (note.style.display = "none"), 2000);
         };
         if (navigator.clipboard) {
-          navigator.clipboard.writeText(num).then(showCopied).catch(() => {});
+          navigator.clipboard.writeText(text).then(showCopied).catch(() => {});
         } else {
           const ta = document.createElement("textarea");
-          ta.value = num;
+          ta.value = text;
           document.body.appendChild(ta);
           ta.select();
           document.execCommand("copy");
@@ -2233,7 +2326,9 @@
       // already fetched above, compared against the current plan's limits.
       function renderSeatUsage(staffList) {
         const summaryEl = document.getElementById("seatUsageSummary");
-        if (currentClinicPlan === "Pro") {
+        // Same fix as updateStaffRoleOptions() above — was reading the
+        // raw, never-resetting subscriptionPlan field.
+        if (currentEffectivePlanLevel === "PREMIUM") {
           summaryEl.innerHTML = `<span style="color:var(--light);"><i class="fa-solid fa-infinity"></i> Unlimited seats on Clinic Pro</span>`;
           return;
         }

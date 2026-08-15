@@ -1413,12 +1413,17 @@
                 <option value="PENDING">Pending Review</option>
                 <option value="VERIFIED">Verified</option>
                 <option value="REJECTED">Rejected</option>
+                <option value="REFUND_OWED">Refund Owed</option>
                 <option value="">All</option>
               </select>
             </div>
             <p style="color: #888; font-size: 0.85rem; margin-top: -10px">
-              Manual bank-transfer submissions awaiting review. NexaPay
-              payments are verified automatically and don't appear here.
+              Manual bank-transfer submissions awaiting review, plus NexaPay
+              deposits. NexaPay payments verify automatically via webhook and
+              never sit PENDING here — but a mismatched-amount NexaPay
+              deposit still lands as REJECTED, since bank transfers can't be
+              declined before they arrive. Those need a manual refund — see
+              "Refund Owed" above.
             </p>
             <div class="table-responsive">
               <table>
@@ -2825,7 +2830,14 @@
         try {
           const status = document.getElementById("paymentStatusFilter").value;
           const params = new URLSearchParams();
-          if (status) params.set("status", status);
+          // "Refund Owed" isn't a review status — it's the separate
+          // refundStatus field, so it needs its own query param rather
+          // than being sent as ?status=.
+          if (status === "REFUND_OWED") {
+            params.set("refundStatus", "OWED");
+          } else if (status) {
+            params.set("status", status);
+          }
 
           const res = await fetch(
             `${API_URL}/clinics/admin/subscription-payments?${params}`,
@@ -2850,16 +2862,29 @@
                   : p.status === "REJECTED"
                     ? "status-draft"
                     : "status-draft";
-              const reviewedInfo = p.reviewedByName
+              let reviewedInfo = p.reviewedByName
                 ? `${p.reviewedByName}${p.reviewNote ? ` — "${p.reviewNote}"` : ""}`
                 : "—";
+              // Refund-owed rows need the payer's bank details visible
+              // right here — that's who the admin has to manually send
+              // the refund to, from NovaBuk's own bank account (NexaPay's
+              // API can only pay out to OUR OWN settlement account).
+              if (p.refundStatus === "OWED") {
+                reviewedInfo += `<br><span style="color:var(--error); font-weight:600;">Refund owed to:</span><br>
+                  ${p.payerName || "Unknown"} — ${p.payerAccountNumber || "?"} (${p.payerBankName || "?"})`;
+              } else if (p.refundStatus === "ISSUED") {
+                reviewedInfo += `<br><span style="color:var(--success, #1a7f37);">Refunded</span> by ${p.refundedByName || "—"}
+                  (ref: ${p.refundReference || "—"})`;
+              }
               const actions =
                 p.status === "PENDING"
                   ? `
                   <button class="btn btn-primary btn-sm" onclick="reviewPayment('${p._id}', 'VERIFIED')"><i class="fas fa-check"></i> Approve</button>
                   <button class="btn btn-danger btn-sm" onclick="reviewPayment('${p._id}', 'REJECTED')"><i class="fas fa-xmark"></i> Reject</button>
                 `
-                  : "—";
+                  : p.refundStatus === "OWED"
+                    ? `<button class="btn btn-primary btn-sm" onclick="markRefunded('${p._id}')"><i class="fas fa-money-bill-transfer"></i> Mark Refund Issued</button>`
+                    : "—";
               return `
               <tr>
                 <td><strong>${p.clinic?.name || "Unknown clinic"}</strong></td>
@@ -2914,6 +2939,47 @@
           }
         } catch (err) {
           showAlert("Error reviewing payment: " + err.message, "error");
+        }
+      }
+
+      // Confirms a manually-issued refund for a mismatched NexaPay
+      // deposit. This does NOT send any money — NexaPay's API has no
+      // way to pay a third party (see routes/clinics.js comment on this
+      // route). The admin sends the transfer themselves first, in their
+      // own banking app, using the payer details shown in the table,
+      // then records it here so it's reconcilable and stops showing as
+      // owed.
+      async function markRefunded(id) {
+        const refundReference = prompt(
+          "Your bank transfer's reference/narration for this refund (for reconciliation):",
+        );
+        if (!refundReference || !refundReference.trim()) {
+          showAlert("A refund reference is required.", "error");
+          return;
+        }
+        const refundNote = prompt("Optional note (e.g. which bank/account you sent from):") || "";
+
+        try {
+          const res = await fetch(
+            `${API_URL}/clinics/admin/subscription-payments/${id}/mark-refunded`,
+            {
+              method: "PATCH",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${authToken}`,
+              },
+              body: JSON.stringify({ refundReference, refundNote }),
+            },
+          );
+          const data = await res.json();
+          if (data.success) {
+            showAlert("Refund marked as issued.", "success");
+            loadPayments();
+          } else {
+            showAlert(data.message, "error");
+          }
+        } catch (err) {
+          showAlert("Error marking refund: " + err.message, "error");
         }
       }
 
